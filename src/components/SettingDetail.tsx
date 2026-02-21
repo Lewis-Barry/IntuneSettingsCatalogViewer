@@ -56,24 +56,25 @@ export default function SettingDetail({ setting, allSettings }: SettingDetailPro
           <h4 className="text-fluent-sm font-semibold text-fluent-text-secondary mb-2">
             Options ({setting.options.length})
           </h4>
-          <div className="space-y-1">
+          <div className="border border-gray-200 rounded-md overflow-hidden divide-y divide-gray-200">
             {setting.options.map((opt) => (
               <div
                 key={opt.itemId}
-                className={`flex items-start gap-2 px-3 py-1.5 rounded text-fluent-sm ${
-                  opt.itemId === setting.defaultOptionId ? 'bg-fluent-light-blue' : 'bg-gray-50'
+                className={`px-3 py-2 text-fluent-sm ${
+                  opt.itemId === setting.defaultOptionId ? 'bg-fluent-light-blue' : 'bg-gray-50/50'
                 }`}
               >
-                <span className="font-medium min-w-0 flex-1">
+                <div className="font-medium">
                   {opt.displayName}
                   {opt.itemId === setting.defaultOptionId && (
-                    <span className="text-fluent-blue ml-2">(default)</span>
+                    <span className="text-fluent-blue ml-2 text-fluent-xs">(default)</span>
                   )}
-                </span>
-                {opt.description && (
-                  <span className="text-fluent-text-secondary text-fluent-xs max-w-xs truncate">
+                </div>
+                {opt.description &&
+                  opt.description.trim().toLowerCase() !== opt.displayName?.trim().toLowerCase() && (
+                  <p className="text-fluent-text-secondary text-fluent-xs mt-1 whitespace-pre-wrap break-words">
                     {opt.description}
-                  </span>
+                  </p>
                 )}
               </div>
             ))}
