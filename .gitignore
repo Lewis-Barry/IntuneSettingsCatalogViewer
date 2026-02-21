@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# production
+build/
+
+# misc
+.DS_Store
+*.pem
+.env
+.env*.local
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# data files (fetched at build time, except changelog and previous snapshot)
+data/settings.json
+data/categories.json
+data/category-tree.json
+data/settings-previous.json
+data/last-updated.json
+public/search-index.json
+
+# keep sample data and changelog
+!data/sample-*.json
+!data/changelog.json
+
+# IDE
+.vscode/
+.idea/
+
+# turbo
+.turbo

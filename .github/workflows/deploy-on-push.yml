@@ -1,0 +1,64 @@
+name: Deploy on Push
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'data/changelog.json'
+      - 'data/settings-previous.json'
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Uses existing data files (no fetch step)
+      # If data files don't exist, falls back to sample data
+      - name: Ensure data files exist
+        run: |
+          if [ ! -f data/settings.json ]; then
+            echo "No settings.json found, using sample data..."
+            cp data/sample-settings.json data/settings.json 2>/dev/null || echo "[]" > data/settings.json
+            cp data/sample-categories.json data/categories.json 2>/dev/null || echo "[]" > data/categories.json
+          fi
+
+      - name: Build search index
+        run: npx tsx scripts/build-search-index.ts
+
+      - name: Build site
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

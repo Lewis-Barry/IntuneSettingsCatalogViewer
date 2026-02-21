@@ -1,0 +1,38 @@
+{
+  "name": "intune-settings-catalog-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A fast, searchable viewer for the Microsoft Intune Settings Catalog",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fetch-settings": "tsx scripts/fetch-settings.ts",
+    "generate-changelog": "tsx scripts/generate-changelog.ts",
+    "build-search-index": "tsx scripts/build-search-index.ts",
+    "refresh": "npm run fetch-settings && npm run generate-changelog && npm run build-search-index",
+    "postinstall": "echo 'Run npm run refresh to fetch settings data'"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.5.0",
+    "flexsearch": "^0.7.43",
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@azure/identity": "^4.2.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@types/node": "^20.12.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

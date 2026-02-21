@@ -1,0 +1,599 @@
+[
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_ads_intrusive",
+    "name": "AdsSettingForIntrusiveAdsSites",
+    "displayName": "Ads setting for sites with intrusive ads",
+    "description": "Controls whether ads are blocked on sites that show intrusive or misleading ads. This is also known as the Better Ads Standard.",
+    "helpText": "If you enable this policy, ads will be blocked on sites known for intrusive ads. If you disable or don't configure this policy, ads won't be blocked on those sites.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_ads_intrusive",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "AdsSettingForIntrusiveAdsSites",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "dropdown",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["ads", "intrusive", "advertising", "better ads", "edge"],
+    "infoUrls": ["https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies#adssettingforintrusiveadssites"],
+    "options": [
+      { "itemId": "ads_default", "displayName": "Default (Allow ads on all sites)", "description": "Ads are allowed on all websites" },
+      { "itemId": "ads_blocked", "displayName": "Block ads on sites with intrusive ads", "description": "Block ads on sites that violate the Better Ads Standards" }
+    ],
+    "defaultOptionId": "ads_default"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_ads_intrusive_user",
+    "name": "AdsSettingForIntrusiveAdsSites_User",
+    "displayName": "Ads setting for sites with intrusive ads (User)",
+    "description": "Controls whether ads are blocked on sites that show intrusive or misleading ads. User scope variant.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_ads_intrusive_user",
+    "baseUri": "./User/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "AdsSettingForIntrusiveAdsSites",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "dropdown",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["ads", "intrusive", "advertising", "edge", "user"],
+    "options": [
+      { "itemId": "ads_default_u", "displayName": "Default (Allow ads on all sites)", "description": "Ads are allowed on all websites" },
+      { "itemId": "ads_blocked_u", "displayName": "Block ads on sites with intrusive ads", "description": "Block ads on sites with intrusive ads" }
+    ],
+    "defaultOptionId": "ads_default_u"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_sensors_access",
+    "name": "SensorsAllowedForUrls",
+    "displayName": "Allow access to sensors on specific sites",
+    "description": "Define a list of URL patterns that specify which sites are automatically granted access to sensors such as motion and light sensors.",
+    "helpText": "If you don't configure this policy, the global default value from the DefaultSensorsSetting policy (if set) or the user's personal configuration is used for all sites.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_sensors_access",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "SensorsAllowedForUrls",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["sensors", "motion", "light", "access", "urls", "sites", "edge"],
+    "options": [
+      { "itemId": "sensors_enabled", "displayName": "Enabled", "description": "Enable sensor access for specified sites" },
+      { "itemId": "sensors_disabled", "displayName": "Disabled", "description": "Disable sensor access" }
+    ],
+    "defaultOptionId": "sensors_disabled",
+    "dependedOnBy": [
+      { "dependedOnBy": "edge_sensors_access_sites", "required": true }
+    ]
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition",
+    "id": "edge_sensors_access_sites",
+    "name": "SensorsAllowedForUrls_Sites",
+    "displayName": "Allow access to sensors on specific sites (Device)",
+    "description": "List of URL patterns for sites that are granted sensor access.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_sensors_access",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "SensorsAllowedForUrls/Sites",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "largeTextBox",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["sensors", "urls", "sites"],
+    "dependentOn": [
+      { "dependentOn": "edge_sensors_access", "parentSettingId": "edge_sensors_access" }
+    ],
+    "valueDefinition": {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValueDefinition",
+      "minimumLength": 0,
+      "maximumLength": 16384,
+      "isRequired": false
+    }
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_sensors_access_user",
+    "name": "SensorsAllowedForUrls_User",
+    "displayName": "Allow access to sensors on specific sites (User)",
+    "description": "User-scope: Define a list of URL patterns that specify which sites are automatically granted access to sensors.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_sensors_access_user",
+    "baseUri": "./User/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "SensorsAllowedForUrls",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["sensors", "access", "urls", "user", "edge"],
+    "options": [
+      { "itemId": "sensors_enabled_u", "displayName": "Enabled", "description": "Enable sensor access for specified sites" },
+      { "itemId": "sensors_disabled_u", "displayName": "Disabled", "description": "Disable sensor access" }
+    ],
+    "defaultOptionId": "sensors_disabled_u"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_enterprise_mode",
+    "name": "EnterpriseSiteListManagerAllowed",
+    "displayName": "Allow access to the Enterprise Mode Site List Manager tool",
+    "description": "Allows users to access the Enterprise Mode Site List Manager tool.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_enterprise_mode",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "EnterpriseSiteListManagerAllowed",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["enterprise", "site list", "manager", "edge"],
+    "options": [
+      { "itemId": "enterprise_on", "displayName": "Allowed", "description": "Allows access to Enterprise Mode Site List Manager" },
+      { "itemId": "enterprise_off", "displayName": "Not allowed", "description": "Blocks access to Enterprise Mode Site List Manager" }
+    ],
+    "defaultOptionId": "enterprise_off"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_enterprise_mode_user",
+    "name": "EnterpriseSiteListManagerAllowed_User",
+    "displayName": "Allow access to the Enterprise Mode Site List Manager tool (User)",
+    "description": "Allows users to access the Enterprise Mode Site List Manager tool (user scope).",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_enterprise_mode_user",
+    "baseUri": "./User/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "EnterpriseSiteListManagerAllowed",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["enterprise", "site list", "manager", "edge", "user"],
+    "options": [
+      { "itemId": "enterprise_on_u", "displayName": "Allowed" },
+      { "itemId": "enterprise_off_u", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "enterprise_off_u"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_sha1_certs",
+    "name": "CertificateAllowSHA1ForLocalAnchors",
+    "displayName": "Allow certificates signed using SHA-1 when issued by local trust anchors (deprecated)",
+    "description": "When this setting is enabled, Microsoft Edge allows connections secured by SHA-1 signed certificates as long as the certificate chains to a locally installed root certificate. This policy is deprecated.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_sha1_certs",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "CertificateAllowSHA1ForLocalAnchors",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["certificate", "sha1", "sha-1", "trust", "deprecated", "edge"],
+    "options": [
+      { "itemId": "sha1_allow", "displayName": "Enabled" },
+      { "itemId": "sha1_block", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "sha1_block"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_sha1_certs_user",
+    "name": "CertificateAllowSHA1ForLocalAnchors_User",
+    "displayName": "Allow certificates signed using SHA-1 when issued by local trust anchors (deprecated) (User)",
+    "description": "User scope: When enabled, Microsoft Edge allows connections secured by SHA-1 signed certificates.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_sha1_certs_user",
+    "baseUri": "./User/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "CertificateAllowSHA1ForLocalAnchors",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["certificate", "sha1", "sha-1", "trust", "deprecated", "edge", "user"],
+    "options": [
+      { "itemId": "sha1_allow_u", "displayName": "Enabled" },
+      { "itemId": "sha1_block_u", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "sha1_block_u"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_clipboard",
+    "name": "ClipboardAllowedForUrls",
+    "displayName": "Allow clipboard use on specific sites",
+    "description": "Configure a list of URL patterns for sites that are allowed to use the clipboard site permission.",
+    "helpText": "If you don't configure this policy, the global default value from the DefaultClipboardSetting policy (if set) or the user's personal configuration is used for all sites.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_clipboard",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "ClipboardAllowedForUrls",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["clipboard", "copy", "paste", "urls", "sites", "edge"],
+    "options": [
+      { "itemId": "clipboard_enabled", "displayName": "Enabled" },
+      { "itemId": "clipboard_disabled", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "clipboard_disabled",
+    "dependedOnBy": [
+      { "dependedOnBy": "edge_clipboard_sites", "required": true }
+    ]
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition",
+    "id": "edge_clipboard_sites",
+    "name": "ClipboardAllowedForUrls_Sites",
+    "displayName": "Allow clipboard use on specific sites (Device)",
+    "description": "List of URL patterns for which clipboard use is allowed.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_clipboard",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "ClipboardAllowedForUrls/Sites",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "largeTextBox",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["clipboard", "urls", "sites"],
+    "dependentOn": [
+      { "dependentOn": "edge_clipboard", "parentSettingId": "edge_clipboard" }
+    ],
+    "valueDefinition": {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValueDefinition",
+      "minimumLength": 0,
+      "maximumLength": 16384
+    }
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_clipboard_user",
+    "name": "ClipboardAllowedForUrls_User",
+    "displayName": "Allow clipboard use on specific sites (User)",
+    "description": "User scope: Configure a list of URL patterns for sites that are allowed to use the clipboard.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_clipboard_user",
+    "baseUri": "./User/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "ClipboardAllowedForUrls",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["clipboard", "urls", "user", "edge"],
+    "options": [
+      { "itemId": "clipboard_enabled_u", "displayName": "Enabled" },
+      { "itemId": "clipboard_disabled_u", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "clipboard_disabled_u"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "edge_search_provider",
+    "name": "DefaultSearchProviderContextMenuAccessAllowed",
+    "displayName": "Allow default search provider context menu search access",
+    "description": "Enables the use of a default search provider in the context menu.",
+    "version": "1.0",
+    "categoryId": "cat_edge",
+    "rootDefinitionId": "edge_search_provider",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Edge",
+    "offsetUri": "DefaultSearchProviderContextMenuAccessAllowed",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["search", "provider", "context menu", "default", "edge"],
+    "options": [
+      { "itemId": "search_ctx_on", "displayName": "Enabled" },
+      { "itemId": "search_ctx_off", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "search_ctx_on"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "above_lock_toast",
+    "name": "AboveLock_AllowToasts",
+    "displayName": "Allow toast notifications above the lock screen",
+    "description": "This policy setting allows toast notifications above the device lock screen.",
+    "version": "1.0",
+    "categoryId": "cat_above_lock",
+    "rootDefinitionId": "above_lock_toast",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/AboveLock",
+    "offsetUri": "AllowToasts",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["toast", "notification", "lock screen", "above lock"],
+    "options": [
+      { "itemId": "toast_allow", "displayName": "Allowed" },
+      { "itemId": "toast_block", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "toast_allow"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "above_lock_cortana",
+    "name": "AboveLock_AllowCortanaAboveLock",
+    "displayName": "Allow Cortana above the lock screen",
+    "description": "This policy setting determines whether or not the user can interact with Cortana using speech while the system is locked.",
+    "version": "1.0",
+    "categoryId": "cat_above_lock",
+    "rootDefinitionId": "above_lock_cortana",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/AboveLock",
+    "offsetUri": "AllowCortanaAboveLock",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["cortana", "voice", "lock screen", "above lock"],
+    "options": [
+      { "itemId": "cortana_allow", "displayName": "Allowed" },
+      { "itemId": "cortana_block", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "cortana_block"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition",
+    "id": "accounts_domain_names",
+    "name": "Accounts_AllowedDomainNames",
+    "displayName": "Allowed domain names for email accounts",
+    "description": "Specifies a list of domains that are allowed to be configured as email accounts on the device.",
+    "helpText": "The domain names are separated by a pipe character (|). For example: contoso.com|fabrikam.com",
+    "version": "1.0",
+    "categoryId": "cat_accounts",
+    "rootDefinitionId": "accounts_domain_names",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Accounts",
+    "offsetUri": "AllowedDomainNames",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "smallTextBox",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["domain", "email", "accounts", "allowed"],
+    "valueDefinition": {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationStringSettingValueDefinition",
+      "minimumLength": 0,
+      "maximumLength": 2048,
+      "isRequired": false
+    }
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "accounts_ms_account",
+    "name": "Accounts_AllowMicrosoftAccountConnection",
+    "displayName": "Allow Microsoft account connection",
+    "description": "Specifies whether the user is allowed to use a Microsoft account for non-email related connection authentication and services.",
+    "version": "1.0",
+    "categoryId": "cat_accounts",
+    "rootDefinitionId": "accounts_ms_account",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Accounts",
+    "offsetUri": "AllowMicrosoftAccountConnection",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["microsoft account", "msa", "connection", "accounts"],
+    "options": [
+      { "itemId": "msa_allow", "displayName": "Allowed" },
+      { "itemId": "msa_block", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "msa_allow"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "defender_realtime",
+    "name": "Defender_AllowRealtimeMonitoring",
+    "displayName": "Allow real-time monitoring",
+    "description": "Allows or disallows Windows Defender real-time monitoring functionality.",
+    "helpText": "If you enable this policy or don't configure it, the real-time monitoring service will run. If you disable this policy, the real-time monitoring service will be stopped.",
+    "version": "2.0",
+    "categoryId": "cat_defender",
+    "rootDefinitionId": "defender_realtime",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Defender",
+    "offsetUri": "AllowRealtimeMonitoring",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["defender", "realtime", "monitoring", "antivirus", "protection"],
+    "options": [
+      { "itemId": "rt_allow", "displayName": "Allowed" },
+      { "itemId": "rt_block", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "rt_allow"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "defender_cloud",
+    "name": "Defender_AllowCloudProtection",
+    "displayName": "Allow cloud-delivered protection",
+    "description": "Allow or disallow Microsoft Defender cloud protection. Cloud protection provides improved and faster protection.",
+    "version": "2.0",
+    "categoryId": "cat_defender",
+    "rootDefinitionId": "defender_cloud",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Defender",
+    "offsetUri": "AllowCloudProtection",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["defender", "cloud", "protection", "maps", "antivirus"],
+    "options": [
+      { "itemId": "cloud_allow", "displayName": "Allowed" },
+      { "itemId": "cloud_block", "displayName": "Not allowed" }
+    ],
+    "defaultOptionId": "cloud_allow"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition",
+    "id": "defender_scan_interval",
+    "name": "Defender_ScheduledScanInterval",
+    "displayName": "Scheduled scan interval (hours)",
+    "description": "Specify how often (in hours) to perform an automatic scheduled scan.",
+    "version": "2.0",
+    "categoryId": "cat_defender",
+    "rootDefinitionId": "defender_scan_interval",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/Defender",
+    "offsetUri": "ScheduledScanInterval",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "smallTextBox",
+    "applicability": {
+      "platform": "windows10",
+      "technologies": "mdm"
+    },
+    "keywords": ["defender", "scan", "interval", "schedule", "antivirus"],
+    "valueDefinition": {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValueDefinition",
+      "minimumValue": 0,
+      "maximumValue": 24
+    },
+    "defaultValue": 8
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "macos_filevault",
+    "name": "macOS_FileVaultEnabled",
+    "displayName": "Enable FileVault",
+    "description": "Enable FileVault disk encryption on macOS devices.",
+    "version": "1.0",
+    "categoryId": "cat_macos_general",
+    "rootDefinitionId": "macos_filevault",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/macOS",
+    "offsetUri": "FileVaultEnabled",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "macOS",
+      "technologies": "mdm"
+    },
+    "keywords": ["filevault", "encryption", "disk", "macos"],
+    "options": [
+      { "itemId": "fv_enabled", "displayName": "Enabled" },
+      { "itemId": "fv_disabled", "displayName": "Disabled" }
+    ],
+    "defaultOptionId": "fv_disabled"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition",
+    "id": "ios_passcode",
+    "name": "iOS_PasscodeRequired",
+    "displayName": "Require device passcode",
+    "description": "Require a passcode on iOS/iPadOS devices.",
+    "version": "1.0",
+    "categoryId": "cat_ios_general",
+    "rootDefinitionId": "ios_passcode",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/iOS",
+    "offsetUri": "PasscodeRequired",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "toggle",
+    "applicability": {
+      "platform": "iOS",
+      "technologies": "mdm"
+    },
+    "keywords": ["passcode", "password", "pin", "ios", "ipados", "security"],
+    "options": [
+      { "itemId": "pass_required", "displayName": "Required" },
+      { "itemId": "pass_not_required", "displayName": "Not required" }
+    ],
+    "defaultOptionId": "pass_not_required"
+  },
+  {
+    "@odata.type": "#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition",
+    "id": "ios_passcode_length",
+    "name": "iOS_MinimumPasscodeLength",
+    "displayName": "Minimum passcode length",
+    "description": "Specify the minimum number of characters required for the device passcode.",
+    "version": "1.0",
+    "categoryId": "cat_ios_general",
+    "rootDefinitionId": "ios_passcode_length",
+    "baseUri": "./Device/Vendor/MSFT/Policy/Config/iOS",
+    "offsetUri": "MinimumPasscodeLength",
+    "settingUsage": "configuration",
+    "visibility": "settingsCatalog",
+    "uxBehavior": "smallTextBox",
+    "applicability": {
+      "platform": "iOS",
+      "technologies": "mdm"
+    },
+    "keywords": ["passcode", "length", "minimum", "ios", "ipados", "security"],
+    "valueDefinition": {
+      "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValueDefinition",
+      "minimumValue": 4,
+      "maximumValue": 16
+    },
+    "defaultValue": 6
+  }
+]

@@ -1,0 +1,222 @@
+[
+  {
+    "id": "cat_above_lock",
+    "name": "AboveLock",
+    "displayName": "Above Lock",
+    "description": "Settings for above lock screen behavior",
+    "parentCategoryId": "cat_above_lock",
+    "rootCategoryId": "cat_above_lock",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_accounts",
+    "name": "Accounts",
+    "displayName": "Accounts",
+    "description": "Account management settings",
+    "parentCategoryId": "cat_accounts",
+    "rootCategoryId": "cat_accounts",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_templates",
+    "name": "AdministrativeTemplates",
+    "displayName": "Administrative Templates",
+    "description": "Administrative template settings",
+    "parentCategoryId": "cat_admin_templates",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": ["cat_admin_mss", "cat_admin_system", "cat_admin_wincomp"],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_mss",
+    "name": "MSS_Legacy",
+    "displayName": "MSS (Legacy)",
+    "description": "Legacy MSS settings",
+    "parentCategoryId": "cat_admin_templates",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_system",
+    "name": "System_InternetCommunication",
+    "displayName": "System\\Internet Communication Management\\Internet Communication settings",
+    "description": "Internet communication management settings",
+    "parentCategoryId": "cat_admin_templates",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_wincomp",
+    "name": "WindowsComponents",
+    "displayName": "Windows Components",
+    "description": "Windows components settings",
+    "parentCategoryId": "cat_admin_templates",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": ["cat_admin_ie", "cat_admin_tabletpc"],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_ie",
+    "name": "InternetExplorer",
+    "displayName": "Internet Explorer",
+    "description": "Internet Explorer settings",
+    "parentCategoryId": "cat_admin_wincomp",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_admin_tabletpc",
+    "name": "TabletPC_InputPanel",
+    "displayName": "Tablet PC\\Input Panel",
+    "description": "Tablet PC input panel settings",
+    "parentCategoryId": "cat_admin_wincomp",
+    "rootCategoryId": "cat_admin_templates",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_browser",
+    "name": "Browser",
+    "displayName": "Browser",
+    "description": "Browser settings",
+    "parentCategoryId": "cat_browser",
+    "rootCategoryId": "cat_browser",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_lockdown",
+    "name": "LockDown",
+    "displayName": "Lock Down",
+    "description": "Lock down settings",
+    "parentCategoryId": "cat_lockdown",
+    "rootCategoryId": "cat_lockdown",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_edge",
+    "name": "MicrosoftEdge",
+    "displayName": "Microsoft Edge",
+    "description": "Microsoft Edge browser policy settings",
+    "parentCategoryId": "cat_edge",
+    "rootCategoryId": "cat_edge",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_edge_default",
+    "name": "MicrosoftEdgeDefault",
+    "displayName": "Microsoft Edge - Default Settings (users can override)",
+    "description": "Microsoft Edge default settings that users can override",
+    "parentCategoryId": "cat_edge_default",
+    "rootCategoryId": "cat_edge_default",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_authentication",
+    "name": "Authentication",
+    "displayName": "Authentication",
+    "description": "Authentication settings",
+    "parentCategoryId": "cat_authentication",
+    "rootCategoryId": "cat_authentication",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_auditing",
+    "name": "Auditing",
+    "displayName": "Auditing",
+    "description": "Auditing settings",
+    "parentCategoryId": "cat_auditing",
+    "rootCategoryId": "cat_auditing",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_appcontrol",
+    "name": "AppControlForBusiness",
+    "displayName": "App Control for Business",
+    "description": "Application control settings",
+    "parentCategoryId": "cat_appcontrol",
+    "rootCategoryId": "cat_appcontrol",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_appdefaults",
+    "name": "ApplicationDefaults",
+    "displayName": "Application Defaults",
+    "description": "Application default settings",
+    "parentCategoryId": "cat_appdefaults",
+    "rootCategoryId": "cat_appdefaults",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_account_mgmt",
+    "name": "AccountManagement",
+    "displayName": "Account Management",
+    "description": "Account management settings",
+    "parentCategoryId": "cat_account_mgmt",
+    "rootCategoryId": "cat_account_mgmt",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_defender",
+    "name": "Defender",
+    "displayName": "Microsoft Defender",
+    "description": "Microsoft Defender settings",
+    "parentCategoryId": "cat_defender",
+    "rootCategoryId": "cat_defender",
+    "childCategoryIds": [],
+    "platforms": "windows10",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_macos_general",
+    "name": "macOSGeneral",
+    "displayName": "macOS General",
+    "description": "macOS general settings",
+    "parentCategoryId": "cat_macos_general",
+    "rootCategoryId": "cat_macos_general",
+    "childCategoryIds": [],
+    "platforms": "macOS",
+    "technologies": "mdm"
+  },
+  {
+    "id": "cat_ios_general",
+    "name": "iOSGeneral",
+    "displayName": "iOS/iPadOS General",
+    "description": "iOS/iPadOS general settings",
+    "parentCategoryId": "cat_ios_general",
+    "rootCategoryId": "cat_ios_general",
+    "childCategoryIds": [],
+    "platforms": "iOS",
+    "technologies": "mdm"
+  }
+]
