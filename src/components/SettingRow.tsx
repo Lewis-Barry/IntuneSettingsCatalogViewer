@@ -12,6 +12,8 @@ interface SettingRowProps {
   highlightQuery?: string;
   /** All settings in context for resolving dependent children */
   allSettings?: SettingDefinition[];
+  /** Sub-category label to disambiguate settings with duplicate display names */
+  disambiguationLabel?: string;
 }
 
 /** Highlight matching substrings with a subtle background.
@@ -81,10 +83,14 @@ function getAllDependedOnBy(setting: SettingDefinition): Array<{ dependedOnBy: s
   return deps;
 }
 
-export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, allSettings }: SettingRowProps) {
+export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, allSettings, disambiguationLabel }: SettingRowProps) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
   const isGroup = setting['@odata.type']?.includes('SettingGroup');
+  const isCollectionGroup =
+    setting['@odata.type']?.includes('SettingGroupCollectionDefinition') &&
+    setting.displayName !== 'Top Level Setting Group Collection' &&
+    childSettings.length > 0;
 
   // Detect toggle + additional input pattern (check both top-level and option-level dependedOnBy)
   const allDeps = getAllDependedOnBy(setting);
@@ -138,6 +144,12 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
               </span>
             )}
           </div>
+          {/* Disambiguation label — shows source sub-category when multiple settings share the same name */}
+          {disambiguationLabel && (
+            <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={disambiguationLabel}>
+              {disambiguationLabel}
+            </div>
+          )}
         </div>
 
         {/* Badges */}
@@ -150,9 +162,19 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
           )}
 
           {/* Type badge */}
-          {!isGroup && (
+          {!isGroup && !isCollectionGroup && (
             <span className="scope-badge bg-gray-100 text-gray-600">
               {getSettingTypeLabel(setting['@odata.type'] || '')}
+            </span>
+          )}
+
+          {/* Collection badge */}
+          {isCollectionGroup && (
+            <span className="scope-badge bg-purple-100 text-purple-700 border border-purple-200" title="Repeatable collection – items in this group can appear multiple times">
+              <svg className="w-3 h-3 mr-0.5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              Collection
             </span>
           )}
 
@@ -183,13 +205,26 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (
-            <div className="ml-4 border-l-[3px] border-blue-300 bg-slate-50/40">
-              <div className="px-3 py-1.5 text-fluent-xs font-semibold text-blue-600 bg-blue-50 border-b border-blue-100 flex items-center gap-1.5">
-                <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 3l4 4-4 4" />
-                </svg>
-                Child settings ({childSettings.length})
+            <div className={`ml-4 border-l-[3px] ${isCollectionGroup ? 'border-purple-300 bg-purple-50/30' : 'border-blue-300 bg-slate-50/40'}`}>
+              <div className={`px-3 py-1.5 text-fluent-xs font-semibold border-b flex items-center gap-1.5 ${
+                isCollectionGroup
+                  ? 'text-purple-700 bg-purple-50 border-purple-100'
+                  : 'text-blue-600 bg-blue-50 border-blue-100'
+              }`}>
+                {isCollectionGroup ? (
+                  <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                ) : (
+                  <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 3l4 4-4 4" />
+                  </svg>
+                )}
+                {isCollectionGroup
+                  ? `Collection items – repeatable (${childSettings.length})`
+                  : `Child settings (${childSettings.length})`
+                }
               </div>
               {childSettings.map((child) => (
                 <SettingRowInner

@@ -62,7 +62,7 @@ function buildBreadcrumb(
   const visited = new Set<string>();
   while (current && current !== ROOT_CATEGORY_ID && !visited.has(current)) {
     visited.add(current);
-    crumbs.unshift(categoryMap[current] || current);
+    crumbs.unshift(categoryMap[current] || 'Unknown Category');
     current = categoryParentMap[current];
   }
   return crumbs;
@@ -242,7 +242,7 @@ export default function SettingsCatalogBrowser({
         filtered.sort((a, b) => (rankMap.get(a.id) ?? Infinity) - (rankMap.get(b.id) ?? Infinity));
         groups.push({
           categoryId: catId,
-          categoryName: categoryMap[catId] || catId,
+          categoryName: categoryMap[catId] || 'Unknown Category',
           breadcrumb: buildBreadcrumb(catId, categoryMap, categoryParentMap),
           settings: filtered,
         });
@@ -395,6 +395,7 @@ export default function SettingsCatalogBrowser({
                   breadcrumb={group.breadcrumb}
                   isSearchResult
                   highlightQuery={searchQuery}
+                  categoryMap={categoryMap}
                 />
               ))}
             </div>
@@ -404,6 +405,7 @@ export default function SettingsCatalogBrowser({
               categoryName={selectedCategoryName}
               totalCount={categorySettings.length}
               scrollContainerRef={settingsScrollRef}
+              categoryMap={categoryMap}
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">

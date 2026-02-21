@@ -18,6 +18,8 @@ interface SettingsListProps {
   scrollContainerRef?: React.RefObject<HTMLDivElement>;
   /** Ancestor breadcrumb path (root → parent). Only shown for search results with a parent category. */
   breadcrumb?: string[];
+  /** Map of categoryId → displayName, used to disambiguate same-named settings from different sub-categories */
+  categoryMap?: Record<string, string>;
 }
 
 const PAGE_SIZE = 500;
@@ -30,11 +32,13 @@ export default function SettingsList({
   highlightQuery,
   scrollContainerRef,
   breadcrumb,
+  categoryMap,
 }: SettingsListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
 
-  // Group settings: root settings at top level, children nested under their root
+  // Group settings: root settings at top level, children nested under their root,
+  // and collection items grouped under their SettingGroupCollectionDefinition header.
   const { rootSettings, childMap } = useMemo(() => {
     const childMap = new Map<string, SettingDefinition[]>();
     const rootSettings: SettingDefinition[] = [];
@@ -95,13 +99,120 @@ export default function SettingsList({
       }
     }
 
+    // ── Collection grouping (offsetUri-based) ──
+    // Settings with [{0}] in their offsetUri (e.g. "Passwords/[{0}]/DeviceID")
+    // belong to a repeatable collection. Find the matching
+    // SettingGroupCollectionDefinition header (e.g. offsetUri "Passwords") and
+    // nest those items under it, removing them from the top-level root list.
+    const collectionHeaders = new Map<string, SettingDefinition>(); // offsetUri → setting
+    for (const s of rootSettings) {
+      if (
+        s['@odata.type']?.includes('SettingGroupCollectionDefinition') &&
+        s.offsetUri &&
+        !s.offsetUri.includes('[{0}]')
+      ) {
+        collectionHeaders.set(s.offsetUri, s);
+      }
+    }
+
+    if (collectionHeaders.size > 0) {
+      const toRemoveFromRoot = new Set<string>();
+      for (const s of rootSettings) {
+        if (!s.offsetUri || !s.offsetUri.includes('[{0}]')) continue;
+        // Extract the collection prefix: everything before the first /[{0}]
+        const prefixEnd = s.offsetUri.indexOf('/[{0}]');
+        if (prefixEnd < 0) continue;
+        const prefix = s.offsetUri.substring(0, prefixEnd);
+        const header = collectionHeaders.get(prefix);
+        if (header) {
+          const children = childMap.get(header.id) || [];
+          children.push(s);
+          childMap.set(header.id, children);
+          toRemoveFromRoot.add(s.id);
+        }
+      }
+
+      // Also nest existing childMap entries that match collection patterns.
+      // (Children already attached to a root via rootDefinitionId whose
+      // offsetUri matches a collection header prefix.)
+      for (const [parentId, children] of childMap) {
+        if (collectionHeaders.has(parentId)) continue; // skip collection headers themselves
+        const remaining: SettingDefinition[] = [];
+        for (const child of children) {
+          if (!child.offsetUri || !child.offsetUri.includes('[{0}]')) {
+            remaining.push(child);
+            continue;
+          }
+          const prefixEnd = child.offsetUri.indexOf('/[{0}]');
+          if (prefixEnd < 0) { remaining.push(child); continue; }
+          const prefix = child.offsetUri.substring(0, prefixEnd);
+          const header = collectionHeaders.get(prefix);
+          if (header && header.id !== parentId) {
+            const hChildren = childMap.get(header.id) || [];
+            hChildren.push(child);
+            childMap.set(header.id, hChildren);
+          } else {
+            remaining.push(child);
+          }
+        }
+        if (remaining.length !== children.length) {
+          childMap.set(parentId, remaining);
+        }
+      }
+
+      // Remove items that were moved under a collection header
+      if (toRemoveFromRoot.size > 0) {
+        for (let i = rootSettings.length - 1; i >= 0; i--) {
+          if (toRemoveFromRoot.has(rootSettings[i].id)) {
+            rootSettings.splice(i, 1);
+          }
+        }
+      }
+    }
+
     // Sort root settings alphabetically
     rootSettings.sort((a, b) =>
       (a.displayName || a.name || '').localeCompare(b.displayName || b.name || '')
     );
 
+    // Sort collection children alphabetically within each group
+    for (const [, children] of childMap) {
+      children.sort((a, b) =>
+        (a.displayName || a.name || '').localeCompare(b.displayName || b.name || '')
+      );
+    }
+
     return { rootSettings, childMap };
   }, [settings]);
+
+  // Build a disambiguation map: settingId → sub-category label for settings
+  // that share the same displayName.  This lets the UI show which sub-category
+  // a setting comes from when multiple settings share a name (e.g. IE zone
+  // policies under Administrative Templates).
+  const disambiguationMap = useMemo(() => {
+    const map = new Map<string, string>();
+    if (!categoryMap) return map;
+
+    // Group root settings by displayName
+    const byName = new Map<string, SettingDefinition[]>();
+    for (const s of rootSettings) {
+      const name = s.displayName || s.name || '';
+      if (!byName.has(name)) byName.set(name, []);
+      byName.get(name)!.push(s);
+    }
+
+    for (const [, arr] of byName) {
+      if (arr.length <= 1) continue;
+      // Multiple settings share the same displayName — disambiguate by category
+      for (const s of arr) {
+        const catName = categoryMap[s.categoryId];
+        if (catName && catName !== categoryName) {
+          map.set(s.id, catName);
+        }
+      }
+    }
+    return map;
+  }, [rootSettings, categoryMap, categoryName]);
 
   const count = totalCount ?? rootSettings.length;
 
@@ -177,6 +288,7 @@ export default function SettingsList({
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
                 allSettings={settings}
+                disambiguationLabel={disambiguationMap.get(setting.id)}
               />
             ))}
 
@@ -244,6 +356,7 @@ export default function SettingsList({
                 setting={setting}
                 childSettings={childMap.get(setting.id)}
                 allSettings={settings}
+                disambiguationLabel={disambiguationMap.get(setting.id)}
               />
             </div>
           );

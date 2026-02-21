@@ -147,7 +147,7 @@ function main() {
       description: (s.description || '').slice(0, 300), // Truncate for index size
       keywords: (s.keywords || []).join(' '),
       categoryId: s.categoryId,
-      categoryName: categoryNameMap.get(s.categoryId) || '',
+      categoryName: categoryNameMap.get(s.categoryId) || 'Unknown Category',
       scope: getScope(s.baseUri),
       platform: s.applicability?.platform || '',
       settingType: getSettingType(s['@odata.type'] || ''),

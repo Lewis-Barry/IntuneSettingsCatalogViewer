@@ -159,7 +159,41 @@ async function main() {
   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf-8');
   console.log(`  Saved to ${SETTINGS_FILE}`);
 
-  // 3. Write last-updated timestamp
+  // 3. Fetch any orphan categories referenced by settings but not in the
+  //    bulk categories response.  The Graph configurationCategories endpoint
+  //    sometimes omits deeply-nested leaf categories that settings still
+  //    reference.  We fetch these individually by ID.
+  const knownCatIds = new Set(categories.map((c) => (c as Record<string, unknown>).id));
+  const settingCatIds = new Set(
+    (settings as Record<string, unknown>[]).map((s) => s.categoryId).filter(Boolean)
+  );
+  const orphanCatIds = [...settingCatIds].filter((id) => !knownCatIds.has(id));
+
+  if (orphanCatIds.length > 0) {
+    console.log(`\nFound ${orphanCatIds.length} category IDs referenced by settings but missing from bulk fetch.`);
+    console.log('Fetching orphan categories individually...');
+    let fetched = 0;
+    for (const catId of orphanCatIds) {
+      try {
+        const cat = await client
+          .api(`/deviceManagement/configurationCategories/${catId}?$select=${CATEGORIES_SELECT}`)
+          .get();
+        categories.push(cat);
+        fetched++;
+      } catch (err: unknown) {
+        // Category may genuinely not exist; log and skip.
+        const status = (err as { statusCode?: number }).statusCode;
+        console.warn(`  Could not fetch category ${catId} (status ${status ?? 'unknown'}) — skipping`);
+      }
+    }
+    console.log(`  Fetched ${fetched}/${orphanCatIds.length} orphan categories.`);
+
+    // Re-write categories.json with the additions
+    fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(categories, null, 2), 'utf-8');
+    console.log(`  Updated ${CATEGORIES_FILE}`);
+  }
+
+  // 4. Write last-updated timestamp
   const now = new Date().toISOString();
   fs.writeFileSync(LAST_UPDATED_FILE, JSON.stringify({ date: now }, null, 2), 'utf-8');
   console.log(`  Updated timestamp: ${now}`);

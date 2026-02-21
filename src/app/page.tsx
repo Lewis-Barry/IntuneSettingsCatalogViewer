@@ -25,6 +25,14 @@ export default function HomePage() {
     settingsByCategoryId[s.categoryId].push(s);
   }
 
+  // Fill in any orphan category IDs referenced by settings but missing from
+  // categories.json.  Use "Unknown Category" so GUIDs never appear in the UI.
+  for (const catId of Object.keys(settingsByCategoryId)) {
+    if (!categoryMap[catId]) {
+      categoryMap[catId] = 'Unknown Category';
+    }
+  }
+
   return (
     <div className="max-w-[1600px] mx-auto">
       <SettingsCatalogBrowser

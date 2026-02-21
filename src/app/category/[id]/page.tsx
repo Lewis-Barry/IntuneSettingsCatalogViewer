@@ -66,6 +66,12 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const categorySettings = allSettings.filter((s) => childCatIds.has(s.categoryId));
 
+  // Build a category map for disambiguation labels
+  const categoryNameMap: Record<string, string> = {};
+  for (const c of categories) {
+    categoryNameMap[c.id] = c.displayName;
+  }
+
   // Breadcrumbs
   const breadcrumbs: Array<{ name: string; id: string }> = [];
   let current = category;
@@ -126,6 +132,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         <SettingsList
           settings={categorySettings}
           categoryName={category.displayName}
+          categoryMap={categoryNameMap}
         />
       </div>
 
