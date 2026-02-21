@@ -5098,6 +5098,23 @@
     "settingCount": 2
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "56b82fc9-c632-4c76-bb4f-dcf8757f003e",
+    "name": null,
+    "displayName": "App Control for Business",
+    "description": "App Control for Business",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "56b82fc9-c632-4c76-bb4f-dcf8757f003e",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
     "id": "f36a78cf-46cf-418e-a98e-032f6cfad224",
     "name": null,
     "displayName": "App Management",
@@ -5214,6 +5231,23 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 2
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "9d952d62-89a8-46cd-8d2b-bb86ad1fac5e",
+    "name": null,
+    "displayName": "Apps",
+    "description": "Apps",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "9d952d62-89a8-46cd-8d2b-bb86ad1fac5e",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
   },
   {
     "id": "5cb7f4f0-ef00-4eb3-80f4-2c2b97b053ea",
@@ -5794,6 +5828,40 @@
     "settingCount": 31
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "47b863f6-8116-432b-9fc1-9e487fdaa203",
+    "name": null,
+    "displayName": "Deployment settings",
+    "description": "Deployment settings",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "47b863f6-8116-432b-9fc1-9e487fdaa203",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 4
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "5ed18ca1-36d1-4375-bfd6-fd67801c2659",
+    "name": null,
+    "displayName": "Device Control",
+    "description": "Device Control",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm,microsoftSense",
+    "settingUsage": "configuration,reusableSetting",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "5ed18ca1-36d1-4375-bfd6-fd67801c2659",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
     "id": "992a8a1e-428e-41cb-948e-4e5da86105fa",
     "name": null,
     "displayName": "Device Guard",
@@ -6073,6 +6141,40 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 4
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "a876b9c1-f22c-48aa-9826-e112f4fbe6d8",
+    "name": null,
+    "displayName": "End User Overrides",
+    "description": "End User Overrides",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "android,iOS",
+    "technologies": "exchangeOnline",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "a876b9c1-f22c-48aa-9826-e112f4fbe6d8",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "a93cb07c-fa96-42af-8987-40f78eae10bd",
+    "name": null,
+    "displayName": "Enrollment",
+    "description": "Enrollment",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "a93cb07c-fa96-42af-8987-40f78eae10bd",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
   },
   {
     "id": "14fe5c02-d4f6-4f2a-9eae-2d60d111ee77",
@@ -7228,6 +7330,23 @@
     "settingCount": 8
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "f1dcf7b6-2d89-41bf-b5eb-02a879c6db5d",
+    "name": null,
+    "displayName": "LAPS",
+    "description": "LAPS",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "f1dcf7b6-2d89-41bf-b5eb-02a879c6db5d",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 7
+  },
+  {
     "id": "c0204a51-a73c-46a6-8626-deeadcabe6ac",
     "name": null,
     "displayName": "Licensing",
@@ -7242,6 +7361,23 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 2
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "36716a4c-cedb-47bb-8f4b-5783fedc7c47",
+    "name": null,
+    "displayName": "Linux Custom Configuration",
+    "description": "Linux Custom Configuration",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "36716a4c-cedb-47bb-8f4b-5783fedc7c47",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 4
   },
   {
     "id": "7fc23813-7a7c-412a-b9bd-eda07e6b1f5d",
@@ -7287,6 +7423,23 @@
     "settingUsage": "configuration",
     "parentCategoryId": "00000000-0000-0000-0000-000000000000",
     "rootCategoryId": "a279f35f-cd71-4489-b0c3-545ea1aa229d",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "b86100f0-e4ae-4f93-9dae-dd253a96726f",
+    "name": null,
+    "displayName": "Local Users And Groups",
+    "description": "Local user group membership policies help to add, remove, or replace members of local groups on Windows devices.",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "b86100f0-e4ae-4f93-9dae-dd253a96726f",
     "childCategoryIds": [],
     "children": [],
     "settingCount": 1
@@ -7614,6 +7767,23 @@
       }
     ],
     "settingCount": 12
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "75e27534-3163-45b1-b34e-ca79b077b286",
+    "name": null,
+    "displayName": "Management settings",
+    "description": "Management settings",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "iOS,visionOS,tvOS",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 6
   },
   {
     "id": "9a7843b4-6ec1-47c4-906b-75b8866e97c2",
@@ -8181,6 +8351,23 @@
       }
     ],
     "settingCount": 81
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "cd55f347-a417-4fe9-83ee-8f1f40ac5eb0",
+    "name": null,
+    "displayName": "Microsoft Defender Application Guard",
+    "description": "Microsoft Defender Application Guard",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm,configManager",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "cd55f347-a417-4fe9-83ee-8f1f40ac5eb0",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 5
   },
   {
     "id": "577d5951-fc56-4906-90bc-2c508c6611ad",
@@ -15253,6 +15440,23 @@
     "settingCount": 2
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "fde9be9c-e0ab-4dd8-9df3-0794e608d15a",
+    "name": null,
+    "displayName": "Non-working time",
+    "description": "Non-working time",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "android,iOS",
+    "technologies": "exchangeOnline",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "fde9be9c-e0ab-4dd8-9df3-0794e608d15a",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
     "id": "cb1e177e-8f06-4a69-8215-ec1e91c19e30",
     "name": null,
     "displayName": "Notifications",
@@ -15590,6 +15794,23 @@
     "settingCount": 5
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "72e4d72b-e01e-427c-a3b6-05bdcf04ef8d",
+    "name": null,
+    "displayName": "Out-of-box experience settings",
+    "description": "Out-of-box experience settings",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "72e4d72b-e01e-427c-a3b6-05bdcf04ef8d",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 9
+  },
+  {
     "id": "82a437a8-6be8-4003-a951-951999e86db8",
     "name": null,
     "displayName": "Parental Controls",
@@ -15755,6 +15976,23 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 2
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "8894808d-fb39-4151-bf83-1b8a126285cf",
+    "name": null,
+    "displayName": "Policies",
+    "description": "Policies",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "8894808d-fb39-4151-bf83-1b8a126285cf",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
   },
   {
     "id": "e9cd3225-7b0e-485e-99f8-7ec8dd3977a1",
@@ -15961,6 +16199,40 @@
     "settingCount": 104
   },
   {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+    "name": null,
+    "displayName": "Privilege Management",
+    "description": "Privilege Management",
+    "categoryDescription": "Elevation Rules set the conditions for allowing users to get just-in-time access to apps and files on their devices.",
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "endpointPrivilegeManagement",
+    "settingUsage": "configuration,reusableSetting",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "b750fe41-33c4-4293-8dfc-42285be35752",
+    "name": null,
+    "displayName": "Privilege management elevation client settings",
+    "description": "Privilege Management Elevation Client Settings",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "mdm,endpointPrivilegeManagement",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "b750fe41-33c4-4293-8dfc-42285be35752",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
+  },
+  {
     "id": "e905d6cf-7820-48d4-86e0-b55fa991a5ad",
     "name": null,
     "displayName": "Profile Removal Password",
@@ -16026,6 +16298,23 @@
         "settingCount": 1
       }
     ],
+    "settingCount": 2
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "39d1a447-308a-4a49-9716-3097b321da31",
+    "name": null,
+    "displayName": "Range Settings",
+    "description": "Range Settings",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "android,iOS",
+    "technologies": "exchangeOnline",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "39d1a447-308a-4a49-9716-3097b321da31",
+    "childCategoryIds": [],
+    "children": [],
     "settingCount": 2
   },
   {
@@ -16123,6 +16412,23 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 8
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "db9fc5b8-fb50-437b-aceb-87d9d380def0",
+    "name": null,
+    "displayName": "Scripts",
+    "description": "Scripts",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "db9fc5b8-fb50-437b-aceb-87d9d380def0",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
   },
   {
     "id": "794337be-8833-4b9a-bb88-8a030141578d",
@@ -16240,6 +16546,23 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 13
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+    "name": null,
+    "displayName": "Setup Assistant",
+    "description": "Setup Assistant",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "iOS,visionOS,tvOS",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 29
   },
   {
     "id": "891d2958-5a8c-479c-aa68-69b1b6c735e1",
