@@ -46,86 +46,6 @@ Data is refreshed automatically every day via GitHub Actions. Simply visit the U
 
 End users just visit the URL; there is nothing to install or run.
 
-## Deploy Your Own Instance
-
-Fork this repository and set up your own GitHub Pages deployment with live Intune data.
-
-### Prerequisites
-
-- A **GitHub repository** with Pages enabled
-- An **Azure AD (Entra ID) app registration** with access to an Intune-licensed tenant
-
-### Step 1: Create Azure AD App Registration
-
-1. Go to [Microsoft Entra admin center](https://entra.microsoft.com) → **App registrations** → **New registration**
-2. Name: `Intune Settings Catalog Reader` (or similar)
-3. Supported account types: **Single tenant**
-4. Click **Register**
-
-### Step 2: Add API Permissions
-
-1. Go to **API permissions** → **Add a permission**
-2. Select **Microsoft Graph** → **Application permissions**
-3. Search for and add: `DeviceManagementConfiguration.Read.All`
-4. Click **Grant admin consent for [your org]**
-
-### Step 3: Create Client Secret
-
-1. Go to **Certificates & secrets** → **New client secret**
-2. Set a description and expiry (recommend 24 months)
-3. Copy the **Value** immediately (it won't be shown again)
-
-### Step 4: Note Your IDs
-
-From the app's **Overview** page, note:
-- **Application (client) ID**
-- **Directory (tenant) ID**
-- The **Client Secret Value** from Step 3
-
-### Step 5: Configure GitHub Secrets
-
-In your GitHub repository: **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
-
-Add these three secrets:
-
-| Secret Name | Value |
-|---|---|
-| `AZURE_TENANT_ID` | Your tenant ID |
-| `AZURE_CLIENT_ID` | Your app's client ID |
-| `AZURE_CLIENT_SECRET` | Your client secret value |
-
-### Step 6: Enable GitHub Pages
-
-1. Go to **Settings** → **Pages**
-2. Source: **GitHub Actions**
-
-### Step 7: Configure the Base Path
-
-Update `next.config.js` with your repository name so assets resolve correctly on GitHub Pages:
-
-```js
-basePath: '/your-repo-name',
-assetPrefix: '/your-repo-name/',
-```
-
-### Step 8: Run Initial Data Fetch & Deploy
-
-Either:
-- Push to `main` to trigger the deploy workflow, OR
-- Go to **Actions** → **Refresh Settings & Deploy** → **Run workflow**
-
-Once complete, your site will be live at `https://<username>.github.io/<repo-name>/`.
-
-## GitHub Actions Workflows
-
-### Refresh & Deploy (Daily)
-- **Trigger**: Cron at 06:00 UTC daily + manual dispatch
-- **Steps**: Install → Fetch from Graph → Diff changelog → Build index → Commit data → Build static site → Deploy to GitHub Pages
-
-### Deploy on Push
-- **Trigger**: Push to `main` (ignoring data-only commits)
-- **Steps**: Install → Use existing data → Build index → Build static site → Deploy to GitHub Pages
-
 ## Local Development (for Contributors)
 
 If you want to contribute to the project or test changes locally, you can run the site on your machine using sample data.
@@ -151,35 +71,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the site with sample data.
-
-### Fetch Live Data Locally
-
-To test against real Intune data locally, set the Azure credentials as environment variables:
-
-```bash
-# Set environment variables
-export AZURE_TENANT_ID="your-tenant-id"
-export AZURE_CLIENT_ID="your-client-id"
-export AZURE_CLIENT_SECRET="your-client-secret"
-
-# Fetch all settings and categories from Microsoft Graph
-npm run fetch-settings
-
-# Generate changelog (diffs against previous snapshot)
-npm run generate-changelog
-
-# Build search index and category tree
-npm run build-search-index
-
-# Build the site
-npm run build
-```
-
-Or all at once:
-```bash
-npm run refresh  # runs fetch + changelog + index
-npm run build
-```
 
 ## Project Structure
 
@@ -229,19 +120,7 @@ npm run build
 
 ## Configuration
 
-### GitHub Pages Base Path
-
-The `basePath` and `assetPrefix` in `next.config.js` must match your GitHub repository name so that the site loads correctly on GitHub Pages:
-
-```js
-basePath: '/your-repo-name',
-assetPrefix: '/your-repo-name/',
-```
-
-### Customization
-
 - **Colors**: Edit `tailwind.config.js` → `theme.extend.colors.fluent`
-- **Daily schedule**: Edit `.github/workflows/refresh-and-deploy.yml` → `cron`
 - **Search fields/weights**: Edit `src/lib/search.ts` → Document index config
 
 ## API Details
