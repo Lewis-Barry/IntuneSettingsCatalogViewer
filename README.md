@@ -46,32 +46,6 @@ Data is refreshed automatically every day via GitHub Actions. Simply visit the U
 
 End users just visit the URL; there is nothing to install or run.
 
-## Local Development (for Contributors)
-
-If you want to contribute to the project or test changes locally, you can run the site on your machine using sample data.
-
-### Prerequisites
-
-- **Node.js 20+** and npm
-
-### Quick Start with Sample Data
-
-```bash
-# 1. Install dependencies
-npm install
-
-# 2. Copy sample data files for local development
-npx tsx scripts/setup-dev-data.ts
-
-# 3. Build the search index and category tree
-npx tsx scripts/build-search-index.ts
-
-# 4. Start the dev server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see the site with sample data.
-
 ## Project Structure
 
 ```
