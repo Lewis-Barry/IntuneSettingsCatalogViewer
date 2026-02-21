@@ -8,7 +8,7 @@ A fast, searchable viewer for the **Microsoft Intune Settings Catalog**, hosted 
 
 The site is publicly available on GitHub Pages — no installation required:
 
-> **https://github.com/Lewis-Barry/IntuneSettingsCatalogViewer/**
+> **https://lewis-barry.github.io/IntuneSettingsCatalogViewer/**
 
 Data is refreshed automatically every day via GitHub Actions. Simply visit the URL to browse the latest Intune settings.
 
