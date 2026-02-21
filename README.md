@@ -1,8 +1,16 @@
 # Intune Settings Catalog Viewer
 
-A fast, searchable, offline-capable viewer for the **Microsoft Intune Settings Catalog**. Gives IT admins a quicker way to browse all available settings without signing into the Intune portal.
+A fast, searchable viewer for the **Microsoft Intune Settings Catalog**, hosted on **GitHub Pages**. Gives IT admins a quicker way to browse all available settings without signing into the Intune portal — just open the site in any browser.
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8) ![License](https://img.shields.io/badge/License-MIT-green)
+![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8) ![GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-222) ![License](https://img.shields.io/badge/License-MIT-green)
+
+## Live Site
+
+The site is publicly available on GitHub Pages — no installation required:
+
+> **https://\<username\>.github.io/IntuneSettingsCatalogViewer/**
+
+Data is refreshed automatically every day via GitHub Actions. Simply visit the URL to browse the latest Intune settings.
 
 ## Features
 
@@ -13,10 +21,10 @@ A fast, searchable, offline-capable viewer for the **Microsoft Intune Settings C
 - **Platform filtering** — filter by Windows, macOS, iOS, Android, Linux
 - **Daily changelog** — automated diff showing additions, removals, and changes
 - **Deep links** — every setting has its own shareable URL
-- **Static site** — zero runtime API calls, deployed to GitHub Pages
-- **Daily auto-refresh** — GitHub Actions fetches fresh data from Microsoft Graph daily
+- **Fully static** — zero runtime API calls; the entire site is pre-built and served from GitHub Pages
+- **Daily auto-refresh** — GitHub Actions fetches fresh data from Microsoft Graph and redeploys every day
 
-## Architecture
+## How It Works
 
 ```
 ┌──────────────────┐     ┌────────────────────┐     ┌──────────────────┐
@@ -30,33 +38,22 @@ A fast, searchable, offline-capable viewer for the **Microsoft Intune Settings C
                           └─ next build (static)     
 ```
 
-**Data pipeline**: An Azure AD app registration with `DeviceManagementConfiguration.Read.All` reads all setting definitions from the Graph beta API → diffs against the previous snapshot → generates a changelog → builds a Flexsearch index → Next.js static export → deployed to GitHub Pages.
+1. A **daily GitHub Actions workflow** authenticates to the Microsoft Graph beta API using an Azure AD app registration with `DeviceManagementConfiguration.Read.All`.
+2. It fetches all setting definitions and categories, diffs them against the previous snapshot, and generates a changelog.
+3. A Flexsearch index and category tree are built from the data.
+4. Next.js produces a **fully static export** — pure HTML, CSS, and JS with no server required.
+5. The static output is deployed to **GitHub Pages**, where it is publicly accessible.
 
-## Prerequisites
+End users just visit the URL; there is nothing to install or run.
 
-- **Node.js 20+** and npm
-- An **Azure AD (Entra ID) app registration** with access to an Intune-licensed tenant (for live data)
-- **GitHub repository** with Pages enabled (for deployment)
+## Deploy Your Own Instance
 
-## Quick Start (Local Development with Sample Data)
+Fork this repository and set up your own GitHub Pages deployment with live Intune data.
 
-```bash
-# 1. Install dependencies
-npm install
+### Prerequisites
 
-# 2. Copy sample data files for local development
-npx tsx scripts/setup-dev-data.ts
-
-# 3. Build the search index and category tree
-npx tsx scripts/build-search-index.ts
-
-# 4. Start the dev server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see the site with sample data.
-
-## Setup for Live Data
+- A **GitHub repository** with Pages enabled
+- An **Azure AD (Entra ID) app registration** with access to an Intune-licensed tenant
 
 ### Step 1: Create Azure AD App Registration
 
@@ -102,13 +99,62 @@ Add these three secrets:
 1. Go to **Settings** → **Pages**
 2. Source: **GitHub Actions**
 
-### Step 7: Run Initial Data Fetch
+### Step 7: Configure the Base Path
+
+Update `next.config.js` with your repository name so assets resolve correctly on GitHub Pages:
+
+```js
+basePath: '/your-repo-name',
+assetPrefix: '/your-repo-name/',
+```
+
+### Step 8: Run Initial Data Fetch & Deploy
 
 Either:
 - Push to `main` to trigger the deploy workflow, OR
 - Go to **Actions** → **Refresh Settings & Deploy** → **Run workflow**
 
-## Fetch Live Data Locally
+Once complete, your site will be live at `https://<username>.github.io/<repo-name>/`.
+
+## GitHub Actions Workflows
+
+### Refresh & Deploy (Daily)
+- **Trigger**: Cron at 06:00 UTC daily + manual dispatch
+- **Steps**: Install → Fetch from Graph → Diff changelog → Build index → Commit data → Build static site → Deploy to GitHub Pages
+
+### Deploy on Push
+- **Trigger**: Push to `main` (ignoring data-only commits)
+- **Steps**: Install → Use existing data → Build index → Build static site → Deploy to GitHub Pages
+
+## Local Development (for Contributors)
+
+If you want to contribute to the project or test changes locally, you can run the site on your machine using sample data.
+
+### Prerequisites
+
+- **Node.js 20+** and npm
+
+### Quick Start with Sample Data
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Copy sample data files for local development
+npx tsx scripts/setup-dev-data.ts
+
+# 3. Build the search index and category tree
+npx tsx scripts/build-search-index.ts
+
+# 4. Start the dev server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see the site with sample data.
+
+### Fetch Live Data Locally
+
+To test against real Intune data locally, set the Azure credentials as environment variables:
 
 ```bash
 # Set environment variables
@@ -139,11 +185,11 @@ npm run build
 
 ```
 ├── .github/workflows/
-│   ├── refresh-and-deploy.yml   # Daily cron: fetch → diff → build → deploy
-│   └── deploy-on-push.yml       # On push: build → deploy (uses existing data)
+│   ├── refresh-and-deploy.yml   # Daily cron: fetch → diff → build → deploy to Pages
+│   └── deploy-on-push.yml       # On push: build → deploy to Pages (uses existing data)
 ├── data/
-│   ├── sample-categories.json   # Sample data for development
-│   ├── sample-settings.json     # Sample data for development
+│   ├── sample-categories.json   # Sample data for local development
+│   ├── sample-settings.json     # Sample data for local development
 │   ├── changelog.json           # Persisted changelog (committed to repo)
 │   ├── categories.json          # Fetched categories (gitignored)
 │   ├── settings.json            # Fetched settings (gitignored)
@@ -181,25 +227,15 @@ npm run build
 └── postcss.config.js
 ```
 
-## GitHub Actions Workflows
-
-### Refresh & Deploy (Daily)
-- **Trigger**: Cron at 06:00 UTC daily + manual
-- **Steps**: Install → Fetch from Graph → Diff changelog → Build index → Commit data → Build site → Deploy to Pages
-
-### Deploy on Push
-- **Trigger**: Push to `main` (ignoring data-only commits)
-- **Steps**: Install → Use existing data → Build index → Build site → Deploy to Pages
-
 ## Configuration
 
 ### GitHub Pages Base Path
 
-If your site is hosted at `https://username.github.io/repo-name/`, uncomment the `basePath` and `assetPrefix` lines in `next.config.js`:
+The `basePath` and `assetPrefix` in `next.config.js` must match your GitHub repository name so that the site loads correctly on GitHub Pages:
 
 ```js
-basePath: '/repo-name',
-assetPrefix: '/repo-name/',
+basePath: '/your-repo-name',
+assetPrefix: '/your-repo-name/',
 ```
 
 ### Customization
@@ -210,7 +246,7 @@ assetPrefix: '/repo-name/',
 
 ## API Details
 
-This project uses the **Microsoft Graph beta API**: 
+This project uses the **Microsoft Graph beta API** (fetched during the GitHub Actions build, not at runtime):
 
 | Endpoint | Purpose |
 |---|---|
@@ -219,7 +255,7 @@ This project uses the **Microsoft Graph beta API**:
 
 **Permission required**: `DeviceManagementConfiguration.Read.All` (Application)
 
-> **Note**: These endpoints are beta-only. Microsoft supports beta APIs for Intune but they may change. The tenant requires an active Intune license.
+> **Note**: These endpoints are beta-only. Microsoft supports beta APIs for Intune but they may change. The tenant requires an active Intune license. The site itself makes **no API calls** — all data is baked in at build time.
 
 ## Contributing
 

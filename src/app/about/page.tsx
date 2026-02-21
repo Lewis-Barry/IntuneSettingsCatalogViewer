@@ -16,7 +16,7 @@ export default function AboutPage() {
             Intune Settings Catalog Viewer
           </h1>
           <p className="mt-4 text-[18px] leading-[28px] sm:text-[20px] sm:leading-[30px] text-white/85 max-w-2xl mx-auto">
-            Browse, search, and explore every Microsoft Intune Settings Catalog definition — fast, offline, and without needing Intune access.
+            Browse, search, and explore every Microsoft Intune Settings Catalog definition — fast, free, and without needing Intune access. Hosted on GitHub Pages and updated daily.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -131,7 +131,7 @@ export default function AboutPage() {
               </summary>
               <div className="px-6 pb-5 pt-1 border-t border-fluent-border space-y-3">
                 <p className="text-[14px] leading-[22px] text-fluent-text-secondary">
-                  The data pipeline runs on a scheduled basis and follows these steps:
+                  A GitHub Actions workflow runs daily at 06:00 UTC and follows these steps:
                 </p>
                 <ol className="space-y-3 text-[14px] leading-[22px] text-fluent-text-secondary list-decimal list-inside">
                   <li>
@@ -144,7 +144,7 @@ export default function AboutPage() {
                     <strong className="text-fluent-text">Search index</strong> — Generates a pre-built search index so that full-text search works instantly in the browser with zero server calls.
                   </li>
                   <li>
-                    <strong className="text-fluent-text">Build and deploy</strong> — The site is statically generated via Next.js at build time. All settings data is embedded directly into the pages, so browsing is fast and fully offline-capable after load.
+                    <strong className="text-fluent-text">Build and deploy</strong> — The site is statically generated via Next.js and deployed to GitHub Pages. All settings data is embedded directly into the pages — the site makes zero runtime API calls.
                   </li>
                 </ol>
               </div>
@@ -169,8 +169,8 @@ export default function AboutPage() {
                     <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">Next.js static generation, pre-built search index</p>
                   </div>
                   <div className="bg-[#f5f5f5] rounded px-4 py-4 border border-fluent-border text-center">
-                    <p className="font-semibold text-[14px] text-fluent-text">Frontend</p>
-                    <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">React with Tailwind, client-side search, no backend required</p>
+                    <p className="font-semibold text-[14px] text-fluent-text">Hosting</p>
+                    <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">GitHub Pages static site, client-side search, no backend required</p>
                   </div>
                 </div>
               </div>

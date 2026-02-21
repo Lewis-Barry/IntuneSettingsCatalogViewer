@@ -96,27 +96,16 @@ function main() {
   // Load previous settings (if exists)
   if (!fs.existsSync(PREVIOUS_FILE)) {
     console.log('No previous snapshot found. This is the first run.');
-    console.log('Creating initial snapshot...');
+    console.log('Creating initial baseline snapshot (not logged to changelog)...');
 
-    // Save current as previous for next time
+    // Save current as previous for next time — future runs will diff against this.
     fs.copyFileSync(SETTINGS_FILE, PREVIOUS_FILE);
 
-    // Initialize changelog with a "first run" entry
-    const entry: ChangelogEntry = {
-      date: new Date().toISOString().split('T')[0],
-      added: current.map((s) => ({
-        id: s.id,
-        displayName: s.displayName,
-        categoryId: s.categoryId,
-        categoryName: categoryMap.get(s.categoryId),
-      })),
-      removed: [],
-      changed: [],
-    };
-
-    const changelog: ChangelogEntry[] = [entry];
-    fs.writeFileSync(CHANGELOG_FILE, JSON.stringify(changelog, null, 2), 'utf-8');
-    console.log(`Initial changelog created with ${entry.added.length} settings.`);
+    // Initialize an empty changelog; the initial bulk load is not a "change".
+    if (!fs.existsSync(CHANGELOG_FILE)) {
+      fs.writeFileSync(CHANGELOG_FILE, JSON.stringify([], null, 2), 'utf-8');
+    }
+    console.log(`Baseline established with ${current.length} settings. Only future changes will appear in the changelog.`);
     return;
   }
 

@@ -32,7 +32,7 @@ export default function ChangelogPage() {
               Change tracking started on February 21, 2026
             </p>
             <p className="text-fluent-sm text-fluent-text-secondary mt-0.5">
-              Changes are detected daily by comparing the current Settings Catalog snapshot against the previous day&apos;s data. Entries will appear here as additions, removals, or modifications are detected.
+              The Settings Catalog is checked periodically for changes by comparing each snapshot against the previous one. Entries only appear here when additions, removals, or modifications are actually detected &mdash; not every check results in an update.
             </p>
           </div>
         </div>

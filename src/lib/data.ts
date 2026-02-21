@@ -37,7 +37,11 @@ export function loadCategoryTree(): CategoryTreeNode[] {
 }
 
 export function loadChangelog(): ChangelogEntry[] {
-  return readJSON<ChangelogEntry[]>('changelog.json') || [];
+  const raw = readJSON<ChangelogEntry[]>('changelog.json') || [];
+  // Exclude the initial baseline entry (2026-02-21) which contains the bulk
+  // import of all settings and makes the page very slow.
+  const BASELINE_DATE = '2026-02-21';
+  return raw.filter((e) => e.date !== BASELINE_DATE);
 }
 
 /** Get the last updated timestamp — prefers the metadata file written by fetch-settings, falls back to changelog */

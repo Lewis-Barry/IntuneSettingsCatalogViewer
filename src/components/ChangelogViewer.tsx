@@ -34,7 +34,46 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
       totalRemoved += e.removed.length;
       totalChanged += e.changed.length;
     }
-    return { totalAdded, totalRemoved, totalChanged, totalDays: entries.length };
+
+    // Most recent entry with actual changes
+    const lastEntry = entries.find(
+      (e) => e.added.length > 0 || e.removed.length > 0 || e.changed.length > 0
+    );
+    const lastChangeDate = lastEntry?.date ?? null;
+
+    // Relative description of last change
+    let lastChangeLabel = 'No changes yet';
+    if (lastChangeDate) {
+      const diffMs = Date.now() - new Date(lastChangeDate + 'T00:00:00').getTime();
+      const diffDays = Math.floor(diffMs / 86_400_000);
+      if (diffDays === 0) lastChangeLabel = 'Today';
+      else if (diffDays === 1) lastChangeLabel = 'Yesterday';
+      else if (diffDays < 7) lastChangeLabel = `${diffDays} days ago`;
+      else if (diffDays < 30) {
+        const weeks = Math.floor(diffDays / 7);
+        lastChangeLabel = weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+      } else {
+        const months = Math.floor(diffDays / 30);
+        lastChangeLabel = months === 1 ? '1 month ago' : `${months} months ago`;
+      }
+    }
+
+    // Counts from the latest entry (for "since last update" context)
+    const latestAdded = lastEntry?.added.length ?? 0;
+    const latestRemoved = lastEntry?.removed.length ?? 0;
+    const latestChanged = lastEntry?.changed.length ?? 0;
+
+    return {
+      totalAdded,
+      totalRemoved,
+      totalChanged,
+      totalDays: entries.length,
+      lastChangeLabel,
+      lastChangeDate,
+      latestAdded,
+      latestRemoved,
+      latestChanged,
+    };
   }, [entries]);
 
   if (entries.length === 0) {
@@ -55,10 +94,32 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
     <div>
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Updates" value={stats.totalDays} color="text-fluent-text" />
-        <StatCard label="Settings added" value={stats.totalAdded} color="text-fluent-success" />
-        <StatCard label="Settings removed" value={stats.totalRemoved} color="text-fluent-error" />
-        <StatCard label="Settings changed" value={stats.totalChanged} color="text-fluent-warning" />
+        <StatCard
+          label="Last change detected"
+          displayValue={stats.lastChangeLabel}
+          subtitle={stats.lastChangeDate
+            ? new Date(stats.lastChangeDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            : undefined}
+          color="text-fluent-text"
+        />
+        <StatCard
+          label="Settings added"
+          value={stats.totalAdded}
+          subtitle={stats.latestAdded > 0 ? `+${stats.latestAdded} in latest update` : undefined}
+          color="text-fluent-success"
+        />
+        <StatCard
+          label="Settings removed"
+          value={stats.totalRemoved}
+          subtitle={stats.latestRemoved > 0 ? `${stats.latestRemoved} in latest update` : undefined}
+          color="text-fluent-error"
+        />
+        <StatCard
+          label="Settings changed"
+          value={stats.totalChanged}
+          subtitle={stats.latestChanged > 0 ? `${stats.latestChanged} in latest update` : undefined}
+          color="text-fluent-warning"
+        />
       </div>
 
       {/* Filter tabs */}
@@ -227,13 +288,22 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
   );
 }
 
-function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
+function StatCard({ label, value, displayValue, subtitle, color }: {
+  label: string;
+  value?: number;
+  displayValue?: string;
+  subtitle?: string;
+  color: string;
+}) {
   return (
     <div className="fluent-card px-4 py-3">
       <div className={`text-fluent-xl font-bold ${color}`}>
-        {value.toLocaleString()}
+        {displayValue ?? value?.toLocaleString() ?? '—'}
       </div>
       <div className="text-fluent-xs text-fluent-text-secondary">{label}</div>
+      {subtitle && (
+        <div className="text-fluent-xs text-fluent-text-disabled mt-0.5">{subtitle}</div>
+      )}
     </div>
   );
 }
