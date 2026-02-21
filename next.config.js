@@ -5,9 +5,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // For GitHub Pages deployment — set to your repo name
-  basePath: '/IntuneSettingsCatalogViewer',
-  assetPrefix: '/IntuneSettingsCatalogViewer/',
+  // Custom domain (intunesettings.app) — no basePath needed
+  basePath: '',
+  assetPrefix: '',
 };
 
 module.exports = nextConfig;
