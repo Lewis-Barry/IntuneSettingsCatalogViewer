@@ -147,9 +147,13 @@ export default function SettingsCatalogBrowser({
         .filter((c): c is CategoryTreeNode => c !== null);
 
       // Count settings in *this* category that match the platform filter
+      // Only count root-level settings (not children nested under a parent)
+      // to stay consistent with the pre-built settingCount values.
       const catSettings = settingsByCategory[node.id] || [];
       const matchingCount = catSettings.filter(
-        (s) => matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
+        (s) =>
+          (!s.rootDefinitionId || s.rootDefinitionId === s.id) &&
+          matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
       ).length;
 
       // Total = own matching + all descendants' matching
