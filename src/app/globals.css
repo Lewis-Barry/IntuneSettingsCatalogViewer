@@ -43,7 +43,7 @@
 
   /* Category tree item */
   .category-item {
-    @apply flex items-center gap-1 px-2 py-1.5 text-fluent-base cursor-pointer
+    @apply flex items-center gap-1 px-2 py-1.5 text-fluent-base cursor-pointer select-none
            hover:bg-fluent-bg-alt rounded-sm transition-colors duration-75;
   }
 

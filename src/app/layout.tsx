@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     'Android',
     'Linux',
   ],
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
