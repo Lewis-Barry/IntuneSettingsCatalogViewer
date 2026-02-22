@@ -4,6 +4,7 @@ import { useState, memo } from 'react';
 import Link from 'next/link';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { getSettingScope, getScopeBadgeClass, getSettingTypeLabel } from '@/lib/types';
+import { getAsrRuleInfo } from '@/lib/asr-rules';
 import SettingDetail from './SettingDetail';
 import HighlightText from './HighlightText';
 
@@ -101,6 +102,15 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
               </span>
             )}
           </div>
+          {/* ASR rule name — shows the well-known rule name for Defender ASR rules */}
+          {(() => {
+            const asrInfo = getAsrRuleInfo(setting.id);
+            return asrInfo ? (
+              <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
+                {asrInfo.ruleName}
+              </div>
+            ) : null;
+          })()}
           {/* Disambiguation label — shows source sub-category when multiple settings share the same name */}
           {disambiguationLabel && (
             <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={disambiguationLabel}>
@@ -258,6 +268,15 @@ function SettingRowInner({
               <HighlightText text={setting.displayName || setting.name || ''} query={highlightQuery} />
             </span>
           </div>
+          {/* ASR rule name for child settings */}
+          {(() => {
+            const asrInfo = getAsrRuleInfo(setting.id);
+            return asrInfo ? (
+              <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
+                {asrInfo.ruleName}
+              </div>
+            ) : null;
+          })()}
         </div>
 
         <div className="flex items-center gap-2 flex-shrink-0">

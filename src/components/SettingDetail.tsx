@@ -1,5 +1,6 @@
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { getPlatformLabel } from '@/lib/types';
+import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import HighlightText from './HighlightText';
 
@@ -21,6 +22,9 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
   const platform = setting.applicability?.platform;
   const platformLabel = getPlatformLabel(platform);
   const PlatformIcon = platform ? PLATFORM_ICONS[platform] : undefined;
+
+  // ASR rule info
+  const asrInfo = getAsrRuleInfo(setting.id);
 
   // Highlight variant logic:
   //   - If title matched: description & CSP use secondary (blue) highlight
@@ -94,6 +98,32 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ASR Rule — GUID & docs link */}
+      {asrInfo && (
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-fluent-xs text-fluent-text-secondary">
+            <span className="font-medium">ASR Rule GUID:</span>
+            <code className="font-mono select-all">{asrInfo.guid}</code>
+          </div>
+          {asrInfo.note && (
+            <p className="text-fluent-xs text-fluent-text-tertiary italic">
+              {asrInfo.note}
+            </p>
+          )}
+          <a
+            href={`${ASR_DOCS_URL}#${asrInfo.guid}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-fluent-xs text-fluent-blue hover:underline"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            View on Microsoft Learn
+          </a>
         </div>
       )}
 

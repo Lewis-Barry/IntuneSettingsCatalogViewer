@@ -15,6 +15,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { SettingDefinition, SettingCategory, CategoryTreeNode, SearchIndexEntry } from '../src/lib/types';
+import { getAsrRuleInfo } from '../src/lib/asr-rules';
 
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
@@ -257,7 +258,12 @@ function main() {
       id: s.id,
       displayName: s.displayName || s.name || '',
       description: (s.description || '').slice(0, 300), // Truncate for index size
-      keywords: (s.keywords || []).join(' '),
+      keywords: (() => {
+        const kw = (s.keywords || []).join(' ');
+        // Append ASR rule GUID so users can search by GUID
+        const asrInfo = getAsrRuleInfo(s.id);
+        return asrInfo ? `${kw} ${asrInfo.guid}` : kw;
+      })(),
       categoryId: s.categoryId,
       categoryName: categoryNameMap.get(s.categoryId) || 'Unknown Category',
       scope: getScope(s.baseUri),

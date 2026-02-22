@@ -223,6 +223,8 @@ export type MatchSource = 'title' | 'description' | 'csp' | 'keywords' | 'catego
 export function detectMatchSources(
   setting: SettingDefinition,
   query: string,
+  /** Optional extra keywords to match against (e.g. ASR rule GUIDs) */
+  extraKeywords?: string[],
 ): MatchSource[] {
   if (!query || !query.trim()) return [];
   const terms = query.split(',').map(t => t.trim()).filter(Boolean);
@@ -252,6 +254,7 @@ export function detectMatchSources(
     : setting.baseUri || setting.offsetUri || '';
   if (cspPath && matches(cspPath)) sources.push('csp');
   if (setting.keywords && setting.keywords.some(k => matches(k))) sources.push('keywords');
+  if (!sources.includes('keywords') && extraKeywords && extraKeywords.some(k => matches(k))) sources.push('keywords');
   return sources;
 }
 

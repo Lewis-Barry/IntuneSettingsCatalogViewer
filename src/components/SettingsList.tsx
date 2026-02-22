@@ -4,6 +4,7 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { detectMatchSources } from '@/lib/types';
+import { getAsrRuleInfo } from '@/lib/asr-rules';
 import { groupSettings } from '@/lib/settings-grouping';
 import SettingRow from './SettingRow';
 import HighlightText from './HighlightText';
@@ -101,7 +102,10 @@ export default function SettingsList({
     if (!isSearchResult || !highlightQuery) return new Map<string, MatchSource[]>();
     const map = new Map<string, MatchSource[]>();
     for (const s of rootSettings) {
-      map.set(s.id, detectMatchSources(s, highlightQuery));
+      map.set(s.id, detectMatchSources(s, highlightQuery, (() => {
+        const asrInfo = getAsrRuleInfo(s.id);
+        return asrInfo ? [asrInfo.guid] : undefined;
+      })()));
     }
     return map;
   }, [isSearchResult, highlightQuery, rootSettings]);

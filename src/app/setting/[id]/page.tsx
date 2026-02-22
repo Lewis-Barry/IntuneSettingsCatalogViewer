@@ -1,6 +1,7 @@
 import { loadSettings, loadCategories } from '@/lib/data';
 import SettingDetail from '@/components/SettingDetail';
 import { getPlatformLabel } from '@/lib/types';
+import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from '@/components/PlatformIcons';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -125,6 +126,34 @@ export default function SettingPage({ params }: SettingPageProps) {
             Category: {category.displayName}
           </p>
         )}
+        {/* ASR Rule info on full page */}
+        {(() => {
+          const asrInfo = getAsrRuleInfo(setting.id);
+          return asrInfo ? (
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center gap-2 text-fluent-sm text-fluent-text-secondary">
+                <span className="font-medium">ASR Rule GUID:</span>
+                <code className="font-mono select-all">{asrInfo.guid}</code>
+              </div>
+              {asrInfo.note && (
+                <p className="text-fluent-xs text-fluent-text-tertiary italic">
+                  {asrInfo.note}
+                </p>
+              )}
+              <a
+                href={`${ASR_DOCS_URL}#${asrInfo.guid}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-fluent-sm text-fluent-blue hover:underline"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                View on Microsoft Learn
+              </a>
+            </div>
+          ) : null;
+        })()}
       </div>
 
       {/* Setting detail card */}
