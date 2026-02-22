@@ -134,7 +134,58 @@
 }
 
 /* ── Mobile device touch-target overrides ──
-   Applied only when the inline UA-detection script sets .mobile-device on <html>. */
+   Applied when the inline detection script sets .mobile-device on <html>,
+   OR via CSS media query for coarse-pointer (touch) devices at mobile widths. */
+@media (pointer: coarse) and (max-width: 767px) {
+  .category-item {
+    @apply gap-2 py-3 px-3 text-[15px];
+  }
+
+  .info-icon {
+    @apply w-7 h-7;
+  }
+
+  .setting-expand-btn {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .child-expand-btn {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .child-tree-connector {
+    @apply w-6 text-base;
+  }
+
+  .setting-row-child {
+    @apply gap-2 py-3 px-3;
+  }
+
+  .setting-row {
+    @apply py-3.5;
+  }
+
+  .category-chevron {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .category-chevron svg {
+    @apply w-4 h-4;
+  }
+
+  .category-chevron-spacer {
+    @apply w-8 h-8;
+  }
+
+  .search-clear-btn {
+    @apply w-8 h-8;
+  }
+
+  .platform-filter-btn {
+    @apply py-1.5;
+  }
+}
+
 html.mobile-device {
   .category-item {
     @apply gap-2 py-3 px-3 text-[15px];

@@ -432,7 +432,7 @@ export default function SettingsCatalogBrowser({
           ref={fabRef}
           onClick={() => setSidebarOpen(true)}
           className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
-            fabHidden ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
+            fabHidden ? 'opacity-25' : 'opacity-100'
           }`}
           aria-label="Open categories"
           title="Browse categories"
