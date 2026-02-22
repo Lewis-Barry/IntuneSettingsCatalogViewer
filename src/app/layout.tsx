@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Detect mobile UA before first paint so CSS can apply larger touch targets */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var t='ontouchstart' in window||navigator.maxTouchPoints>0;var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;if(m||t||p){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;var s=window.matchMedia&&window.matchMedia('(max-width:767px)').matches;if(m||(p&&s)){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
       </head>
       <body className="min-h-screen flex flex-col">
         {/* ── Header ── */}

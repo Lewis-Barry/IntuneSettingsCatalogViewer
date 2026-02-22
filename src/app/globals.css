@@ -186,6 +186,7 @@
   }
 }
 
+@media (max-width: 767px) {
 html.mobile-device {
   .category-item {
     @apply gap-2 py-3 px-3 text-[15px];
@@ -234,4 +235,5 @@ html.mobile-device {
   .platform-filter-btn {
     @apply py-1.5;
   }
+}
 }

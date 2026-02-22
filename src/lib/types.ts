@@ -247,14 +247,19 @@ export function detectMatchSources(
   };
 
   const sources: MatchSource[] = [];
-  if (matches(setting.displayName) || matches(setting.name)) sources.push('title');
+  // Only the user-visible displayName counts as a "title" match.
+  // The internal `name` (e.g. "ExploitGuard_ASR_Rules") is treated as a
+  // keyword-level match so that the amber contextual-hint border still shows
+  // when the displayName itself doesn't contain the search term.
+  if (matches(setting.displayName)) sources.push('title');
   if (matches(setting.description)) sources.push('description');
   const cspPath = setting.baseUri && setting.offsetUri
     ? `${setting.baseUri}/${setting.offsetUri}`
     : setting.baseUri || setting.offsetUri || '';
   if (cspPath && matches(cspPath)) sources.push('csp');
+  const nameMatchesButNotTitle = !sources.includes('title') && matches(setting.name);
   if (setting.keywords && setting.keywords.some(k => matches(k))) sources.push('keywords');
-  if (!sources.includes('keywords') && extraKeywords && extraKeywords.some(k => matches(k))) sources.push('keywords');
+  if (!sources.includes('keywords') && (nameMatchesButNotTitle || (extraKeywords && extraKeywords.some(k => matches(k))))) sources.push('keywords');
   return sources;
 }
 
