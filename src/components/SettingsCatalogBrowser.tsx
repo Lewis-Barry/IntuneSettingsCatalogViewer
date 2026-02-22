@@ -7,6 +7,7 @@ import SearchBar from './SearchBar';
 import PlatformFilter from './PlatformFilter';
 import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
 import { countVisibleRootSettings } from '@/lib/settings-grouping';
+import { useIsDesktop } from '@/lib/useMediaQuery';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -82,12 +83,80 @@ export default function SettingsCatalogBrowser({
   const [searchResults, setSearchResults] = useState<SearchIndexEntry[] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const isDesktop = useIsDesktop();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const isResizing = useRef(false);
   const settingsScrollRef = useRef<HTMLDivElement>(null);
+  const [sidebarHydrated, setSidebarHydrated] = useState(false);
   const MIN_SIDEBAR = 200;
   const MAX_SIDEBAR = 600;
+
+  // ── FAB auto-hide on touch / keyboard activity ──
+  const [fabHidden, setFabHidden] = useState(false);
+  const fabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fabRef = useRef<HTMLButtonElement>(null);
+
+  // Show the FAB again after a delay with no interaction
+  const scheduleFabShow = useCallback(() => {
+    if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
+    fabTimerRef.current = setTimeout(() => setFabHidden(false), 800);
+  }, []);
+
+  // Hide FAB immediately and schedule re-show
+  const hideFab = useCallback(() => {
+    setFabHidden(true);
+    scheduleFabShow();
+  }, [scheduleFabShow]);
+
+  useEffect(() => {
+    if (isDesktop) return;
+
+    // Touch activity on the document — ignore touches on the FAB itself
+    const onTouchStart = (e: TouchEvent) => {
+      if (fabRef.current?.contains(e.target as Node)) return;
+      hideFab();
+    };
+    const onTouchMove = () => hideFab();
+
+    // Keyboard open / close (visual viewport resize on mobile)
+    const vv = window.visualViewport;
+    let lastHeight = vv?.height ?? window.innerHeight;
+    const onViewportResize = () => {
+      const currentHeight = vv?.height ?? window.innerHeight;
+      if (currentHeight < lastHeight - 50) {
+        // Keyboard probably opened
+        setFabHidden(true);
+        if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
+      } else if (currentHeight > lastHeight + 50) {
+        // Keyboard probably closed
+        scheduleFabShow();
+      }
+      lastHeight = currentHeight;
+    };
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    vv?.addEventListener('resize', onViewportResize);
+
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      vv?.removeEventListener('resize', onViewportResize);
+      if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
+    };
+  }, [isDesktop, hideFab, scheduleFabShow]);
+
+  // After first client render: close sidebar on mobile, then hand control to React.
+  // We check window.matchMedia directly because the useIsDesktop hook hasn't
+  // updated its state yet when this first effect fires (stale closure).
+  useEffect(() => {
+    const isMobile = !window.matchMedia('(min-width: 768px)').matches;
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+    setSidebarHydrated(true);
+  }, []);
 
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -310,10 +379,21 @@ export default function SettingsCatalogBrowser({
 
   const isSearching = searchResults !== null && searchResults.length > 0;
 
+  // Close mobile drawer when a category is selected
+  const handleSelectCategoryMobile = useCallback(
+    (categoryId: string, categoryName: string) => {
+      handleSelectCategory(categoryId, categoryName);
+      if (!isDesktop) {
+        setSidebarOpen(false);
+      }
+    },
+    [handleSelectCategory, isDesktop]
+  );
+
   return (
-    <div className="flex flex-col h-[calc(100vh-96px)]">
+    <div className="flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100dvh-96px)]">
       {/* Top section: title + search + filters */}
-      <div className="px-4 sm:px-6 py-4 border-b border-fluent-border bg-white">
+      <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-fluent-border bg-white">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h1 className="text-fluent-2xl font-semibold text-fluent-text">
@@ -346,53 +426,102 @@ export default function SettingsCatalogBrowser({
 
       </div>
 
-      {/* Main content: sidebar + settings list */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Category sidebar */}
-        <aside
-          className={`flex-shrink-0 border-r border-fluent-border bg-white overflow-hidden transition-all duration-200`}
-          style={{ width: sidebarOpen ? sidebarWidth : 0 }}
+      {/* Mobile sidebar toggle FAB */}
+      {!isDesktop && !sidebarOpen && (
+        <button
+          ref={fabRef}
+          onClick={() => setSidebarOpen(true)}
+          className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
+            fabHidden ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
+          }`}
+          aria-label="Open categories"
+          title="Browse categories"
         >
-          <div className="h-full overflow-y-auto fluent-scroll py-2" style={{ minWidth: MIN_SIDEBAR }}>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </button>
+      )}
+
+      {/* Mobile sidebar backdrop */}
+      {!isDesktop && sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Main content: sidebar + settings list */}
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Category sidebar — drawer on mobile, inline on desktop */}
+        <aside
+          className={`${!sidebarHydrated ? 'sidebar-mobile-init ' : ''}${
+            isDesktop
+              ? 'flex-shrink-0 border-r border-fluent-border bg-white overflow-hidden transition-all duration-200'
+              : `fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[360px] bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
+                  sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                }`
+          }`}
+          style={isDesktop ? { width: sidebarOpen ? sidebarWidth : 0 } : undefined}
+        >
+          {/* Mobile drawer header */}
+          {!isDesktop && (
+            <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-fluent-bg-alt">
+              <span className="text-fluent-base font-semibold">Categories</span>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-fluent-bg text-fluent-text-secondary hover:text-fluent-text transition-colors"
+                aria-label="Close categories"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
+          <div className="h-full overflow-y-auto fluent-scroll py-2" style={isDesktop ? { minWidth: MIN_SIDEBAR } : undefined}>
             <CategoryTree
               categories={filteredCategoryTree}
               selectedCategoryId={selectedCategoryId}
-              onSelectCategory={handleSelectCategory}
+              onSelectCategory={handleSelectCategoryMobile}
             />
           </div>
         </aside>
 
-        {/* Resize handle + toggle */}
-        <div className="flex-shrink-0 flex flex-col relative">
-          {/* Drag handle */}
-          {sidebarOpen && (
-            <div
-              className="absolute inset-y-0 -left-1 w-2 cursor-col-resize z-20 group"
-              onMouseDown={handleResizeStart}
-              title="Drag to resize sidebar"
-            >
-              <div className="absolute inset-y-0 left-[3px] w-px bg-transparent group-hover:bg-fluent-blue transition-colors" />
-            </div>
-          )}
+        {/* Desktop resize handle + toggle */}
+        {isDesktop && (
+          <div className={`flex-shrink-0 flex flex-col relative${!sidebarHydrated ? ' sidebar-mobile-init' : ''}`}>
+            {/* Drag handle */}
+            {sidebarOpen && (
+              <div
+                className="absolute inset-y-0 -left-1 w-2 cursor-col-resize z-20 group"
+                onMouseDown={handleResizeStart}
+                title="Drag to resize sidebar"
+              >
+                <div className="absolute inset-y-0 left-[3px] w-px bg-transparent group-hover:bg-fluent-blue transition-colors" />
+              </div>
+            )}
 
-          {/* Toggle button */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="flex-shrink-0 w-6 h-full flex items-center justify-center bg-fluent-bg hover:bg-fluent-bg-alt border-r border-fluent-border transition-colors"
-            aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-            title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            <svg
-              className={`w-3 h-3 text-fluent-text-secondary transition-transform ${sidebarOpen ? '' : 'rotate-180'}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
+            {/* Toggle button */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="flex-shrink-0 w-8 h-full flex items-center justify-center bg-fluent-bg hover:bg-fluent-bg-alt border-r border-fluent-border transition-colors"
+              aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-        </div>
+              <svg
+                className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform ${sidebarOpen ? '' : 'rotate-180'}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Settings list */}
         <div ref={settingsScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white">

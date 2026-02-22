@@ -68,7 +68,7 @@ const CategoryNode = memo(function CategoryNode({
       <button
         type="button"
         className={`category-item ${isSelected ? 'category-item-active' : ''}`}
-        style={{ paddingLeft: `${8 + depth * 16}px` }}
+        style={{ paddingLeft: `${8 + Math.min(depth, 4) * 14}px` }}
         onClick={handleClick}
         role="treeitem"
         aria-expanded={hasChildren ? expanded : undefined}
@@ -92,7 +92,7 @@ const CategoryNode = memo(function CategoryNode({
         {hasChildren ? (
           <span
             onClick={handleToggle}
-            className="w-4 h-4 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
+            className="category-chevron w-4 h-4 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
             aria-hidden="true"
           >
             <svg
@@ -106,7 +106,7 @@ const CategoryNode = memo(function CategoryNode({
             </svg>
           </span>
         ) : (
-          <span className="w-4 h-4 flex-shrink-0" />
+          <span className="category-chevron-spacer w-4 h-4 flex-shrink-0" />
         )}
 
         {/* Category name */}

@@ -110,7 +110,7 @@ export default function SettingPage({ params }: SettingPageProps) {
 
       {/* Setting title */}
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-1">
+        <div className="flex items-center gap-3 mb-1 flex-wrap">
           <h1 className="text-fluent-2xl font-semibold text-fluent-text">
             {setting.displayName}
           </h1>

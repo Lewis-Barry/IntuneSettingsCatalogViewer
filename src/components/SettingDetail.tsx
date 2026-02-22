@@ -38,7 +38,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
       : 'secondary';
 
   return (
-    <div className="px-6 py-4 space-y-4">
+    <div className="px-4 md:px-6 py-4 space-y-4">
       {/* Platform pill + toggle indicator bar */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* Platform pill */}
@@ -129,7 +129,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
 
       {/* CSP Path — subtle and small */}
       <div className="pt-1">
-        <span className="text-fluent-xs text-fluent-text-disabled font-mono">
+        <span className="text-fluent-xs text-fluent-text-disabled font-mono break-all">
           <HighlightText text={cspPath} query={highlightQuery} variant={cspVariant} />
         </span>
       </div>

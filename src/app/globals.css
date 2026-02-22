@@ -66,7 +66,7 @@
 
   /* Setting row */
   .setting-row {
-    @apply flex items-center gap-3 px-4 py-3 border-b border-fluent-border
+    @apply flex items-start md:items-center gap-3 px-4 py-3 border-b border-fluent-border
            hover:bg-fluent-bg transition-colors duration-75 cursor-pointer;
   }
 
@@ -76,7 +76,7 @@
 
   /* Child setting row — tinted background to differentiate from parent rows */
   .setting-row-child {
-    @apply flex items-center gap-3 px-3 py-2.5 border-b border-blue-100
+    @apply flex items-start md:items-center gap-3 px-3 py-2.5 border-b border-blue-100
            bg-slate-50 hover:bg-blue-50 transition-colors duration-75 cursor-pointer;
   }
 
@@ -123,5 +123,64 @@
 
   .fluent-scroll::-webkit-scrollbar-thumb:hover {
     background-color: #a19f9d;
+  }
+}
+
+/* ── Pre-hydration: hide sidebar on small screens so it doesn't flash open ── */
+@media (max-width: 767px) {
+  .sidebar-mobile-init {
+    display: none !important;
+  }
+}
+
+/* ── Mobile device touch-target overrides ──
+   Applied only when the inline UA-detection script sets .mobile-device on <html>. */
+html.mobile-device {
+  .category-item {
+    @apply gap-2 py-3 px-3 text-[15px];
+  }
+
+  .info-icon {
+    @apply w-7 h-7;
+  }
+
+  .setting-expand-btn {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .child-expand-btn {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .child-tree-connector {
+    @apply w-6 text-base;
+  }
+
+  .setting-row-child {
+    @apply gap-2 py-3 px-3;
+  }
+
+  .setting-row {
+    @apply py-3.5;
+  }
+
+  .category-chevron {
+    @apply w-8 h-8 rounded-md bg-fluent-bg-alt;
+  }
+
+  .category-chevron svg {
+    @apply w-4 h-4;
+  }
+
+  .category-chevron-spacer {
+    @apply w-8 h-8;
+  }
+
+  .search-clear-btn {
+    @apply w-8 h-8;
+  }
+
+  .platform-filter-btn {
+    @apply py-1.5;
   }
 }

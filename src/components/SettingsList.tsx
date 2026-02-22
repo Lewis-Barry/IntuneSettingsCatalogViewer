@@ -137,12 +137,12 @@ export default function SettingsList({
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
-          <div className="flex items-center gap-1.5 min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
             {breadcrumb && breadcrumb.length > 0 && (
               <>
                 {breadcrumb.map((ancestor, i) => (
                   <span key={i} className="flex items-center gap-1.5 flex-shrink-0">
-                    <span className="text-fluent-sm text-fluent-text-secondary truncate max-w-[180px]">
+                    <span className="text-fluent-sm text-fluent-text-secondary md:truncate md:max-w-[180px]">
                       <HighlightText text={ancestor} query={highlightQuery} />
                     </span>
                     <svg className="w-2.5 h-2.5 text-fluent-text-tertiary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -168,7 +168,7 @@ export default function SettingsList({
             <div className="flex items-center gap-3 px-4 py-2 border-b border-fluent-border bg-fluent-bg-alt text-fluent-sm font-semibold text-fluent-text-secondary">
               <span className="w-5" /> {/* Chevron spacer */}
               <span className="flex-1">Setting name</span>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
                 <span className="w-[4.5rem] text-center">Scope</span>
                 <span className="w-[6rem] text-center">Type</span>
                 <span className="w-[3.5rem]" /> {/* Extra badge spacer */}
@@ -221,7 +221,7 @@ export default function SettingsList({
       <div className="flex items-center gap-3 px-4 py-2 border-b border-fluent-border bg-fluent-bg-alt text-fluent-sm font-semibold text-fluent-text-secondary">
         <span className="w-5" /> {/* Chevron spacer */}
         <span className="flex-1">Setting name</span>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
           <span className="w-[4.5rem] text-center">Scope</span>
           <span className="w-[6rem] text-center">Type</span>
           <span className="w-[3.5rem]" /> {/* Extra badge spacer */}

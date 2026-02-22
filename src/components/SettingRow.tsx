@@ -71,7 +71,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
         {/* Expand/collapse chevron */}
         <button
           type="button"
-          className="w-5 h-5 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
+          className="setting-expand-btn w-5 h-5 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
           aria-label={expanded ? 'Collapse setting' : 'Expand setting'}
           aria-expanded={expanded}
           onClick={(e) => {
@@ -93,7 +93,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
         {/* Setting name */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className={`text-fluent-base truncate ${titleTextClass}`}>
+            <span className={`text-fluent-base md:truncate ${titleTextClass}`}>
               <HighlightText text={setting.displayName || setting.name || ''} query={highlightQuery} />
             </span>
             {childSettings.length > 0 && (
@@ -106,21 +106,45 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
           {(() => {
             const asrInfo = getAsrRuleInfo(setting.id);
             return asrInfo ? (
-              <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
+              <div className="text-fluent-xs text-fluent-text-tertiary md:truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
                 {asrInfo.ruleName}
               </div>
             ) : null;
           })()}
           {/* Disambiguation label — shows source sub-category when multiple settings share the same name */}
           {disambiguationLabel && (
-            <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={disambiguationLabel}>
+            <div className="text-fluent-xs text-fluent-text-tertiary md:truncate mt-0.5" title={disambiguationLabel}>
               {disambiguationLabel}
             </div>
           )}
+
+          {/* Mobile-only inline badges (stacked below name) */}
+          <div className="flex md:hidden items-center gap-1.5 mt-1 flex-wrap">
+            {scope !== 'unknown' && (
+              <span className={`scope-badge whitespace-nowrap ${getScopeBadgeClass(scope)}`}>
+                {scope === 'device' ? 'Device' : 'User'}
+              </span>
+            )}
+            {!isGroup && !isCollectionGroup && (
+              <span className="scope-badge whitespace-nowrap bg-gray-100 text-gray-600">
+                {getSettingTypeLabel(setting['@odata.type'] || '')}
+              </span>
+            )}
+            {isCollectionGroup && (
+              <span className="scope-badge whitespace-nowrap bg-purple-100 text-purple-700 border border-purple-200">
+                Collection
+              </span>
+            )}
+            {isTogglePlusInput && (
+              <span className="scope-badge whitespace-nowrap bg-slate-100 text-slate-600 border border-slate-200">
+                Input
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Badges */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        {/* Badges — hidden on mobile, shown inline on desktop */}
+        <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
           {/* Scope badge — fixed width to match column header */}
           <div className="w-[4.5rem] flex justify-center">
             {scope !== 'unknown' && (
@@ -170,6 +194,17 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
             i
           </Link>
         </div>
+
+        {/* Mobile info icon — always visible on mobile */}
+        <Link
+          href={`/setting/${encodeURIComponent(setting.id)}/`}
+          className="md:hidden info-icon flex-shrink-0"
+          title="View setting details"
+          prefetch={false}
+          onClick={(e) => e.stopPropagation()}
+        >
+          i
+        </Link>
       </div>
 
       {/* Expanded detail panel */}
@@ -179,7 +214,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (
-            <div className={`ml-4 border-l-[3px] ${isCollectionGroup ? 'border-purple-300 bg-purple-50/30' : 'border-blue-300 bg-slate-50/40'}`}>
+            <div className={`ml-2 md:ml-4 border-l-[3px] ${isCollectionGroup ? 'border-purple-300 bg-purple-50/30' : 'border-blue-300 bg-slate-50/40'}`}>
               <div className={`px-3 py-1.5 text-fluent-xs font-semibold border-b flex items-center gap-1.5 ${
                 isCollectionGroup
                   ? 'text-purple-700 bg-purple-50 border-purple-100'
@@ -191,8 +226,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
                   </svg>
                 ) : (
                   <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 3l4 4-4 4" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 )}
                 {isCollectionGroup
@@ -238,12 +272,12 @@ function SettingRowInner({
         role="row"
         aria-expanded={expanded}
       >
-        {/* Tree connector icon */}
-        <span className="w-4 flex-shrink-0 text-blue-300 select-none text-fluent-sm font-light">↳</span>
+        {/* Tree connector icon — hidden on mobile where the expand button is enough */}
+        <span className="child-tree-connector hidden md:flex w-4 flex-shrink-0 text-blue-300 select-none text-fluent-sm font-light items-center justify-center">↳</span>
 
         <button
           type="button"
-          className="w-4 h-4 flex items-center justify-center flex-shrink-0 text-blue-400 hover:text-blue-600"
+          className="child-expand-btn w-4 h-4 flex items-center justify-center flex-shrink-0 text-blue-400 hover:text-blue-600"
           aria-label={expanded ? 'Collapse setting' : 'Expand setting'}
           aria-expanded={expanded}
           onClick={(e) => {
@@ -264,7 +298,7 @@ function SettingRowInner({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-fluent-sm text-fluent-text truncate">
+            <span className="text-fluent-sm text-fluent-text md:truncate">
               <HighlightText text={setting.displayName || setting.name || ''} query={highlightQuery} />
             </span>
           </div>
@@ -272,14 +306,28 @@ function SettingRowInner({
           {(() => {
             const asrInfo = getAsrRuleInfo(setting.id);
             return asrInfo ? (
-              <div className="text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
+              <div className="text-fluent-xs text-fluent-text-tertiary md:truncate mt-0.5" title={`ASR Rule: ${asrInfo.ruleName} (${asrInfo.guid})`}>
                 {asrInfo.ruleName}
               </div>
             ) : null;
           })()}
+
+          {/* Mobile-only inline badges for child rows */}
+          <div className="flex md:hidden items-center gap-1.5 mt-1 flex-wrap">
+            {scope !== 'unknown' && (
+              <span className={`scope-badge ${getScopeBadgeClass(scope)}`}>
+                {scope === 'device' ? 'Device' : 'User'}
+              </span>
+            )}
+            {!isGroup && (
+              <span className="scope-badge bg-blue-50 text-blue-600 border border-blue-100">
+                {getSettingTypeLabel(setting['@odata.type'] || '')}
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
           {scope !== 'unknown' && (
             <span className={`scope-badge ${getScopeBadgeClass(scope)}`}>
               {scope === 'device' ? 'Device' : 'User'}
@@ -300,6 +348,17 @@ function SettingRowInner({
             i
           </Link>
         </div>
+
+        {/* Mobile info icon */}
+        <Link
+          href={`/setting/${encodeURIComponent(setting.id)}/`}
+          className="md:hidden info-icon flex-shrink-0"
+          title="View setting details"
+          prefetch={false}
+          onClick={(e) => e.stopPropagation()}
+        >
+          i
+        </Link>
       </div>
 
       {expanded && (

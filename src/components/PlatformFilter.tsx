@@ -36,7 +36,7 @@ export default function PlatformFilter({
       {/* All button */}
       <button
         onClick={() => onPlatformsChange([])}
-        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
+        className={`platform-filter-btn inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
           allSelected
             ? 'bg-fluent-blue text-white border-fluent-blue'
             : 'bg-white text-fluent-text border-fluent-border hover:bg-fluent-bg-alt'
@@ -52,7 +52,7 @@ export default function PlatformFilter({
           <button
             key={p.value}
             onClick={() => togglePlatform(p.value)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
+            className={`platform-filter-btn inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
               isActive
                 ? 'bg-fluent-blue text-white border-fluent-blue'
                 : 'bg-white text-fluent-text border-fluent-border hover:bg-fluent-bg-alt'

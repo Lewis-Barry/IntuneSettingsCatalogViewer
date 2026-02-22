@@ -130,7 +130,7 @@ export default function SearchBar({
                 onSearchResults?.([]);
                 inputRef.current?.focus();
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center
+              className="search-clear-btn absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center
                          text-fluent-text-secondary hover:text-fluent-text rounded-full"
               aria-label="Clear search"
             >
