@@ -22,6 +22,7 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const SEARCH_INDEX_FILE = path.join(PUBLIC_DIR, 'search-index.json');
 const CATEGORY_TREE_FILE = path.join(DATA_DIR, 'category-tree.json');
+const MERGE_MAP_FILE = path.join(DATA_DIR, 'category-merge-map.json');
 
 /** Derive scope from baseUri */
 function getScope(baseUri?: string): 'device' | 'user' | 'unknown' {
@@ -40,11 +41,26 @@ function getSettingType(odataType: string): string {
   return 'unknown';
 }
 
+/** Format a human-friendly platform label for disambiguation */
+function platformLabel(platforms: string[]): string {
+  const map: Record<string, string> = {
+    windows10: 'Windows',
+    macOS: 'macOS',
+    iOS: 'iOS/iPadOS',
+    android: 'Android',
+    androidEnterprise: 'Android Enterprise',
+    aosp: 'AOSP',
+    linux: 'Linux',
+  };
+  const labels = platforms.map((p) => map[p.trim()] || p.trim()).filter(Boolean);
+  return labels.join(', ');
+}
+
 /** Build a nested category tree from flat list */
 function buildCategoryTree(
   categories: SettingCategory[],
   settingsCountMap: Map<string, number>
-): CategoryTreeNode[] {
+): { roots: CategoryTreeNode[]; mergeMap: Record<string, string> } {
   const nodeMap = new Map<string, CategoryTreeNode>();
 
   // Create nodes
@@ -83,6 +99,79 @@ function buildCategoryTree(
   }
   sortTree(roots);
 
+  // ── Merge & disambiguate sibling categories with identical displayNames ──
+  // The Graph API sometimes returns multiple category entries with the same
+  // display name under the same parent.  When their key metadata (platforms,
+  // technologies, settingUsage) is identical they are true duplicates and we
+  // merge them.  When metadata differs they are distinct variants and we
+  // append a platform label to disambiguate (e.g. "Microsoft Edge (macOS)").
+  const mergeMap: Record<string, string> = {}; // secondaryId → primaryId
+
+  function deduplicateSiblings(siblings: CategoryTreeNode[]) {
+    // Group by displayName
+    const byName = new Map<string, CategoryTreeNode[]>();
+    for (const node of siblings) {
+      const list = byName.get(node.displayName) || [];
+      list.push(node);
+      byName.set(node.displayName, list);
+    }
+
+    const toRemove = new Set<string>();
+    for (const [, group] of byName) {
+      if (group.length <= 1) continue;
+
+      // Check whether all members have identical key metadata
+      const metaKey = (n: CategoryTreeNode) =>
+        `${n.platforms || ''}|${n.technologies || ''}|${n.settingUsage || ''}`;
+      const allSameMeta = group.every((n) => metaKey(n) === metaKey(group[0]));
+
+      if (allSameMeta) {
+        // True duplicates — merge into the one with the most settings
+        group.sort((a, b) => b.settingCount - a.settingCount);
+        const primary = group[0];
+        for (let i = 1; i < group.length; i++) {
+          const secondary = group[i];
+          // Absorb settings count
+          primary.settingCount += secondary.settingCount;
+          // Absorb child categories
+          primary.children.push(...secondary.children);
+          // Record merge so page.tsx can consolidate settingsByCategory
+          mergeMap[secondary.id] = primary.id;
+          toRemove.add(secondary.id);
+        }
+      } else {
+        // Different metadata — disambiguate with a platform label.
+        // Leave the variant with the most settings unlabeled (it's the "main"
+        // one) and only add platform labels to the smaller variants.
+        group.sort((a, b) => b.settingCount - a.settingCount);
+        for (let i = 1; i < group.length; i++) {
+          const node = group[i];
+          const platforms = (node.platforms || 'unknown').split(',');
+          const label = platformLabel(platforms);
+          if (label) {
+            node.displayName = `${node.displayName} (${label})`;
+          }
+        }
+      }
+    }
+
+    // Remove merged-away nodes
+    if (toRemove.size > 0) {
+      for (let i = siblings.length - 1; i >= 0; i--) {
+        if (toRemove.has(siblings[i].id)) siblings.splice(i, 1);
+      }
+    }
+
+    // Recurse into children
+    for (const node of siblings) {
+      deduplicateSiblings(node.children);
+    }
+  }
+
+  deduplicateSiblings(roots);
+  // Re-sort after possible displayName changes
+  sortTree(roots);
+
   // Roll up setting counts from children to parents
   function rollUpCounts(node: CategoryTreeNode): number {
     let total = node.settingCount;
@@ -96,7 +185,7 @@ function buildCategoryTree(
     rollUpCounts(root);
   }
 
-  return roots;
+  return { roots, mergeMap };
 }
 
 function main() {
@@ -124,13 +213,36 @@ function main() {
     categoryNameMap.set(c.id, c.displayName);
   }
 
-  // Count settings per category (only root-level settings, not children)
+  // Count visible settings per category.
+  // A setting is "visible" if it is either:
+  //   - A root setting (no rootDefinitionId, or rootDefinitionId === id), OR
+  //   - A child whose CSP path differs from its parent's (non-duplicate child).
+  // Children with the same CSP path as their parent are hidden in the UI and
+  // should not inflate the count.
+  const settingById = new Map<string, SettingDefinition>();
+  for (const s of settings) settingById.set(s.id, s);
+
+  const getCspPath = (s: SettingDefinition) =>
+    s.baseUri && s.offsetUri
+      ? `${s.baseUri}/${s.offsetUri}`
+      : s.baseUri || s.offsetUri || '';
+
   const settingsCountMap = new Map<string, number>();
   for (const s of settings) {
-    // Count settings that are either root or have no rootDefinitionId
-    if (!s.rootDefinitionId || s.rootDefinitionId === s.id) {
+    const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
+    if (isRoot) {
+      // Always count root settings (except synthetic group containers which
+      // are promoted through their children — but these are rare enough to
+      // keep in the count for simplicity).
       const count = settingsCountMap.get(s.categoryId) || 0;
       settingsCountMap.set(s.categoryId, count + 1);
+    } else {
+      // Child setting — only count if its CSP path differs from the parent's
+      const parent = settingById.get(s.rootDefinitionId!);
+      if (!parent || getCspPath(s) !== getCspPath(parent)) {
+        const count = settingsCountMap.get(s.categoryId) || 0;
+        settingsCountMap.set(s.categoryId, count + 1);
+      }
     }
   }
 
@@ -165,9 +277,16 @@ function main() {
 
   // Build category tree
   console.log('Building category tree...');
-  const tree = buildCategoryTree(categories, settingsCountMap);
+  const { roots: tree, mergeMap } = buildCategoryTree(categories, settingsCountMap);
   fs.writeFileSync(CATEGORY_TREE_FILE, JSON.stringify(tree, null, 2), 'utf-8');
   console.log(`Category tree: ${tree.length} root categories → ${CATEGORY_TREE_FILE}`);
+
+  // Write merge map (secondary category ID → primary category ID)
+  fs.writeFileSync(MERGE_MAP_FILE, JSON.stringify(mergeMap, null, 2), 'utf-8');
+  const mergeCount = Object.keys(mergeMap).length;
+  if (mergeCount > 0) {
+    console.log(`Merged ${mergeCount} duplicate categories → ${MERGE_MAP_FILE}`);
+  }
 
   console.log('\nDone!');
 }

@@ -52,3 +52,8 @@ export function getLastUpdated(): string | null {
   if (changelog.length === 0) return null;
   return changelog[0].date;
 }
+
+/** Load the category merge map (secondary ID → primary ID) produced by build-search-index */
+export function loadCategoryMergeMap(): Record<string, string> {
+  return readJSON<Record<string, string>>('category-merge-map.json') || {};
+}

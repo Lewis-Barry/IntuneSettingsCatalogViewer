@@ -1,4 +1,4 @@
-import { loadCategoryTree, loadSettings, loadCategories, getLastUpdated } from '@/lib/data';
+import { loadCategoryTree, loadSettings, loadCategories, getLastUpdated, loadCategoryMergeMap } from '@/lib/data';
 import SettingsCatalogBrowser from '@/components/SettingsCatalogBrowser';
 
 export default function HomePage() {
@@ -7,6 +7,7 @@ export default function HomePage() {
   const settings = loadSettings();
   const categories = loadCategories();
   const lastUpdated = getLastUpdated();
+  const categoryMergeMap = loadCategoryMergeMap();
 
   // Create a serializable category map
   const categoryMap: Record<string, string> = {};
@@ -16,13 +17,21 @@ export default function HomePage() {
     categoryParentMap[c.id] = c.parentCategoryId;
   }
 
-  // Group settings by category ID for quick lookup
+  // Group settings by category ID for quick lookup.
+  // When a category was merged into another (via categoryMergeMap), redirect
+  // its settings to the primary category so they appear together in the UI.
   const settingsByCategoryId: Record<string, typeof settings> = {};
   for (const s of settings) {
-    if (!settingsByCategoryId[s.categoryId]) {
-      settingsByCategoryId[s.categoryId] = [];
+    const effectiveCatId = categoryMergeMap[s.categoryId] || s.categoryId;
+    if (effectiveCatId !== s.categoryId) {
+      // Update the setting object so downstream code (search grouping, etc.)
+      // uses the merged primary category ID consistently.
+      s.categoryId = effectiveCatId;
     }
-    settingsByCategoryId[s.categoryId].push(s);
+    if (!settingsByCategoryId[effectiveCatId]) {
+      settingsByCategoryId[effectiveCatId] = [];
+    }
+    settingsByCategoryId[effectiveCatId].push(s);
   }
 
   // Fill in any orphan category IDs referenced by settings but missing from

@@ -66,7 +66,7 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "831dcaee-a6fa-4893-a32d-e13fdf7d3777",
@@ -82,7 +82,7 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 8
       },
       {
         "id": "45fe783f-a80b-42d9-ab3c-8c4081be8d05",
@@ -98,7 +98,7 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 8
       },
       {
         "id": "9ba1b877-865a-4104-8376-b43a0c75b04b",
@@ -114,7 +114,7 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 10
       },
       {
         "id": "ccea1cb0-55cd-4597-bfb1-e2d38b8a53ac",
@@ -130,7 +130,7 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       },
       {
         "id": "fa20bbc3-d25d-4a7f-a349-9b211d186e21",
@@ -146,10 +146,10 @@
         "rootCategoryId": "952bb5bd-fd1f-44d0-b3af-2201977fc87f",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       }
     ],
-    "settingCount": 10
+    "settingCount": 45
   },
   {
     "id": "48be5f9d-4941-4189-8015-dd78f87aacd5",
@@ -2628,10 +2628,10 @@
                 "rootCategoryId": "48be5f9d-4941-4189-8015-dd78f87aacd5",
                 "childCategoryIds": [],
                 "children": [],
-                "settingCount": 2
+                "settingCount": 4
               }
             ],
-            "settingCount": 16
+            "settingCount": 18
           },
           {
             "id": "5d19c257-8b7e-4071-9303-19317c94d7f7",
@@ -5044,10 +5044,10 @@
             "settingCount": 3
           }
         ],
-        "settingCount": 1571
+        "settingCount": 1573
       }
     ],
-    "settingCount": 2510
+    "settingCount": 2512
   },
   {
     "id": "132003c7-1130-4f59-96a7-dfb6adb8bd5d",
@@ -5063,7 +5063,7 @@
     "rootCategoryId": "132003c7-1130-4f59-96a7-dfb6adb8bd5d",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 7
   },
   {
     "id": "ad1ecbf4-75da-4dc1-9354-7d00c0e2af72",
@@ -5079,7 +5079,7 @@
     "rootCategoryId": "ad1ecbf4-75da-4dc1-9354-7d00c0e2af72",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 2
   },
   {
     "id": "a7b1c291-6bec-499b-9018-6120950cd5a6",
@@ -5095,24 +5095,7 @@
     "rootCategoryId": "a7b1c291-6bec-499b-9018-6120950cd5a6",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 2
-  },
-  {
-    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
-    "id": "56b82fc9-c632-4c76-bb4f-dcf8757f003e",
-    "name": null,
-    "displayName": "App Control for Business",
-    "description": "App Control for Business",
-    "categoryDescription": null,
-    "helpText": null,
-    "platforms": "windows10",
-    "technologies": "mdm",
-    "settingUsage": "configuration",
-    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
-    "rootCategoryId": "56b82fc9-c632-4c76-bb4f-dcf8757f003e",
-    "childCategoryIds": [],
-    "children": [],
-    "settingCount": 1
+    "settingCount": 4
   },
   {
     "id": "f36a78cf-46cf-418e-a98e-032f6cfad224",
@@ -5147,7 +5130,7 @@
         "rootCategoryId": "f36a78cf-46cf-418e-a98e-032f6cfad224",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 23
       },
       {
         "id": "8efd284f-5a56-4da8-8821-f51984ff954d",
@@ -5163,7 +5146,7 @@
         "rootCategoryId": "f36a78cf-46cf-418e-a98e-032f6cfad224",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 5
       },
       {
         "id": "daa2ea69-8026-465a-942c-75eb0396d5b9",
@@ -5179,7 +5162,7 @@
         "rootCategoryId": "f36a78cf-46cf-418e-a98e-032f6cfad224",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "d875dca1-dc97-4cc5-9df3-c50b813622a3",
@@ -5195,10 +5178,10 @@
         "rootCategoryId": "f36a78cf-46cf-418e-a98e-032f6cfad224",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       }
     ],
-    "settingCount": 4
+    "settingCount": 36
   },
   {
     "id": "f14014f5-a401-41e3-8a97-1a9e3c5e3614",
@@ -5214,7 +5197,7 @@
     "rootCategoryId": "f14014f5-a401-41e3-8a97-1a9e3c5e3614",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 4
   },
   {
     "id": "ddcc8634-edc3-40ef-a444-45f806439c18",
@@ -5298,7 +5281,7 @@
         "rootCategoryId": "a79b2d36-7dea-4a84-81ef-27f99296bccf",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 40
       },
       {
         "id": "7b6ddf4e-7136-4fde-adbf-38e6bdfcc962",
@@ -5314,7 +5297,7 @@
         "rootCategoryId": "a79b2d36-7dea-4a84-81ef-27f99296bccf",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 43
       },
       {
         "id": "f35cc803-3a06-4262-b38b-a5295321f756",
@@ -5330,7 +5313,7 @@
         "rootCategoryId": "a79b2d36-7dea-4a84-81ef-27f99296bccf",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 44
       },
       {
         "id": "c3fdc01d-0648-4dcb-855d-7afe78bf1d89",
@@ -5346,10 +5329,10 @@
         "rootCategoryId": "a79b2d36-7dea-4a84-81ef-27f99296bccf",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 9
       }
     ],
-    "settingCount": 14
+    "settingCount": 146
   },
   {
     "id": "0a1347d2-90c0-407a-baa0-e4859260532a",
@@ -5365,7 +5348,7 @@
     "rootCategoryId": "0a1347d2-90c0-407a-baa0-e4859260532a",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 4
+    "settingCount": 5
   },
   {
     "id": "7443c1d4-1087-486c-9a0a-f9da9074e4e1",
@@ -5413,7 +5396,7 @@
     "rootCategoryId": "5d835ac8-2e5e-4887-8e4d-0c3846d0ad9f",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 107
+    "settingCount": 109
   },
   {
     "id": "18893f00-c309-4695-bcaf-b66286ad99c1",
@@ -5461,7 +5444,7 @@
     "rootCategoryId": "b6650a16-32bc-4344-ac98-8f20486c6b0b",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 12
   },
   {
     "id": "3ccd987e-bfca-4838-98ea-576de34b3ebe",
@@ -5477,7 +5460,7 @@
     "rootCategoryId": "3ccd987e-bfca-4838-98ea-576de34b3ebe",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 4
   },
   {
     "id": "39e4c352-be9c-4e75-8111-8236279c7f1e",
@@ -5509,7 +5492,7 @@
     "rootCategoryId": "80b21376-0e9a-4e5b-8a74-b672adbe94a8",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 3
   },
   {
     "id": "f03f9f2f-f8ba-4c94-ad5f-95ada256c8c6",
@@ -5646,7 +5629,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 7
       },
       {
         "id": "ddb64e9d-34b9-44f4-9980-a6623f14e445",
@@ -5678,7 +5661,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "6b83806b-eb3e-4224-b082-d6f2c8ab3eb9",
@@ -5694,7 +5677,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 16
       },
       {
         "id": "2cdd4a96-23c1-4419-b88c-41bbaa119e68",
@@ -5710,7 +5693,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 18
       },
       {
         "id": "e0ab6868-4b53-4310-b665-f7c979941db7",
@@ -5726,7 +5709,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 12
       },
       {
         "id": "7d9e5b9b-84e7-473c-b6ca-a1629448df55",
@@ -5742,7 +5725,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 8
       },
       {
         "id": "42a6198f-bdec-402e-b619-315400b65488",
@@ -5758,7 +5741,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 5
       },
       {
         "id": "15be55d8-7477-4274-9b09-b775bce68416",
@@ -5774,7 +5757,7 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "b382d980-7459-4850-a45e-75dd99488972",
@@ -5790,10 +5773,10 @@
         "rootCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 24
       }
     ],
-    "settingCount": 10
+    "settingCount": 99
   },
   {
     "id": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
@@ -5809,7 +5792,7 @@
     "rootCategoryId": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 111
+    "settingCount": 131
   },
   {
     "id": "e2ec9af6-6143-4cd8-952c-1b3e849ee0dc",
@@ -5859,7 +5842,7 @@
     "rootCategoryId": "5ed18ca1-36d1-4375-bfd6-fd67801c2659",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 4
   },
   {
     "id": "992a8a1e-428e-41cb-948e-4e5da86105fa",
@@ -5891,7 +5874,7 @@
     "rootCategoryId": "55c888df-44ff-49d1-808e-ad9cb8429aff",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 6
   },
   {
     "id": "a4fb2510-977f-42ff-9033-6f1eb98f141b",
@@ -5907,7 +5890,7 @@
     "rootCategoryId": "a4fb2510-977f-42ff-9033-6f1eb98f141b",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 6
+    "settingCount": 14
   },
   {
     "id": "89519fc9-9b38-4401-8767-b0a047cae515",
@@ -5961,7 +5944,7 @@
         "rootCategoryId": "89519fc9-9b38-4401-8767-b0a047cae515",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 9
+        "settingCount": 17
       },
       {
         "id": "b6733d23-eadc-486a-abfc-62b78698a16c",
@@ -6041,10 +6024,10 @@
         "rootCategoryId": "89519fc9-9b38-4401-8767-b0a047cae515",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 5
+        "settingCount": 12
       }
     ],
-    "settingCount": 64
+    "settingCount": 79
   },
   {
     "id": "264202da-475b-476e-bbc7-3c252f777145",
@@ -6206,7 +6189,7 @@
     "rootCategoryId": "3c46dc04-e649-41b9-be99-04b771303fdd",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 3
+    "settingCount": 11
   },
   {
     "id": "139974ad-f615-442b-b3dc-84a44e3ec663",
@@ -6222,7 +6205,7 @@
     "rootCategoryId": "139974ad-f615-442b-b3dc-84a44e3ec663",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 21
+    "settingCount": 28
   },
   {
     "id": "e73ddc98-e465-43b0-bfd8-8a18cd9d4830",
@@ -6286,7 +6269,7 @@
     "rootCategoryId": "4a5e4714-00ac-4793-b0cc-5049041b0ed7",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 14
+    "settingCount": 111
   },
   {
     "id": "e099d9e1-4ffa-42ed-a250-5fd7875469f2",
@@ -6478,7 +6461,7 @@
         "rootCategoryId": "ca48a8ac-4f14-475a-9e32-08b5ed4fa667",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 14
       },
       {
         "id": "5b327ef8-f9fb-4e10-ba9e-8a8ca9bf4ed9",
@@ -6494,7 +6477,7 @@
         "rootCategoryId": "ca48a8ac-4f14-475a-9e32-08b5ed4fa667",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "bd5533e1-f1ee-4994-8a79-cffe02b12d5c",
@@ -6510,10 +6493,10 @@
         "rootCategoryId": "ca48a8ac-4f14-475a-9e32-08b5ed4fa667",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       }
     ],
-    "settingCount": 3
+    "settingCount": 20
   },
   {
     "id": "0497eec4-fe3a-44f2-8caf-b5ab11839893",
@@ -7279,7 +7262,7 @@
     "rootCategoryId": "14df2cb2-fc75-43af-87f8-a1fbd56a64e3",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 3
+    "settingCount": 7
   },
   {
     "id": "26c1af84-7c09-4910-8b2f-486072fef710",
@@ -7344,7 +7327,7 @@
     "rootCategoryId": "f1dcf7b6-2d89-41bf-b5eb-02a879c6db5d",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 7
+    "settingCount": 18
   },
   {
     "id": "c0204a51-a73c-46a6-8626-deeadcabe6ac",
@@ -7493,7 +7476,7 @@
         "rootCategoryId": "22f83491-cbb8-4a84-92c9-301ab9b3c6e3",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "8f831e0a-feb7-4cbb-acc1-2e583f3f4de3",
@@ -7509,7 +7492,7 @@
         "rootCategoryId": "22f83491-cbb8-4a84-92c9-301ab9b3c6e3",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 22
       },
       {
         "id": "0e937777-d01a-4180-a937-c2010451a529",
@@ -7525,7 +7508,7 @@
         "rootCategoryId": "22f83491-cbb8-4a84-92c9-301ab9b3c6e3",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "9859957e-34f1-4669-9f95-2b7c79fff052",
@@ -7541,10 +7524,10 @@
         "rootCategoryId": "22f83491-cbb8-4a84-92c9-301ab9b3c6e3",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       }
     ],
-    "settingCount": 4
+    "settingCount": 34
   },
   {
     "id": "8ff93a7a-503c-4955-89be-900d475b7c5e",
@@ -7587,7 +7570,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 9
       },
       {
         "id": "5f71c40e-01aa-42d2-9c8c-7d560126cd4b",
@@ -7603,7 +7586,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "3c7f15ef-a539-411c-93f1-5f97b7bd5519",
@@ -7619,7 +7602,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "0be23ead-c5f7-4ea5-9ec5-64c05d19cf5d",
@@ -7635,7 +7618,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "b32726b3-b0e9-465b-86f8-b61ad8af52f0",
@@ -7651,7 +7634,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "99d68d97-63b7-4f49-83dd-1ad3b3281d0d",
@@ -7667,7 +7650,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "dd68a290-1ba7-470f-afca-339f443a767c",
@@ -7683,7 +7666,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 5
       },
       {
         "id": "1a056b49-3fb9-4097-b286-c5f493208578",
@@ -7699,7 +7682,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "724d930a-7a3c-4171-a17c-431cee336518",
@@ -7715,7 +7698,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "2c156b7e-99c8-4a21-a828-4f9b94479b0d",
@@ -7731,7 +7714,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "1fbc29d7-0530-4208-b506-9df648a402e9",
@@ -7747,7 +7730,7 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "ef7328b1-c666-40fe-a933-57b14bc77dd3",
@@ -7763,10 +7746,10 @@
         "rootCategoryId": "8ff93a7a-503c-4955-89be-900d475b7c5e",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       }
     ],
-    "settingCount": 12
+    "settingCount": 37
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
@@ -7783,7 +7766,7 @@
     "rootCategoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 6
+    "settingCount": 16
   },
   {
     "id": "9a7843b4-6ec1-47c4-906b-75b8866e97c2",
@@ -7815,7 +7798,7 @@
     "rootCategoryId": "87f460f4-8403-419c-bfb4-44dec5edcccb",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 2
   },
   {
     "id": "de9a9583-d660-4bdc-83bc-404c8c488267",
@@ -8162,7 +8145,7 @@
     "rootCategoryId": "2373de26-8270-4e74-a53f-9aeb55d5553c",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 15
+    "settingCount": 113
   },
   {
     "id": "48b8705b-58a8-4504-ab7a-2704980f4577",
@@ -8203,7 +8186,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "13467142-14e7-4380-8573-4866e842c7f6",
@@ -8219,7 +8202,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 33
+        "settingCount": 47
       },
       {
         "id": "93099bd4-c685-434b-9d72-f0cb6db5e753",
@@ -8251,7 +8234,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 3
+        "settingCount": 5
       },
       {
         "id": "d2191717-e304-46f7-bcc0-55e6477026c9",
@@ -8267,7 +8250,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 5
       },
       {
         "id": "a3ea4da3-445e-41c0-ac4d-c9ad2467ec26",
@@ -8315,7 +8298,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 7
+        "settingCount": 12
       },
       {
         "id": "5c4df3be-80b0-40cc-a8c8-0258120b0de5",
@@ -8331,7 +8314,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 2
+        "settingCount": 6
       },
       {
         "id": "67cd904c-78e0-4e77-9dd4-c713b21763f3",
@@ -8350,7 +8333,7 @@
         "settingCount": 3
       }
     ],
-    "settingCount": 81
+    "settingCount": 112
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
@@ -8367,7 +8350,7 @@
     "rootCategoryId": "cd55f347-a417-4fe9-83ee-8f1f40ac5eb0",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 5
+    "settingCount": 13
   },
   {
     "id": "577d5951-fc56-4906-90bc-2c508c6611ad",
@@ -8383,23 +8366,7 @@
     "rootCategoryId": "577d5951-fc56-4906-90bc-2c508c6611ad",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 3
-  },
-  {
-    "id": "9d14bbed-327d-4c38-ac02-6b916909bdd9",
-    "name": null,
-    "displayName": "Microsoft Edge",
-    "description": "Microsoft Edge Apple",
-    "categoryDescription": null,
-    "helpText": null,
-    "platforms": "macOS",
-    "technologies": "mdm,appleRemoteManagement",
-    "settingUsage": "configuration",
-    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
-    "rootCategoryId": "9d14bbed-327d-4c38-ac02-6b916909bdd9",
-    "childCategoryIds": [],
-    "children": [],
-    "settingCount": 429
+    "settingCount": 6
   },
   {
     "id": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
@@ -9305,6 +9272,22 @@
     "settingCount": 240
   },
   {
+    "id": "9d14bbed-327d-4c38-ac02-6b916909bdd9",
+    "name": null,
+    "displayName": "Microsoft Edge (macOS)",
+    "description": "Microsoft Edge Apple",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "macOS",
+    "technologies": "mdm,appleRemoteManagement",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "9d14bbed-327d-4c38-ac02-6b916909bdd9",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 457
+  },
+  {
     "id": "d4943981-47b2-4a86-848b-860e8ca47381",
     "name": null,
     "displayName": "Microsoft Edge Update",
@@ -9889,13 +9872,13 @@
                     "settingCount": 22
                   }
                 ],
-                "settingCount": 75
+                "settingCount": 76
               }
             ],
-            "settingCount": 90
+            "settingCount": 91
           }
         ],
-        "settingCount": 145
+        "settingCount": 146
       },
       {
         "id": "9a2bfe77-7e03-4a24-a9fa-c42a225a28b8",
@@ -9965,7 +9948,7 @@
         "settingCount": 1
       }
     ],
-    "settingCount": 173
+    "settingCount": 174
   },
   {
     "id": "151e95d3-64ec-424f-ba7e-4d1ba6ef5aa1",
@@ -12687,7 +12670,7 @@
                 "settingCount": 10
               }
             ],
-            "settingCount": 22
+            "settingCount": 64
           },
           {
             "id": "c3db5686-3bb2-437c-8906-60da1a1fa844",
@@ -12706,10 +12689,10 @@
             "settingCount": 11
           }
         ],
-        "settingCount": 77
+        "settingCount": 119
       }
     ],
-    "settingCount": 398
+    "settingCount": 440
   },
   {
     "id": "ba7686de-e6ee-4af9-b1a5-265b03e08367",
@@ -13123,16 +13106,16 @@
                     "settingCount": 22
                   }
                 ],
-                "settingCount": 48
+                "settingCount": 49
               }
             ],
-            "settingCount": 63
+            "settingCount": 64
           }
         ],
-        "settingCount": 106
+        "settingCount": 107
       }
     ],
-    "settingCount": 141
+    "settingCount": 142
   },
   {
     "id": "0e864f4a-d9e7-48f5-abe6-c7f92773921a",
@@ -13670,10 +13653,10 @@
                 "rootCategoryId": "0e864f4a-d9e7-48f5-abe6-c7f92773921a",
                 "childCategoryIds": [],
                 "children": [],
-                "settingCount": 27
+                "settingCount": 28
               }
             ],
-            "settingCount": 38
+            "settingCount": 39
           },
           {
             "id": "28c4859e-1faa-4b51-96cf-068cb4354093",
@@ -13728,10 +13711,10 @@
             "settingCount": 12
           }
         ],
-        "settingCount": 134
+        "settingCount": 135
       }
     ],
-    "settingCount": 140
+    "settingCount": 141
   },
   {
     "id": "0483f5bb-0aaa-4f99-9a5e-b05bbfd70524",
@@ -13972,13 +13955,13 @@
             "rootCategoryId": "0483f5bb-0aaa-4f99-9a5e-b05bbfd70524",
             "childCategoryIds": [],
             "children": [],
-            "settingCount": 5
+            "settingCount": 6
           }
         ],
-        "settingCount": 7
+        "settingCount": 8
       }
     ],
-    "settingCount": 40
+    "settingCount": 41
   },
   {
     "id": "501b5a30-253c-48b7-ab40-de1d100e4358",
@@ -14409,10 +14392,10 @@
                     "settingCount": 3
                   }
                 ],
-                "settingCount": 34
+                "settingCount": 35
               }
             ],
-            "settingCount": 36
+            "settingCount": 37
           },
           {
             "id": "a7d55d90-e1d1-4577-8bfd-fe2641bce461",
@@ -14431,10 +14414,10 @@
             "settingCount": 3
           }
         ],
-        "settingCount": 88
+        "settingCount": 89
       }
     ],
-    "settingCount": 98
+    "settingCount": 99
   },
   {
     "id": "859f3bfb-70f6-447a-822e-680ac98e91ce",
@@ -15196,10 +15179,10 @@
                     "settingCount": 22
                   }
                 ],
-                "settingCount": 57
+                "settingCount": 58
               }
             ],
-            "settingCount": 73
+            "settingCount": 74
           },
           {
             "id": "2f6205e9-8680-4b8f-97f3-be12e252e038",
@@ -15218,10 +15201,10 @@
             "settingCount": 6
           }
         ],
-        "settingCount": 228
+        "settingCount": 229
       }
     ],
-    "settingCount": 292
+    "settingCount": 293
   },
   {
     "id": "f10138ba-123a-43bc-8031-4458ba327374",
@@ -15253,7 +15236,7 @@
     "rootCategoryId": "83fb8ae9-dfc0-4ff8-8a98-3a04f0edd919",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 5
   },
   {
     "id": "64cf78b2-0594-4178-8e80-bdfe3dc38e63",
@@ -15322,7 +15305,7 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 18
       },
       {
         "id": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
@@ -15338,7 +15321,7 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 35
       },
       {
         "id": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
@@ -15354,7 +15337,7 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 20
       },
       {
         "id": "224dc683-c0e0-4783-8ba8-8f02c76d161d",
@@ -15370,7 +15353,7 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       },
       {
         "id": "70b5da13-9c31-4857-890d-b7eb223729c3",
@@ -15386,7 +15369,7 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 11
       },
       {
         "id": "06a85f5b-2614-4467-91cf-4a64d0c9326f",
@@ -15402,10 +15385,10 @@
         "rootCategoryId": "cf5f7f94-cb88-497e-9599-f0985d9ff3cb",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 8
       }
     ],
-    "settingCount": 6
+    "settingCount": 98
   },
   {
     "id": "b260992a-8216-4bfa-b60a-4eeea1f356c9",
@@ -15808,7 +15791,7 @@
     "rootCategoryId": "72e4d72b-e01e-427c-a3b6-05bdcf04ef8d",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 9
+    "settingCount": 10
   },
   {
     "id": "82a437a8-6be8-4003-a951-951999e86db8",
@@ -15844,7 +15827,7 @@
         "rootCategoryId": "82a437a8-6be8-4003-a951-951999e86db8",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "dc270c70-1cf4-4d98-ad26-8c2d441173f1",
@@ -15860,7 +15843,7 @@
         "rootCategoryId": "82a437a8-6be8-4003-a951-951999e86db8",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 10
       },
       {
         "id": "65087b94-7e45-4d74-a50d-df4377b67499",
@@ -15876,7 +15859,7 @@
         "rootCategoryId": "82a437a8-6be8-4003-a951-951999e86db8",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "7ecdd7c9-6ab2-4dac-88ef-9bdad46e1f66",
@@ -15892,7 +15875,7 @@
         "rootCategoryId": "82a437a8-6be8-4003-a951-951999e86db8",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "f71e7e3a-482a-4760-b7f9-0403b2b6f7d8",
@@ -15908,10 +15891,10 @@
         "rootCategoryId": "82a437a8-6be8-4003-a951-951999e86db8",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 27
       }
     ],
-    "settingCount": 5
+    "settingCount": 43
   },
   {
     "id": "1d5e7986-870c-444b-bf09-78bbf82a53fa",
@@ -15927,7 +15910,7 @@
     "rootCategoryId": "1d5e7986-870c-444b-bf09-78bbf82a53fa",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 4
   },
   {
     "id": "1dd655c9-a1f3-4780-befb-cab19922277d",
@@ -16042,7 +16025,7 @@
         "rootCategoryId": "187e5f4f-a789-4487-a848-7bf0f41597c7",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "c7c1ed5a-a2ec-4237-bbf1-d5723f94d033",
@@ -16058,7 +16041,7 @@
         "rootCategoryId": "187e5f4f-a789-4487-a848-7bf0f41597c7",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "0a9f982a-3515-4728-a231-fa000eb9e550",
@@ -16074,10 +16057,10 @@
         "rootCategoryId": "187e5f4f-a789-4487-a848-7bf0f41597c7",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       }
     ],
-    "settingCount": 3
+    "settingCount": 8
   },
   {
     "id": "56c54112-2991-4bda-9e01-e6868bd07726",
@@ -16093,7 +16076,7 @@
     "rootCategoryId": "56c54112-2991-4bda-9e01-e6868bd07726",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 6
   },
   {
     "id": "508b2c0e-f572-4a50-93bf-566e5b827c0e",
@@ -16142,7 +16125,7 @@
         "rootCategoryId": "a01c03d4-ec76-4c01-b982-de71620feb19",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       },
       {
         "id": "174ffe92-3770-4688-aa21-85b7535cf374",
@@ -16158,10 +16141,10 @@
         "rootCategoryId": "a01c03d4-ec76-4c01-b982-de71620feb19",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 20
       }
     ],
-    "settingCount": 2
+    "settingCount": 26
   },
   {
     "id": "98e76d3e-9e52-45b3-b0c7-f029023121e9",
@@ -16193,10 +16176,10 @@
         "rootCategoryId": "98e76d3e-9e52-45b3-b0c7-f029023121e9",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 177
       }
     ],
-    "settingCount": 104
+    "settingCount": 280
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
@@ -16213,7 +16196,7 @@
     "rootCategoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 22
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
@@ -16230,7 +16213,7 @@
     "rootCategoryId": "b750fe41-33c4-4293-8dfc-42285be35752",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 6
   },
   {
     "id": "e905d6cf-7820-48d4-86e0-b55fa991a5ad",
@@ -16246,7 +16229,7 @@
     "rootCategoryId": "e905d6cf-7820-48d4-86e0-b55fa991a5ad",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 2
   },
   {
     "id": "a754c9bd-2116-4dd6-9014-07f914869145",
@@ -16279,7 +16262,7 @@
         "rootCategoryId": "a754c9bd-2116-4dd6-9014-07f914869145",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 9
       },
       {
         "id": "b8ed9eb3-17de-4091-b08b-7adb2fe13271",
@@ -16295,10 +16278,10 @@
         "rootCategoryId": "a754c9bd-2116-4dd6-9014-07f914869145",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 26
       }
     ],
-    "settingCount": 2
+    "settingCount": 35
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
@@ -16347,12 +16330,12 @@
     "rootCategoryId": "9c6a5b09-3fc4-4cf9-916f-d3a20496fd90",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 2
   },
   {
     "id": "c14c2e8b-0081-46e0-89ac-48ade3b83408",
     "name": null,
-    "displayName": "Remote Desktop",
+    "displayName": "Remote Desktop (Windows)",
     "description": "Remote Desktop",
     "categoryDescription": null,
     "helpText": null,
@@ -16379,7 +16362,7 @@
     "rootCategoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 8
   },
   {
     "id": "eda31027-9270-4959-801b-397fa05512e2",
@@ -16395,7 +16378,7 @@
     "rootCategoryId": "eda31027-9270-4959-801b-397fa05512e2",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 226
   },
   {
     "id": "66c92e07-234b-4992-a081-9afe4c113ba3",
@@ -16494,7 +16477,7 @@
         "rootCategoryId": "62cb63bd-d3ef-4cff-9b4a-e7bbf4657173",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 18
       },
       {
         "id": "8abddb23-7036-4ba8-8912-529279a849ea",
@@ -16510,7 +16493,7 @@
         "rootCategoryId": "62cb63bd-d3ef-4cff-9b4a-e7bbf4657173",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "f4a8384f-9e4e-4fc6-9ee2-28fa5260347a",
@@ -16526,10 +16509,10 @@
         "rootCategoryId": "62cb63bd-d3ef-4cff-9b4a-e7bbf4657173",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 7
       }
     ],
-    "settingCount": 13
+    "settingCount": 39
   },
   {
     "id": "eec07ad3-24ef-4502-8125-9fc988650a7c",
@@ -16629,7 +16612,7 @@
     "rootCategoryId": "f8f4d337-4c55-4518-91c4-f7f77703d843",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 9
   },
   {
     "id": "ed24097d-3bb7-459c-83fb-f0090d1ad8dd",
@@ -16661,7 +16644,7 @@
     "rootCategoryId": "311e1dac-a77c-4bc0-a376-35ad55923b7d",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 43
+    "settingCount": 45
   },
   {
     "id": "94fd7e7e-2a0f-4b5e-903a-28868a2e7e3c",
@@ -16748,7 +16731,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 39
       },
       {
         "id": "768d9aa4-7407-4ed9-b97f-2385b8cadb47",
@@ -16764,7 +16747,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "5401711f-292a-487a-be18-f99593a0477c",
@@ -16780,7 +16763,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "dec8381a-0a61-406b-842b-fc6ae9930795",
@@ -16796,7 +16779,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "8cefd936-362e-4a24-bc76-e078b6fd13fa",
@@ -16812,7 +16795,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       },
       {
         "id": "cb33668b-933f-4424-8d2d-8bdf0e61bddd",
@@ -16828,7 +16811,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 18
       },
       {
         "id": "0d4d90ab-7ad8-4524-ade0-bc01aa7b71a3",
@@ -16844,7 +16827,7 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       },
       {
         "id": "853f4181-42e8-411c-91cf-c06968c0a543",
@@ -16860,10 +16843,10 @@
         "rootCategoryId": "bb995a00-4ed7-49aa-aef2-a6d2c341ee37",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 3
       }
     ],
-    "settingCount": 8
+    "settingCount": 79
   },
   {
     "id": "361dc9bb-0cf7-4d8b-af4b-6117aeb46511",
@@ -16896,7 +16879,7 @@
         "rootCategoryId": "361dc9bb-0cf7-4d8b-af4b-6117aeb46511",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "64538726-8745-4e7a-b370-332f725b58bf",
@@ -16912,10 +16895,10 @@
         "rootCategoryId": "361dc9bb-0cf7-4d8b-af4b-6117aeb46511",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       }
     ],
-    "settingCount": 2
+    "settingCount": 6
   },
   {
     "id": "4f29ef5c-6ca0-4b09-893f-01755a670877",
@@ -17082,7 +17065,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 22
       },
       {
         "id": "e42edcd8-fcb0-4255-a774-c78b34f0b0c9",
@@ -17098,7 +17081,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 2
       },
       {
         "id": "cc388035-b49c-493e-a598-14b0d0de4359",
@@ -17114,7 +17097,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 53
       },
       {
         "id": "d8f06fcf-7328-43ac-b5b7-f7166b5333de",
@@ -17130,7 +17113,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 10
       },
       {
         "id": "b6ad9576-be4c-46b9-a3a6-13a03ff1fed7",
@@ -17146,7 +17129,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 29
       },
       {
         "id": "ff90bf4b-0583-4761-a1c4-5aa4b50c5872",
@@ -17162,7 +17145,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 13
       },
       {
         "id": "11c4cf0f-a03d-4309-93b2-011be4c410d5",
@@ -17178,7 +17161,7 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 4
       },
       {
         "id": "361859d9-1382-47c3-b9ec-9251a62fbb25",
@@ -17194,10 +17177,10 @@
         "rootCategoryId": "84affc4e-1473-43e6-9df0-0fe7e1e84c4b",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 9
       }
     ],
-    "settingCount": 8
+    "settingCount": 142
   },
   {
     "id": "9fa124da-acc8-4f4a-a75d-732cd5f91bfd",
@@ -17261,7 +17244,7 @@
     "rootCategoryId": "a6fe8038-136b-4d50-bf04-8e232409c0d2",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 1
+    "settingCount": 24
   },
   {
     "id": "c4e48b1b-6d88-434f-a717-d5bab28eb245",
@@ -17373,7 +17356,7 @@
     "rootCategoryId": "e7ae2b99-0479-475f-af5c-96457121fcd0",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 11
+    "settingCount": 38
   },
   {
     "id": "01d16911-19a1-4dcb-8089-ffa4781d977c",
@@ -17501,7 +17484,7 @@
     "rootCategoryId": "0d9ee4f5-7d6b-41fd-9089-b0886f7ff944",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 8
+    "settingCount": 13
   },
   {
     "id": "811f63f1-1619-4b48-b8f0-3d388729bd47",
@@ -17534,7 +17517,7 @@
         "rootCategoryId": "811f63f1-1619-4b48-b8f0-3d388729bd47",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       },
       {
         "id": "fd3717c1-dcf8-4038-b7f7-4ad3359a9d32",
@@ -17550,9 +17533,9 @@
         "rootCategoryId": "811f63f1-1619-4b48-b8f0-3d388729bd47",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 1
+        "settingCount": 6
       }
     ],
-    "settingCount": 2
+    "settingCount": 12
   }
 ]

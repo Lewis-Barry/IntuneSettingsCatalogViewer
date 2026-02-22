@@ -216,7 +216,16 @@ export default function SettingsList({
     return map;
   }, [rootSettings, categoryMap, categoryName]);
 
-  const count = totalCount ?? rootSettings.length;
+  // Compute visible settings count: root settings + all non-duplicate children
+  // that survived the CSP-path deduplication and grouping logic.  This is more
+  // accurate than the raw `totalCount` prop which includes hidden duplicates.
+  const count = useMemo(() => {
+    let total = rootSettings.length;
+    for (const [, children] of childMap) {
+      total += children.length;
+    }
+    return total;
+  }, [rootSettings, childMap]);
 
   // Progressive loading for long lists
   const [visibleCount, setVisibleCount] = useState(Math.min(PAGE_SIZE, rootSettings.length));

@@ -140,19 +140,37 @@ export default function SettingsCatalogBrowser({
   const filteredCategoryTree = useMemo(() => {
     if (selectedPlatforms.length === 0) return categoryTree;
 
+    // Build a lookup map for CSP-path deduplication (same logic as SettingsList)
+    const settingById = new Map<string, SettingDefinition>();
+    for (const catSettings of Object.values(settingsByCategory)) {
+      for (const s of catSettings) settingById.set(s.id, s);
+    }
+    const getCspPath = (s: SettingDefinition) =>
+      s.baseUri && s.offsetUri
+        ? `${s.baseUri}/${s.offsetUri}`
+        : s.baseUri || s.offsetUri || '';
+
+    function isVisibleSetting(s: SettingDefinition): boolean {
+      const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
+      if (isRoot) return true;
+      // Child: only visible if CSP path differs from parent
+      const parent = settingById.get(s.rootDefinitionId!);
+      return !parent || getCspPath(s) !== getCspPath(parent);
+    }
+
     function filterNode(node: CategoryTreeNode): CategoryTreeNode | null {
       // Recursively filter children first
       const filteredChildren = node.children
         .map(filterNode)
         .filter((c): c is CategoryTreeNode => c !== null);
 
-      // Count settings in *this* category that match the platform filter
-      // Only count root-level settings (not children nested under a parent)
-      // to stay consistent with the pre-built settingCount values.
+      // Count visible settings in *this* category that match the platform filter.
+      // Excludes child settings whose CSP path is identical to their parent
+      // (these are hidden duplicates in the UI).
       const catSettings = settingsByCategory[node.id] || [];
       const matchingCount = catSettings.filter(
         (s) =>
-          (!s.rootDefinitionId || s.rootDefinitionId === s.id) &&
+          isVisibleSetting(s) &&
           matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
       ).length;
 
@@ -263,7 +281,7 @@ export default function SettingsCatalogBrowser({
       return a.categoryName.localeCompare(b.categoryName);
     });
     return groups;
-  }, [searchResults, settingsByCategory, selectedPlatforms, categoryMap]);
+  }, [searchResults, settingsByCategory, selectedPlatforms, categoryMap, categoryParentMap]);
 
   // Total matched settings count for display (all settings shown in results)
   const searchResultCount = useMemo(() => {
