@@ -114,7 +114,7 @@ export default function SettingPage({ params }: SettingPageProps) {
             {setting.displayName}
           </h1>
           {platform && platform !== 'none' && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-fluent-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
               {PlatformIcon && <PlatformIcon className="w-3.5 h-3.5" />}
               {platformLabel}
             </span>

@@ -80,7 +80,7 @@
 
   /* Badge */
   .scope-badge {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-fluent-xs font-medium;
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-fluent-xs font-medium;
   }
 
   /* Search result item */

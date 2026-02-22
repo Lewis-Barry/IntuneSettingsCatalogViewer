@@ -138,6 +138,16 @@ async function main() {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
 
+  // Load existing data for comparison (if available)
+  let existingSettings = '';
+  let existingCategories = '';
+  if (fs.existsSync(SETTINGS_FILE)) {
+    existingSettings = fs.readFileSync(SETTINGS_FILE, 'utf-8');
+  }
+  if (fs.existsSync(CATEGORIES_FILE)) {
+    existingCategories = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
+  }
+
   // 1. Fetch categories
   console.log('Fetching configuration categories...');
   const categoriesUrl = `/deviceManagement/configurationCategories?$select=${CATEGORIES_SELECT}`;
@@ -193,10 +203,18 @@ async function main() {
     console.log(`  Updated ${CATEGORIES_FILE}`);
   }
 
-  // 4. Write last-updated timestamp
-  const now = new Date().toISOString();
-  fs.writeFileSync(LAST_UPDATED_FILE, JSON.stringify({ date: now }, null, 2), 'utf-8');
-  console.log(`  Updated timestamp: ${now}`);
+  // 4. Write last-updated timestamp only if data actually changed
+  const newSettings = fs.readFileSync(SETTINGS_FILE, 'utf-8');
+  const newCategories = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
+  const hasChanges = newSettings !== existingSettings || newCategories !== existingCategories;
+
+  if (hasChanges) {
+    const now = new Date().toISOString();
+    fs.writeFileSync(LAST_UPDATED_FILE, JSON.stringify({ date: now }, null, 2), 'utf-8');
+    console.log(`  Data changed — updated timestamp: ${now}`);
+  } else {
+    console.log('  No data changes detected — last-updated timestamp unchanged.');
+  }
 
   console.log();
   console.log('Done! Data saved to:');

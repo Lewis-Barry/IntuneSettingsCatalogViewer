@@ -14,7 +14,7 @@ export default function SettingLoading() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-8 w-72 bg-gray-200 rounded animate-pulse" />
-          <div className="h-6 w-16 bg-gray-200 rounded-full animate-pulse" />
+          <div className="h-6 w-16 bg-gray-200 rounded-md animate-pulse" />
         </div>
         <div className="h-4 w-48 bg-gray-200 rounded animate-pulse mt-2" />
       </div>
@@ -24,8 +24,8 @@ export default function SettingLoading() {
         <div className="px-6 py-4 space-y-4">
           {/* Platform pill */}
           <div className="flex items-center gap-2">
-            <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
-            <div className="h-6 w-16 bg-gray-200 rounded-full animate-pulse" />
+            <div className="h-6 w-20 bg-gray-200 rounded-md animate-pulse" />
+            <div className="h-6 w-16 bg-gray-200 rounded-md animate-pulse" />
           </div>
 
           {/* Description */}

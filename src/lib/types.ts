@@ -214,6 +214,47 @@ export interface SearchIndexEntry {
   settingType: string;
 }
 
+// ─── Match Source (where a search query matched) ───
+
+export type MatchSource = 'title' | 'description' | 'csp' | 'keywords' | 'category';
+
+/** Detect which fields of a setting match the given search query.
+ *  Returns an array of match sources (e.g. ['title', 'description']). */
+export function detectMatchSources(
+  setting: SettingDefinition,
+  query: string,
+): MatchSource[] {
+  if (!query || !query.trim()) return [];
+  const terms = query.split(',').map(t => t.trim()).filter(Boolean);
+  if (terms.length === 0) return [];
+
+  // Build a list of individual words + full phrases from the query
+  const searchTokens: string[] = [];
+  for (const term of terms) {
+    searchTokens.push(term.toLowerCase());
+    const words = term.split(/\s+/).filter(w => w.length > 0);
+    for (const w of words) searchTokens.push(w.toLowerCase());
+  }
+  // Deduplicate
+  const tokens = [...new Set(searchTokens)];
+
+  const matches = (text: string | undefined): boolean => {
+    if (!text) return false;
+    const lower = text.toLowerCase();
+    return tokens.some(t => lower.includes(t));
+  };
+
+  const sources: MatchSource[] = [];
+  if (matches(setting.displayName) || matches(setting.name)) sources.push('title');
+  if (matches(setting.description)) sources.push('description');
+  const cspPath = setting.baseUri && setting.offsetUri
+    ? `${setting.baseUri}/${setting.offsetUri}`
+    : setting.baseUri || setting.offsetUri || '';
+  if (cspPath && matches(cspPath)) sources.push('csp');
+  if (setting.keywords && setting.keywords.some(k => matches(k))) sources.push('keywords');
+  return sources;
+}
+
 // ─── Helpers ───
 
 /** Derive scope from baseUri */
@@ -230,9 +271,9 @@ export function getSettingTypeLabel(odataType: string): string {
     '#microsoft.graph.deviceManagementConfigurationChoiceSettingDefinition': 'Choice',
     '#microsoft.graph.deviceManagementConfigurationSimpleSettingDefinition': 'Simple',
     '#microsoft.graph.deviceManagementConfigurationSettingGroupDefinition': 'Group',
-    '#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition': 'Group Collection',
-    '#microsoft.graph.deviceManagementConfigurationChoiceSettingCollectionDefinition': 'Choice Collection',
-    '#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition': 'Simple Collection',
+    '#microsoft.graph.deviceManagementConfigurationSettingGroupCollectionDefinition': 'Group Coll.',
+    '#microsoft.graph.deviceManagementConfigurationChoiceSettingCollectionDefinition': 'Choice Coll.',
+    '#microsoft.graph.deviceManagementConfigurationSimpleSettingCollectionDefinition': 'Simple Coll.',
     '#microsoft.graph.deviceManagementConfigurationRedirectSettingDefinition': 'Redirect',
   };
   return map[odataType] || 'Unknown';

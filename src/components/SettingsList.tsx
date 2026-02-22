@@ -2,8 +2,10 @@
 
 import { useMemo, useRef, useState, useEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import type { SettingDefinition } from '@/lib/types';
+import type { SettingDefinition, MatchSource } from '@/lib/types';
+import { detectMatchSources } from '@/lib/types';
 import SettingRow from './SettingRow';
+import HighlightText from './HighlightText';
 
 interface SettingsListProps {
   settings: SettingDefinition[];
@@ -227,6 +229,16 @@ export default function SettingsList({
 
   const visibleSettings = rootSettings.slice(0, visibleCount);
 
+  // Compute match sources for each setting when in search mode
+  const matchSourcesMap = useMemo(() => {
+    if (!isSearchResult || !highlightQuery) return new Map<string, MatchSource[]>();
+    const map = new Map<string, MatchSource[]>();
+    for (const s of rootSettings) {
+      map.set(s.id, detectMatchSources(s, highlightQuery));
+    }
+    return map;
+  }, [isSearchResult, highlightQuery, rootSettings]);
+
   // Virtualizer for the standard (non-search) category view
   const virtualizer = useVirtualizer({
     count: visibleSettings.length,
@@ -260,7 +272,7 @@ export default function SettingsList({
                 {breadcrumb.map((ancestor, i) => (
                   <span key={i} className="flex items-center gap-1.5 flex-shrink-0">
                     <span className="text-fluent-sm text-fluent-text-secondary truncate max-w-[180px]">
-                      {ancestor}
+                      <HighlightText text={ancestor} query={highlightQuery} />
                     </span>
                     <svg className="w-2.5 h-2.5 text-fluent-text-tertiary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -270,7 +282,7 @@ export default function SettingsList({
               </>
             )}
             <span className="text-fluent-base font-semibold text-fluent-text">
-              {categoryName}
+              <HighlightText text={categoryName} query={highlightQuery} />
             </span>
           </div>
           <span className="text-fluent-sm text-fluent-text-secondary ml-1">
@@ -281,12 +293,24 @@ export default function SettingsList({
         {/* Settings rows */}
         {!collapsed && (
           <div role="table" aria-label={`Settings from ${categoryName}`}>
+            {/* Column header */}
+            <div className="flex items-center gap-3 px-4 py-2 border-b border-fluent-border bg-fluent-bg-alt text-fluent-sm font-semibold text-fluent-text-secondary">
+              <span className="w-5" /> {/* Chevron spacer */}
+              <span className="flex-1">Setting name</span>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <span className="w-[4.5rem] text-center">Scope</span>
+                <span className="w-[6rem] text-center">Type</span>
+                <span className="w-[3.5rem]" /> {/* Extra badge spacer */}
+                <span className="w-5" /> {/* Info icon spacer */}
+              </div>
+            </div>
             {visibleSettings.map((setting) => (
               <SettingRow
                 key={setting.id}
                 setting={setting}
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
+                matchSources={matchSourcesMap.get(setting.id)}
                 allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
@@ -326,9 +350,12 @@ export default function SettingsList({
       <div className="flex items-center gap-3 px-4 py-2 border-b border-fluent-border bg-fluent-bg-alt text-fluent-sm font-semibold text-fluent-text-secondary">
         <span className="w-5" /> {/* Chevron spacer */}
         <span className="flex-1">Setting name</span>
-        <span className="w-32 text-right">Scope</span>
-        <span className="w-20 text-right">Type</span>
-        <span className="w-5" /> {/* Info icon spacer */}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <span className="w-[4.5rem] text-center">Scope</span>
+          <span className="w-[6rem] text-center">Type</span>
+          <span className="w-[3.5rem]" /> {/* Extra badge spacer */}
+          <span className="w-5" /> {/* Info icon spacer */}
+        </div>
       </div>
 
       {/* Settings list (virtualized) */}

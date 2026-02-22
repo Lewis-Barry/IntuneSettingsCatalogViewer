@@ -265,16 +265,11 @@ export default function SettingsCatalogBrowser({
     return groups;
   }, [searchResults, settingsByCategory, selectedPlatforms, categoryMap]);
 
-  // Total matched settings count for display (counting root settings only)
+  // Total matched settings count for display (all settings shown in results)
   const searchResultCount = useMemo(() => {
     let count = 0;
     for (const group of searchGroups) {
-      for (const s of group.settings) {
-        // Only count root-level settings (not child settings nested under a parent)
-        if (!s.rootDefinitionId || s.rootDefinitionId === s.id) {
-          count++;
-        }
-      }
+      count += group.settings.length;
     }
     return count;
   }, [searchGroups]);
