@@ -8,10 +8,19 @@
       BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent Edge from showing a blinking text caret on non-editable content */
+    caret-color: transparent;
   }
 
   body {
     @apply bg-white text-fluent-text;
+  }
+
+  /* Restore visible caret for actual text inputs */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    caret-color: auto;
   }
 }
 
@@ -41,10 +50,14 @@
     @apply bg-white rounded shadow-sm border border-fluent-border;
   }
 
-  /* Category tree item */
+  /* Category tree item (rendered as <button>) */
   .category-item {
     @apply flex items-center gap-1 px-2 py-1.5 text-fluent-base cursor-pointer select-none
-           hover:bg-fluent-bg-alt rounded-sm transition-colors duration-75;
+           hover:bg-fluent-bg-alt rounded-sm transition-colors duration-75
+           bg-transparent border-0 w-full;
+    font: inherit;
+    color: inherit;
+    text-align: left;
   }
 
   .category-item-active {

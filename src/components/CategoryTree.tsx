@@ -65,14 +65,14 @@ const CategoryNode = memo(function CategoryNode({
 
   return (
     <div>
-      <div
+      <button
+        type="button"
         className={`category-item ${isSelected ? 'category-item-active' : ''}`}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
         onClick={handleClick}
         role="treeitem"
         aria-expanded={hasChildren ? expanded : undefined}
         aria-selected={isSelected}
-        tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -90,10 +90,10 @@ const CategoryNode = memo(function CategoryNode({
       >
         {/* Expand/collapse chevron */}
         {hasChildren ? (
-          <button
+          <span
             onClick={handleToggle}
             className="w-4 h-4 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
-            aria-label={expanded ? 'Collapse' : 'Expand'}
+            aria-hidden="true"
           >
             <svg
               className={`w-3 h-3 transition-transform duration-150 ${expanded ? 'rotate-90' : ''}`}
@@ -104,7 +104,7 @@ const CategoryNode = memo(function CategoryNode({
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
-          </button>
+          </span>
         ) : (
           <span className="w-4 h-4 flex-shrink-0" />
         )}
@@ -120,7 +120,7 @@ const CategoryNode = memo(function CategoryNode({
             {node.settingCount.toLocaleString()}
           </span>
         )}
-      </div>
+      </button>
 
       {/* Children */}
       {hasChildren && expanded && (

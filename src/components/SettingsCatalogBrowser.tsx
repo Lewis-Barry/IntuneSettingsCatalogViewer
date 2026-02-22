@@ -6,6 +6,7 @@ import SettingsList from './SettingsList';
 import SearchBar from './SearchBar';
 import PlatformFilter from './PlatformFilter';
 import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
+import { countVisibleRootSettings } from '@/lib/settings-grouping';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -283,11 +284,12 @@ export default function SettingsCatalogBrowser({
     return groups;
   }, [searchResults, settingsByCategory, selectedPlatforms, categoryMap, categoryParentMap]);
 
-  // Total matched settings count for display (all settings shown in results)
+  // Total matched settings count for display — uses the same grouping logic
+  // as SettingsList so the banner count matches the actual visible rows.
   const searchResultCount = useMemo(() => {
     let count = 0;
     for (const group of searchGroups) {
-      count += group.settings.length;
+      count += countVisibleRootSettings(group.settings);
     }
     return count;
   }, [searchGroups]);

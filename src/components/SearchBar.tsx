@@ -90,7 +90,7 @@ export default function SearchBar({
     <div>
       {/* Search instruction */}
       <p className="text-fluent-sm text-fluent-text-secondary mb-2">
-        Use commas &ldquo;,&rdquo; among search terms to lookup settings by their keywords
+        Search by policy name, description, keywords, or CSP path; separate multiple terms with commas
       </p>
 
       {/* Search input */}

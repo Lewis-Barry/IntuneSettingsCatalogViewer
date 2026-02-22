@@ -66,18 +66,13 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
         onClick={() => setExpanded(!expanded)}
         role="row"
         aria-expanded={expanded}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setExpanded(!expanded);
-          }
-        }}
       >
         {/* Expand/collapse chevron */}
         <button
+          type="button"
           className="w-5 h-5 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
-          aria-label={expanded ? 'Collapse' : 'Expand'}
+          aria-label={expanded ? 'Collapse setting' : 'Expand setting'}
+          aria-expanded={expanded}
           onClick={(e) => {
             e.stopPropagation();
             setExpanded(!expanded);
@@ -232,20 +227,15 @@ function SettingRowInner({
         onClick={() => setExpanded(!expanded)}
         role="row"
         aria-expanded={expanded}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setExpanded(!expanded);
-          }
-        }}
       >
         {/* Tree connector icon */}
         <span className="w-4 flex-shrink-0 text-blue-300 select-none text-fluent-sm font-light">↳</span>
 
         <button
+          type="button"
           className="w-4 h-4 flex items-center justify-center flex-shrink-0 text-blue-400 hover:text-blue-600"
-          aria-label={expanded ? 'Collapse' : 'Expand'}
+          aria-label={expanded ? 'Collapse setting' : 'Expand setting'}
+          aria-expanded={expanded}
           onClick={(e) => {
             e.stopPropagation();
             setExpanded(!expanded);

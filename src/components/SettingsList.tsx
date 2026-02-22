@@ -4,6 +4,7 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { detectMatchSources } from '@/lib/types';
+import { groupSettings } from '@/lib/settings-grouping';
 import SettingRow from './SettingRow';
 import HighlightText from './HighlightText';
 
@@ -41,151 +42,8 @@ export default function SettingsList({
 
   // Group settings: root settings at top level, children nested under their root,
   // and collection items grouped under their SettingGroupCollectionDefinition header.
-  const { rootSettings, childMap } = useMemo(() => {
-    const childMap = new Map<string, SettingDefinition[]>();
-    const rootSettings: SettingDefinition[] = [];
-    const rootIds = new Set<string>();
-
-    // Detect synthetic "Top Level Setting Group Collection" containers — these
-    // are API-internal wrappers whose children are the real settings.  We skip
-    // them as roots and instead promote their children.
-    const syntheticGroupIds = new Set<string>();
-
-    // Build a quick id → setting lookup for CSP-path deduplication
-    const settingById = new Map<string, SettingDefinition>();
-    for (const s of settings) settingById.set(s.id, s);
-
-    const getCspPath = (s: SettingDefinition) =>
-      s.baseUri && s.offsetUri
-        ? `${s.baseUri}/${s.offsetUri}`
-        : s.baseUri || s.offsetUri || '';
-
-    // First pass: identify root settings (skip synthetic group containers)
-    for (const s of settings) {
-      if (!s.rootDefinitionId || s.rootDefinitionId === s.id) {
-        const isSyntheticGroup =
-          s['@odata.type']?.includes('SettingGroupCollectionDefinition') &&
-          s.displayName === 'Top Level Setting Group Collection';
-        if (isSyntheticGroup) {
-          syntheticGroupIds.add(s.id);
-        } else {
-          rootSettings.push(s);
-          rootIds.add(s.id);
-        }
-      }
-    }
-
-    // Second pass: group children, but promote orphans whose root is absent
-    // or whose root is a synthetic group container.
-    // Skip children whose CSP path is identical to their parent's — they add
-    // no new information and would appear as duplicate entries.
-    for (const s of settings) {
-      if (s.rootDefinitionId && s.rootDefinitionId !== s.id) {
-        if (syntheticGroupIds.has(s.rootDefinitionId)) {
-          // Parent is a synthetic group — promote child to root
-          rootSettings.push(s);
-          rootIds.add(s.id);
-        } else if (rootIds.has(s.rootDefinitionId)) {
-          // Skip child if its CSP path is identical to the parent's
-          const parent = settingById.get(s.rootDefinitionId);
-          if (parent && getCspPath(s) === getCspPath(parent)) continue;
-          // Parent is present — attach as child
-          const children = childMap.get(s.rootDefinitionId) || [];
-          children.push(s);
-          childMap.set(s.rootDefinitionId, children);
-        } else {
-          // Parent is absent (e.g. search didn't match it) — promote to root
-          rootSettings.push(s);
-          rootIds.add(s.id);
-        }
-      }
-    }
-
-    // ── Collection grouping (offsetUri-based) ──
-    // Settings with [{0}] in their offsetUri (e.g. "Passwords/[{0}]/DeviceID")
-    // belong to a repeatable collection. Find the matching
-    // SettingGroupCollectionDefinition header (e.g. offsetUri "Passwords") and
-    // nest those items under it, removing them from the top-level root list.
-    const collectionHeaders = new Map<string, SettingDefinition>(); // offsetUri → setting
-    for (const s of rootSettings) {
-      if (
-        s['@odata.type']?.includes('SettingGroupCollectionDefinition') &&
-        s.offsetUri &&
-        !s.offsetUri.includes('[{0}]')
-      ) {
-        collectionHeaders.set(s.offsetUri, s);
-      }
-    }
-
-    if (collectionHeaders.size > 0) {
-      const toRemoveFromRoot = new Set<string>();
-      for (const s of rootSettings) {
-        if (!s.offsetUri || !s.offsetUri.includes('[{0}]')) continue;
-        // Extract the collection prefix: everything before the first /[{0}]
-        const prefixEnd = s.offsetUri.indexOf('/[{0}]');
-        if (prefixEnd < 0) continue;
-        const prefix = s.offsetUri.substring(0, prefixEnd);
-        const header = collectionHeaders.get(prefix);
-        if (header) {
-          const children = childMap.get(header.id) || [];
-          children.push(s);
-          childMap.set(header.id, children);
-          toRemoveFromRoot.add(s.id);
-        }
-      }
-
-      // Also nest existing childMap entries that match collection patterns.
-      // (Children already attached to a root via rootDefinitionId whose
-      // offsetUri matches a collection header prefix.)
-      for (const [parentId, children] of childMap) {
-        if (collectionHeaders.has(parentId)) continue; // skip collection headers themselves
-        const remaining: SettingDefinition[] = [];
-        for (const child of children) {
-          if (!child.offsetUri || !child.offsetUri.includes('[{0}]')) {
-            remaining.push(child);
-            continue;
-          }
-          const prefixEnd = child.offsetUri.indexOf('/[{0}]');
-          if (prefixEnd < 0) { remaining.push(child); continue; }
-          const prefix = child.offsetUri.substring(0, prefixEnd);
-          const header = collectionHeaders.get(prefix);
-          if (header && header.id !== parentId) {
-            const hChildren = childMap.get(header.id) || [];
-            hChildren.push(child);
-            childMap.set(header.id, hChildren);
-          } else {
-            remaining.push(child);
-          }
-        }
-        if (remaining.length !== children.length) {
-          childMap.set(parentId, remaining);
-        }
-      }
-
-      // Remove items that were moved under a collection header
-      if (toRemoveFromRoot.size > 0) {
-        for (let i = rootSettings.length - 1; i >= 0; i--) {
-          if (toRemoveFromRoot.has(rootSettings[i].id)) {
-            rootSettings.splice(i, 1);
-          }
-        }
-      }
-    }
-
-    // Sort root settings alphabetically
-    rootSettings.sort((a, b) =>
-      (a.displayName || a.name || '').localeCompare(b.displayName || b.name || '')
-    );
-
-    // Sort collection children alphabetically within each group
-    for (const [, children] of childMap) {
-      children.sort((a, b) =>
-        (a.displayName || a.name || '').localeCompare(b.displayName || b.name || '')
-      );
-    }
-
-    return { rootSettings, childMap };
-  }, [settings]);
+  // Uses shared utility so the same logic drives both rendering and result counts.
+  const { rootSettings, childMap } = useMemo(() => groupSettings(settings), [settings]);
 
   // Build a disambiguation map: settingId → sub-category label for settings
   // that share the same displayName.  This lets the UI show which sub-category
