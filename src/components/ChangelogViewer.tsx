@@ -29,15 +29,25 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
     let totalAdded = 0;
     let totalRemoved = 0;
     let totalChanged = 0;
+    let totalCatAdded = 0;
+    let totalCatRemoved = 0;
+    let totalCatChanged = 0;
     for (const e of entries) {
       totalAdded += e.added.length;
       totalRemoved += e.removed.length;
       totalChanged += e.changed.length;
+      totalCatAdded += e.categoriesAdded?.length ?? 0;
+      totalCatRemoved += e.categoriesRemoved?.length ?? 0;
+      totalCatChanged += e.categoriesChanged?.length ?? 0;
     }
 
     // Most recent entry with actual changes
     const lastEntry = entries.find(
-      (e) => e.added.length > 0 || e.removed.length > 0 || e.changed.length > 0
+      (e) =>
+        e.added.length > 0 || e.removed.length > 0 || e.changed.length > 0 ||
+        (e.categoriesAdded?.length ?? 0) > 0 ||
+        (e.categoriesRemoved?.length ?? 0) > 0 ||
+        (e.categoriesChanged?.length ?? 0) > 0
     );
     const lastChangeDate = lastEntry?.date ?? null;
 
@@ -62,17 +72,26 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
     const latestAdded = lastEntry?.added.length ?? 0;
     const latestRemoved = lastEntry?.removed.length ?? 0;
     const latestChanged = lastEntry?.changed.length ?? 0;
+    const latestCatAdded = lastEntry?.categoriesAdded?.length ?? 0;
+    const latestCatRemoved = lastEntry?.categoriesRemoved?.length ?? 0;
+    const latestCatChanged = lastEntry?.categoriesChanged?.length ?? 0;
 
     return {
       totalAdded,
       totalRemoved,
       totalChanged,
+      totalCatAdded,
+      totalCatRemoved,
+      totalCatChanged,
       totalDays: entries.length,
       lastChangeLabel,
       lastChangeDate,
       latestAdded,
       latestRemoved,
       latestChanged,
+      latestCatAdded,
+      latestCatRemoved,
+      latestCatChanged,
     };
   }, [entries]);
 
@@ -105,19 +124,28 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
         <StatCard
           label="Settings added"
           value={stats.totalAdded}
-          subtitle={stats.latestAdded > 0 ? `+${stats.latestAdded} in latest update` : undefined}
+          subtitle={[
+            stats.latestAdded > 0 ? `+${stats.latestAdded} settings` : '',
+            stats.latestCatAdded > 0 ? `+${stats.latestCatAdded} categories` : '',
+          ].filter(Boolean).join(', ') || undefined}
           color="text-fluent-success"
         />
         <StatCard
           label="Settings removed"
           value={stats.totalRemoved}
-          subtitle={stats.latestRemoved > 0 ? `${stats.latestRemoved} in latest update` : undefined}
+          subtitle={[
+            stats.latestRemoved > 0 ? `${stats.latestRemoved} settings` : '',
+            stats.latestCatRemoved > 0 ? `${stats.latestCatRemoved} categories` : '',
+          ].filter(Boolean).join(', ') || undefined}
           color="text-fluent-error"
         />
         <StatCard
           label="Settings changed"
           value={stats.totalChanged}
-          subtitle={stats.latestChanged > 0 ? `${stats.latestChanged} in latest update` : undefined}
+          subtitle={[
+            stats.latestChanged > 0 ? `${stats.latestChanged} settings` : '',
+            stats.latestCatChanged > 0 ? `${stats.latestCatChanged} categories` : '',
+          ].filter(Boolean).join(', ') || undefined}
           color="text-fluent-warning"
         />
       </div>
@@ -146,7 +174,10 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
           const hasAdded = entry.added.length > 0 && (filter === 'all' || filter === 'added');
           const hasRemoved = entry.removed.length > 0 && (filter === 'all' || filter === 'removed');
           const hasChanged = entry.changed.length > 0 && (filter === 'all' || filter === 'changed');
-          const hasContent = hasAdded || hasRemoved || hasChanged;
+          const hasCatAdded = (entry.categoriesAdded?.length ?? 0) > 0 && (filter === 'all' || filter === 'added');
+          const hasCatRemoved = (entry.categoriesRemoved?.length ?? 0) > 0 && (filter === 'all' || filter === 'removed');
+          const hasCatChanged = (entry.categoriesChanged?.length ?? 0) > 0 && (filter === 'all' || filter === 'changed');
+          const hasContent = hasAdded || hasRemoved || hasChanged || hasCatAdded || hasCatRemoved || hasCatChanged;
 
           if (!hasContent && filter !== 'all') return null;
 
@@ -185,6 +216,11 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                   )}
                   {entry.changed.length > 0 && (
                     <span className="text-fluent-warning">~{entry.changed.length}</span>
+                  )}
+                  {((entry.categoriesAdded?.length ?? 0) + (entry.categoriesRemoved?.length ?? 0) + (entry.categoriesChanged?.length ?? 0)) > 0 && (
+                    <span className="text-fluent-text-secondary text-fluent-xs border border-fluent-border rounded px-1">
+                      {(entry.categoriesAdded?.length ?? 0) + (entry.categoriesRemoved?.length ?? 0) + (entry.categoriesChanged?.length ?? 0)} cat
+                    </span>
                   )}
                 </div>
               </button>
@@ -265,6 +301,72 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                             </a>
                             <div className="ml-4 mt-1 space-y-0.5">
                               {s.fields.map((f, i) => (
+                                <div key={i} className="text-fluent-xs text-fluent-text-secondary">
+                                  <span className="font-medium">{f.field}</span>:{' '}
+                                  <span className="line-through text-fluent-error">{truncate(f.oldValue, 80)}</span>
+                                  {' → '}
+                                  <span className="text-fluent-success">{truncate(f.newValue, 80)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {/* Categories Added */}
+                  {hasCatAdded && (
+                    <div className="px-4 py-3 border-t border-fluent-border">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Categories Added ({entry.categoriesAdded!.length})
+                      </h4>
+                      <div className="space-y-1">
+                        {entry.categoriesAdded!.map((c) => (
+                          <div key={c.id} className="text-fluent-sm text-fluent-text">
+                            {c.displayName}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Categories Removed */}
+                  {hasCatRemoved && (
+                    <div className="px-4 py-3 border-t border-fluent-border">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+                        </svg>
+                        Categories Removed ({entry.categoriesRemoved!.length})
+                      </h4>
+                      <div className="space-y-1">
+                        {entry.categoriesRemoved!.map((c) => (
+                          <div key={c.id} className="text-fluent-sm text-fluent-text-secondary line-through">
+                            {c.displayName}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Categories Changed */}
+                  {hasCatChanged && (
+                    <div className="px-4 py-3 border-t border-fluent-border">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Categories Changed ({entry.categoriesChanged!.length})
+                      </h4>
+                      <div className="space-y-2">
+                        {entry.categoriesChanged!.map((c) => (
+                          <div key={c.id} className="text-fluent-sm">
+                            <span className="font-medium">{c.displayName}</span>
+                            <div className="ml-4 mt-1 space-y-0.5">
+                              {c.fields.map((f, i) => (
                                 <div key={i} className="text-fluent-xs text-fluent-text-secondary">
                                   <span className="font-medium">{f.field}</span>:{' '}
                                   <span className="line-through text-fluent-error">{truncate(f.oldValue, 80)}</span>

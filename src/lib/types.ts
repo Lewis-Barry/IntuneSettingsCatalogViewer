@@ -179,6 +179,9 @@ export interface ChangelogEntry {
   added: ChangelogSettingRef[];
   removed: ChangelogSettingRef[];
   changed: ChangelogChange[];
+  categoriesAdded?: ChangelogCategoryRef[];
+  categoriesRemoved?: ChangelogCategoryRef[];
+  categoriesChanged?: ChangelogCategoryChange[];
 }
 
 export interface ChangelogSettingRef {
@@ -193,6 +196,22 @@ export interface ChangelogChange {
   displayName: string;
   categoryId: string;
   categoryName?: string;
+  fields: Array<{
+    field: string;
+    oldValue: string;
+    newValue: string;
+  }>;
+}
+
+export interface ChangelogCategoryRef {
+  id: string;
+  displayName: string;
+  parentCategoryId?: string;
+}
+
+export interface ChangelogCategoryChange {
+  id: string;
+  displayName: string;
   fields: Array<{
     field: string;
     oldValue: string;
