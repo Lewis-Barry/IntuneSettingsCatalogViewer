@@ -27,14 +27,12 @@ function hashSetting(s: SettingDefinition): string {
     displayName: s.displayName,
     description: s.description,
     helpText: s.helpText,
-    version: s.version,
     categoryId: s.categoryId,
     baseUri: s.baseUri,
     offsetUri: s.offsetUri,
     options: s.options,
     valueDefinition: s.valueDefinition,
     applicability: s.applicability,
-    keywords: s.keywords,
   };
   return crypto.createHash('md5').update(JSON.stringify(relevant)).digest('hex');
 }
@@ -75,7 +73,7 @@ function diffCategoryFields(
 /** Identify which fields changed between two settings */
 function diffFields(oldS: SettingDefinition, newS: SettingDefinition): Array<{ field: string; oldValue: string; newValue: string }> {
   const fields: Array<keyof SettingDefinition> = [
-    'displayName', 'description', 'helpText', 'version',
+    'displayName', 'description', 'helpText',
     'categoryId', 'baseUri', 'offsetUri',
   ];
   const diffs: Array<{ field: string; oldValue: string; newValue: string }> = [];
@@ -97,12 +95,12 @@ function diffFields(oldS: SettingDefinition, newS: SettingDefinition): Array<{ f
     });
   }
 
-  // Check keywords changes
-  if (JSON.stringify(oldS.keywords) !== JSON.stringify(newS.keywords)) {
+  // Check applicability (OS/platform) changes
+  if (JSON.stringify(oldS.applicability) !== JSON.stringify(newS.applicability)) {
     diffs.push({
-      field: 'keywords',
-      oldValue: (oldS.keywords || []).join(', '),
-      newValue: (newS.keywords || []).join(', '),
+      field: 'applicability',
+      oldValue: JSON.stringify(oldS.applicability ?? ''),
+      newValue: JSON.stringify(newS.applicability ?? ''),
     });
   }
 

@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - 'data/**'
       - 'public/search-index.json'
+      - 'LICENSE'
+      - 'README.md'
 
 permissions:
   pages: write

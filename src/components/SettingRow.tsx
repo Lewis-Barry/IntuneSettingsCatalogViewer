@@ -272,9 +272,6 @@ function SettingRowInner({
         role="row"
         aria-expanded={expanded}
       >
-        {/* Tree connector icon — hidden on mobile where the expand button is enough */}
-        <span className="child-tree-connector hidden md:flex w-4 flex-shrink-0 text-blue-300 select-none text-fluent-sm font-light items-center justify-center">↳</span>
-
         <button
           type="button"
           className="child-expand-btn w-4 h-4 flex items-center justify-center flex-shrink-0 text-blue-400 hover:text-blue-600"

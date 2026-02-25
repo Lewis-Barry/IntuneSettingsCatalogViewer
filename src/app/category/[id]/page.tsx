@@ -42,9 +42,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         <p className="text-fluent-base text-fluent-text-secondary mb-6">
           The category &ldquo;{decodedId}&rdquo; was not found.
         </p>
-        <Link href="/" className="fluent-btn-primary">
-          Back to Browse
-        </Link>
+
       </div>
     );
   }
@@ -136,15 +134,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         />
       </div>
 
-      {/* Back link */}
-      <div className="mt-6">
-        <Link href="/" className="fluent-btn-secondary inline-flex items-center gap-1.5">
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Browse
-        </Link>
-      </div>
+
     </div>
   );
 }
