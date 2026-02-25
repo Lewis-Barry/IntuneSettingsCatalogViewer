@@ -5063,7 +5063,7 @@
     "rootCategoryId": "132003c7-1130-4f59-96a7-dfb6adb8bd5d",
     "childCategoryIds": [],
     "children": [],
-    "settingCount": 7
+    "settingCount": 8
   },
   {
     "id": "ad1ecbf4-75da-4dc1-9354-7d00c0e2af72",
@@ -8056,7 +8056,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 47
+        "settingCount": 49
       },
       {
         "id": "93099bd4-c685-434b-9d72-f0cb6db5e753",
@@ -8120,7 +8120,7 @@
         "rootCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 4
+        "settingCount": 5
       },
       {
         "id": "269c487f-8902-486a-88dd-db9b9b4454b8",
@@ -8187,7 +8187,7 @@
         "settingCount": 3
       }
     ],
-    "settingCount": 112
+    "settingCount": 115
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
