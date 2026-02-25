@@ -189,6 +189,7 @@ export interface ChangelogSettingRef {
   displayName: string;
   categoryId: string;
   categoryName?: string;
+  platform?: string;
 }
 
 export interface ChangelogChange {
@@ -196,6 +197,7 @@ export interface ChangelogChange {
   displayName: string;
   categoryId: string;
   categoryName?: string;
+  platform?: string;
   fields: Array<{
     field: string;
     oldValue: string;

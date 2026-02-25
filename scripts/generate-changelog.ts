@@ -172,6 +172,7 @@ function main() {
         displayName: s.displayName,
         categoryId: s.categoryId,
         categoryName: categoryMap.get(s.categoryId),
+        platform: s.applicability?.platform ?? undefined,
       });
     }
   }
@@ -185,6 +186,7 @@ function main() {
         displayName: s.displayName,
         categoryId: s.categoryId,
         categoryName: categoryMap.get(s.categoryId),
+        platform: s.applicability?.platform ?? undefined,
       });
     }
   }
@@ -200,6 +202,7 @@ function main() {
           displayName: s.displayName,
           categoryId: s.categoryId,
           categoryName: categoryMap.get(s.categoryId),
+          platform: s.applicability?.platform ?? undefined,
           fields,
         });
       }
@@ -207,40 +210,49 @@ function main() {
   }
 
   // ── Category diffing ──────────────────────────────────────────
-  const previousCategories: SettingCategory[] = fs.existsSync(CATEGORIES_PREVIOUS_FILE)
+  // If no category baseline exists yet, skip diffing and just create the baseline.
+  // This mirrors the settings first-run guard and prevents every existing category
+  // from being reported as "added" when category tracking is enabled for the first time.
+  const hasCategoryBaseline = fs.existsSync(CATEGORIES_PREVIOUS_FILE);
+  const previousCategories: SettingCategory[] = hasCategoryBaseline
     ? JSON.parse(fs.readFileSync(CATEGORIES_PREVIOUS_FILE, 'utf-8'))
     : [];
 
-  const prevCatMap = new Map<string, SettingCategory>();
-  const prevCatHashMap = new Map<string, string>();
-  for (const c of previousCategories) {
-    prevCatMap.set(c.id, c);
-    prevCatHashMap.set(c.id, hashCategory(c));
-  }
-  const currCatHashMap = new Map<string, string>();
-  for (const c of categories) currCatHashMap.set(c.id, hashCategory(c));
+  let categoriesAdded: ChangelogCategoryRef[] = [];
+  let categoriesRemoved: ChangelogCategoryRef[] = [];
+  let categoriesChanged: ChangelogCategoryChange[] = [];
 
-  const categoriesAdded: ChangelogCategoryRef[] = [];
-  for (const c of categories) {
-    if (!prevCatMap.has(c.id)) {
-      categoriesAdded.push({ id: c.id, displayName: c.displayName, parentCategoryId: c.parentCategoryId });
+  if (!hasCategoryBaseline) {
+    console.log('No category baseline found — establishing baseline (not logged to changelog).');
+  } else {
+    const prevCatMap = new Map<string, SettingCategory>();
+    const prevCatHashMap = new Map<string, string>();
+    for (const c of previousCategories) {
+      prevCatMap.set(c.id, c);
+      prevCatHashMap.set(c.id, hashCategory(c));
     }
-  }
+    const currCatHashMap = new Map<string, string>();
+    for (const c of categories) currCatHashMap.set(c.id, hashCategory(c));
 
-  const currCatMap = new Map<string, SettingCategory>(categories.map((c) => [c.id, c]));
-  const categoriesRemoved: ChangelogCategoryRef[] = [];
-  for (const c of previousCategories) {
-    if (!currCatMap.has(c.id)) {
-      categoriesRemoved.push({ id: c.id, displayName: c.displayName, parentCategoryId: c.parentCategoryId });
+    for (const c of categories) {
+      if (!prevCatMap.has(c.id)) {
+        categoriesAdded.push({ id: c.id, displayName: c.displayName, parentCategoryId: c.parentCategoryId });
+      }
     }
-  }
 
-  const categoriesChanged: ChangelogCategoryChange[] = [];
-  for (const c of categories) {
-    if (prevCatMap.has(c.id) && prevCatHashMap.get(c.id) !== currCatHashMap.get(c.id)) {
-      const fields = diffCategoryFields(prevCatMap.get(c.id)!, c);
-      if (fields.length > 0) {
-        categoriesChanged.push({ id: c.id, displayName: c.displayName, fields });
+    const currCatMap = new Map<string, SettingCategory>(categories.map((cc) => [cc.id, cc]));
+    for (const c of previousCategories) {
+      if (!currCatMap.has(c.id)) {
+        categoriesRemoved.push({ id: c.id, displayName: c.displayName, parentCategoryId: c.parentCategoryId });
+      }
+    }
+
+    for (const c of categories) {
+      if (prevCatMap.has(c.id) && prevCatHashMap.get(c.id) !== currCatHashMap.get(c.id)) {
+        const fields = diffCategoryFields(prevCatMap.get(c.id)!, c);
+        if (fields.length > 0) {
+          categoriesChanged.push({ id: c.id, displayName: c.displayName, fields });
+        }
       }
     }
   }

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import type { ChangelogEntry } from '@/lib/types';
+import { PLATFORM_ICONS } from './PlatformIcons';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
@@ -25,6 +26,14 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
   };
 
   // Summary stats
+  // Strip version-only noise: remove `version` field diffs and drop entries with no remaining fields
+  const cleanedEntries = useMemo(() => entries.map((e) => ({
+    ...e,
+    changed: e.changed
+      .map((c) => ({ ...c, fields: c.fields.filter((f) => f.field !== 'version') }))
+      .filter((c) => c.fields.length > 0),
+  })), [entries]);
+
   const stats = useMemo(() => {
     let totalAdded = 0;
     let totalRemoved = 0;
@@ -32,7 +41,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
     let totalCatAdded = 0;
     let totalCatRemoved = 0;
     let totalCatChanged = 0;
-    for (const e of entries) {
+    for (const e of cleanedEntries) {
       totalAdded += e.added.length;
       totalRemoved += e.removed.length;
       totalChanged += e.changed.length;
@@ -41,8 +50,8 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
       totalCatChanged += e.categoriesChanged?.length ?? 0;
     }
 
-    // Most recent entry with actual changes
-    const lastEntry = entries.find(
+    // Most recent entry with actual changes (version-only entries excluded via cleanedEntries)
+    const lastEntry = cleanedEntries.find(
       (e) =>
         e.added.length > 0 || e.removed.length > 0 || e.changed.length > 0 ||
         (e.categoriesAdded?.length ?? 0) > 0 ||
@@ -71,7 +80,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
     // Counts from the latest entry (for "since last update" context)
     const latestAdded = lastEntry?.added.length ?? 0;
     const latestRemoved = lastEntry?.removed.length ?? 0;
-    const latestChanged = lastEntry?.changed.length ?? 0;
+    const latestChanged = lastEntry?.changed.length ?? 0;  // already version-filtered via cleanedEntries
     const latestCatAdded = lastEntry?.categoriesAdded?.length ?? 0;
     const latestCatRemoved = lastEntry?.categoriesRemoved?.length ?? 0;
     const latestCatChanged = lastEntry?.categoriesChanged?.length ?? 0;
@@ -93,7 +102,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
       latestCatRemoved,
       latestCatChanged,
     };
-  }, [entries]);
+  }, [cleanedEntries]);
 
   if (entries.length === 0) {
     return (
@@ -169,7 +178,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
 
       {/* Entries */}
       <div className="space-y-3">
-        {entries.map((entry) => {
+        {cleanedEntries.map((entry) => {
           const isExpanded = expandedDates.has(entry.date);
           const hasAdded = entry.added.length > 0 && (filter === 'all' || filter === 'added');
           const hasRemoved = entry.removed.length > 0 && (filter === 'all' || filter === 'removed');
@@ -207,15 +216,15 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                   </svg>
                   <span className="text-fluent-base font-semibold">{dateStr}</span>
                 </div>
-                <div className="flex items-center gap-3 text-fluent-sm">
+                <div className="flex items-center gap-2 text-fluent-xs">
                   {entry.added.length > 0 && (
-                    <span className="text-fluent-success">+{entry.added.length}</span>
+                    <span className="inline-flex items-center gap-0.5 text-fluent-success bg-fluent-success/10 rounded-full px-2 py-0.5 font-medium">+{entry.added.length}</span>
                   )}
                   {entry.removed.length > 0 && (
-                    <span className="text-fluent-error">-{entry.removed.length}</span>
+                    <span className="inline-flex items-center gap-0.5 text-fluent-error bg-fluent-error/10 rounded-full px-2 py-0.5 font-medium">−{entry.removed.length}</span>
                   )}
                   {entry.changed.length > 0 && (
-                    <span className="text-fluent-warning">~{entry.changed.length}</span>
+                    <span className="inline-flex items-center gap-0.5 text-fluent-warning bg-fluent-warning/10 rounded-full px-2 py-0.5 font-medium">~{entry.changed.length}</span>
                   )}
                   {((entry.categoriesAdded?.length ?? 0) + (entry.categoriesRemoved?.length ?? 0) + (entry.categoriesChanged?.length ?? 0)) > 0 && (
                     <span className="text-fluent-text-secondary text-fluent-xs border border-fluent-border rounded px-1">
@@ -230,8 +239,8 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                 <div className="border-t border-fluent-border">
                   {/* Added */}
                   {hasAdded && (
-                    <div className="px-4 py-3">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-l-2 border-l-fluent-success/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
@@ -239,18 +248,21 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                       </h4>
                       <div className="space-y-1">
                         {entry.added.map((s) => (
-                          <div key={s.id} className="flex items-center gap-2 text-fluent-sm">
+                          <div key={s.id} className="flex items-start gap-2 text-fluent-sm py-0.5">
                             <a
                               href={`/setting/${encodeURIComponent(s.id)}/`}
                               className="text-fluent-blue hover:underline"
                             >
                               {s.displayName}
                             </a>
-                            {s.categoryName && (
-                              <span className="text-fluent-text-disabled text-fluent-xs">
-                                ({s.categoryName})
-                              </span>
-                            )}
+                            <span className="ml-auto inline-flex items-center gap-1.5 shrink-0">
+                              {s.categoryName && (
+                                <span className="text-fluent-text-disabled text-fluent-xs bg-fluent-bg-alt rounded px-1.5 py-0.5">
+                                  {s.categoryName}
+                                </span>
+                              )}
+                              <PlatformBadges platform={s.platform} />
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -259,8 +271,8 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
 
                   {/* Removed */}
                   {hasRemoved && (
-                    <div className="px-4 py-3 border-t border-fluent-border">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-error/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
                         </svg>
@@ -268,13 +280,16 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                       </h4>
                       <div className="space-y-1">
                         {entry.removed.map((s) => (
-                          <div key={s.id} className="flex items-center gap-2 text-fluent-sm text-fluent-text-secondary line-through">
-                            {s.displayName}
-                            {s.categoryName && (
-                              <span className="text-fluent-text-disabled text-fluent-xs no-underline">
-                                ({s.categoryName})
-                              </span>
-                            )}
+                          <div key={s.id} className="flex items-start gap-2 text-fluent-sm py-0.5">
+                            <span className="text-fluent-text-secondary line-through">{s.displayName}</span>
+                            <span className="ml-auto inline-flex items-center gap-1.5 shrink-0">
+                              {s.categoryName && (
+                                <span className="text-fluent-text-disabled text-fluent-xs bg-fluent-bg-alt rounded px-1.5 py-0.5 no-underline">
+                                  {s.categoryName}
+                                </span>
+                              )}
+                              <PlatformBadges platform={s.platform} />
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -283,41 +298,31 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
 
                   {/* Changed */}
                   {hasChanged && (
-                    <div className="px-4 py-3 border-t border-fluent-border">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-warning/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         Changed ({entry.changed.length})
                       </h4>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {entry.changed.map((s) => (
-                          <div key={s.id} className="text-fluent-sm">
-                            <a
-                              href={`/setting/${encodeURIComponent(s.id)}/`}
-                              className="text-fluent-blue hover:underline font-medium"
-                            >
-                              {s.displayName}
-                            </a>
-                            <div className="ml-4 mt-1 space-y-0.5">
-                              {s.fields.map((f, i) => (
-                                <div key={i} className="text-fluent-xs text-fluent-text-secondary">
-                                  <span className="font-medium">{f.field}</span>:{' '}
-                                  <span className="line-through text-fluent-error">{truncate(f.oldValue, 80)}</span>
-                                  {' → '}
-                                  <span className="text-fluent-success">{truncate(f.newValue, 80)}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+                          <DiffBlock
+                            key={s.id}
+                            title={s.displayName}
+                            href={`/setting/${encodeURIComponent(s.id)}/`}
+                            badge={s.categoryName}
+                            platform={s.platform}
+                            fields={s.fields}
+                          />
                         ))}
                       </div>
                     </div>
                   )}
                   {/* Categories Added */}
                   {hasCatAdded && (
-                    <div className="px-4 py-3 border-t border-fluent-border">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-success/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
@@ -335,8 +340,8 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
 
                   {/* Categories Removed */}
                   {hasCatRemoved && (
-                    <div className="px-4 py-3 border-t border-fluent-border">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-error/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
                         </svg>
@@ -354,28 +359,20 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
 
                   {/* Categories Changed */}
                   {hasCatChanged && (
-                    <div className="px-4 py-3 border-t border-fluent-border">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1">
+                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-warning/30 ml-px">
+                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         Categories Changed ({entry.categoriesChanged!.length})
                       </h4>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {entry.categoriesChanged!.map((c) => (
-                          <div key={c.id} className="text-fluent-sm">
-                            <span className="font-medium">{c.displayName}</span>
-                            <div className="ml-4 mt-1 space-y-0.5">
-                              {c.fields.map((f, i) => (
-                                <div key={i} className="text-fluent-xs text-fluent-text-secondary">
-                                  <span className="font-medium">{f.field}</span>:{' '}
-                                  <span className="line-through text-fluent-error">{truncate(f.oldValue, 80)}</span>
-                                  {' → '}
-                                  <span className="text-fluent-success">{truncate(f.newValue, 80)}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+                          <DiffBlock
+                            key={c.id}
+                            title={c.displayName}
+                            fields={c.fields}
+                          />
                         ))}
                       </div>
                     </div>
@@ -410,9 +407,127 @@ function StatCard({ label, value, displayValue, subtitle, color }: {
   );
 }
 
-function truncate(s: string, max: number): string {
-  // Remove surrounding quotes from JSON stringification
-  const clean = s.replace(/^"|"$/g, '');
-  if (clean.length <= max) return clean;
-  return clean.slice(0, max) + '…';
+/** Strip surrounding JSON quotes so values display cleanly */
+function cleanValue(s: string): string {
+  return s.replace(/^"|"$/g, '');
+}
+
+/** Platform key → display label (matches PlatformFilter) */
+const PLATFORM_LABELS: Record<string, string> = {
+  windows10: 'Windows',
+  macOS: 'macOS',
+  iOS: 'iOS/iPadOS',
+  android: 'Android',
+  linux: 'Linux',
+};
+
+/** Normalize a raw platform string to its canonical icon key */
+function normalizePlatformKey(p: string): string | null {
+  if (p === 'iOS') return 'iOS';
+  if (p === 'macOS') return 'macOS';
+  if (p.startsWith('windows')) return 'windows10';
+  if (p.startsWith('android') || p === 'aosp' || p === 'androidEnterprise') return 'android';
+  if (p === 'linux') return 'linux';
+  return null;
+}
+
+/** Render platform indicators from a comma-separated platform string — styled like the platform filter buttons */
+function PlatformBadges({ platform }: { platform?: string }) {
+  if (!platform) return null;
+  const platforms = platform.split(',').map((p) => p.trim()).filter(Boolean);
+  if (platforms.length === 0) return null;
+
+  // Deduplicate by normalized key
+  const seen = new Set<string>();
+  const unique: Array<{ key: string; label: string }> = [];
+  for (const p of platforms) {
+    const key = normalizePlatformKey(p);
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      unique.push({ key, label: PLATFORM_LABELS[key] ?? p });
+    } else if (!key) {
+      unique.push({ key: p, label: p });
+    }
+  }
+
+  return (
+    <span className="inline-flex items-center gap-1 shrink-0">
+      {unique.map(({ key, label }) => {
+        const Icon = PLATFORM_ICONS[key];
+        return (
+          <span
+            key={key}
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-fluent-border bg-white text-fluent-text text-[11px] leading-tight font-medium"
+          >
+            {Icon && <Icon className="w-3.5 h-3.5" />}
+            {label}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+/** GitHub-style unified diff box for a single changed item */
+function DiffBlock({ title, href, badge, platform, fields }: {
+  title: string;
+  href?: string;
+  badge?: string;
+  platform?: string;
+  fields: Array<{ field: string; oldValue: string; newValue: string }>;
+}) {
+  return (
+    <div className="rounded-md border border-[#d0d7de] overflow-hidden text-fluent-sm">
+      {/* File header */}
+      <div className="flex items-center gap-2 px-3 py-2 bg-[#f6f8fa] border-b border-[#d0d7de]">
+        <svg className="w-4 h-4 text-[#656d76] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+        {href ? (
+          <a href={href} className="font-semibold text-fluent-sm text-fluent-blue hover:underline truncate">
+            {title}
+          </a>
+        ) : (
+          <span className="font-semibold text-fluent-sm text-fluent-text truncate">{title}</span>
+        )}
+        <span className="shrink-0 ml-auto inline-flex items-center gap-1.5">
+          {badge && (
+            <span className="text-[11px] text-[#656d76] bg-[#ddf4ff] rounded-full px-2 py-0.5 font-medium">
+              {badge}
+            </span>
+          )}
+          <PlatformBadges platform={platform} />
+        </span>
+      </div>
+      {/* Diff lines */}
+      <div className="font-mono text-fluent-xs leading-[20px] divide-y divide-[#d0d7de]">
+        {fields.map((f, i) => (
+          <div key={i}>
+            {/* Hunk header — field name */}
+            <div className="px-3 py-1 bg-[#ddf4ff] text-[#0550ae] font-semibold select-none text-[11px]">
+              @@ {f.field} @@
+            </div>
+            {/* Removed line */}
+            <div className="flex bg-[#ffebe9]">
+              <span className="select-none shrink-0 w-8 text-center text-[#cf222e] bg-[#ffcecb]/40 border-r border-[#ffcecb]">
+                −
+              </span>
+              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#82071e] min-w-0 flex-1">
+                {cleanValue(f.oldValue)}
+              </span>
+            </div>
+            {/* Added line */}
+            <div className="flex bg-[#e6ffec]">
+              <span className="select-none shrink-0 w-8 text-center text-[#1a7f37] bg-[#aceebb]/40 border-r border-[#aceebb]">
+                +
+              </span>
+              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#116329] min-w-0 flex-1">
+                {cleanValue(f.newValue)}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
