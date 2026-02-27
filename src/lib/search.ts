@@ -86,6 +86,16 @@ export async function ensureIndex(): Promise<void> {
   return loadPromise;
 }
 
+/**
+ * Pre-warm the search index in the background.
+ * Called on page mount so the index is ready before the user interacts with search.
+ */
+export function preloadIndex(): void {
+  ensureIndex().catch(() => {
+    // Swallow — ensureIndex will retry on next call
+  });
+}
+
 /** Search the index. Returns matching SearchIndexEntry items. */
 export async function search(
   query: string,

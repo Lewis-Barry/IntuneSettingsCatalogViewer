@@ -294,6 +294,46 @@ function main() {
     console.log(`Merged ${mergeCount} duplicate categories → ${MERGE_MAP_FILE}`);
   }
 
+  // ── Generate settings-browse.json ──
+  // A slim version of settings.json containing only the fields needed for the
+  // browse UI (list display, inline expansion, platform filtering, search
+  // match-source detection).  This is fetched client-side instead of being
+  // embedded in the page HTML, reducing the initial payload from ~55 MB to <1 MB.
+  console.log('Building settings-browse.json...');
+  const BROWSE_FILE = path.join(PUBLIC_DIR, 'settings-browse.json');
+  const browseSettings = settings.map((s) => {
+    // Apply category merge map so client doesn't need to re-map
+    const effectiveCatId = mergeMap[s.categoryId] || s.categoryId;
+    const slim: Record<string, unknown> = {
+      '@odata.type': s['@odata.type'],
+      id: s.id,
+      name: s.name,
+      displayName: s.displayName,
+      description: s.description || undefined,
+      categoryId: effectiveCatId,
+      baseUri: s.baseUri || undefined,
+      offsetUri: s.offsetUri || undefined,
+      rootDefinitionId: s.rootDefinitionId || undefined,
+      uxBehavior: s.uxBehavior || undefined,
+      applicability: s.applicability || undefined,
+      dependedOnBy: s.dependedOnBy || undefined,
+      defaultOptionId: s.defaultOptionId || undefined,
+      // Minimal options: keep displayName + dependedOnBy for toggle detection + inline expansion
+      options: s.options
+        ? s.options.map((o) => ({
+            itemId: o.itemId,
+            displayName: o.displayName,
+            dependedOnBy: o.dependedOnBy || undefined,
+          }))
+        : undefined,
+    };
+    // Strip undefined values to shrink JSON
+    return JSON.parse(JSON.stringify(slim));
+  });
+  fs.writeFileSync(BROWSE_FILE, JSON.stringify(browseSettings), 'utf-8');
+  const browseSizeMB = (fs.statSync(BROWSE_FILE).size / 1024 / 1024).toFixed(2);
+  console.log(`Browse data: ${browseSettings.length} settings (${browseSizeMB} MB) → ${BROWSE_FILE}`);
+
   console.log('\nDone!');
 }
 

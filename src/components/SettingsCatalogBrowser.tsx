@@ -11,10 +11,8 @@ import { useIsDesktop } from '@/lib/useMediaQuery';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
-  settingsByCategory: Record<string, SettingDefinition[]>;
   categoryMap: Record<string, string>;
   categoryParentMap: Record<string, string>;
-  totalSettings: number;
   lastUpdated: string | null;
 }
 
@@ -72,10 +70,8 @@ function buildBreadcrumb(
 
 export default function SettingsCatalogBrowser({
   categoryTree,
-  settingsByCategory,
-  categoryMap,
+  categoryMap: initialCategoryMap,
   categoryParentMap,
-  totalSettings,
   lastUpdated,
 }: SettingsCatalogBrowserProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -84,6 +80,47 @@ export default function SettingsCatalogBrowser({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const isDesktop = useIsDesktop();
+
+  // ── Client-side settings loading ──
+  // Settings are loaded from /settings-browse.json instead of being embedded
+  // in the page HTML (~55 MB → ~3 MB gzipped fetch).
+  const [settingsByCategory, setSettingsByCategory] = useState<Record<string, SettingDefinition[]>>({});
+  const [categoryMap, setCategoryMap] = useState<Record<string, string>>(initialCategoryMap);
+  const [totalSettings, setTotalSettings] = useState(0);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const basePath = (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
+    fetch(`${basePath}/settings-browse.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to load settings: ${res.status}`);
+        return res.json();
+      })
+      .then((settings: SettingDefinition[]) => {
+        if (cancelled) return;
+        // Group settings by category (merge map already applied at build time)
+        const byCat: Record<string, SettingDefinition[]> = {};
+        for (const s of settings) {
+          if (!byCat[s.categoryId]) byCat[s.categoryId] = [];
+          byCat[s.categoryId].push(s);
+        }
+        // Fill in any orphan category IDs
+        const mergedMap = { ...initialCategoryMap };
+        for (const catId of Object.keys(byCat)) {
+          if (!mergedMap[catId]) mergedMap[catId] = 'Unknown Category';
+        }
+        setSettingsByCategory(byCat);
+        setCategoryMap(mergedMap);
+        setTotalSettings(settings.length);
+        setSettingsLoaded(true);
+      })
+      .catch((err) => {
+        console.error('Failed to load browse settings:', err);
+        if (!cancelled) setSettingsLoaded(true); // unblock UI even on error
+      });
+    return () => { cancelled = true; };
+  }, [initialCategoryMap]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const isResizing = useRef(false);
@@ -400,7 +437,13 @@ export default function SettingsCatalogBrowser({
               Settings Catalog
             </h1>
             <p className="text-fluent-sm text-fluent-text-secondary mt-1">
-              {displayedSettingsCount.toLocaleString()} settings available
+              {settingsLoaded
+                ? <>{displayedSettingsCount.toLocaleString()} settings available</>
+                : <span className="inline-flex items-center gap-1.5">
+                    <span className="w-3 h-3 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
+                    Loading settings…
+                  </span>
+              }
               {lastUpdated && (
                 <span> · Last updated: {new Date(lastUpdated).toLocaleDateString()}</span>
               )}
@@ -555,6 +598,11 @@ export default function SettingsCatalogBrowser({
               scrollContainerRef={settingsScrollRef}
               categoryMap={categoryMap}
             />
+          ) : !settingsLoaded ? (
+            <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
+              <div className="w-8 h-8 border-3 border-fluent-blue border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-fluent-base">Loading settings catalog…</p>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
               <svg className="w-16 h-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">

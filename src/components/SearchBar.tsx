@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
-import { search as flexSearch, ensureIndex } from '@/lib/search';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { search as flexSearch, ensureIndex, preloadIndex } from '@/lib/search';
 import type { SearchIndexEntry } from '@/lib/types';
 
 interface SearchBarProps {
@@ -21,17 +21,20 @@ export default function SearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Pre-load index on focus
+  // Pre-warm search index immediately on mount (background, non-blocking)
+  useEffect(() => {
+    preloadIndex();
+  }, []);
+
+  // Ensure index is ready on focus (in case preload hasn't finished)
   const handleFocus = useCallback(async () => {
     if (!indexReady) {
-      setIsLoading(true);
       try {
         await ensureIndex();
         setIndexReady(true);
       } catch (err) {
         console.error('Failed to load search index:', err);
       }
-      setIsLoading(false);
     }
   }, [indexReady]);
 
