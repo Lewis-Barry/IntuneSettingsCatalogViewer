@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { getSettingScope, getScopeBadgeClass, getSettingTypeLabel } from '@/lib/types';
 import { getAsrRuleInfo } from '@/lib/asr-rules';
+import { settingSlug } from '@/lib/slug';
 import SettingDetail from './SettingDetail';
 import HighlightText from './HighlightText';
 
@@ -185,7 +186,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
           {/* Info icon */}
           <Link
-            href={`/setting/${encodeURIComponent(setting.id)}/`}
+            href={`/setting/${encodeURIComponent(settingSlug(setting.id))}/`}
             className="info-icon"
             title="View setting details"
             prefetch={false}
@@ -197,7 +198,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
         {/* Mobile info icon — always visible on mobile */}
         <Link
-          href={`/setting/${encodeURIComponent(setting.id)}/`}
+          href={`/setting/${encodeURIComponent(settingSlug(setting.id))}/`}
           className="md:hidden info-icon flex-shrink-0"
           title="View setting details"
           prefetch={false}
@@ -336,7 +337,7 @@ function SettingRowInner({
             </span>
           )}
           <Link
-            href={`/setting/${encodeURIComponent(setting.id)}/`}
+            href={`/setting/${encodeURIComponent(settingSlug(setting.id))}/`}
             className="info-icon"
             title="View setting details"
             prefetch={false}
@@ -348,7 +349,7 @@ function SettingRowInner({
 
         {/* Mobile info icon */}
         <Link
-          href={`/setting/${encodeURIComponent(setting.id)}/`}
+          href={`/setting/${encodeURIComponent(settingSlug(setting.id))}/`}
           className="md:hidden info-icon flex-shrink-0"
           title="View setting details"
           prefetch={false}

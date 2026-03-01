@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import type { ChangelogEntry } from '@/lib/types';
 import { PLATFORM_ICONS } from './PlatformIcons';
+import { settingSlug } from '@/lib/slug';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
@@ -250,7 +251,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                         {entry.added.map((s) => (
                           <div key={s.id} className="flex items-start gap-2 text-fluent-sm py-0.5">
                             <a
-                              href={`/setting/${encodeURIComponent(s.id)}/`}
+                              href={`/setting/${encodeURIComponent(settingSlug(s.id))}/`}
                               className="text-fluent-blue hover:underline"
                             >
                               {s.displayName}
@@ -310,7 +311,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
                           <DiffBlock
                             key={s.id}
                             title={s.displayName}
-                            href={`/setting/${encodeURIComponent(s.id)}/`}
+                            href={`/setting/${encodeURIComponent(settingSlug(s.id))}/`}
                             badge={s.categoryName}
                             platform={s.platform}
                             fields={s.fields}

@@ -3,6 +3,7 @@ import SettingDetail from '@/components/SettingDetail';
 import { getPlatformLabel } from '@/lib/types';
 import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from '@/components/PlatformIcons';
+import { settingSlug } from '@/lib/slug';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
@@ -14,14 +15,15 @@ interface SettingPageProps {
 export async function generateStaticParams() {
   const settings = loadSettings();
   return settings.map((s) => ({
-    id: s.id,
+    id: settingSlug(s.id),
   }));
 }
 
 // Dynamic metadata for SEO
 export async function generateMetadata({ params }: SettingPageProps): Promise<Metadata> {
   const settings = loadSettings();
-  const setting = settings.find((s) => s.id === decodeURIComponent(params.id));
+  const slug = decodeURIComponent(params.id);
+  const setting = settings.find((s) => settingSlug(s.id) === slug);
 
   if (!setting) {
     return { title: 'Setting Not Found' };
@@ -34,10 +36,10 @@ export async function generateMetadata({ params }: SettingPageProps): Promise<Me
 }
 
 export default function SettingPage({ params }: SettingPageProps) {
-  const decodedId = decodeURIComponent(params.id);
+  const slug = decodeURIComponent(params.id);
   const settings = loadSettings();
   const categories = loadCategories();
-  const setting = settings.find((s) => s.id === decodedId);
+  const setting = settings.find((s) => settingSlug(s.id) === slug);
 
   if (!setting) {
     return (
@@ -47,7 +49,7 @@ export default function SettingPage({ params }: SettingPageProps) {
             Setting Not Found
           </h1>
           <p className="text-fluent-base text-fluent-text-secondary mb-6">
-            The setting with ID &ldquo;{decodedId}&rdquo; was not found in the catalog.
+            The setting with ID &ldquo;{slug}&rdquo; was not found in the catalog.
           </p>
 
         </div>
@@ -170,7 +172,7 @@ export default function SettingPage({ params }: SettingPageProps) {
               <div key={child.id} className="fluent-card">
                 <div className="px-4 py-3">
                   <Link
-                    href={`/setting/${encodeURIComponent(child.id)}/`}
+                    href={`/setting/${encodeURIComponent(settingSlug(child.id))}/`}
                     className="text-fluent-base font-medium text-fluent-blue hover:underline"
                     prefetch={false}
                   >
