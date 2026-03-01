@@ -1,5 +1,554 @@
 [
   {
+    "date": "2026-03-01",
+    "added": [
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionallowedforurls",
+        "displayName": "Allow idle detection on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionallowedforurls_idledetectionallowedforurlsdesc",
+        "displayName": "Allowed sites for idle detection (Device)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_allowedcomaddins_l_allowedcomaddinslist_key",
+        "displayName": "Name",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_restrictcucomaddin",
+        "displayName": "Block loading of COM/VSTO add-ins registered in HKCU (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_onent16v8~policy~l_microsoftofficeonenote~l_disableitemsinuserinterface~l_custom_l_disableshortcutkeys291_l_enterakeyandmodifiertodisable",
+        "displayName": "Enter a key and modifier to disable (User)",
+        "categoryId": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "categoryName": "Custom",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_deletemeetingrequestfrominboxwhenresponding_l_deletemeetingrequestfrominboxwhenresponding",
+        "displayName": "Delete meeting request from Inbox when responding (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_automaticnamechecking",
+        "displayName": "Automatic name checking (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_addpropertiestoattachmentstoenablereplywithchanges_l_addpropertiestoattachmentstoenablereplywithchanges",
+        "displayName": "Add properties to attachments to enable Reply with Changes (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionblockedforurls_idledetectionblockedforurlsdesc",
+        "displayName": "Blocked sites for idle detection (Device)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_recommended_httpsonlymode_recommended_httpsonlymode",
+        "displayName": "Allow HTTPS-Only Mode to be enabled (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_messagesexpireafterdays",
+        "displayName": "Messages expire after (days) (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_setimportance",
+        "displayName": "Set importance (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_staticstoragequotaenabled",
+        "displayName": "Control whether storage quota APIs will return static values (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_defaultidledetectionsetting_defaultidledetectionsetting",
+        "displayName": "Idle detection (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~extensions_edgesafehostingextensionenabled",
+        "displayName": "Control Microsoft Edge Safe Hosting Extension (User)",
+        "categoryId": "66615d2a-fec9-47f1-8eaf-9813e30cc023",
+        "categoryName": "Extensions",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_staticstoragequotaenabled",
+        "displayName": "Control whether storage quota APIs will return static values",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_recommended_httpsonlymode_recommended_httpsonlymode",
+        "displayName": "Allow HTTPS-Only Mode to be enabled (Device)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_allowedcomaddins",
+        "displayName": "List of allowed COM/VSTO add-ins registered in HKCU (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_setsensitivity",
+        "displayName": "Set sensitivity (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_setimportance_l_setimportance",
+        "displayName": "Set importance: (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_addpropertiestoattachmentstoenablereplywithchanges",
+        "displayName": "Add properties to attachments to enable Reply with Changes (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionblockedforurls_idledetectionblockedforurlsdesc",
+        "displayName": "Blocked sites for idle detection (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_defaultidledetectionsetting",
+        "displayName": "Default idle detection setting",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_allowedcomaddins_l_allowedcomaddinslist_value",
+        "displayName": "Value",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_onent16v8~policy~l_microsoftofficeonenote~l_disableitemsinuserinterface~l_custom_l_disableshortcutkeys291",
+        "displayName": "Disable shortcut keys (User)",
+        "categoryId": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "categoryName": "Custom",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_deletemeetingrequestfrominboxwhenresponding",
+        "displayName": "Delete meeting request from Inbox when responding (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_defaultidledetectionsetting",
+        "displayName": "Default idle detection setting (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionblockedforurls",
+        "displayName": "Block idle detection on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_defaultidledetectionsetting_defaultidledetectionsetting",
+        "displayName": "Idle detection (Device)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionallowedforurls_idledetectionallowedforurlsdesc",
+        "displayName": "Allowed sites for idle detection (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_webappinstallbyuserenabled",
+        "displayName": "Enable User Web App Install From Browser",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~identity_editprofileenabled",
+        "displayName": "Enable editing profile in settings (User)",
+        "categoryId": "45a89c1f-0a34-4f78-b28f-d30b623fa423",
+        "categoryName": "Identity and sign-in",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_recommended_httpsonlymode_recommended",
+        "displayName": "Allow HTTPS-Only Mode to be enabled",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~extensions_edgesafehostingextensionenabled",
+        "displayName": "Control Microsoft Edge Safe Hosting Extension",
+        "categoryId": "66615d2a-fec9-47f1-8eaf-9813e30cc023",
+        "categoryName": "Extensions",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_recommended_httpsonlymode_recommended",
+        "displayName": "Allow HTTPS-Only Mode to be enabled (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_miscellaneous437_l_ageoutpolicyincludingfilespendingupload",
+        "displayName": "Age out documents older than n days Including documents with pending uploads (User)",
+        "categoryId": "9b2ad6d8-8837-4c50-89d5-7507b69c7dec",
+        "categoryName": "Miscellaneous",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_miscellaneous437_l_ageoutpolicyincludingfilespendingupload_l_ageoutpolicyincludingfilespendinguploaddecimal",
+        "displayName": "Number of days (User)",
+        "categoryId": "9b2ad6d8-8837-4c50-89d5-7507b69c7dec",
+        "categoryName": "Miscellaneous",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_allowedcomaddins_l_allowedcomaddinslist",
+        "displayName": "Allowed COM/VSTO Add-ins: (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_suggestnameswhilecompletingtoccandbccfields_l_suggestnameswhilecompletingtoccandbccfields",
+        "displayName": "Suggest names while completing To, Cc, and Bcc fields (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionallowedforurls",
+        "displayName": "Allow idle detection on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~contentsettings_idledetectionblockedforurls",
+        "displayName": "Block idle detection on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_requirealwaysonmacrosig",
+        "displayName": "Require trusted publisher signatures for macros that are always loaded (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_miscellaneous437_l_writingassistantadminchoiceadminchoice",
+        "displayName": "Enable Writing Assistant (User)",
+        "categoryId": "9b2ad6d8-8837-4c50-89d5-7507b69c7dec",
+        "categoryName": "Miscellaneous",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_automaticnamechecking_l_automaticnamechecking",
+        "displayName": "Automatic name checking (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_suggestnameswhilecompletingtoccandbccfields",
+        "displayName": "Suggest names while completing To, Cc, and Bcc fields (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_setsensitivity_l_setsensitivity",
+        "displayName": "Set sensitivity: (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_allowcommasasaddressseparator_l_allowcommasasaddressseparator",
+        "displayName": "Allow commas as address separator (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~passwordmanager_passwordmanagerpasskeysenabled",
+        "displayName": "Enable saving passkeys to the password manager",
+        "categoryId": "3ba8106d-4b2f-4775-939d-1cc8703a41dc",
+        "categoryName": "Password manager and protection",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge_webappinstallbyuserenabled",
+        "displayName": "Enable User Web App Install From Browser (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~identity_editprofileenabled",
+        "displayName": "Enable editing profile in settings",
+        "categoryId": "45a89c1f-0a34-4f78-b28f-d30b623fa423",
+        "categoryName": "Identity and sign-in",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_blockmotwmacrointrustedorsigned",
+        "displayName": "Block all internet macros (ignore trusted locations or publishers) (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_blockvbamacrotrusteddocument",
+        "displayName": "Turn off Trusted Documents for VBA macros (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_allowcommasasaddressseparator",
+        "displayName": "Allow commas as address separator (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v18~policy~l_microsoftofficeoutlook~l_outlookoptions~l_preferences~l_emailoptions~l_advancedemailoptions~l_whensendingamessagecategory_l_messagesexpireafterdays_l_messagesexpireafterdays",
+        "displayName": "Messages expire after (days): (User)",
+        "categoryId": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "categoryName": "When sending a message",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev145~policy~microsoft_edge~passwordmanager_passwordmanagerpasskeysenabled",
+        "displayName": "Enable saving passkeys to the password manager (User)",
+        "categoryId": "3ba8106d-4b2f-4775-939d-1cc8703a41dc",
+        "categoryName": "Password manager and protection",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_vbadigsigchaintrustedpublishers",
+        "displayName": "Allow root or intermediate certificates as VBA trusted publishers (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v21~policy~l_microsoftofficesystem~l_securitysettings_l_enablemacrotrustlevel",
+        "displayName": "Enable macro trust levels (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_onent16v8~policy~l_microsoftofficeonenote~l_disableitemsinuserinterface~l_custom_l_disablecommandbarbuttonsandmenuitems290",
+        "displayName": "Disable commands (User)",
+        "categoryId": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "categoryName": "Custom",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_onent16v8~policy~l_microsoftofficeonenote~l_disableitemsinuserinterface~l_custom_l_disablecommandbarbuttonsandmenuitems290_l_enteracommandbaridtodisable",
+        "displayName": "Enter a command bar ID to disable (User)",
+        "categoryId": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "categoryName": "Custom",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [],
+    "categoriesAdded": [
+      {
+        "id": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "displayName": "Custom",
+        "parentCategoryId": "afc4a9d5-81df-4077-bb80-bd46dcd0d0d1"
+      },
+      {
+        "id": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "displayName": "When sending a message",
+        "parentCategoryId": "897675f9-0d1b-437b-ba0a-584fbd54df95"
+      },
+      {
+        "id": "afc4a9d5-81df-4077-bb80-bd46dcd0d0d1",
+        "displayName": "Microsoft One Note 2016",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ],
+    "categoriesChanged": [
+      {
+        "id": "20ceae56-e189-46ec-a440-791ce7454017",
+        "displayName": "Printing",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "a185940c-7899-4ab6-867d-7559352cf8d2",
+        "displayName": "OneNote Options",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"00000000-0000-0000-0000-000000000000\"",
+            "newValue": "\"afc4a9d5-81df-4077-bb80-bd46dcd0d0d1\""
+          }
+        ]
+      },
+      {
+        "id": "962a2377-ad9a-4654-a526-a77c14152fd7",
+        "displayName": "Content settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "de643352-007f-4a47-8c83-d75a79516b39",
+        "displayName": "Deprecated policies",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "12142994-4b30-486c-bab1-9206528b2b96",
+        "displayName": "Accessibility settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "54f2e032-bdcc-4877-b7a0-973d0a7c1653",
+        "displayName": "Startup Home page and New Tab page",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "6d6b289c-c1e9-4004-b5ab-3123920cf10d",
+        "displayName": "Password manager",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "af351b0c-3d9e-4b18-957b-8179e4eaba15",
+        "displayName": "Safe Browsing settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "bce24fbf-4caf-449f-a210-5dd31a368b22",
+        "displayName": "Removed policies",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "d97d6d8f-0a1a-4160-89aa-d624a36954a2",
+        "displayName": "Default search provider",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-02-25",
     "added": [
       {
