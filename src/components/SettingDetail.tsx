@@ -129,7 +129,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
 
       {/* CSP Path — subtle and small */}
       <div className="pt-1">
-        <span className="text-fluent-xs text-fluent-text-disabled font-mono break-all">
+        <span className="text-fluent-xs text-fluent-text-secondary font-mono break-all">
           <HighlightText text={cspPath} query={highlightQuery} variant={cspVariant} />
         </span>
       </div>
