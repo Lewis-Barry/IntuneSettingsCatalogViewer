@@ -3,6 +3,49 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── Light theme tokens ── */
+  :root {
+    --fluent-blue: #0078d4;
+    --fluent-blue-hover: #106ebe;
+    --fluent-blue-pressed: #005a9e;
+    --fluent-light-blue: #deecf9;
+    --fluent-bg: #faf9f8;
+    --fluent-bg-alt: #f3f2f1;
+    --fluent-border: #edebe9;
+    --fluent-border-strong: #8a8886;
+    --fluent-text: #323130;
+    --fluent-text-secondary: #605e5c;
+    --fluent-text-disabled: #a19f9d;
+    --fluent-info: #0078d4;
+    /* RGB channel values for opacity modifier support */
+    --fluent-success-rgb: 16 124 16;   /* #107c10 */
+    --fluent-warning-rgb: 255 185 0;   /* #ffb900 */
+    --fluent-error-rgb: 209 52 56;     /* #d13438 */
+  }
+
+  /* ── Dark theme tokens (WCAG AA compliant) ──
+     Primary text #f2f2f7 on #1c1c1e → 15.2:1 (AAA)
+     Secondary text #aeaeb2 on #1c1c1e → 7.7:1 (AAA)
+     Accent blue #60cdff on #1c1c1e → 9.4:1 (AAA)   */
+  .dark {
+    --fluent-blue: #60cdff;
+    --fluent-blue-hover: #82d6ff;
+    --fluent-blue-pressed: #45c4fb;
+    --fluent-light-blue: #0d2d3f;
+    --fluent-bg: #1c1c1e;
+    --fluent-bg-alt: #2c2c2e;
+    --fluent-border: #3a3a3c;
+    --fluent-border-strong: #636366;
+    --fluent-text: #f2f2f7;
+    --fluent-text-secondary: #aeaeb2;
+    --fluent-text-disabled: #636366;
+    --fluent-info: #60cdff;
+    /* Brighter semantic colors for dark backgrounds */
+    --fluent-success-rgb: 76 199 76;   /* #4cc74c — 6.2:1 on dark bg */
+    --fluent-warning-rgb: 255 214 10;  /* #ffd60a — 12.4:1 on dark bg */
+    --fluent-error-rgb: 255 107 105;   /* #ff6b69 — 5.8:1 on dark bg */
+  }
+
   html {
     font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system,
       BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
@@ -13,7 +56,7 @@
   }
 
   body {
-    @apply bg-white text-fluent-text;
+    @apply bg-white dark:bg-[#1c1c1e] text-fluent-text;
   }
 
   /* Restore visible caret for actual text inputs */
@@ -37,17 +80,18 @@
   }
 
   .fluent-btn-primary {
-    @apply fluent-btn bg-fluent-blue text-white hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed;
+    /* In dark mode --fluent-blue is #60cdff (light), so dark text is needed for contrast */
+    @apply fluent-btn bg-fluent-blue text-white dark:text-[#1c1c1e] hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed;
   }
 
   .fluent-btn-secondary {
-    @apply fluent-btn bg-white text-fluent-text border border-fluent-border-strong
+    @apply fluent-btn bg-white dark:bg-[#2c2c2e] text-fluent-text border border-fluent-border-strong
            hover:bg-fluent-bg-alt active:bg-fluent-border;
   }
 
   /* Fluent-style card */
   .fluent-card {
-    @apply bg-white rounded shadow-sm border border-fluent-border;
+    @apply bg-white dark:bg-[#2c2c2e] rounded shadow-sm border border-fluent-border;
   }
 
   /* Category tree item (rendered as <button>) */
@@ -62,12 +106,14 @@
 
   .category-item-active {
     @apply bg-fluent-light-blue text-fluent-blue font-semibold;
+    /* In dark mode: --fluent-light-blue = #0d2d3f, --fluent-blue = #60cdff (9.4:1 contrast) */
   }
 
   /* Setting row */
   .setting-row {
     @apply flex items-start md:items-center gap-3 px-4 py-3 border-b border-fluent-border
            hover:bg-fluent-bg transition-colors duration-75 cursor-pointer;
+    /* bg-fluent-bg uses var(--fluent-bg) which switches in dark mode automatically */
   }
 
   .setting-row-expanded {
@@ -77,11 +123,12 @@
   /* Child setting row — tinted background to differentiate from parent rows */
   .setting-row-child {
     @apply flex items-start md:items-center gap-3 px-3 py-2.5 border-b border-blue-100
-           bg-slate-50 hover:bg-blue-50 transition-colors duration-75 cursor-pointer;
+           dark:border-blue-900/40 bg-slate-50 dark:bg-[#1e2a35] hover:bg-blue-50
+           dark:hover:bg-[#1a2d3f] transition-colors duration-75 cursor-pointer;
   }
 
   .setting-row-child-expanded {
-    @apply bg-blue-50;
+    @apply bg-blue-50 dark:bg-[#1a2d3f];
   }
 
   /* Info tooltip icon */
@@ -108,6 +155,10 @@
     scrollbar-color: #c8c6c4 transparent;
   }
 
+  .dark .fluent-scroll {
+    scrollbar-color: #48484a transparent;
+  }
+
   .fluent-scroll::-webkit-scrollbar {
     width: 6px;
   }
@@ -121,8 +172,16 @@
     border-radius: 3px;
   }
 
+  .dark .fluent-scroll::-webkit-scrollbar-thumb {
+    background-color: #48484a;
+  }
+
   .fluent-scroll::-webkit-scrollbar-thumb:hover {
     background-color: #a19f9d;
+  }
+
+  .dark .fluent-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #636366;
   }
 }
 

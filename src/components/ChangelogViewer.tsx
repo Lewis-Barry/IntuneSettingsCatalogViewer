@@ -166,10 +166,10 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 rounded text-fluent-sm capitalize transition-colors ${
+            className={`px-3 py-1 rounded text-fluent-sm capitalize transition-colors border ${
               filter === f
-                ? 'bg-fluent-blue text-white'
-                : 'bg-fluent-bg-alt text-fluent-text hover:bg-fluent-border'
+                ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
+                : 'bg-fluent-bg-alt dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-border dark:hover:bg-[#3a3a3c]'
             }`}
           >
             {f}
@@ -458,7 +458,7 @@ function PlatformBadges({ platform }: { platform?: string }) {
         return (
           <span
             key={key}
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-fluent-border bg-white text-fluent-text text-[11px] leading-tight font-medium"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-fluent-border dark:border-[#636366] bg-white dark:bg-[#2c2c2e] text-fluent-text text-[11px] leading-tight font-medium"
           >
             {Icon && <Icon className="w-3.5 h-3.5" />}
             {label}
@@ -478,10 +478,10 @@ function DiffBlock({ title, href, badge, platform, fields }: {
   fields: Array<{ field: string; oldValue: string; newValue: string }>;
 }) {
   return (
-    <div className="rounded-md border border-[#d0d7de] overflow-hidden text-fluent-sm">
+    <div className="rounded-md border border-[#d0d7de] dark:border-[#30363d] overflow-hidden text-fluent-sm">
       {/* File header */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-[#f6f8fa] border-b border-[#d0d7de]">
-        <svg className="w-4 h-4 text-[#656d76] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <div className="flex items-center gap-2 px-3 py-2 bg-[#f6f8fa] dark:bg-[#161b22] border-b border-[#d0d7de] dark:border-[#30363d]">
+        <svg className="w-4 h-4 text-[#656d76] dark:text-[#8b949e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
         </svg>
         {href ? (
@@ -493,7 +493,7 @@ function DiffBlock({ title, href, badge, platform, fields }: {
         )}
         <span className="shrink-0 ml-auto inline-flex items-center gap-1.5">
           {badge && (
-            <span className="text-[11px] text-[#656d76] bg-[#ddf4ff] rounded-full px-2 py-0.5 font-medium">
+            <span className="text-[11px] text-[#0550ae] dark:text-[#79c0ff] bg-[#ddf4ff] dark:bg-[#1f4173] rounded-full px-2 py-0.5 font-medium">
               {badge}
             </span>
           )}
@@ -501,28 +501,28 @@ function DiffBlock({ title, href, badge, platform, fields }: {
         </span>
       </div>
       {/* Diff lines */}
-      <div className="font-mono text-fluent-xs leading-[20px] divide-y divide-[#d0d7de]">
+      <div className="font-mono text-fluent-xs leading-[20px] divide-y divide-[#d0d7de] dark:divide-[#30363d]">
         {fields.map((f, i) => (
           <div key={i}>
             {/* Hunk header — field name */}
-            <div className="px-3 py-1 bg-[#ddf4ff] text-[#0550ae] font-semibold select-none text-[11px]">
+            <div className="px-3 py-1 bg-[#ddf4ff] dark:bg-[#1f4173] text-[#0550ae] dark:text-[#79c0ff] font-semibold select-none text-[11px]">
               @@ {f.field} @@
             </div>
             {/* Removed line */}
-            <div className="flex bg-[#ffebe9]">
-              <span className="select-none shrink-0 w-8 text-center text-[#cf222e] bg-[#ffcecb]/40 border-r border-[#ffcecb]">
+            <div className="flex bg-[#ffebe9] dark:bg-[#3d1616]">
+              <span className="select-none shrink-0 w-8 text-center text-[#cf222e] dark:text-[#ff7b72] bg-[#ffcecb]/40 dark:bg-[#6e1f1f]/40 border-r border-[#ffcecb] dark:border-[#6e1f1f]">
                 −
               </span>
-              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#82071e] min-w-0 flex-1">
+              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#82071e] dark:text-[#ffa198] min-w-0 flex-1">
                 {cleanValue(f.oldValue)}
               </span>
             </div>
             {/* Added line */}
-            <div className="flex bg-[#e6ffec]">
-              <span className="select-none shrink-0 w-8 text-center text-[#1a7f37] bg-[#aceebb]/40 border-r border-[#aceebb]">
+            <div className="flex bg-[#e6ffec] dark:bg-[#0d3522]">
+              <span className="select-none shrink-0 w-8 text-center text-[#1a7f37] dark:text-[#3fb950] bg-[#aceebb]/40 dark:bg-[#1e6436]/40 border-r border-[#aceebb] dark:border-[#1e6436]">
                 +
               </span>
-              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#116329] min-w-0 flex-1">
+              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#116329] dark:text-[#56d364] min-w-0 flex-1">
                 {cleanValue(f.newValue)}
               </span>
             </div>

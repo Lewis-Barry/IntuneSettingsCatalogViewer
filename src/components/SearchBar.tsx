@@ -118,7 +118,7 @@ export default function SearchBar({
             onFocus={handleFocus}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full pl-10 pr-8 py-2 text-fluent-base border border-fluent-border-strong rounded
+            className="w-full pl-10 pr-8 py-2 text-fluent-base bg-white dark:bg-[#2c2c2e] border border-fluent-border-strong rounded
                        focus:outline-none focus:border-fluent-blue focus:ring-1 focus:ring-fluent-blue
                        placeholder:text-fluent-text-disabled"
             aria-label="Search settings"

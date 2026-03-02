@@ -48,7 +48,7 @@ export default function HighlightText({
   const pattern = new RegExp(`(${sorted.join('|')})`, 'gi');
   const parts = text.split(pattern);
 
-  const highlightClass = 'bg-yellow-100 text-inherit rounded-sm';
+  const highlightClass = 'bg-yellow-100 dark:bg-yellow-800/50 text-inherit rounded-sm';
 
   return (
     <>

@@ -9,23 +9,25 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Fluent UI-inspired palette
+        // Fluent UI-inspired palette — values driven by CSS variables for dark mode support
         fluent: {
-          blue: '#0078d4',
-          'blue-hover': '#106ebe',
-          'blue-pressed': '#005a9e',
-          'light-blue': '#deecf9',
-          'bg': '#faf9f8',
-          'bg-alt': '#f3f2f1',
-          'border': '#edebe9',
-          'border-strong': '#8a8886',
-          'text': '#323130',
-          'text-secondary': '#605e5c',
-          'text-disabled': '#a19f9d',
-          'success': '#107c10',
-          'warning': '#ffb900',
-          'error': '#d13438',
-          'info': '#0078d4',
+          blue: 'var(--fluent-blue)',
+          'blue-hover': 'var(--fluent-blue-hover)',
+          'blue-pressed': 'var(--fluent-blue-pressed)',
+          'light-blue': 'var(--fluent-light-blue)',
+          'bg': 'var(--fluent-bg)',
+          'bg-alt': 'var(--fluent-bg-alt)',
+          'border': 'var(--fluent-border)',
+          'border-strong': 'var(--fluent-border-strong)',
+          'text': 'var(--fluent-text)',
+          'text-secondary': 'var(--fluent-text-secondary)',
+          'text-disabled': 'var(--fluent-text-disabled)',
+          // success/error/warning use the rgb() + <alpha-value> format so that
+          // opacity modifiers (e.g. bg-fluent-success/10) work correctly.
+          'success': 'rgb(var(--fluent-success-rgb) / <alpha-value>)',
+          'warning': 'rgb(var(--fluent-warning-rgb) / <alpha-value>)',
+          'error': 'rgb(var(--fluent-error-rgb) / <alpha-value>)',
+          'info': 'var(--fluent-info)',
         },
       },
       fontFamily: {

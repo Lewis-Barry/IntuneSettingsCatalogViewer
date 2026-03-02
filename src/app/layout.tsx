@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getLastUpdated } from '@/lib/data';
 import MobileNav from '@/components/MobileNav';
+import ThemeToggle from '@/components/ThemeToggle';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -33,6 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Apply theme class before first paint to prevent flash of wrong theme.
+            Defaults to dark if no preference is saved in localStorage. */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');var dark=t!==null?t==='dark':true;document.documentElement.classList.toggle('dark',dark)}catch(e){}})()` }} />
         {/* Detect mobile UA before first paint so CSS can apply larger touch targets */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;var s=window.matchMedia&&window.matchMedia('(max-width:767px)').matches;if(m||(p&&s)){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
       </head>
@@ -61,6 +65,7 @@ export default function RootLayout({
                   About
                 </Link>
                 <div className="w-px h-5 bg-white/20 mx-1.5" aria-hidden="true" />
+                <ThemeToggle />
                 <a
                   href="https://github.com/Lewis-Barry/IntuneSettingsCatalogViewer"
                   target="_blank"
@@ -87,7 +92,7 @@ export default function RootLayout({
         </main>
 
         {/* ── Footer ── */}
-        <footer className="border-t border-fluent-border bg-fluent-bg py-4">
+        <footer className="border-t border-fluent-border bg-fluent-bg dark:bg-[#1c1c1e] py-4">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-fluent-sm text-fluent-text-secondary">
             <p>
               Data sourced from Microsoft Graph API. Not affiliated with Microsoft.

@@ -311,9 +311,11 @@ export function getSettingTypeLabel(odataType: string): string {
 /** Get CSS color class for scope badge */
 export function getScopeBadgeClass(scope: SettingScope): string {
   switch (scope) {
-    case 'device': return 'bg-blue-100 text-blue-800';
-    case 'user': return 'bg-green-100 text-green-800';
-    default: return 'bg-gray-100 text-gray-600';
+    // Device: blue-100/blue-800 light → blue-900/50 + blue-200 dark (11.7:1 on dark bg)
+    case 'device': return 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200';
+    // User: green-100/green-800 light → green-900/50 + green-200 dark (9.8:1 on dark bg)
+    case 'user': return 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
   }
 }
 

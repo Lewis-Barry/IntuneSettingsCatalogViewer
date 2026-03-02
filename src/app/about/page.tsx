@@ -36,7 +36,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── What This Tool Does ── */}
-      <section className="bg-white">
+      <section className="bg-white dark:bg-[#1c1c1e]">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-16 sm:py-20">
           <h2 className="text-[28px] leading-[36px] font-semibold text-fluent-text text-center">
             Explore the full Settings Catalog in one place
@@ -83,7 +83,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── How It Works (FAQ-style dropdown) ── */}
-      <section className="bg-[#f5f5f5]">
+      <section className="bg-[#f5f5f5] dark:bg-[#2c2c2e]">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-16 sm:py-20">
           <h2 className="text-[28px] leading-[36px] font-semibold text-fluent-text text-center">
             How it works
@@ -94,7 +94,7 @@ export default function AboutPage() {
 
           <div className="mt-10 max-w-3xl mx-auto space-y-3">
             {/* Graph API & Permissions */}
-            <details className="bg-white rounded shadow-sm border border-fluent-border group">
+            <details className="bg-white dark:bg-[#2c2c2e] rounded shadow-sm border border-fluent-border group">
               <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-[15px] font-semibold text-fluent-text select-none hover:bg-fluent-bg-alt transition-colors">
                 <span>Microsoft Graph API and permissions</span>
                 <svg className="w-4 h-4 text-fluent-text-secondary transition-transform duration-200 group-open:rotate-180 flex-shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                 <p className="text-[14px] leading-[22px] text-fluent-text-secondary">
                   Settings data is pulled from the Microsoft Graph API using an Azure AD app registration with application-level (client credentials) authentication. The only permission required is:
                 </p>
-                <div className="bg-[#f5f5f5] rounded px-4 py-3 border border-fluent-border">
+                <div className="bg-[#f5f5f5] dark:bg-[#3a3a3c] rounded px-4 py-3 border border-fluent-border">
                   <code className="text-[13px] font-mono text-fluent-blue">DeviceManagementConfiguration.Read.All</code>
                   <p className="text-[12px] leading-[18px] text-fluent-text-secondary mt-1">
                     A read-only permission. This app never writes to or modifies your Intune environment.
@@ -122,7 +122,7 @@ export default function AboutPage() {
             </details>
 
             {/* Update Process */}
-            <details className="bg-white rounded shadow-sm border border-fluent-border group">
+            <details className="bg-white dark:bg-[#2c2c2e] rounded shadow-sm border border-fluent-border group">
               <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-[15px] font-semibold text-fluent-text select-none hover:bg-fluent-bg-alt transition-colors">
                 <span>Update process</span>
                 <svg className="w-4 h-4 text-fluent-text-secondary transition-transform duration-200 group-open:rotate-180 flex-shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -151,7 +151,7 @@ export default function AboutPage() {
             </details>
 
             {/* Architecture */}
-            <details className="bg-white rounded shadow-sm border border-fluent-border group">
+            <details className="bg-white dark:bg-[#2c2c2e] rounded shadow-sm border border-fluent-border group">
               <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-[15px] font-semibold text-fluent-text select-none hover:bg-fluent-bg-alt transition-colors">
                 <span>Architecture</span>
                 <svg className="w-4 h-4 text-fluent-text-secondary transition-transform duration-200 group-open:rotate-180 flex-shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -160,15 +160,15 @@ export default function AboutPage() {
               </summary>
               <div className="px-6 pb-5 pt-3 border-t border-fluent-border">
                 <div className="grid sm:grid-cols-3 gap-4">
-                  <div className="bg-[#f5f5f5] rounded px-4 py-4 border border-fluent-border text-center">
+                  <div className="bg-[#f5f5f5] dark:bg-[#3a3a3c] rounded px-4 py-4 border border-fluent-border text-center">
                     <p className="font-semibold text-[14px] text-fluent-text">Data layer</p>
                     <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">JSON snapshots from Graph API, diffed daily</p>
                   </div>
-                  <div className="bg-[#f5f5f5] rounded px-4 py-4 border border-fluent-border text-center">
+                  <div className="bg-[#f5f5f5] dark:bg-[#3a3a3c] rounded px-4 py-4 border border-fluent-border text-center">
                     <p className="font-semibold text-[14px] text-fluent-text">Build</p>
                     <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">Next.js static generation, pre-built search index</p>
                   </div>
-                  <div className="bg-[#f5f5f5] rounded px-4 py-4 border border-fluent-border text-center">
+                  <div className="bg-[#f5f5f5] dark:bg-[#3a3a3c] rounded px-4 py-4 border border-fluent-border text-center">
                     <p className="font-semibold text-[14px] text-fluent-text">Hosting</p>
                     <p className="text-[13px] leading-[20px] text-fluent-text-secondary mt-1">GitHub Pages static site, client-side search, no backend required</p>
                   </div>
@@ -180,7 +180,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Entirely Vibe Coded ── */}
-      <section className="bg-white">
+      <section className="bg-white dark:bg-[#1c1c1e]">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-16 sm:py-20">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-[28px] leading-[36px] font-semibold text-fluent-text">
@@ -194,7 +194,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Bottom CTA ── */}
-      <section className="bg-[#f5f5f5]">
+      <section className="bg-[#f5f5f5] dark:bg-[#2c2c2e]">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-14 sm:py-16 text-center">
           <h2 className="text-[24px] leading-[32px] font-semibold text-fluent-text">
             Start exploring the catalog
@@ -214,7 +214,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Disclaimer ── */}
-      <section className="bg-white border-t border-fluent-border">
+      <section className="bg-white dark:bg-[#1c1c1e] border-t border-fluent-border">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-6 text-center">
           <p className="text-[12px] leading-[18px] text-fluent-text-secondary">
             This tool is not affiliated with, endorsed by, or connected to Microsoft. All data is sourced from publicly available Microsoft Graph API endpoints.

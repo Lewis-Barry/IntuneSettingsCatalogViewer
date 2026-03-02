@@ -43,7 +43,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
       <div className="flex items-center gap-2 flex-wrap">
         {/* Platform pill */}
         {platform && platform !== 'none' && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
             {PlatformIcon && <PlatformIcon className="w-3.5 h-3.5" />}
             {platformLabel}
           </span>
@@ -51,7 +51,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
 
         {/* Technology pill */}
         {setting.applicability?.technologies && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-gray-50 text-gray-500 border border-gray-200">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
             {setting.applicability.technologies.toUpperCase()}
           </span>
         )}
@@ -75,12 +75,12 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
           <h4 className="text-fluent-sm font-semibold text-fluent-text-secondary mb-2">
             Options ({setting.options.length})
           </h4>
-          <div className="border border-gray-200 rounded-md overflow-hidden divide-y divide-gray-200">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
             {setting.options.map((opt) => (
               <div
                 key={opt.itemId}
                 className={`px-3 py-2 text-fluent-sm ${
-                  opt.itemId === setting.defaultOptionId ? 'bg-fluent-light-blue' : 'bg-gray-50/50'
+                  opt.itemId === setting.defaultOptionId ? 'bg-fluent-light-blue' : 'bg-gray-50/50 dark:bg-gray-800/50'
                 }`}
               >
                 <div className="font-medium">

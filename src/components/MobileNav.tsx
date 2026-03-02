@@ -1,11 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 /** Mobile navigation hamburger menu — rendered only below `md` breakpoint via CSS. */
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    setIsDark(saved !== null ? saved === 'dark' : true);
+  }, []);
+
+  const toggleTheme = () => {
+    const newDark = !isDark;
+    setIsDark(newDark);
+    document.documentElement.classList.toggle('dark', newDark);
+    localStorage.setItem('theme', newDark ? 'dark' : 'light');
+  };
 
   return (
     <div className="md:hidden">
@@ -65,6 +78,22 @@ export default function MobileNav() {
               </svg>
               GitHub
             </a>
+            <button
+              onClick={toggleTheme}
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px] flex items-center gap-2 w-full text-left"
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+              {isDark ? 'Light mode' : 'Dark mode'}
+            </button>
           </nav>
         </div>
       )}

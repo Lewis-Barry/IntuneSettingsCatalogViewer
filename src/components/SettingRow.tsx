@@ -127,17 +127,17 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
               </span>
             )}
             {!isGroup && !isCollectionGroup && (
-              <span className="scope-badge whitespace-nowrap bg-gray-100 text-gray-600">
+              <span className="scope-badge whitespace-nowrap bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                 {getSettingTypeLabel(setting['@odata.type'] || '')}
               </span>
             )}
             {isCollectionGroup && (
-              <span className="scope-badge whitespace-nowrap bg-purple-100 text-purple-700 border border-purple-200">
+              <span className="scope-badge whitespace-nowrap bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700">
                 Collection
               </span>
             )}
             {isTogglePlusInput && (
-              <span className="scope-badge whitespace-nowrap bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="scope-badge whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
                 Input
               </span>
             )}
@@ -158,14 +158,14 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
           {/* Type badge — fixed width to match column header */}
           <div className="w-[6rem] flex justify-center">
             {!isGroup && !isCollectionGroup && (
-              <span className="scope-badge whitespace-nowrap bg-gray-100 text-gray-600">
+              <span className="scope-badge whitespace-nowrap bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                 {getSettingTypeLabel(setting['@odata.type'] || '')}
               </span>
             )}
 
             {/* Collection badge */}
             {isCollectionGroup && (
-              <span className="scope-badge whitespace-nowrap bg-purple-100 text-purple-700 border border-purple-200" title="Repeatable collection \u2013 items in this group can appear multiple times">
+              <span className="scope-badge whitespace-nowrap bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700" title="Repeatable collection \u2013 items in this group can appear multiple times">
                 <svg className="w-3 h-3 mr-0.5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -178,7 +178,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
           <div className="w-[3.5rem] flex justify-center">
             {/* Input indicator */}
             {isTogglePlusInput && (
-              <span className="scope-badge whitespace-nowrap bg-slate-100 text-slate-600 border border-slate-200" title="This toggle requires additional input when enabled">
+              <span className="scope-badge whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600" title="This toggle requires additional input when enabled">
                 Input
               </span>
             )}
@@ -215,11 +215,11 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (
-            <div className={`ml-2 md:ml-4 border-l-[3px] ${isCollectionGroup ? 'border-purple-300 bg-purple-50/30' : 'border-blue-300 bg-slate-50/40'}`}>
+            <div className={`ml-2 md:ml-4 border-l-[3px] ${isCollectionGroup ? 'border-purple-300 dark:border-purple-700 bg-purple-50/30 dark:bg-purple-900/10' : 'border-blue-300 dark:border-blue-700 bg-slate-50/40 dark:bg-blue-950/20'}`}>
               <div className={`px-3 py-1.5 text-fluent-xs font-semibold border-b flex items-center gap-1.5 ${
                 isCollectionGroup
-                  ? 'text-purple-700 bg-purple-50 border-purple-100'
-                  : 'text-blue-600 bg-blue-50 border-blue-100'
+                  ? 'text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/30 border-purple-100 dark:border-purple-800'
+                  : 'text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 border-blue-100 dark:border-blue-900'
               }`}>
                 {isCollectionGroup ? (
                   <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -318,7 +318,7 @@ function SettingRowInner({
               </span>
             )}
             {!isGroup && (
-              <span className="scope-badge bg-blue-50 text-blue-600 border border-blue-100">
+              <span className="scope-badge bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-blue-900">
                 {getSettingTypeLabel(setting['@odata.type'] || '')}
               </span>
             )}
@@ -332,7 +332,7 @@ function SettingRowInner({
             </span>
           )}
           {!isGroup && (
-            <span className="scope-badge bg-blue-50 text-blue-600 border border-blue-100">
+            <span className="scope-badge bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-blue-900">
               {getSettingTypeLabel(setting['@odata.type'] || '')}
             </span>
           )}
@@ -360,7 +360,7 @@ function SettingRowInner({
       </div>
 
       {expanded && (
-        <div className="border-b border-blue-100 bg-blue-50/50">
+        <div className="border-b border-blue-100 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20">
           <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} />
         </div>
       )}

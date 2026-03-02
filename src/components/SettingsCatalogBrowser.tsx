@@ -430,7 +430,7 @@ export default function SettingsCatalogBrowser({
   return (
     <div className="flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100dvh-96px)]">
       {/* Top section: title + search + filters */}
-      <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-fluent-border bg-white">
+      <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-fluent-border bg-white dark:bg-[#1c1c1e]">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h1 className="text-fluent-2xl font-semibold text-fluent-text">
@@ -474,7 +474,7 @@ export default function SettingsCatalogBrowser({
         <button
           ref={fabRef}
           onClick={() => setSidebarOpen(true)}
-          className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
+          className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white dark:text-[#1c1c1e] shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
             fabHidden ? 'opacity-25' : 'opacity-100'
           }`}
           aria-label="Open categories"
@@ -501,8 +501,8 @@ export default function SettingsCatalogBrowser({
         <aside
           className={`${!sidebarHydrated ? 'sidebar-mobile-init ' : ''}${
             isDesktop
-              ? 'flex-shrink-0 border-r border-fluent-border bg-white overflow-hidden transition-all duration-200'
-              : `fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[360px] bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
+              ? 'flex-shrink-0 border-r border-fluent-border bg-white dark:bg-[#1c1c1e] overflow-hidden transition-all duration-200'
+              : `fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[360px] bg-white dark:bg-[#1c1c1e] shadow-2xl transition-transform duration-300 ease-in-out ${
                   sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 }`
           }`}
@@ -567,12 +567,12 @@ export default function SettingsCatalogBrowser({
         )}
 
         {/* Settings list */}
-        <div ref={settingsScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white">
+        <div ref={settingsScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {isSearching ? (
             /* Search results: grouped by category */
             <div>
               {/* Search results header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-white sticky top-0 z-10">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-white dark:bg-[#1c1c1e] sticky top-0 z-10">
                 <div className="text-fluent-base font-semibold text-fluent-blue">
                   {searchResultCount.toLocaleString()} matching {searchResultCount === 1 ? 'setting' : 'settings'} across {searchGroups.length} {searchGroups.length === 1 ? 'category' : 'categories'}
                 </div>

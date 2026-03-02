@@ -126,7 +126,7 @@ export default function SettingsList({
         {/* Category header bar */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-2 w-full px-4 py-2.5 bg-fluent-bg-alt hover:bg-gray-100 transition-colors text-left"
+          className="flex items-center gap-2 w-full px-4 py-2.5 bg-fluent-bg-alt hover:bg-fluent-border transition-colors text-left"
         >
           <svg
             className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform duration-150 flex-shrink-0 ${collapsed ? '' : 'rotate-90'}`}
