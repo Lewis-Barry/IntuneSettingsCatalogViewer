@@ -11,9 +11,8 @@ export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Read saved preference; fall back to dark if none
-    const saved = localStorage.getItem('theme');
-    setIsDark(saved !== null ? saved === 'dark' : true);
+    // Read the class the init script already applied — it's the ground truth
+    setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
   const toggle = () => {

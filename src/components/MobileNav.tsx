@@ -9,8 +9,7 @@ export default function MobileNav() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    setIsDark(saved !== null ? saved === 'dark' : true);
+    setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
   const toggleTheme = () => {

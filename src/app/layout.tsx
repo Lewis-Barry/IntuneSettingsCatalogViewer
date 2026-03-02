@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/* Apply theme class before first paint to prevent flash of wrong theme.
             Defaults to dark if no preference is saved in localStorage. */}
