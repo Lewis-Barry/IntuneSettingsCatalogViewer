@@ -1,5 +1,140 @@
 [
   {
+    "date": "2026-03-02",
+    "added": [],
+    "removed": [],
+    "changed": [],
+    "categoriesAdded": [
+      {
+        "id": "b135b86c-b0f4-4cb5-94f4-a6c7ae2013d9",
+        "displayName": "Custom",
+        "parentCategoryId": "afc4a9d5-81df-4077-bb80-bd46dcd0d0d1"
+      },
+      {
+        "id": "832f3a51-5e73-4541-8f14-1323cd9919bc",
+        "displayName": "When sending a message",
+        "parentCategoryId": "897675f9-0d1b-437b-ba0a-584fbd54df95"
+      },
+      {
+        "id": "afc4a9d5-81df-4077-bb80-bd46dcd0d0d1",
+        "displayName": "Microsoft One Note 2016",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ],
+    "categoriesChanged": [
+      {
+        "id": "20ceae56-e189-46ec-a440-791ce7454017",
+        "displayName": "Printing",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "a185940c-7899-4ab6-867d-7559352cf8d2",
+        "displayName": "OneNote Options",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"00000000-0000-0000-0000-000000000000\"",
+            "newValue": "\"afc4a9d5-81df-4077-bb80-bd46dcd0d0d1\""
+          }
+        ]
+      },
+      {
+        "id": "962a2377-ad9a-4654-a526-a77c14152fd7",
+        "displayName": "Content settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "de643352-007f-4a47-8c83-d75a79516b39",
+        "displayName": "Deprecated policies",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "12142994-4b30-486c-bab1-9206528b2b96",
+        "displayName": "Accessibility settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "54f2e032-bdcc-4877-b7a0-973d0a7c1653",
+        "displayName": "Startup Home page and New Tab page",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "6d6b289c-c1e9-4004-b5ab-3123920cf10d",
+        "displayName": "Password manager",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "af351b0c-3d9e-4b18-957b-8179e4eaba15",
+        "displayName": "Safe Browsing settings",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "bce24fbf-4caf-449f-a210-5dd31a368b22",
+        "displayName": "Removed policies",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      },
+      {
+        "id": "d97d6d8f-0a1a-4160-89aa-d624a36954a2",
+        "displayName": "Default search provider",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"36c83fb3-c18c-472b-b39e-617c2f8a7fbd\"",
+            "newValue": "\"c3857f91-3df8-472f-9b5a-b10778c715c0\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-03-01",
     "added": [
       {
