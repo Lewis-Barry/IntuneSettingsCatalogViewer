@@ -315,6 +315,7 @@ function main() {
       offsetUri: s.offsetUri || undefined,
       rootDefinitionId: s.rootDefinitionId || undefined,
       uxBehavior: s.uxBehavior || undefined,
+      infoUrls: s.infoUrls?.length ? s.infoUrls : undefined,
       applicability: s.applicability || undefined,
       dependedOnBy: s.dependedOnBy || undefined,
       defaultOptionId: s.defaultOptionId || undefined,

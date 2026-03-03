@@ -39,7 +39,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
 
   return (
     <div className="px-4 md:px-6 py-4 space-y-4">
-      {/* Platform pill + toggle indicator bar */}
+      {/* Platform pill + technology pill */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* Platform pill */}
         {platform && platform !== 'none' && (
@@ -55,6 +55,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             {setting.applicability.technologies.toUpperCase()}
           </span>
         )}
+
       </div>
 
       {/* Description */}
@@ -114,7 +115,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             </p>
           )}
           <a
-            href={`${ASR_DOCS_URL}#${asrInfo.guid}`}
+            href={ASR_DOCS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-fluent-xs text-fluent-blue hover:underline"
@@ -122,16 +123,42 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-            View on Microsoft Learn
+            ASR rules reference
           </a>
         </div>
       )}
 
-      {/* CSP Path — subtle and small */}
-      <div className="pt-1">
+      {/* CSP Path + MS Learn links */}
+      <div className="flex items-end justify-between gap-3 pt-1">
         <span className="text-fluent-xs text-fluent-text-secondary font-mono break-all">
           <HighlightText text={cspPath} query={highlightQuery} variant={cspVariant} />
         </span>
+        {setting.infoUrls && setting.infoUrls.length > 0 && (
+          <div className="flex gap-2 flex-shrink-0">
+            {setting.infoUrls.map((url, i) => {
+              // Insert tracking param before any # fragment
+              const hashIdx = url.indexOf('#');
+              const base = hashIdx >= 0 ? url.slice(0, hashIdx) : url;
+              const fragment = hashIdx >= 0 ? url.slice(hashIdx) : '';
+              const separator = base.includes('?') ? '&' : '?';
+              const href = `${base}${separator}wt.mc_id=MVP_310915${fragment}`;
+              return (
+                <a
+                  key={i}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-fluent-xs font-medium text-fluent-blue bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors whitespace-nowrap"
+                >
+                  <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  MS Learn
+                </a>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

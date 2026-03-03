@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(node -e \":*)",
+      "Bash(grep -n \"SettingDetail\\\\|infoUrl\" c:/Temp/IntuneSettingsCatalogViewer/src/app/setting/[id]/page.tsx)"
+    ]
+  }
+}
