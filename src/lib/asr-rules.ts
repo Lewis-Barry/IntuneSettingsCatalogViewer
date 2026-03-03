@@ -134,4 +134,4 @@ export function isAsrSetting(settingId: string): boolean {
 
 /** Microsoft docs URL for the ASR rules reference page */
 export const ASR_DOCS_URL =
-  'https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference?wt.mc_id=MVP_310915#asr-rule-to-guid-matrix';
+  'https://learn.microsoft.com/defender-endpoint/attack-surface-reduction-rules-reference?wt.mc_id=MVP_310915#asr-rule-to-guid-matrix';

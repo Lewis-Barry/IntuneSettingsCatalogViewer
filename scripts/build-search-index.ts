@@ -316,7 +316,9 @@ function main() {
       rootDefinitionId: s.rootDefinitionId || undefined,
       uxBehavior: s.uxBehavior || undefined,
       infoUrls: s.infoUrls?.length ? s.infoUrls : undefined,
-      applicability: s.applicability || undefined,
+      applicability: s.applicability
+        ? { platform: s.applicability.platform, technologies: s.applicability.technologies }
+        : undefined,
       dependedOnBy: s.dependedOnBy || undefined,
       defaultOptionId: s.defaultOptionId || undefined,
       // Minimal options: keep displayName + dependedOnBy for toggle detection + inline expansion
