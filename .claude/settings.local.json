@@ -3,7 +3,9 @@
     "allow": [
       "Bash(python3 -c \":*)",
       "Bash(node -e \":*)",
-      "Bash(grep -n \"SettingDetail\\\\|infoUrl\" c:/Temp/IntuneSettingsCatalogViewer/src/app/setting/[id]/page.tsx)"
+      "Bash(grep -n \"SettingDetail\\\\|infoUrl\" c:/Temp/IntuneSettingsCatalogViewer/src/app/setting/[id]/page.tsx)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx tsc --noEmit)"
     ]
   }
 }

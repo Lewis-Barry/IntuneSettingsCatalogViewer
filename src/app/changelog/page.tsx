@@ -1,4 +1,4 @@
-import { loadChangelog } from '@/lib/data';
+import { loadChangelog, loadSettings } from '@/lib/data';
 import ChangelogViewer from '@/components/ChangelogViewer';
 import type { Metadata } from 'next';
 
@@ -9,6 +9,10 @@ export const metadata: Metadata = {
 
 export default function ChangelogPage() {
   const changelog = loadChangelog();
+  const settings = loadSettings();
+  const deprecatedCount = settings.filter((s) =>
+    s.displayName?.toLowerCase().includes('deprecated')
+  ).length;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
@@ -38,7 +42,7 @@ export default function ChangelogPage() {
         </div>
       </div>
 
-      <ChangelogViewer entries={changelog} />
+      <ChangelogViewer entries={changelog} deprecatedCount={deprecatedCount} />
     </div>
   );
 }

@@ -51,6 +51,12 @@ function matchesPlatformFilter(platformValue: string | undefined, selectedPlatfo
   });
 }
 
+/** Check whether a setting matches the deprecated filter. */
+function matchesDeprecatedFilter(displayName: string | undefined, deprecatedOnly: boolean): boolean {
+  if (!deprecatedOnly) return true;
+  return !!displayName?.toLowerCase().includes('deprecated');
+}
+
 /** Build an ancestor breadcrumb path (root → parent) for a given category. */
 function buildBreadcrumb(
   categoryId: string,
@@ -79,6 +85,7 @@ export default function SettingsCatalogBrowser({
   const [searchResults, setSearchResults] = useState<SearchIndexEntry[] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [deprecatedOnly, setDeprecatedOnly] = useState(false);
   const isDesktop = useIsDesktop();
 
   // ── Client-side settings loading ──
@@ -245,7 +252,7 @@ export default function SettingsCatalogBrowser({
   // selected platform(s) are shown.  When no platform filter is active the
   // full tree is returned unchanged.
   const filteredCategoryTree = useMemo(() => {
-    if (selectedPlatforms.length === 0) return categoryTree;
+    if (selectedPlatforms.length === 0 && !deprecatedOnly) return categoryTree;
 
     // Build a lookup map for CSP-path deduplication (same logic as SettingsList)
     const settingById = new Map<string, SettingDefinition>();
@@ -278,7 +285,8 @@ export default function SettingsCatalogBrowser({
       const matchingCount = catSettings.filter(
         (s) =>
           isVisibleSetting(s) &&
-          matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
+          (selectedPlatforms.length === 0 || matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) &&
+          matchesDeprecatedFilter(s.displayName, deprecatedOnly)
       ).length;
 
       // Total = own matching + all descendants' matching
@@ -298,7 +306,7 @@ export default function SettingsCatalogBrowser({
     return categoryTree
       .map(filterNode)
       .filter((c): c is CategoryTreeNode => c !== null);
-  }, [categoryTree, selectedPlatforms, settingsByCategory]);
+  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory]);
 
   // Clear selected category when it's removed by a platform filter change
   useEffect(() => {
@@ -323,15 +331,18 @@ export default function SettingsCatalogBrowser({
       }
     }
 
-    // Apply platform filter
+    // Apply platform + deprecated filters
     if (selectedPlatforms.length > 0) {
       settings = settings.filter(
         (s) => matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
       );
     }
+    if (deprecatedOnly) {
+      settings = settings.filter((s) => matchesDeprecatedFilter(s.displayName, deprecatedOnly));
+    }
 
     return settings;
-  }, [selectedCategoryId, searchResults, settingsByCategory, selectedPlatforms, filteredCategoryTree]);
+  }, [selectedCategoryId, searchResults, settingsByCategory, selectedPlatforms, deprecatedOnly, filteredCategoryTree]);
 
   // When searching: group matched settings by their source category,
   // preserving the relevance order from the search engine so that groups
@@ -357,7 +368,7 @@ export default function SettingsCatalogBrowser({
       }
     }
 
-    // Apply platform filter
+    // Apply platform + deprecated filters
     const groups: CategorySettingsGroup[] = [];
     for (const [catId, settings] of groupMap) {
       let filtered = settings;
@@ -365,6 +376,9 @@ export default function SettingsCatalogBrowser({
         filtered = filtered.filter(
           (s) => matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)
         );
+      }
+      if (deprecatedOnly) {
+        filtered = filtered.filter((s) => matchesDeprecatedFilter(s.displayName, deprecatedOnly));
       }
       if (filtered.length > 0) {
         // Sort settings within each group by search relevance rank
@@ -388,7 +402,7 @@ export default function SettingsCatalogBrowser({
       return a.categoryName.localeCompare(b.categoryName);
     });
     return groups;
-  }, [searchResults, settingsByCategory, selectedPlatforms, categoryMap, categoryParentMap]);
+  }, [searchResults, settingsByCategory, selectedPlatforms, deprecatedOnly, categoryMap, categoryParentMap]);
 
   // Total matched settings count for display — uses the same grouping logic
   // as SettingsList so the banner count matches the actual visible rows.
@@ -402,17 +416,20 @@ export default function SettingsCatalogBrowser({
 
   // Compute the displayed settings count based on active platform filter
   const displayedSettingsCount = useMemo(() => {
-    if (selectedPlatforms.length === 0) return totalSettings;
+    if (selectedPlatforms.length === 0 && !deprecatedOnly) return totalSettings;
     let count = 0;
     for (const catSettings of Object.values(settingsByCategory)) {
       for (const s of catSettings) {
-        if (matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) {
+        if (
+          (selectedPlatforms.length === 0 || matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) &&
+          matchesDeprecatedFilter(s.displayName, deprecatedOnly)
+        ) {
           count++;
         }
       }
     }
     return count;
-  }, [selectedPlatforms, settingsByCategory, totalSettings]);
+  }, [selectedPlatforms, deprecatedOnly, settingsByCategory, totalSettings]);
 
   const isSearching = searchResults !== null && searchResults.length > 0;
 
@@ -464,6 +481,8 @@ export default function SettingsCatalogBrowser({
           <PlatformFilter
             selectedPlatforms={selectedPlatforms}
             onPlatformsChange={setSelectedPlatforms}
+            deprecatedOnly={deprecatedOnly}
+            onDeprecatedChange={setDeprecatedOnly}
           />
         </div>
 

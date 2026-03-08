@@ -7,11 +7,12 @@ import { settingSlug } from '@/lib/slug';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
+  deprecatedCount?: number;
 }
 
 type FilterType = 'all' | 'added' | 'removed' | 'changed';
 
-export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
+export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const [expandedDates, setExpandedDates] = useState<Set<string>>(
     new Set(entries.slice(0, 3).map((e) => e.date))
@@ -122,7 +123,7 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
   return (
     <div>
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         <StatCard
           label="Last change detected"
           displayValue={stats.lastChangeLabel}
@@ -157,6 +158,12 @@ export default function ChangelogViewer({ entries }: ChangelogViewerProps) {
             stats.latestCatChanged > 0 ? `${stats.latestCatChanged} categories` : '',
           ].filter(Boolean).join(', ') || undefined}
           color="text-fluent-warning"
+        />
+        <StatCard
+          label="Deprecated settings"
+          value={deprecatedCount}
+          subtitle="currently in catalog"
+          color="text-fluent-text-secondary"
         />
       </div>
 
