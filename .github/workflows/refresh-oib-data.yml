@@ -1,16 +1,12 @@
-name: Deploy on Push
+name: Refresh OIB Data
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'data/**'
-      - 'public/search-index.json'
-      - 'public/oib-data.json'
-      - 'LICENSE'
-      - 'README.md'
+  workflow_dispatch:
+    # Manual trigger only — run this when a new OIB release is published.
+    # Find it at: Actions → Refresh OIB Data → Run workflow
 
 permissions:
+  contents: write
   pages: write
   id-token: write
 
@@ -19,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  refresh-oib-data:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -38,16 +34,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Uses existing data files (no fetch step)
-      # If data files don't exist, falls back to sample data
-      - name: Ensure data files exist
-        run: |
-          if [ ! -f data/settings.json ]; then
-            echo "No settings.json found, using sample data..."
-            cp data/sample-settings.json data/settings.json 2>/dev/null || echo "[]" > data/settings.json
-            cp data/sample-categories.json data/categories.json 2>/dev/null || echo "[]" > data/categories.json
-          fi
+      # ── Fetch OIB policy data from GitHub (no Azure credentials needed) ──
+      - name: Fetch OIB data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tsx scripts/fetch-oib-data.ts
 
+      # ── Commit the updated bundle back to the repo ──
+      - name: Commit OIB data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f public/oib-data.json
+          git diff --cached --quiet || git commit -m "chore: refresh OIB data $(date -I)"
+          git push
+
+      # ── Build and deploy the site with the fresh data ──
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
 

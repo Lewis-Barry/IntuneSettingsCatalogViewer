@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "fetch-settings": "tsx scripts/fetch-settings.ts",
+    "fetch-oib": "tsx scripts/fetch-oib-data.ts",
     "generate-changelog": "tsx scripts/generate-changelog.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
     "refresh": "npm run fetch-settings && npm run generate-changelog && npm run build-search-index",
