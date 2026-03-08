@@ -55,7 +55,7 @@ export default function MobileNav() {
               onClick={() => setOpen(false)}
               className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
             >
-              Baseline
+              OIB Lookup
             </Link>
             <Link
               href="/changelog/"
