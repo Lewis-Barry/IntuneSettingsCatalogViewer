@@ -19,6 +19,14 @@ interface SettingRowProps {
   allSettings?: SettingDefinition[];
   /** Sub-category label to disambiguate settings with duplicate display names */
   disambiguationLabel?: string;
+  /** Optional value badge (e.g. OIB configured value) shown in the badge area */
+  valueBadge?: React.ReactNode;
+  /** Option IDs actively selected by a baseline (e.g. OIB) — highlighted in expanded detail */
+  activeOptionIds?: string[];
+  /** Resolved simple value configured by a baseline — shown in expanded detail */
+  activeSimpleValue?: string;
+  /** Hide the scope badge (useful when scope is shown at a parent level) */
+  hideScope?: boolean;
 }
 
 /** Collect all dependedOnBy refs from both top-level setting and its options */
@@ -35,7 +43,7 @@ function getAllDependedOnBy(setting: SettingDefinition): Array<{ dependedOnBy: s
   return deps;
 }
 
-export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel }: SettingRowProps) {
+export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, hideScope }: SettingRowProps) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
   const isGroup = setting['@odata.type']?.includes('SettingGroup');
@@ -121,7 +129,8 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
           {/* Mobile-only inline badges (stacked below name) */}
           <div className="flex md:hidden items-center gap-1.5 mt-1 flex-wrap">
-            {scope !== 'unknown' && (
+            {valueBadge}
+            {!hideScope && scope !== 'unknown' && (
               <span className={`scope-badge whitespace-nowrap ${getScopeBadgeClass(scope)}`}>
                 {scope === 'device' ? 'Device' : 'User'}
               </span>
@@ -146,14 +155,23 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 
         {/* Badges — hidden on mobile, shown inline on desktop */}
         <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
+          {/* Value badge (e.g. OIB configured value) */}
+          {valueBadge && (
+            <div className="w-[10rem] flex justify-end">
+              {valueBadge}
+            </div>
+          )}
+
           {/* Scope badge — fixed width to match column header */}
-          <div className="w-[4.5rem] flex justify-center">
-            {scope !== 'unknown' && (
-              <span className={`scope-badge whitespace-nowrap ${getScopeBadgeClass(scope)}`}>
-                {scope === 'device' ? 'Device' : 'User'}
-              </span>
-            )}
-          </div>
+          {!hideScope && (
+            <div className="w-[4.5rem] flex justify-center">
+              {scope !== 'unknown' && (
+                <span className={`scope-badge whitespace-nowrap ${getScopeBadgeClass(scope)}`}>
+                  {scope === 'device' ? 'Device' : 'User'}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Type badge — fixed width to match column header */}
           <div className="w-[6rem] flex justify-center">
@@ -211,7 +229,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
       {/* Expanded detail panel */}
       {expanded && (
         <div className="border-b border-fluent-border bg-fluent-bg">
-          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} matchSources={matchSources} />
+          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} matchSources={matchSources} activeOptionIds={activeOptionIds} activeSimpleValue={activeSimpleValue} />
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (

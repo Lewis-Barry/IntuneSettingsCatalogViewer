@@ -12,9 +12,13 @@ interface SettingDetailProps {
   highlightQuery?: string;
   /** Where the search query matched for this setting */
   matchSources?: MatchSource[];
+  /** Option IDs actively selected (e.g. by OIB baseline) — highlighted in the options list */
+  activeOptionIds?: string[];
+  /** Resolved simple value configured by a baseline (shown when no options list) */
+  activeSimpleValue?: string;
 }
 
-export default function SettingDetail({ setting, allSettings, highlightQuery, matchSources }: SettingDetailProps) {
+export default function SettingDetail({ setting, allSettings, highlightQuery, matchSources, activeOptionIds, activeSimpleValue }: SettingDetailProps) {
   const cspPath =
     setting.baseUri && setting.offsetUri
       ? `${setting.baseUri}/${setting.offsetUri}`
@@ -70,6 +74,23 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
         </div>
       )}
 
+      {/* Configured value for simple (non-choice) settings — same box style as options list */}
+      {activeSimpleValue && !(setting.options && setting.options.length > 0) && (
+        <div>
+          <h4 className="text-fluent-sm font-semibold text-fluent-text-secondary mb-2">
+            Configured Value
+          </h4>
+          <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+            <div className="px-3 py-2 text-fluent-sm bg-green-50 dark:bg-green-950/30 border-l-[3px] border-l-green-500 dark:border-l-green-400">
+              <div className="font-medium">
+                {activeSimpleValue}
+                <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">(OIB)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Choice options */}
       {setting.options && setting.options.length > 0 && (
         <div>
@@ -77,27 +98,40 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             Options ({setting.options.length})
           </h4>
           <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
-            {setting.options.map((opt) => (
-              <div
-                key={opt.itemId}
-                className={`px-3 py-2 text-fluent-sm ${
-                  opt.itemId === setting.defaultOptionId ? 'bg-fluent-light-blue' : 'bg-gray-50/50 dark:bg-gray-800/50'
-                }`}
-              >
-                <div className="font-medium">
-                  {opt.displayName}
-                  {opt.itemId === setting.defaultOptionId && (
-                    <span className="text-fluent-blue ml-2 text-fluent-xs">(default)</span>
+            {setting.options.map((opt) => {
+              const isDefault = opt.itemId === setting.defaultOptionId;
+              const isOibSelected = activeOptionIds?.includes(opt.itemId) ?? false;
+
+              let bgClass = 'bg-gray-50/50 dark:bg-gray-800/50';
+              if (isOibSelected) {
+                bgClass = 'bg-green-50 dark:bg-green-950/30';
+              } else if (isDefault) {
+                bgClass = 'bg-fluent-light-blue';
+              }
+
+              return (
+                <div
+                  key={opt.itemId}
+                  className={`px-3 py-2 text-fluent-sm ${bgClass}${isOibSelected ? ' border-l-[3px] border-l-green-500 dark:border-l-green-400' : ''}`}
+                >
+                  <div className="font-medium">
+                    {opt.displayName}
+                    {isDefault && (
+                      <span className="text-fluent-blue ml-2 text-fluent-xs">(default)</span>
+                    )}
+                    {isOibSelected && (
+                      <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">(OIB)</span>
+                    )}
+                  </div>
+                  {opt.description &&
+                    opt.description.trim().toLowerCase() !== opt.displayName?.trim().toLowerCase() && (
+                    <p className="text-fluent-text-secondary text-fluent-xs mt-1 whitespace-pre-wrap break-words">
+                      {opt.description}
+                    </p>
                   )}
                 </div>
-                {opt.description &&
-                  opt.description.trim().toLowerCase() !== opt.displayName?.trim().toLowerCase() && (
-                  <p className="text-fluent-text-secondary text-fluent-xs mt-1 whitespace-pre-wrap break-words">
-                    {opt.description}
-                  </p>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

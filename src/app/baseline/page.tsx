@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import OIBBrowser from '@/components/OIBBrowser';
 
 export const metadata: Metadata = {
-  title: 'OpenIntuneBaseline Browser | Intune Settings Catalog Viewer',
+  title: 'OIB Lookup | Intune Settings Catalog Viewer',
   description:
     'Browse OpenIntuneBaseline policies — see exactly which settings are configured and how. Search across Windows, macOS and Windows 365 baselines.',
 };
