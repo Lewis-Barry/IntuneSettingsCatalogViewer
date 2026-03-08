@@ -50,6 +50,9 @@ export function parsePolicy(policy: OIBPolicy): ParsedPolicy {
   if (oibFolder === 'WINDOWS') {
     const m = name.match(/^Win - OIB - (ES|SC) - (.+?) - (D|U) - (.+?) - v([\d.]+)$/);
     if (m) return { tier: m[1] as 'ES' | 'SC', category: m[2], scope: m[3] as 'D' | 'U', policyLabel: m[4], version: m[5] };
+    // Update/Ring policies (no D/U scope): e.g. "Win - OIB - ES - Defender Antivirus Updates - Ring 1 - Pilot - v3.4"
+    const m2 = name.match(/^Win - OIB - (ES|SC) - (.+?) Updates - (Ring \d+ - .+?) - v([\d.]+)$/);
+    if (m2) return { tier: m2[1] as 'ES' | 'SC', category: m2[2], scope: 'D', policyLabel: `Updates - ${m2[3]}`, version: m2[4] };
   }
 
   if (oibFolder === 'MACOS') {
