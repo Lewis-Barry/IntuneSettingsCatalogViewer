@@ -15,6 +15,7 @@ import {
   type OIBFolderNode,
   type OIBCategoryNode,
 } from '@/lib/oib-types';
+import CABExportDialog from './CABExportDialog';
 
 // ── (Value resolution removed — OIB selections are now shown in the expanded detail panel) ──
 
@@ -363,6 +364,8 @@ export default function OIBBrowser() {
   const MIN_SIDEBAR = 200;
   const MAX_SIDEBAR = 600;
 
+  const [showCABDialog, setShowCABDialog] = useState(false);
+
   const [fabHidden, setFabHidden] = useState(false);
   const fabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fabRef = useRef<HTMLButtonElement>(null);
@@ -690,7 +693,7 @@ export default function OIBBrowser() {
           </div>
         </div>
 
-        {/* Platform filters */}
+        {/* Platform filters + CAB export */}
         <div className="mt-3 flex items-center gap-2 flex-wrap">
           <button
             onClick={() => handleFolderFilter(null)}
@@ -716,6 +719,21 @@ export default function OIBBrowser() {
               {label}
             </button>
           ))}
+
+          {/* CAB export button — only available once data is loaded */}
+          {!isLoading && oibData && (
+            <button
+              onClick={() => setShowCABDialog(true)}
+              className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-fluent-sm font-medium border transition-colors
+                         bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt"
+              title="Generate a Change Advisory Board document for this baseline"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              CAB document
+            </button>
+          )}
         </div>
       </div>
 
@@ -903,6 +921,16 @@ export default function OIBBrowser() {
           )}
         </div>
       </div>
+
+      {/* CAB export dialog */}
+      {showCABDialog && oibData && (
+        <CABExportDialog
+          oibData={oibData}
+          defsMap={defsMap}
+          initialFolder={selectedFolder}
+          onClose={() => setShowCABDialog(false)}
+        />
+      )}
     </div>
   );
 }

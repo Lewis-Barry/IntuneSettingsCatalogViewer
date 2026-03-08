@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.5.0",
+    "docx": "^9.6.0",
     "flexsearch": "^0.7.43",
     "next": "^14.2.0",
     "react": "^18.3.0",

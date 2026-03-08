@@ -5,7 +5,13 @@
       "Bash(node -e \":*)",
       "Bash(grep -n \"SettingDetail\\\\|infoUrl\" c:/Temp/IntuneSettingsCatalogViewer/src/app/setting/[id]/page.tsx)",
       "mcp__Claude_Preview__preview_start",
-      "Bash(npx tsc --noEmit)"
+      "Bash(npx tsc --noEmit)",
+      "Bash(npm install docx)",
+      "Bash(node -e \"const {HeadingLevel, AlignmentType, WidthType} = require\\(''docx''\\); console.log\\(''HeadingLevel:'', JSON.stringify\\(HeadingLevel\\)\\); console.log\\(''AlignmentType \\(sample\\):'', AlignmentType.CENTER\\); console.log\\(''WidthType:'', JSON.stringify\\(WidthType\\)\\);\")",
+      "Bash(npm run build)",
+      "Bash(node -e \"const d = require\\(''docx''\\); console.log\\([''PageOrientation'',''SectionType'',''convertMillimetersToTwip'',''convertInchesToTwip''].filter\\(k => k in d\\).join\\('', ''\\)\\)\")",
+      "Bash(node -e \"const {PageOrientation, SectionType} = require\\(''docx''\\); console.log\\(''PageOrientation:'', JSON.stringify\\(PageOrientation\\)\\); console.log\\(''SectionType:'', JSON.stringify\\(SectionType\\)\\);\")",
+      "Bash(python3 -c \"import sys,json; logs=json.load\\(sys.stdin\\); errors=[l for l in logs if ''error'' in l.get\\(''type'',''''\\).lower\\(\\) or ''Error'' in l.get\\(''text'',''''\\)]; [print\\(e[''text''][:300]\\) for e in errors[:10]]\")"
     ]
   }
 }
