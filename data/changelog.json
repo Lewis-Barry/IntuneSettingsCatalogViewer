@@ -1,5 +1,48 @@
 [
   {
+    "date": "2026-04-22",
+    "added": [],
+    "removed": [],
+    "changed": [],
+    "categoriesAdded": [
+      {
+        "id": "11d26400-1d13-4dd6-ab4b-cb323494b127",
+        "displayName": "Intelligence Settings",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      },
+      {
+        "id": "120b24dd-c04a-4291-8f24-9c48fcdc1434",
+        "displayName": "Cryptography compliance policies",
+        "parentCategoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17"
+      },
+      {
+        "id": "d9654cb3-57c8-487c-90a5-454e15336731",
+        "displayName": "External Intelligence Settings",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      },
+      {
+        "id": "dba26132-cba6-4178-93c3-f02476532f08",
+        "displayName": "Keyboard Settings",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      },
+      {
+        "id": "1fcd72cb-7c09-4e7b-a314-97a88df6e623",
+        "displayName": "Recovery Lock Password",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "id": "d40a32e1-ab3e-4cbc-aa03-4766792e563e",
+        "displayName": "Performance Profiles Configuration",
+        "parentCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577"
+      },
+      {
+        "id": "b85d9c04-4923-4fdf-a425-424686d47859",
+        "displayName": "Siri Settings",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      }
+    ]
+  },
+  {
     "date": "2026-04-21",
     "added": [],
     "removed": [],
