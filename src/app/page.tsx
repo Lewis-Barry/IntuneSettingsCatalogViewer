@@ -1,12 +1,13 @@
-import { loadCategoryTree, loadCategories, getLastUpdated } from '@/lib/data';
+import { loadCategoryTree, loadCategories, loadCatalogStats, getLastUpdated } from '@/lib/data';
 import SettingsCatalogBrowser from '@/components/SettingsCatalogBrowser';
 
 export default function HomePage() {
   // Load lightweight data at build time (server component).
-  // Settings are loaded client-side from /settings-browse.json to avoid
-  // embedding ~55 MB of data in the page HTML.
+  // Setting details are loaded client-side by category shard to avoid pulling
+  // the full browse payload on initial page load.
   const categoryTree = loadCategoryTree();
   const categories = loadCategories();
+  const catalogStats = loadCatalogStats();
   const lastUpdated = getLastUpdated();
 
   // Create serializable category maps (small — ~1 MB)
@@ -23,6 +24,7 @@ export default function HomePage() {
         categoryTree={categoryTree}
         categoryMap={categoryMap}
         categoryParentMap={categoryParentMap}
+        totalSettings={catalogStats.totalSettings}
         lastUpdated={lastUpdated}
       />
     </div>

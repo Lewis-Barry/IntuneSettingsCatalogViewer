@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: 'Learn about the Intune Settings Catalog Viewer, how it works, and how data is sourced.',
 };
 
+export const dynamic = 'force-static';
+
 export default function AboutPage() {
   return (
     <div>

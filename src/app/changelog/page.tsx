@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: 'Changelog of additions, removals, and changes to the Intune Settings Catalog.',
 };
 
+export const dynamic = 'force-static';
+
 export default function ChangelogPage() {
   const changelog = loadChangelog();
   const categories = loadCategories();

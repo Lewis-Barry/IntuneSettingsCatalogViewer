@@ -6,12 +6,14 @@ import type { CategoryTreeNode } from '@/lib/types';
 interface CategoryTreeProps {
   categories: CategoryTreeNode[];
   selectedCategoryId: string | null;
+  loadingCategoryId?: string | null;
   onSelectCategory: (categoryId: string, categoryName: string) => void;
 }
 
 export default memo(function CategoryTree({
   categories,
   selectedCategoryId,
+  loadingCategoryId,
   onSelectCategory,
 }: CategoryTreeProps) {
   return (
@@ -26,6 +28,7 @@ export default memo(function CategoryTree({
             node={cat}
             depth={0}
             selectedCategoryId={selectedCategoryId}
+            loadingCategoryId={loadingCategoryId}
             onSelectCategory={onSelectCategory}
           />
         ))}
@@ -38,6 +41,7 @@ interface CategoryNodeProps {
   node: CategoryTreeNode;
   depth: number;
   selectedCategoryId: string | null;
+  loadingCategoryId?: string | null;
   onSelectCategory: (categoryId: string, categoryName: string) => void;
 }
 
@@ -45,11 +49,13 @@ const CategoryNode = memo(function CategoryNode({
   node,
   depth,
   selectedCategoryId,
+  loadingCategoryId,
   onSelectCategory,
 }: CategoryNodeProps) {
   const [expanded, setExpanded] = useState(false);
   const hasChildren = node.children.length > 0;
   const isSelected = node.id === selectedCategoryId;
+  const isLoading = node.id === loadingCategoryId;
 
   const handleClick = useCallback(() => {
     onSelectCategory(node.id, node.displayName);
@@ -73,6 +79,7 @@ const CategoryNode = memo(function CategoryNode({
         role="treeitem"
         aria-expanded={hasChildren ? expanded : undefined}
         aria-selected={isSelected}
+        aria-busy={isLoading || undefined}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -120,6 +127,13 @@ const CategoryNode = memo(function CategoryNode({
             {node.settingCount.toLocaleString()}
           </span>
         )}
+
+        {isLoading && (
+          <span
+            className="ml-1 w-3 h-3 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin flex-shrink-0"
+            aria-hidden="true"
+          />
+        )}
       </button>
 
       {/* Children */}
@@ -131,6 +145,7 @@ const CategoryNode = memo(function CategoryNode({
               node={child}
               depth={depth + 1}
               selectedCategoryId={selectedCategoryId}
+              loadingCategoryId={loadingCategoryId}
               onSelectCategory={onSelectCategory}
             />
           ))}

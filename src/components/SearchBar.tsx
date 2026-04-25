@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { search as flexSearch, ensureIndex, preloadIndex } from '@/lib/search';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { search as flexSearch, preloadIndex } from '@/lib/search';
 import type { SearchIndexEntry } from '@/lib/types';
 
 interface SearchBarProps {
@@ -17,26 +17,22 @@ export default function SearchBar({
 }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [indexReady, setIndexReady] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const searchSeqRef = useRef(0);
 
-  // Pre-warm search index immediately on mount (background, non-blocking)
-  useEffect(() => {
-    preloadIndex();
+  const clearPendingDebounce = useCallback(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = undefined;
+    }
   }, []);
 
-  // Ensure index is ready on focus (in case preload hasn't finished)
-  const handleFocus = useCallback(async () => {
-    if (!indexReady) {
-      try {
-        await ensureIndex();
-        setIndexReady(true);
-      } catch (err) {
-        console.error('Failed to load search index:', err);
-      }
-    }
-  }, [indexReady]);
+  useEffect(() => clearPendingDebounce, [clearPendingDebounce]);
+
+  const handleFocus = useCallback(() => {
+    preloadIndex();
+  }, []);
 
   // Debounced search — fires results to parent, no dropdown
   const handleChange = useCallback(
@@ -44,40 +40,64 @@ export default function SearchBar({
       const value = e.target.value;
       setQuery(value);
       onQueryChange?.(value);
+      const searchSeq = ++searchSeqRef.current;
 
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      clearPendingDebounce();
 
       if (!value.trim()) {
+        setIsLoading(false);
         onSearchResults?.([]);
         return;
       }
 
       debounceRef.current = setTimeout(async () => {
+        debounceRef.current = undefined;
+        if (searchSeq !== searchSeqRef.current) return;
+
         setIsLoading(true);
         try {
           const res = await flexSearch(value, 200);
-          onSearchResults?.(res);
+          if (searchSeq === searchSeqRef.current) {
+            onSearchResults?.(res);
+          }
         } catch (err) {
           console.error('Search failed:', err);
+        } finally {
+          if (searchSeq === searchSeqRef.current) {
+            setIsLoading(false);
+          }
         }
-        setIsLoading(false);
       }, 200);
     },
-    [onSearchResults, onQueryChange]
+    [clearPendingDebounce, onSearchResults, onQueryChange]
   );
 
   // Handle search button / Enter key
   const handleSearch = useCallback(async () => {
-    if (!query.trim()) return;
+    const trimmedQuery = query.trim();
+    clearPendingDebounce();
+
+    if (!trimmedQuery) {
+      ++searchSeqRef.current;
+      setIsLoading(false);
+      return;
+    }
+
+    const searchSeq = ++searchSeqRef.current;
     setIsLoading(true);
     try {
-      const res = await flexSearch(query, 200);
-      onSearchResults?.(res);
+      const res = await flexSearch(trimmedQuery, 200);
+      if (searchSeq === searchSeqRef.current) {
+        onSearchResults?.(res);
+      }
     } catch (err) {
       console.error('Search failed:', err);
+    } finally {
+      if (searchSeq === searchSeqRef.current) {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
-  }, [query, onSearchResults]);
+  }, [clearPendingDebounce, query, onSearchResults]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -99,16 +119,25 @@ export default function SearchBar({
       {/* Search input */}
       <div className="flex">
         <div className="relative flex-1">
-          {/* Search icon */}
-          <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-fluent-text-secondary"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          {isLoading ? (
+            <span
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+              aria-hidden="true"
+            >
+              <span className="block w-4 h-4 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
+            </span>
+          ) : (
+            <svg
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-fluent-text-secondary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          )}
 
           <input
             ref={inputRef}
@@ -128,7 +157,10 @@ export default function SearchBar({
           {query && (
             <button
               onClick={() => {
+                clearPendingDebounce();
                 setQuery('');
+                ++searchSeqRef.current;
+                setIsLoading(false);
                 onQueryChange?.('');
                 onSearchResults?.([]);
                 inputRef.current?.focus();
@@ -141,13 +173,6 @@ export default function SearchBar({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-          )}
-
-          {/* Loading indicator */}
-          {isLoading && (
-            <div className="absolute right-8 top-1/2 -translate-y-1/2">
-              <div className="w-4 h-4 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
-            </div>
           )}
         </div>
 

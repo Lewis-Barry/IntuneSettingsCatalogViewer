@@ -24,6 +24,7 @@ const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const SEARCH_INDEX_FILE = path.join(PUBLIC_DIR, 'search-index.json');
 const CATEGORY_TREE_FILE = path.join(DATA_DIR, 'category-tree.json');
 const MERGE_MAP_FILE = path.join(DATA_DIR, 'category-merge-map.json');
+const CATALOG_STATS_FILE = path.join(DATA_DIR, 'catalog-stats.json');
 
 /** Derive scope from baseUri */
 function getScope(baseUri?: string): 'device' | 'user' | 'unknown' {
@@ -294,6 +295,9 @@ function main() {
     console.log(`Merged ${mergeCount} duplicate categories → ${MERGE_MAP_FILE}`);
   }
 
+  fs.writeFileSync(CATALOG_STATS_FILE, JSON.stringify({ totalSettings: settings.length }, null, 2), 'utf-8');
+  console.log(`Catalog stats → ${CATALOG_STATS_FILE}`);
+
   // ── Generate settings-browse.json ──
   // A slim version of settings.json containing only the fields needed for the
   // browse UI (list display, inline expansion, platform filtering, search
@@ -301,6 +305,7 @@ function main() {
   // embedded in the page HTML, reducing the initial payload from ~55 MB to <1 MB.
   console.log('Building settings-browse.json...');
   const BROWSE_FILE = path.join(PUBLIC_DIR, 'settings-browse.json');
+  const BROWSE_BY_CATEGORY_DIR = path.join(PUBLIC_DIR, 'settings-by-category');
   const browseSettings = settings.map((s) => {
     // Apply category merge map so client doesn't need to re-map
     const effectiveCatId = mergeMap[s.categoryId] || s.categoryId;
@@ -336,6 +341,27 @@ function main() {
   fs.writeFileSync(BROWSE_FILE, JSON.stringify(browseSettings), 'utf-8');
   const browseSizeMB = (fs.statSync(BROWSE_FILE).size / 1024 / 1024).toFixed(2);
   console.log(`Browse data: ${browseSettings.length} settings (${browseSizeMB} MB) → ${BROWSE_FILE}`);
+
+  // Also write per-category browse payloads so the main browser can fetch only
+  // the selected category subtree instead of parsing the full catalog on first load.
+  fs.rmSync(BROWSE_BY_CATEGORY_DIR, { recursive: true, force: true });
+  fs.mkdirSync(BROWSE_BY_CATEGORY_DIR, { recursive: true });
+  const browseByCategory = new Map<string, Record<string, unknown>[]>();
+  for (const s of browseSettings) {
+    const categoryId = s.categoryId as string;
+    const list = browseByCategory.get(categoryId) || [];
+    list.push(s);
+    browseByCategory.set(categoryId, list);
+  }
+
+  for (const [categoryId, categorySettings] of browseByCategory) {
+    fs.writeFileSync(
+      path.join(BROWSE_BY_CATEGORY_DIR, `${categoryId}.json`),
+      JSON.stringify(categorySettings),
+      'utf-8'
+    );
+  }
+  console.log(`Browse category shards: ${browseByCategory.size} files → ${BROWSE_BY_CATEGORY_DIR}`);
 
   console.log('\nDone!');
 }

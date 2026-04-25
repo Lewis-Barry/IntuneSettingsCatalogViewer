@@ -36,6 +36,10 @@ export function loadCategoryTree(): CategoryTreeNode[] {
   return readJSON<CategoryTreeNode[]>('category-tree.json') || [];
 }
 
+export function loadCatalogStats(): { totalSettings: number } {
+  return readJSON<{ totalSettings: number }>('catalog-stats.json') || { totalSettings: 0 };
+}
+
 export function loadChangelog(): ChangelogEntry[] {
   const raw = readJSON<ChangelogEntry[]>('changelog.json') || [];
   // Exclude the initial baseline entry (2026-02-21) which contains the bulk

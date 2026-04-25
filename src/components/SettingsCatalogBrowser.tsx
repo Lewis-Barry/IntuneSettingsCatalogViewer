@@ -13,6 +13,7 @@ interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
   categoryMap: Record<string, string>;
   categoryParentMap: Record<string, string>;
+  totalSettings: number;
   lastUpdated: string | null;
 }
 
@@ -78,6 +79,7 @@ export default function SettingsCatalogBrowser({
   categoryTree,
   categoryMap: initialCategoryMap,
   categoryParentMap,
+  totalSettings,
   lastUpdated,
 }: SettingsCatalogBrowserProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -89,45 +91,114 @@ export default function SettingsCatalogBrowser({
   const isDesktop = useIsDesktop();
 
   // ── Client-side settings loading ──
-  // Settings are loaded from /settings-browse.json instead of being embedded
-  // in the page HTML (~55 MB → ~3 MB gzipped fetch).
+  // The initial page only needs the category tree. Setting details are loaded
+  // from per-category shards when the user selects a category; the full browse
+  // payload is kept as a fallback for global filters and search result grouping.
   const [settingsByCategory, setSettingsByCategory] = useState<Record<string, SettingDefinition[]>>({});
   const [categoryMap, setCategoryMap] = useState<Record<string, string>>(initialCategoryMap);
-  const [totalSettings, setTotalSettings] = useState(0);
-  const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [fullBrowseLoaded, setFullBrowseLoaded] = useState(false);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [loadingCategoryId, setLoadingCategoryId] = useState<string | null>(null);
+  const loadedCategoryIdsRef = useRef<Set<string>>(new Set());
+  const categoryLoadPromisesRef = useRef<Map<string, Promise<{ categoryId: string; settings: SettingDefinition[] }>>>(new Map());
+  const fullBrowsePromiseRef = useRef<Promise<void> | null>(null);
+  const pendingCategoryIdRef = useRef<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
+  const getBasePath = useCallback(() => {
     const basePath = (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
-    fetch(`${basePath}/settings-browse.json`)
+    return basePath;
+  }, []);
+
+  const mergeSettingsByCategory = useCallback((byCat: Record<string, SettingDefinition[]>) => {
+    setSettingsByCategory((prev) => ({ ...prev, ...byCat }));
+    setCategoryMap((prev) => {
+      let changed = false;
+      const mergedMap = { ...prev };
+      for (const catId of Object.keys(byCat)) {
+        if (!mergedMap[catId]) {
+          mergedMap[catId] = 'Unknown Category';
+          changed = true;
+        }
+      }
+      return changed ? mergedMap : prev;
+    });
+  }, []);
+
+  const loadSettingsForCategories = useCallback(async (categoryIds: string[]) => {
+    const missingIds = Array.from(new Set(categoryIds)).filter((categoryId) => !loadedCategoryIdsRef.current.has(categoryId));
+    if (missingIds.length === 0) return;
+
+    setSettingsLoading(true);
+    try {
+      const basePath = getBasePath();
+      const loads = missingIds.map((categoryId) => {
+        const existing = categoryLoadPromisesRef.current.get(categoryId);
+        if (existing) return existing;
+
+        const promise = fetch(`${basePath}/settings-by-category/${encodeURIComponent(categoryId)}.json`)
+          .then((res) => {
+            if (res.status === 404) return [] as SettingDefinition[];
+            if (!res.ok) throw new Error(`Failed to load category ${categoryId}: ${res.status}`);
+            return res.json() as Promise<SettingDefinition[]>;
+          })
+          .then((settings) => ({ categoryId, settings }))
+          .finally(() => {
+            categoryLoadPromisesRef.current.delete(categoryId);
+          });
+
+        categoryLoadPromisesRef.current.set(categoryId, promise);
+        return promise;
+      });
+
+      const results = await Promise.all(loads);
+      const byCat: Record<string, SettingDefinition[]> = {};
+      for (const { categoryId, settings } of results) {
+        byCat[categoryId] = settings;
+        loadedCategoryIdsRef.current.add(categoryId);
+      }
+      mergeSettingsByCategory(byCat);
+    } catch (err) {
+      console.error('Failed to load category settings:', err);
+    } finally {
+      setSettingsLoading(false);
+    }
+  }, [getBasePath, mergeSettingsByCategory]);
+
+  const loadFullBrowseSettings = useCallback(async () => {
+    if (fullBrowseLoaded) return;
+    if (fullBrowsePromiseRef.current) return fullBrowsePromiseRef.current;
+
+    setSettingsLoading(true);
+    fullBrowsePromiseRef.current = (async () => {
+      const basePath = getBasePath();
+      const settings = await fetch(`${basePath}/settings-browse.json`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to load settings: ${res.status}`);
         return res.json();
       })
-      .then((settings: SettingDefinition[]) => {
-        if (cancelled) return;
-        // Group settings by category (merge map already applied at build time)
-        const byCat: Record<string, SettingDefinition[]> = {};
-        for (const s of settings) {
-          if (!byCat[s.categoryId]) byCat[s.categoryId] = [];
-          byCat[s.categoryId].push(s);
-        }
-        // Fill in any orphan category IDs
-        const mergedMap = { ...initialCategoryMap };
-        for (const catId of Object.keys(byCat)) {
-          if (!mergedMap[catId]) mergedMap[catId] = 'Unknown Category';
-        }
-        setSettingsByCategory(byCat);
-        setCategoryMap(mergedMap);
-        setTotalSettings(settings.length);
-        setSettingsLoaded(true);
-      })
+      .then((data) => data as SettingDefinition[]);
+
+      const byCat: Record<string, SettingDefinition[]> = {};
+      for (const s of settings) {
+        if (!byCat[s.categoryId]) byCat[s.categoryId] = [];
+        byCat[s.categoryId].push(s);
+      }
+      for (const catId of Object.keys(byCat)) {
+        loadedCategoryIdsRef.current.add(catId);
+      }
+      mergeSettingsByCategory(byCat);
+      setFullBrowseLoaded(true);
+    })()
       .catch((err) => {
+        fullBrowsePromiseRef.current = null;
         console.error('Failed to load browse settings:', err);
-        if (!cancelled) setSettingsLoaded(true); // unblock UI even on error
+      })
+      .finally(() => {
+        setSettingsLoading(false);
       });
-    return () => { cancelled = true; };
-  }, [initialCategoryMap]);
+
+    return fullBrowsePromiseRef.current;
+  }, [fullBrowseLoaded, getBasePath, mergeSettingsByCategory]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const isResizing = useRef(false);
@@ -231,11 +302,35 @@ export default function SettingsCatalogBrowser({
 
   const handleSelectCategory = useCallback(
     (categoryId: string, categoryName: string) => {
-      setSelectedCategoryId(categoryId);
-      setSelectedCategoryName(categoryName);
-      setSearchResults(null); // Clear search when selecting a category
+      const categoryIds = collectCategoryIds(categoryTree, categoryId);
+      const hasMissingSettings = categoryIds.some((id) => !loadedCategoryIdsRef.current.has(id));
+
+      // If data is already cached, swap immediately — no flash possible.
+      if (!hasMissingSettings) {
+        pendingCategoryIdRef.current = categoryId;
+        setSelectedCategoryId(categoryId);
+        setSelectedCategoryName(categoryName);
+        setSearchResults(null);
+        setLoadingCategoryId(null);
+        return;
+      }
+
+      // Data needs fetching: keep the current right-pane content and only
+      // show the spinner on the clicked item in the sidebar. Commit the
+      // selection swap once the fetch resolves, so the new content appears
+      // in one go with no empty-state flash.
+      pendingCategoryIdRef.current = categoryId;
+      setLoadingCategoryId(categoryId);
+      void loadSettingsForCategories(categoryIds).finally(() => {
+        // Ignore stale loads if the user has since clicked a different category.
+        if (pendingCategoryIdRef.current !== categoryId) return;
+        setSelectedCategoryId(categoryId);
+        setSelectedCategoryName(categoryName);
+        setSearchResults(null);
+        setLoadingCategoryId(null);
+      });
     },
-    []
+    [categoryTree, loadSettingsForCategories]
   );
 
   const handleSearchResults = useCallback((results: SearchIndexEntry[]) => {
@@ -243,16 +338,24 @@ export default function SettingsCatalogBrowser({
       setSearchResults(results);
       setSelectedCategoryId(null);
       setSelectedCategoryName('');
+      void loadSettingsForCategories(results.map((result) => result.categoryId));
     } else {
       setSearchResults(null);
     }
-  }, []);
+  }, [loadSettingsForCategories]);
+
+  useEffect(() => {
+    if ((selectedPlatforms.length > 0 || deprecatedOnly) && !fullBrowseLoaded) {
+      void loadFullBrowseSettings();
+    }
+  }, [deprecatedOnly, fullBrowseLoaded, loadFullBrowseSettings, selectedPlatforms.length]);
 
   // Filter the category tree so only categories with settings matching the
   // selected platform(s) are shown.  When no platform filter is active the
   // full tree is returned unchanged.
   const filteredCategoryTree = useMemo(() => {
     if (selectedPlatforms.length === 0 && !deprecatedOnly) return categoryTree;
+    if (!fullBrowseLoaded) return categoryTree;
 
     // Build a lookup map for CSP-path deduplication (same logic as SettingsList)
     const settingById = new Map<string, SettingDefinition>();
@@ -306,17 +409,17 @@ export default function SettingsCatalogBrowser({
     return categoryTree
       .map(filterNode)
       .filter((c): c is CategoryTreeNode => c !== null);
-  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory]);
+  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory, fullBrowseLoaded]);
 
   // Clear selected category when it's removed by a platform filter change
   useEffect(() => {
-    if (!selectedCategoryId || selectedPlatforms.length === 0) return;
+    if (!selectedCategoryId || (selectedPlatforms.length === 0 && !deprecatedOnly) || !fullBrowseLoaded) return;
     const exists = collectCategoryIds(filteredCategoryTree, selectedCategoryId).length > 0;
     if (!exists) {
       setSelectedCategoryId(null);
       setSelectedCategoryName('');
     }
-  }, [filteredCategoryTree, selectedCategoryId, selectedPlatforms]);
+  }, [deprecatedOnly, filteredCategoryTree, fullBrowseLoaded, selectedCategoryId, selectedPlatforms.length]);
 
   // When browsing a category: flat list of settings
   const categorySettings = useMemo(() => {
@@ -417,6 +520,7 @@ export default function SettingsCatalogBrowser({
   // Compute the displayed settings count based on active platform filter
   const displayedSettingsCount = useMemo(() => {
     if (selectedPlatforms.length === 0 && !deprecatedOnly) return totalSettings;
+    if (!fullBrowseLoaded) return totalSettings;
     let count = 0;
     for (const catSettings of Object.values(settingsByCategory)) {
       for (const s of catSettings) {
@@ -429,7 +533,7 @@ export default function SettingsCatalogBrowser({
       }
     }
     return count;
-  }, [selectedPlatforms, deprecatedOnly, settingsByCategory, totalSettings]);
+  }, [selectedPlatforms, deprecatedOnly, settingsByCategory, totalSettings, fullBrowseLoaded]);
 
   const isSearching = searchResults !== null && searchResults.length > 0;
 
@@ -454,15 +558,15 @@ export default function SettingsCatalogBrowser({
               Settings Catalog
             </h1>
             <p className="text-fluent-sm text-fluent-text-secondary mt-1">
-              {settingsLoaded
-                ? <>{displayedSettingsCount.toLocaleString()} settings available</>
-                : <span className="inline-flex items-center gap-1.5">
+              {settingsLoading && (selectedPlatforms.length > 0 || deprecatedOnly || isSearching)
+                ? <span className="inline-flex items-center gap-1.5">
                     <span className="w-3 h-3 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
                     Loading settings…
                   </span>
+                : <>{displayedSettingsCount.toLocaleString()} settings available</>
               }
               {lastUpdated && (
-                <span> · Last updated: {new Date(lastUpdated).toLocaleDateString()}</span>
+                <span> · Last updated: {new Date(lastUpdated).toLocaleDateString('en-US')}</span>
               )}
             </p>
           </div>
@@ -546,6 +650,7 @@ export default function SettingsCatalogBrowser({
             <CategoryTree
               categories={filteredCategoryTree}
               selectedCategoryId={selectedCategoryId}
+              loadingCategoryId={loadingCategoryId}
               onSelectCategory={handleSelectCategoryMobile}
             />
           </div>
@@ -617,11 +722,6 @@ export default function SettingsCatalogBrowser({
               scrollContainerRef={settingsScrollRef}
               categoryMap={categoryMap}
             />
-          ) : !settingsLoaded ? (
-            <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
-              <div className="w-8 h-8 border-3 border-fluent-blue border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-fluent-base">Loading settings catalog…</p>
-            </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
               <svg className="w-16 h-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
