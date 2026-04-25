@@ -717,7 +717,7 @@ function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; exp
         aria-expanded={expanded}
       >
         <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${actionStyles.badge}`}>
-          {item.action === 'added' ? '+' : item.action === 'removed' ? '−' : '~'}
+          <ActionIcon action={item.action} />
         </span>
 
         <span className="min-w-0 flex-1">
@@ -770,6 +770,30 @@ function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; exp
         </div>
       )}
     </div>
+  );
+}
+
+function ActionIcon({ action }: { action: ActionType }) {
+  const path =
+    action === 'added'
+      ? 'M12 5v14M5 12h14' // plus
+      : action === 'removed'
+        ? 'M5 12h14' // minus
+        : 'M4 12c2-3 4-3 6 0s4 3 6 0 4-3 4-3'; // tilde / change
+
+  return (
+    <svg
+      className="h-3.5 w-3.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={path} />
+    </svg>
   );
 }
 
