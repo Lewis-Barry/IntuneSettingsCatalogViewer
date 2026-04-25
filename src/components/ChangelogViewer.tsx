@@ -217,13 +217,17 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
     );
     const lastChangeDate = lastEntry?.date ?? null;
 
-    // Platform breakdown for the latest update only
+    // Platform breakdown for the latest update only. Each setting that targets
+    // multiple platforms increments each platform's counter, so the sum of
+    // counts represents total platform-mentions across changed settings.
     const platformCounts = new Map<string, number>();
+    let platformTotal = 0;
     if (lastEntry) {
       const trackPlatform = (platform?: string) => {
-        getPlatformKeys(platform).forEach((p) =>
-          platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1),
-        );
+        getPlatformKeys(platform).forEach((p) => {
+          platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1);
+          platformTotal += 1;
+        });
       };
       lastEntry.added.forEach((s) => trackPlatform(s.platform));
       lastEntry.removed.forEach((s) => trackPlatform(s.platform));
@@ -278,6 +282,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
       latestCatChanges,
       latestNewlyDeprecated,
       platformCounts: Array.from(platformCounts.entries()).sort((a, b) => b[1] - a[1]),
+      platformTotal,
     };
   }, [cleanedEntries]);
 
@@ -312,6 +317,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
   const scopedHotspots = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const counts = new Map<string, number>();
+    let total = 0;
 
     dateScopedItems.forEach((item) => {
       if (item.entity !== 'setting' || !item.hotspotCategory) return;
@@ -337,9 +343,13 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
       }
 
       counts.set(item.hotspotCategory, (counts.get(item.hotspotCategory) ?? 0) + 1);
+      total += 1;
     });
 
-    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    const ranked = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+    const top = ranked.slice(0, 8);
+    const otherCount = ranked.slice(8).reduce((s, [, c]) => s + c, 0);
+    return { top, otherCount, total };
   }, [dateScopedItems, filter, query, selectedPlatforms]);
 
   const taxonomySummary = useMemo(() => buildTaxonomySummary(filteredItems), [filteredItems]);
@@ -362,7 +372,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
     <div className="space-y-6">
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
         <div className="fluent-card p-4 sm:p-5">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="flex h-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="text-fluent-sm font-semibold text-fluent-text-secondary">Latest update</div>
               <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
@@ -392,7 +402,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
           </div>
           <div className="mt-4 space-y-3">
             {stats.platformCounts.slice(0, 5).map(([platform, count]) => (
-              <ImpactBar key={platform} label={PLATFORM_LABELS[platform] ?? platform} value={count} max={stats.platformCounts[0]?.[1] ?? count} iconKey={platform} />
+              <ImpactBar key={platform} label={PLATFORM_LABELS[platform] ?? platform} value={count} total={stats.platformTotal} iconKey={platform} />
             ))}
           </div>
         </div>
@@ -506,7 +516,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
             </p>
           </div>
           <div className="space-y-2">
-            {scopedHotspots.length === 0 ? (
+            {scopedHotspots.top.length === 0 ? (
               taxonomySummary.total > 0 ? (
                 <TaxonomySummaryPanel summary={taxonomySummary} />
               ) : (
@@ -514,28 +524,58 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
                   No setting hotspots.
                 </div>
               )
-            ) : scopedHotspots.map(([category, count]) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
-                className={`w-full rounded border px-3 py-2 text-left transition-colors ${
-                  selectedCategory === category
-                    ? 'border-fluent-blue bg-fluent-light-blue text-fluent-blue'
-                    : 'border-fluent-border bg-white text-fluent-text hover:bg-fluent-bg-alt dark:bg-[#2c2c2e]'
-                }`}
-              >
-                <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold">
-                  <span className="truncate">{category}</span>
-                  <span>{count}</span>
-                </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
-                  <div
-                    className="h-full rounded-full bg-fluent-blue"
-                    style={{ width: `${Math.max(8, Math.round((count / (scopedHotspots[0]?.[1] ?? count)) * 100))}%` }}
-                  />
-                </div>
-              </button>
-            ))}
+            ) : (
+              <>
+                {scopedHotspots.top.map(([category, count]) => {
+                  const share = scopedHotspots.total > 0 ? (count / scopedHotspots.total) * 100 : 0;
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
+                      className={`w-full rounded border px-3 py-2 text-left transition-colors ${
+                        selectedCategory === category
+                          ? 'border-fluent-blue bg-fluent-light-blue text-fluent-blue'
+                          : 'border-fluent-border bg-white text-fluent-text hover:bg-fluent-bg-alt dark:bg-[#2c2c2e]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold">
+                        <span className="truncate">{category}</span>
+                        <span>
+                          {count}
+                          <span className="ml-1 font-normal text-fluent-text-secondary">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
+                        </span>
+                      </div>
+                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
+                        <div
+                          className="h-full rounded-full bg-fluent-blue"
+                          style={{ width: `${share}%` }}
+                        />
+                      </div>
+                    </button>
+                  );
+                })}
+                {scopedHotspots.otherCount > 0 && (() => {
+                  const share = scopedHotspots.total > 0 ? (scopedHotspots.otherCount / scopedHotspots.total) * 100 : 0;
+                  return (
+                    <div className="w-full rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#2c2c2e]">
+                      <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold text-fluent-text-secondary">
+                        <span className="truncate">Other categories</span>
+                        <span>
+                          {scopedHotspots.otherCount}
+                          <span className="ml-1 font-normal">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
+                        </span>
+                      </div>
+                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white dark:bg-[#1c1c1e]">
+                        <div
+                          className="h-full rounded-full bg-fluent-text-secondary/50"
+                          style={{ width: `${share}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
+              </>
+            )}
           </div>
         </aside>
 
@@ -587,8 +627,9 @@ function StatCard({ label, value, displayValue, subtitle, color }: {
   );
 }
 
-function ImpactBar({ label, value, max, iconKey }: { label: string; value: number; max: number; iconKey: string }) {
+function ImpactBar({ label, value, total, iconKey }: { label: string; value: number; total: number; iconKey: string }) {
   const Icon = PLATFORM_ICONS[iconKey];
+  const share = total > 0 ? (value / total) * 100 : 0;
 
   return (
     <div>
@@ -597,10 +638,13 @@ function ImpactBar({ label, value, max, iconKey }: { label: string; value: numbe
           {Icon && <Icon className="h-4 w-4 shrink-0" />}
           <span className="truncate">{label}</span>
         </span>
-        <span className="shrink-0 text-fluent-text-secondary">{value.toLocaleString()}</span>
+        <span className="shrink-0 text-fluent-text-secondary">
+          {value.toLocaleString()}
+          <span className="ml-1">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
+        </span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
-        <div className="h-full rounded-full bg-fluent-blue" style={{ width: `${Math.max(5, Math.round((value / max) * 100))}%` }} />
+        <div className="h-full rounded-full bg-fluent-blue" style={{ width: `${share}%` }} />
       </div>
     </div>
   );
