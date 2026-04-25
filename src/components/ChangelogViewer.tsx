@@ -9,7 +9,6 @@ import { settingSlug } from '@/lib/slug';
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
   categories: SettingCategory[];
-  deprecatedCount?: number;
 }
 
 type FilterType = 'all' | 'added' | 'removed' | 'changed';
@@ -62,7 +61,7 @@ const PLATFORMS = [
   { value: 'linux', label: 'Linux' },
 ];
 
-export default function ChangelogViewer({ entries, categories, deprecatedCount }: ChangelogViewerProps) {
+export default function ChangelogViewer({ entries, categories }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -208,34 +207,6 @@ export default function ChangelogViewer({ entries, categories, deprecatedCount }
   }, [activeDate, feedItems]);
 
   const stats = useMemo(() => {
-    let totalAdded = 0;
-    let totalRemoved = 0;
-    let totalChanged = 0;
-    let totalCatAdded = 0;
-    let totalCatRemoved = 0;
-    let totalCatChanged = 0;
-    const platformCounts = new Map<string, number>();
-    const categoryCounts = new Map<string, number>();
-
-    for (const e of cleanedEntries) {
-      totalAdded += e.added.length;
-      totalRemoved += e.removed.length;
-      totalChanged += e.changed.length;
-      totalCatAdded += e.categoriesAdded?.length ?? 0;
-      totalCatRemoved += e.categoriesRemoved?.length ?? 0;
-      totalCatChanged += e.categoriesChanged?.length ?? 0;
-
-      const trackSetting = (categoryId: string, categoryName: string | undefined, platform?: string) => {
-        const hotspotCategory = getHotspotCategory(categoryId, categoryName, categoryRollups);
-        if (hotspotCategory) categoryCounts.set(hotspotCategory, (categoryCounts.get(hotspotCategory) ?? 0) + 1);
-        getPlatformKeys(platform).forEach((p) => platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1));
-      };
-
-      e.added.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
-      e.removed.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
-      e.changed.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
-    }
-
     // Most recent entry with actual changes (version-only entries excluded via cleanedEntries)
     const lastEntry = cleanedEntries.find(
       (e) =>
@@ -245,6 +216,19 @@ export default function ChangelogViewer({ entries, categories, deprecatedCount }
         (e.categoriesChanged?.length ?? 0) > 0
     );
     const lastChangeDate = lastEntry?.date ?? null;
+
+    // Platform breakdown for the latest update only
+    const platformCounts = new Map<string, number>();
+    if (lastEntry) {
+      const trackPlatform = (platform?: string) => {
+        getPlatformKeys(platform).forEach((p) =>
+          platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1),
+        );
+      };
+      lastEntry.added.forEach((s) => trackPlatform(s.platform));
+      lastEntry.removed.forEach((s) => trackPlatform(s.platform));
+      lastEntry.changed.forEach((s) => trackPlatform(s.platform));
+    }
 
     // Relative description of last change
     let lastChangeLabel = 'No changes yet';
@@ -263,37 +247,39 @@ export default function ChangelogViewer({ entries, categories, deprecatedCount }
       }
     }
 
-    // Counts from the latest entry (for "since last update" context)
+    // Counts from the latest entry (delta since previous snapshot)
     const latestAdded = lastEntry?.added.length ?? 0;
     const latestRemoved = lastEntry?.removed.length ?? 0;
-    const latestChanged = lastEntry?.changed.length ?? 0;  // already version-filtered via cleanedEntries
-    const latestCatAdded = lastEntry?.categoriesAdded?.length ?? 0;
-    const latestCatRemoved = lastEntry?.categoriesRemoved?.length ?? 0;
-    const latestCatChanged = lastEntry?.categoriesChanged?.length ?? 0;
+    const latestChanged = lastEntry?.changed.length ?? 0;
+    const latestSettingTotal = latestAdded + latestRemoved + latestChanged;
+    const latestCatChanges =
+      (lastEntry?.categoriesAdded?.length ?? 0) +
+      (lastEntry?.categoriesRemoved?.length ?? 0) +
+      (lastEntry?.categoriesChanged?.length ?? 0);
 
-    const latestTotal = latestAdded + latestRemoved + latestChanged + latestCatAdded + latestCatRemoved + latestCatChanged;
+    // Settings newly marked deprecated in the latest update — detect by a
+    // displayName change where the new value contains "deprecated" but the old
+    // one didn't.
+    const latestNewlyDeprecated = lastEntry?.changed.filter((c) =>
+      c.fields.some(
+        (f) =>
+          f.field === 'displayName' &&
+          f.newValue.toLowerCase().includes('deprecated') &&
+          !f.oldValue.toLowerCase().includes('deprecated'),
+      ),
+    ).length ?? 0;
 
     return {
-      totalAdded,
-      totalRemoved,
-      totalChanged,
-      totalCatAdded,
-      totalCatRemoved,
-      totalCatChanged,
-      totalDays: entries.length,
       lastChangeLabel,
       lastChangeDate,
       latestAdded,
-      latestRemoved,
       latestChanged,
-      latestCatAdded,
-      latestCatRemoved,
-      latestCatChanged,
-      latestTotal,
+      latestSettingTotal,
+      latestCatChanges,
+      latestNewlyDeprecated,
       platformCounts: Array.from(platformCounts.entries()).sort((a, b) => b[1] - a[1]),
-      categoryHotspots: Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8),
     };
-  }, [categoryRollups, cleanedEntries, entries.length]);
+  }, [cleanedEntries]);
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -387,17 +373,12 @@ export default function ChangelogViewer({ entries, categories, deprecatedCount }
                   </div>
                 )}
               </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <MetricPill label="Added" value={stats.latestAdded + stats.latestCatAdded} tone="success" />
-                <MetricPill label="Changed" value={stats.latestChanged + stats.latestCatChanged} tone="warning" />
-                <MetricPill label="Removed" value={stats.latestRemoved + stats.latestCatRemoved} tone="error" />
-              </div>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:min-w-[26rem]">
-              <StatCard label="Setting additions" value={stats.totalAdded} color="text-fluent-success" />
-              <StatCard label="Setting changes" value={stats.totalChanged} color="text-fluent-warning" />
-              <StatCard label="Category changes" value={stats.totalCatAdded + stats.totalCatRemoved + stats.totalCatChanged} color="text-fluent-blue" />
-              <StatCard label="Deprecated" value={deprecatedCount} color="text-fluent-text-secondary" />
+              <StatCard label="Setting additions" value={stats.latestAdded} color="text-fluent-success" />
+              <StatCard label="Setting changes" value={stats.latestChanged} color="text-fluent-warning" />
+              <StatCard label="Category changes" value={stats.latestCatChanges} color="text-fluent-blue" />
+              <StatCard label="Deprecated" value={stats.latestNewlyDeprecated} color="text-fluent-text-secondary" />
             </div>
           </div>
         </div>
@@ -406,7 +387,7 @@ export default function ChangelogViewer({ entries, categories, deprecatedCount }
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-fluent-base font-semibold text-fluent-text">Platform impact</h2>
             <span className="text-fluent-xs text-fluent-text-secondary">
-              {(stats.totalAdded + stats.totalRemoved + stats.totalChanged).toLocaleString()} settings
+              {stats.latestSettingTotal.toLocaleString()} settings
             </span>
           </div>
           <div className="mt-4 space-y-3">
@@ -603,21 +584,6 @@ function StatCard({ label, value, displayValue, subtitle, color }: {
         <div className="text-fluent-xs text-fluent-text-disabled mt-0.5">{subtitle}</div>
       )}
     </div>
-  );
-}
-
-function MetricPill({ label, value, tone }: { label: string; value: number; tone: 'success' | 'warning' | 'error' }) {
-  const toneClass = {
-    success: 'text-fluent-success bg-fluent-success/10 border-fluent-success/20',
-    warning: 'text-fluent-warning bg-fluent-warning/10 border-fluent-warning/20',
-    error: 'text-fluent-error bg-fluent-error/10 border-fluent-error/20',
-  }[tone];
-
-  return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-fluent-sm font-semibold ${toneClass}`}>
-      <span>{value.toLocaleString()}</span>
-      <span>{label}</span>
-    </span>
   );
 }
 
