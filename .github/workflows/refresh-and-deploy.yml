@@ -64,6 +64,7 @@ jobs:
             data/last-updated.json \
             data/changelog.json \
             data/settings-previous.json \
+            data/categories-previous.json \
             public/search-index.json
           git diff --cached --quiet || git commit -m "chore: update settings data $(date -I)"
           git push

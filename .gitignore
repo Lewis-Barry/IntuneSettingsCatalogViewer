@@ -24,6 +24,7 @@ data/settings.json
 data/categories.json
 data/category-tree.json
 data/settings-previous.json
+data/categories-previous.json
 data/last-updated.json
 public/search-index.json
 
