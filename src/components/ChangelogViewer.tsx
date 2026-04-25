@@ -1,40 +1,211 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import type { ChangelogEntry } from '@/lib/types';
+import Link from 'next/link';
+import type { ChangelogEntry, SettingCategory } from '@/lib/types';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
+  categories: SettingCategory[];
   deprecatedCount?: number;
 }
 
 type FilterType = 'all' | 'added' | 'removed' | 'changed';
 
-export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogViewerProps) {
-  const [filter, setFilter] = useState<FilterType>('all');
-  const [expandedDates, setExpandedDates] = useState<Set<string>>(
-    new Set(entries.slice(0, 3).map((e) => e.date))
-  );
+type ActionType = 'added' | 'removed' | 'changed';
+type EntityType = 'setting' | 'category';
+type FeedFilter = FilterType | 'categories';
+type DateFilter = 'latest' | 'all' | `date:${string}`;
 
-  const toggleDate = (date: string) => {
-    setExpandedDates((prev) => {
+interface ChangeFeedItem {
+  key: string;
+  date: string;
+  action: ActionType;
+  entity: EntityType;
+  title: string;
+  categoryId?: string;
+  categoryName?: string;
+  hotspotCategory?: string;
+  contextLabel?: string;
+  contextDetail?: string;
+  platform?: string;
+  href?: string;
+  fields?: Array<{ field: string; oldValue: string; newValue: string }>;
+}
+
+interface TaxonomySummary {
+  total: number;
+  added: number;
+  changed: number;
+  removed: number;
+  moved: number;
+  settings: number;
+  moveGroups: Array<{ label: string; count: number }>;
+  addGroups: Array<{ label: string; count: number }>;
+}
+
+const FILTERS: Array<{ value: FeedFilter; label: string }> = [
+  { value: 'all', label: 'All' },
+  { value: 'added', label: 'Added' },
+  { value: 'changed', label: 'Changed' },
+  { value: 'removed', label: 'Removed' },
+  { value: 'categories', label: 'Categories' },
+];
+
+const PLATFORMS = [
+  { value: 'windows10', label: 'Windows' },
+  { value: 'macOS', label: 'macOS' },
+  { value: 'iOS', label: 'iOS/iPadOS' },
+  { value: 'android', label: 'Android' },
+  { value: 'linux', label: 'Linux' },
+];
+
+export default function ChangelogViewer({ entries, categories, deprecatedCount }: ChangelogViewerProps) {
+  const [filter, setFilter] = useState<FeedFilter>('all');
+  const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [query, setQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  const toggleItem = (key: string) => {
+    setExpandedItems((prev) => {
       const next = new Set(prev);
-      if (next.has(date)) next.delete(date);
-      else next.add(date);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   };
 
-  // Summary stats
-  // Strip version-only noise: remove `version` field diffs and drop entries with no remaining fields
+  const togglePlatform = (platform: string) => {
+    setSelectedPlatforms((prev) =>
+      prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
+    );
+  };
+
   const cleanedEntries = useMemo(() => entries.map((e) => ({
     ...e,
     changed: e.changed
       .map((c) => ({ ...c, fields: c.fields.filter((f) => f.field !== 'version') }))
       .filter((c) => c.fields.length > 0),
   })), [entries]);
+
+  const categoriesById = useMemo(() => new Map(categories.map((category) => [category.id, category])), [categories]);
+  const categoryRollups = useMemo(() => buildCategoryRollupMap(categoriesById), [categoriesById]);
+
+  const feedItems = useMemo<ChangeFeedItem[]>(() => {
+    const items: ChangeFeedItem[] = [];
+
+    for (const entry of cleanedEntries) {
+      entry.added.forEach((setting, index) => {
+        items.push({
+          key: `${entry.date}:added:setting:${setting.id}:${index}`,
+          date: entry.date,
+          action: 'added',
+          entity: 'setting',
+          title: setting.displayName,
+          categoryId: setting.categoryId,
+          categoryName: setting.categoryName,
+          hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
+          platform: setting.platform,
+          href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
+        });
+      });
+
+      entry.removed.forEach((setting, index) => {
+        items.push({
+          key: `${entry.date}:removed:setting:${setting.id}:${index}`,
+          date: entry.date,
+          action: 'removed',
+          entity: 'setting',
+          title: setting.displayName,
+          categoryId: setting.categoryId,
+          categoryName: setting.categoryName,
+          hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
+          platform: setting.platform,
+        });
+      });
+
+      entry.changed.forEach((setting, index) => {
+        items.push({
+          key: `${entry.date}:changed:setting:${setting.id}:${index}`,
+          date: entry.date,
+          action: 'changed',
+          entity: 'setting',
+          title: setting.displayName,
+          categoryId: setting.categoryId,
+          categoryName: setting.categoryName,
+          hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
+          platform: setting.platform,
+          href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
+          fields: setting.fields,
+        });
+      });
+
+      entry.categoriesAdded?.forEach((category, index) => {
+        const parentLabel = formatCategoryReference(category.parentCategoryId, categoriesById);
+        items.push({
+          key: `${entry.date}:added:category:${category.id}:${index}`,
+          date: entry.date,
+          action: 'added',
+          entity: 'category',
+          title: category.displayName,
+          categoryId: category.id,
+          contextLabel: parentLabel ? `Added under ${parentLabel}` : 'Added at top level',
+          contextDetail: getCategoryPath(category.id, categoriesById),
+        });
+      });
+
+      entry.categoriesRemoved?.forEach((category, index) => {
+        const parentLabel = formatCategoryReference(category.parentCategoryId, categoriesById);
+        items.push({
+          key: `${entry.date}:removed:category:${category.id}:${index}`,
+          date: entry.date,
+          action: 'removed',
+          entity: 'category',
+          title: category.displayName,
+          categoryId: category.id,
+          contextLabel: parentLabel ? `Removed from ${parentLabel}` : 'Removed from top level',
+          contextDetail: getCategoryPath(category.id, categoriesById),
+        });
+      });
+
+      entry.categoriesChanged?.forEach((category, index) => {
+        const fields = enrichCategoryFields(category.fields, categoriesById);
+        items.push({
+          key: `${entry.date}:changed:category:${category.id}:${index}`,
+          date: entry.date,
+          action: 'changed',
+          entity: 'category',
+          title: category.displayName,
+          categoryId: category.id,
+          contextLabel: getCategoryChangeSummary(category.fields, categoriesById),
+          contextDetail: getCategoryPath(category.id, categoriesById),
+          fields,
+        });
+      });
+    }
+
+    return items;
+  }, [categoriesById, categoryRollups, cleanedEntries]);
+
+  const dateOptions = useMemo(() => {
+    return Array.from(new Set(feedItems.map((item) => item.date))).sort((a, b) => b.localeCompare(a));
+  }, [feedItems]);
+
+  const latestDate = dateOptions[0] ?? null;
+  const activeDate = selectedDate === 'all'
+    ? null
+    : selectedDate === 'latest'
+      ? latestDate
+      : selectedDate.replace(/^date:/, '');
+
+  const dateScopedItems = useMemo(() => {
+    if (!activeDate) return feedItems;
+    return feedItems.filter((item) => item.date === activeDate);
+  }, [activeDate, feedItems]);
 
   const stats = useMemo(() => {
     let totalAdded = 0;
@@ -43,6 +214,9 @@ export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogV
     let totalCatAdded = 0;
     let totalCatRemoved = 0;
     let totalCatChanged = 0;
+    const platformCounts = new Map<string, number>();
+    const categoryCounts = new Map<string, number>();
+
     for (const e of cleanedEntries) {
       totalAdded += e.added.length;
       totalRemoved += e.removed.length;
@@ -50,6 +224,16 @@ export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogV
       totalCatAdded += e.categoriesAdded?.length ?? 0;
       totalCatRemoved += e.categoriesRemoved?.length ?? 0;
       totalCatChanged += e.categoriesChanged?.length ?? 0;
+
+      const trackSetting = (categoryId: string, categoryName: string | undefined, platform?: string) => {
+        const hotspotCategory = getHotspotCategory(categoryId, categoryName, categoryRollups);
+        if (hotspotCategory) categoryCounts.set(hotspotCategory, (categoryCounts.get(hotspotCategory) ?? 0) + 1);
+        getPlatformKeys(platform).forEach((p) => platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1));
+      };
+
+      e.added.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
+      e.removed.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
+      e.changed.forEach((s) => trackSetting(s.categoryId, s.categoryName, s.platform));
     }
 
     // Most recent entry with actual changes (version-only entries excluded via cleanedEntries)
@@ -87,6 +271,8 @@ export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogV
     const latestCatRemoved = lastEntry?.categoriesRemoved?.length ?? 0;
     const latestCatChanged = lastEntry?.categoriesChanged?.length ?? 0;
 
+    const latestTotal = latestAdded + latestRemoved + latestChanged + latestCatAdded + latestCatRemoved + latestCatChanged;
+
     return {
       totalAdded,
       totalRemoved,
@@ -103,8 +289,74 @@ export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogV
       latestCatAdded,
       latestCatRemoved,
       latestCatChanged,
+      latestTotal,
+      platformCounts: Array.from(platformCounts.entries()).sort((a, b) => b[1] - a[1]),
+      categoryHotspots: Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8),
     };
-  }, [cleanedEntries]);
+  }, [categoryRollups, cleanedEntries, entries.length]);
+
+  const filteredItems = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    return dateScopedItems.filter((item) => {
+      if (filter === 'categories' && item.entity !== 'category') return false;
+      if (filter !== 'all' && filter !== 'categories' && item.action !== filter) return false;
+      if (selectedCategory && item.hotspotCategory !== selectedCategory) return false;
+      if (selectedPlatforms.length > 0) {
+        const platformKeys = getPlatformKeys(item.platform);
+        if (item.entity !== 'setting' || !selectedPlatforms.some((p) => platformKeys.includes(p))) return false;
+      }
+      if (!normalizedQuery) return true;
+
+      const haystack = [
+        item.title,
+        item.hotspotCategory,
+        item.categoryName,
+        item.contextLabel,
+        item.contextDetail,
+        item.platform,
+        item.date,
+        item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      return haystack.includes(normalizedQuery);
+    });
+  }, [dateScopedItems, filter, query, selectedCategory, selectedPlatforms]);
+
+  const scopedHotspots = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    const counts = new Map<string, number>();
+
+    dateScopedItems.forEach((item) => {
+      if (item.entity !== 'setting' || !item.hotspotCategory) return;
+      if (filter !== 'all' && filter !== 'categories' && item.action !== filter) return;
+      if (filter === 'categories') return;
+      if (selectedPlatforms.length > 0) {
+        const platformKeys = getPlatformKeys(item.platform);
+        if (!selectedPlatforms.some((p) => platformKeys.includes(p))) return;
+      }
+      if (normalizedQuery) {
+        const haystack = [
+          item.title,
+          item.hotspotCategory,
+          item.categoryName,
+          item.contextLabel,
+          item.contextDetail,
+          item.platform,
+          item.date,
+          item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        if (!haystack.includes(normalizedQuery)) return;
+      }
+
+      counts.set(item.hotspotCategory, (counts.get(item.hotspotCategory) ?? 0) + 1);
+    });
+
+    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  }, [dateScopedItems, filter, query, selectedPlatforms]);
+
+  const taxonomySummary = useMemo(() => buildTaxonomySummary(filteredItems), [filteredItems]);
 
   if (entries.length === 0) {
     return (
@@ -121,276 +373,215 @@ export default function ChangelogViewer({ entries, deprecatedCount }: ChangelogV
   }
 
   return (
-    <div>
-      {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
-        <StatCard
-          label="Last change detected"
-          displayValue={stats.lastChangeLabel}
-          subtitle={stats.lastChangeDate
-            ? new Date(stats.lastChangeDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            : undefined}
-          color="text-fluent-text"
-        />
-        <StatCard
-          label="Settings added"
-          value={stats.totalAdded}
-          subtitle={[
-            stats.latestAdded > 0 ? `+${stats.latestAdded} settings` : '',
-            stats.latestCatAdded > 0 ? `+${stats.latestCatAdded} categories` : '',
-          ].filter(Boolean).join(', ') || undefined}
-          color="text-fluent-success"
-        />
-        <StatCard
-          label="Settings removed"
-          value={stats.totalRemoved}
-          subtitle={[
-            stats.latestRemoved > 0 ? `${stats.latestRemoved} settings` : '',
-            stats.latestCatRemoved > 0 ? `${stats.latestCatRemoved} categories` : '',
-          ].filter(Boolean).join(', ') || undefined}
-          color="text-fluent-error"
-        />
-        <StatCard
-          label="Settings changed"
-          value={stats.totalChanged}
-          subtitle={[
-            stats.latestChanged > 0 ? `${stats.latestChanged} settings` : '',
-            stats.latestCatChanged > 0 ? `${stats.latestCatChanged} categories` : '',
-          ].filter(Boolean).join(', ') || undefined}
-          color="text-fluent-warning"
-        />
-        <StatCard
-          label="Deprecated settings"
-          value={deprecatedCount}
-          subtitle="currently in catalog"
-          color="text-fluent-text-secondary"
-        />
-      </div>
+    <div className="space-y-6">
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
+        <div className="fluent-card p-4 sm:p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <div className="text-fluent-sm font-semibold text-fluent-text-secondary">Latest update</div>
+              <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
+                <div className="text-fluent-3xl font-semibold text-fluent-text">{stats.lastChangeLabel}</div>
+                {stats.lastChangeDate && (
+                  <div className="pb-1 text-fluent-sm text-fluent-text-secondary">
+                    {formatDate(stats.lastChangeDate, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                )}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <MetricPill label="Added" value={stats.latestAdded + stats.latestCatAdded} tone="success" />
+                <MetricPill label="Changed" value={stats.latestChanged + stats.latestCatChanged} tone="warning" />
+                <MetricPill label="Removed" value={stats.latestRemoved + stats.latestCatRemoved} tone="error" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:min-w-[26rem]">
+              <StatCard label="Setting additions" value={stats.totalAdded} color="text-fluent-success" />
+              <StatCard label="Setting changes" value={stats.totalChanged} color="text-fluent-warning" />
+              <StatCard label="Category changes" value={stats.totalCatAdded + stats.totalCatRemoved + stats.totalCatChanged} color="text-fluent-blue" />
+              <StatCard label="Deprecated" value={deprecatedCount} color="text-fluent-text-secondary" />
+            </div>
+          </div>
+        </div>
 
-      {/* Filter tabs */}
-      <div className="flex items-center gap-2 mb-4 border-b border-fluent-border pb-3">
-        {(['all', 'added', 'removed', 'changed'] as FilterType[]).map((f) => (
+        <div className="fluent-card p-4 sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-fluent-base font-semibold text-fluent-text">Platform impact</h2>
+            <span className="text-fluent-xs text-fluent-text-secondary">
+              {(stats.totalAdded + stats.totalRemoved + stats.totalChanged).toLocaleString()} settings
+            </span>
+          </div>
+          <div className="mt-4 space-y-3">
+            {stats.platformCounts.slice(0, 5).map(([platform, count]) => (
+              <ImpactBar key={platform} label={PLATFORM_LABELS[platform] ?? platform} value={count} max={stats.platformCounts[0]?.[1] ?? count} iconKey={platform} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="fluent-card p-3 sm:p-4 sticky top-0 z-10">
+        <div className="grid gap-3 xl:grid-cols-[minmax(18rem,1fr)_auto] xl:items-center">
+          <label className="relative block">
+            <span className="sr-only">Search changes</span>
+            <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fluent-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m1.35-5.15a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" />
+            </svg>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search changes"
+              className="w-full rounded border border-fluent-border bg-white py-2 pl-9 pr-3 text-fluent-base text-fluent-text outline-none transition-colors focus:border-fluent-blue dark:bg-[#1c1c1e]"
+            />
+          </label>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="relative">
+              <span className="sr-only">Change date</span>
+              <select
+                value={selectedDate}
+                onChange={(event) => {
+                  setSelectedDate(event.target.value as DateFilter);
+                  setSelectedCategory(null);
+                  setExpandedItems(new Set());
+                }}
+                className="h-[34px] rounded border border-fluent-border bg-white px-3 pr-8 text-fluent-sm text-fluent-text outline-none transition-colors focus:border-fluent-blue dark:bg-[#2c2c2e] dark:border-[#636366]"
+              >
+                {latestDate && (
+                  <option value="latest">
+                    Latest update ({formatDate(latestDate, { month: 'short', day: 'numeric', year: 'numeric' })})
+                  </option>
+                )}
+                <option value="all">All updates</option>
+                {dateOptions.slice(1).map((date) => (
+                  <option key={date} value={`date:${date}`}>
+                    {formatDate(date, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`px-3 py-1.5 rounded text-fluent-sm border transition-colors ${
+                  filter === f.value
+                    ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
+                    : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-fluent-border pt-3">
           <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-3 py-1 rounded text-fluent-sm capitalize transition-colors border ${
-              filter === f
+            onClick={() => setSelectedPlatforms([])}
+            className={`inline-flex items-center gap-1.5 rounded border px-3 py-1 text-fluent-sm transition-colors ${
+              selectedPlatforms.length === 0
                 ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
-                : 'bg-fluent-bg-alt dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-border dark:hover:bg-[#3a3a3c]'
+                : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
             }`}
           >
-            {f}
+            All platforms
           </button>
-        ))}
-      </div>
-
-      {/* Entries */}
-      <div className="space-y-3">
-        {cleanedEntries.map((entry) => {
-          const isExpanded = expandedDates.has(entry.date);
-          const hasAdded = entry.added.length > 0 && (filter === 'all' || filter === 'added');
-          const hasRemoved = entry.removed.length > 0 && (filter === 'all' || filter === 'removed');
-          const hasChanged = entry.changed.length > 0 && (filter === 'all' || filter === 'changed');
-          const hasCatAdded = (entry.categoriesAdded?.length ?? 0) > 0 && (filter === 'all' || filter === 'added');
-          const hasCatRemoved = (entry.categoriesRemoved?.length ?? 0) > 0 && (filter === 'all' || filter === 'removed');
-          const hasCatChanged = (entry.categoriesChanged?.length ?? 0) > 0 && (filter === 'all' || filter === 'changed');
-          const hasContent = hasAdded || hasRemoved || hasChanged || hasCatAdded || hasCatRemoved || hasCatChanged;
-
-          if (!hasContent && filter !== 'all') return null;
-
-          const dateStr = new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          });
-
-          return (
-            <div key={entry.date} className="fluent-card">
-              {/* Date header */}
+          {PLATFORMS.map((platform) => {
+            const Icon = PLATFORM_ICONS[platform.value];
+            const isActive = selectedPlatforms.includes(platform.value);
+            return (
               <button
-                onClick={() => toggleDate(entry.date)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-fluent-bg transition-colors"
+                key={platform.value}
+                onClick={() => togglePlatform(platform.value)}
+                className={`inline-flex items-center gap-1.5 rounded border px-3 py-1 text-fluent-sm transition-colors ${
+                  isActive
+                    ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
+                    : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
+                }`}
               >
-                <div className="flex items-center gap-3">
-                  <svg
-                    className={`w-4 h-4 text-fluent-text-secondary transition-transform ${isExpanded ? 'rotate-90' : ''}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                  <span className="text-fluent-base font-semibold">{dateStr}</span>
+                {Icon && <Icon className="h-4 w-4" />}
+                {platform.label}
+              </button>
+            );
+          })}
+          {selectedCategory && (
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="ml-auto inline-flex items-center gap-1.5 rounded border border-fluent-border bg-fluent-bg-alt px-3 py-1 text-fluent-sm text-fluent-text hover:bg-fluent-border dark:hover:bg-[#3a3a3c]"
+            >
+              {selectedCategory}
+              <span aria-hidden="true">×</span>
+            </button>
+          )}
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="space-y-3 lg:sticky lg:top-36 lg:self-start">
+          <div>
+            <h2 className="text-fluent-base font-semibold text-fluent-text">Hotspots</h2>
+            <p className="mt-1 text-fluent-sm text-fluent-text-secondary">
+              {activeDate
+                ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                : `${feedItems.length.toLocaleString()} tracked changes`}
+            </p>
+          </div>
+          <div className="space-y-2">
+            {scopedHotspots.length === 0 ? (
+              taxonomySummary.total > 0 ? (
+                <TaxonomySummaryPanel summary={taxonomySummary} />
+              ) : (
+                <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-4 text-fluent-sm text-fluent-text-secondary dark:bg-[#2c2c2e]">
+                  No setting hotspots.
                 </div>
-                <div className="flex items-center gap-2 text-fluent-xs">
-                  {entry.added.length > 0 && (
-                    <span className="inline-flex items-center gap-0.5 text-fluent-success bg-fluent-success/10 rounded-full px-2 py-0.5 font-medium">+{entry.added.length}</span>
-                  )}
-                  {entry.removed.length > 0 && (
-                    <span className="inline-flex items-center gap-0.5 text-fluent-error bg-fluent-error/10 rounded-full px-2 py-0.5 font-medium">−{entry.removed.length}</span>
-                  )}
-                  {entry.changed.length > 0 && (
-                    <span className="inline-flex items-center gap-0.5 text-fluent-warning bg-fluent-warning/10 rounded-full px-2 py-0.5 font-medium">~{entry.changed.length}</span>
-                  )}
-                  {((entry.categoriesAdded?.length ?? 0) + (entry.categoriesRemoved?.length ?? 0) + (entry.categoriesChanged?.length ?? 0)) > 0 && (
-                    <span className="text-fluent-text-secondary text-fluent-xs border border-fluent-border rounded px-1">
-                      {(entry.categoriesAdded?.length ?? 0) + (entry.categoriesRemoved?.length ?? 0) + (entry.categoriesChanged?.length ?? 0)} cat
-                    </span>
-                  )}
+              )
+            ) : scopedHotspots.map(([category, count]) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
+                className={`w-full rounded border px-3 py-2 text-left transition-colors ${
+                  selectedCategory === category
+                    ? 'border-fluent-blue bg-fluent-light-blue text-fluent-blue'
+                    : 'border-fluent-border bg-white text-fluent-text hover:bg-fluent-bg-alt dark:bg-[#2c2c2e]'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold">
+                  <span className="truncate">{category}</span>
+                  <span>{count}</span>
+                </div>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
+                  <div
+                    className="h-full rounded-full bg-fluent-blue"
+                    style={{ width: `${Math.max(8, Math.round((count / (scopedHotspots[0]?.[1] ?? count)) * 100))}%` }}
+                  />
                 </div>
               </button>
+            ))}
+          </div>
+        </aside>
 
-              {/* Content */}
-              {isExpanded && (
-                <div className="border-t border-fluent-border">
-                  {/* Added */}
-                  {hasAdded && (
-                    <div className="px-4 py-3 border-l-2 border-l-fluent-success/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Added ({entry.added.length})
-                      </h4>
-                      <div className="space-y-1">
-                        {entry.added.map((s) => (
-                          <div key={s.id} className="flex items-start gap-2 text-fluent-sm py-0.5">
-                            <a
-                              href={`/setting/${encodeURIComponent(settingSlug(s.id))}/`}
-                              className="text-fluent-blue hover:underline"
-                            >
-                              {s.displayName}
-                            </a>
-                            <span className="ml-auto inline-flex items-center gap-1.5 shrink-0">
-                              {s.categoryName && (
-                                <span className="text-fluent-text-disabled text-fluent-xs bg-fluent-bg-alt rounded px-1.5 py-0.5">
-                                  {s.categoryName}
-                                </span>
-                              )}
-                              <PlatformBadges platform={s.platform} />
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+        <div>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-fluent-base font-semibold text-fluent-text">Change feed</h2>
+            <span className="text-fluent-sm text-fluent-text-secondary">{filteredItems.length.toLocaleString()} results</span>
+          </div>
 
-                  {/* Removed */}
-                  {hasRemoved && (
-                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-error/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-                        </svg>
-                        Removed ({entry.removed.length})
-                      </h4>
-                      <div className="space-y-1">
-                        {entry.removed.map((s) => (
-                          <div key={s.id} className="flex items-start gap-2 text-fluent-sm py-0.5">
-                            <span className="text-fluent-text-secondary line-through">{s.displayName}</span>
-                            <span className="ml-auto inline-flex items-center gap-1.5 shrink-0">
-                              {s.categoryName && (
-                                <span className="text-fluent-text-disabled text-fluent-xs bg-fluent-bg-alt rounded px-1.5 py-0.5 no-underline">
-                                  {s.categoryName}
-                                </span>
-                              )}
-                              <PlatformBadges platform={s.platform} />
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Changed */}
-                  {hasChanged && (
-                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-warning/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Changed ({entry.changed.length})
-                      </h4>
-                      <div className="space-y-3">
-                        {entry.changed.map((s) => (
-                          <DiffBlock
-                            key={s.id}
-                            title={s.displayName}
-                            href={`/setting/${encodeURIComponent(settingSlug(s.id))}/`}
-                            badge={s.categoryName}
-                            platform={s.platform}
-                            fields={s.fields}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {/* Categories Added */}
-                  {hasCatAdded && (
-                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-success/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-success mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Categories Added ({entry.categoriesAdded!.length})
-                      </h4>
-                      <div className="space-y-1">
-                        {entry.categoriesAdded!.map((c) => (
-                          <div key={c.id} className="text-fluent-sm text-fluent-text">
-                            {c.displayName}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Categories Removed */}
-                  {hasCatRemoved && (
-                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-error/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-error mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-                        </svg>
-                        Categories Removed ({entry.categoriesRemoved!.length})
-                      </h4>
-                      <div className="space-y-1">
-                        {entry.categoriesRemoved!.map((c) => (
-                          <div key={c.id} className="text-fluent-sm text-fluent-text-secondary line-through">
-                            {c.displayName}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Categories Changed */}
-                  {hasCatChanged && (
-                    <div className="px-4 py-3 border-t border-fluent-border border-l-2 border-l-fluent-warning/30 ml-px">
-                      <h4 className="text-fluent-sm font-semibold text-fluent-warning mb-2 flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Categories Changed ({entry.categoriesChanged!.length})
-                      </h4>
-                      <div className="space-y-3">
-                        {entry.categoriesChanged!.map((c) => (
-                          <DiffBlock
-                            key={c.id}
-                            title={c.displayName}
-                            fields={c.fields}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+          {filteredItems.length === 0 ? (
+            <div className="fluent-card px-4 py-10 text-center text-fluent-text-secondary">
+              <p className="text-fluent-base">No matching changes.</p>
             </div>
-          );
-        })}
-      </div>
+          ) : (
+            <div className="space-y-2">
+              {filteredItems.map((item) => (
+                <ChangeFeedRow
+                  key={item.key}
+                  item={item}
+                  expanded={expandedItems.has(item.key)}
+                  onToggle={() => toggleItem(item.key)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
@@ -403,7 +594,7 @@ function StatCard({ label, value, displayValue, subtitle, color }: {
   color: string;
 }) {
   return (
-    <div className="fluent-card px-4 py-3">
+    <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#1c1c1e]">
       <div className={`text-fluent-xl font-bold ${color}`}>
         {displayValue ?? value?.toLocaleString() ?? '—'}
       </div>
@@ -413,6 +604,184 @@ function StatCard({ label, value, displayValue, subtitle, color }: {
       )}
     </div>
   );
+}
+
+function MetricPill({ label, value, tone }: { label: string; value: number; tone: 'success' | 'warning' | 'error' }) {
+  const toneClass = {
+    success: 'text-fluent-success bg-fluent-success/10 border-fluent-success/20',
+    warning: 'text-fluent-warning bg-fluent-warning/10 border-fluent-warning/20',
+    error: 'text-fluent-error bg-fluent-error/10 border-fluent-error/20',
+  }[tone];
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-fluent-sm font-semibold ${toneClass}`}>
+      <span>{value.toLocaleString()}</span>
+      <span>{label}</span>
+    </span>
+  );
+}
+
+function ImpactBar({ label, value, max, iconKey }: { label: string; value: number; max: number; iconKey: string }) {
+  const Icon = PLATFORM_ICONS[iconKey];
+
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between gap-3 text-fluent-sm">
+        <span className="inline-flex min-w-0 items-center gap-1.5 font-medium text-fluent-text">
+          {Icon && <Icon className="h-4 w-4 shrink-0" />}
+          <span className="truncate">{label}</span>
+        </span>
+        <span className="shrink-0 text-fluent-text-secondary">{value.toLocaleString()}</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
+        <div className="h-full rounded-full bg-fluent-blue" style={{ width: `${Math.max(5, Math.round((value / max) * 100))}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function TaxonomySummaryPanel({ summary }: { summary: TaxonomySummary }) {
+  return (
+    <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-3 dark:bg-[#2c2c2e]">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="text-fluent-sm font-semibold text-fluent-text">Taxonomy update</div>
+          <div className="mt-0.5 text-fluent-xs text-fluent-text-secondary">
+            {summary.settings === 0 ? 'No setting definitions changed.' : `${summary.settings.toLocaleString()} setting changes included.`}
+          </div>
+        </div>
+        <span className="rounded bg-white px-2 py-0.5 text-fluent-xs font-semibold text-fluent-blue dark:bg-[#1c1c1e]">
+          {summary.total.toLocaleString()}
+        </span>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+        <MiniCount label="Added" value={summary.added} tone="text-fluent-success" />
+        <MiniCount label="Moved" value={summary.moved} tone="text-fluent-warning" />
+        <MiniCount label="Removed" value={summary.removed} tone="text-fluent-error" />
+      </div>
+
+      {summary.moveGroups.length > 0 && (
+        <div className="mt-3 space-y-1.5">
+          <div className="text-fluent-xs font-semibold uppercase tracking-wide text-fluent-text-secondary">Parent moves</div>
+          {summary.moveGroups.slice(0, 3).map((group) => (
+            <div key={group.label} className="rounded bg-white px-2 py-1.5 text-fluent-xs text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              <span className="font-semibold text-fluent-text">{group.count}</span> {group.label}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {summary.moveGroups.length === 0 && summary.addGroups.length > 0 && (
+        <div className="mt-3 space-y-1.5">
+          <div className="text-fluent-xs font-semibold uppercase tracking-wide text-fluent-text-secondary">Added under</div>
+          {summary.addGroups.slice(0, 3).map((group) => (
+            <div key={group.label} className="rounded bg-white px-2 py-1.5 text-fluent-xs text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              <span className="font-semibold text-fluent-text">{group.count}</span> {group.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MiniCount({ label, value, tone }: { label: string; value: number; tone: string }) {
+  return (
+    <div className="rounded bg-white px-2 py-1.5 dark:bg-[#1c1c1e]">
+      <div className={`text-fluent-base font-semibold ${tone}`}>{value.toLocaleString()}</div>
+      <div className="text-fluent-xs text-fluent-text-secondary">{label}</div>
+    </div>
+  );
+}
+
+function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; expanded: boolean; onToggle: () => void }) {
+  const actionStyles = getActionStyles(item.action);
+  const hasDetails = (item.fields?.length ?? 0) > 0;
+
+  return (
+    <div className={`fluent-card overflow-hidden border-l-4 ${actionStyles.border}`}>
+      <button
+        onClick={onToggle}
+        className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-fluent-bg"
+        aria-expanded={expanded}
+      >
+        <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${actionStyles.badge}`}>
+          {item.action === 'added' ? '+' : item.action === 'removed' ? '−' : '~'}
+        </span>
+
+        <span className="min-w-0 flex-1">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="text-fluent-base font-semibold text-fluent-text">{item.title}</span>
+            <span className="rounded bg-fluent-bg-alt px-1.5 py-0.5 text-fluent-xs capitalize text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              {item.entity}
+            </span>
+          </span>
+          <span className="mt-1 flex flex-wrap items-center gap-2 text-fluent-sm text-fluent-text-secondary">
+            <ActionLabel action={item.action} />
+            {item.categoryName && <span>{item.categoryName}</span>}
+            {item.contextLabel && <span>{item.contextLabel}</span>}
+            <PlatformBadges platform={item.platform} />
+          </span>
+        </span>
+
+        <span className="flex shrink-0 flex-col items-end gap-2">
+          <span className="text-fluent-sm text-fluent-text-secondary">{formatDate(item.date, { month: 'short', day: 'numeric' })}</span>
+          <svg className={`h-4 w-4 text-fluent-text-secondary transition-transform ${expanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-fluent-border px-4 py-3">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="text-fluent-sm text-fluent-text-secondary">
+              {formatDate(item.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+            </div>
+            {item.href && (
+              <Link href={item.href} className="text-fluent-sm font-semibold text-fluent-blue hover:underline" prefetch={false}>
+                Open setting
+              </Link>
+            )}
+          </div>
+          {item.contextDetail && (
+            <div className="mb-3 rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 text-fluent-sm text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              <span className="font-semibold text-fluent-text">Path:</span> {item.contextDetail}
+            </div>
+          )}
+          {hasDetails ? (
+            <DiffBlock title={item.title} badge={item.categoryName} platform={item.platform} fields={item.fields!} />
+          ) : (
+            <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 text-fluent-sm text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              {item.action === 'added' ? 'New item in this snapshot.' : item.action === 'removed' ? 'Item no longer appears in this snapshot.' : 'No field-level details available.'}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ActionLabel({ action }: { action: ActionType }) {
+  const label = action === 'added' ? 'Added' : action === 'removed' ? 'Removed' : 'Changed';
+  const className = action === 'added'
+    ? 'text-fluent-success'
+    : action === 'removed'
+      ? 'text-fluent-error'
+      : 'text-fluent-warning';
+
+  return <span className={`font-semibold ${className}`}>{label}</span>;
+}
+
+function getActionStyles(action: ActionType) {
+  if (action === 'added') {
+    return { border: 'border-l-fluent-success/60', badge: 'bg-fluent-success/10 text-fluent-success' };
+  }
+  if (action === 'removed') {
+    return { border: 'border-l-fluent-error/60', badge: 'bg-fluent-error/10 text-fluent-error' };
+  }
+  return { border: 'border-l-fluent-warning/70', badge: 'bg-fluent-warning/10 text-fluent-warning' };
 }
 
 /** Strip surrounding JSON quotes so values display cleanly */
@@ -437,6 +806,158 @@ function normalizePlatformKey(p: string): string | null {
   if (p.startsWith('android') || p === 'aosp' || p === 'androidEnterprise') return 'android';
   if (p === 'linux') return 'linux';
   return null;
+}
+
+function getPlatformKeys(platform?: string): string[] {
+  if (!platform) return [];
+
+  const seen = new Set<string>();
+  const keys: string[] = [];
+  platform.split(',').map((p) => p.trim()).filter(Boolean).forEach((p) => {
+    const key = normalizePlatformKey(p);
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      keys.push(key);
+    }
+  });
+
+  return keys;
+}
+
+function formatDate(date: string, options: Intl.DateTimeFormatOptions): string {
+  return new Date(date + 'T00:00:00').toLocaleDateString('en-US', options);
+}
+
+function buildCategoryRollupMap(categoriesById: Map<string, SettingCategory>): Map<string, string> {
+  const rollups = new Map<string, string>();
+
+  for (const category of categoriesById.values()) {
+    const root = category.rootCategoryId ? categoriesById.get(category.rootCategoryId) : undefined;
+    if (root?.displayName) {
+      rollups.set(category.id, root.displayName);
+      continue;
+    }
+
+    let current = category;
+    const seen = new Set<string>();
+    while (current.parentCategoryId && current.parentCategoryId !== current.id && !seen.has(current.parentCategoryId)) {
+      seen.add(current.id);
+      const parent = categoriesById.get(current.parentCategoryId);
+      if (!parent) break;
+      current = parent;
+    }
+
+    rollups.set(category.id, current.displayName || category.displayName);
+  }
+
+  return rollups;
+}
+
+function getHotspotCategory(categoryId: string | undefined, categoryName: string | undefined, rollups: Map<string, string>): string | undefined {
+  if (!categoryId) return categoryName;
+  return rollups.get(categoryId) ?? categoryName;
+}
+
+function buildTaxonomySummary(items: ChangeFeedItem[]): TaxonomySummary {
+  const moveCounts = new Map<string, number>();
+  const addCounts = new Map<string, number>();
+  let added = 0;
+  let changed = 0;
+  let removed = 0;
+  let moved = 0;
+  let settings = 0;
+
+  for (const item of items) {
+    if (item.entity === 'setting') {
+      settings += 1;
+      continue;
+    }
+
+    if (item.action === 'added') {
+      added += 1;
+      const label = item.contextLabel?.replace(/^Added under\s+/i, '');
+      if (label) addCounts.set(label, (addCounts.get(label) ?? 0) + 1);
+    } else if (item.action === 'removed') {
+      removed += 1;
+    } else {
+      changed += 1;
+      if (item.contextLabel?.startsWith('Moved from ')) {
+        moved += 1;
+        const label = item.contextLabel.replace(/^Moved from\s+/i, '').replace(/\s+to\s+/i, ' to ');
+        moveCounts.set(label, (moveCounts.get(label) ?? 0) + 1);
+      }
+    }
+  }
+
+  const toSortedGroups = (counts: Map<string, number>) => Array.from(counts.entries())
+    .map(([label, count]) => ({ label, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+
+  return {
+    total: added + changed + removed,
+    added,
+    changed,
+    removed,
+    moved,
+    settings,
+    moveGroups: toSortedGroups(moveCounts),
+    addGroups: toSortedGroups(addCounts),
+  };
+}
+
+function getCategoryPath(categoryId: string | undefined, categoriesById: Map<string, SettingCategory>): string | undefined {
+  if (!categoryId) return undefined;
+  const category = categoriesById.get(categoryId);
+  if (!category) return undefined;
+
+  const chain: string[] = [];
+  const seen = new Set<string>();
+  let current: SettingCategory | undefined = category;
+
+  while (current && !seen.has(current.id)) {
+    seen.add(current.id);
+    if (current.displayName) chain.unshift(current.displayName);
+    if (!current.parentCategoryId || current.parentCategoryId === current.id || isEmptyCategoryId(current.parentCategoryId)) break;
+    current = categoriesById.get(current.parentCategoryId);
+  }
+
+  return chain.length > 0 ? chain.join(' > ') : undefined;
+}
+
+function enrichCategoryFields(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, SettingCategory>) {
+  return fields.map((field) => {
+    if (field.field !== 'parentCategoryId') return field;
+
+    return {
+      ...field,
+      field: 'Parent category',
+      oldValue: formatCategoryReference(field.oldValue, categoriesById) ?? cleanValue(field.oldValue),
+      newValue: formatCategoryReference(field.newValue, categoriesById) ?? cleanValue(field.newValue),
+    };
+  });
+}
+
+function getCategoryChangeSummary(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, SettingCategory>): string | undefined {
+  const parentChange = fields.find((field) => field.field === 'parentCategoryId');
+  if (!parentChange) return undefined;
+
+  const oldParent = formatCategoryReference(parentChange.oldValue, categoriesById) ?? cleanValue(parentChange.oldValue);
+  const newParent = formatCategoryReference(parentChange.newValue, categoriesById) ?? cleanValue(parentChange.newValue);
+  return `Moved from ${oldParent} to ${newParent}`;
+}
+
+function formatCategoryReference(value: string | undefined, categoriesById: Map<string, SettingCategory>): string | undefined {
+  if (!value) return undefined;
+  const id = cleanValue(value);
+  if (isEmptyCategoryId(id)) return 'Top level';
+  const category = categoriesById.get(id);
+  if (category?.displayName) return category.displayName;
+  if (/^[0-9a-f-]{36}$/i.test(id)) return `Unknown category (${id.slice(0, 8)})`;
+  return id;
+}
+
+function isEmptyCategoryId(value: string): boolean {
+  return value === '00000000-0000-0000-0000-000000000000';
 }
 
 /** Render platform indicators from a comma-separated platform string — styled like the platform filter buttons */

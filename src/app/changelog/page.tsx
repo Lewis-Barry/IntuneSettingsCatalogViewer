@@ -1,4 +1,4 @@
-import { loadChangelog, loadSettings } from '@/lib/data';
+import { loadCategories, loadChangelog, loadSettings } from '@/lib/data';
 import ChangelogViewer from '@/components/ChangelogViewer';
 import type { Metadata } from 'next';
 
@@ -9,19 +9,20 @@ export const metadata: Metadata = {
 
 export default function ChangelogPage() {
   const changelog = loadChangelog();
+  const categories = loadCategories();
   const settings = loadSettings();
   const deprecatedCount = settings.filter((s) =>
     s.displayName?.toLowerCase().includes('deprecated')
   ).length;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <div className="mb-6">
         <h1 className="text-fluent-2xl font-semibold text-fluent-text">
           Settings Catalog Changelog
         </h1>
         <p className="text-fluent-base text-fluent-text-secondary mt-1">
-          Log of additions, removals, and changes to the Intune Settings Catalog. Each entry represents an update where changes were detected.
+          Review additions, removals, field-level updates, and category changes across tracked Settings Catalog snapshots.
         </p>
       </div>
 
@@ -36,13 +37,13 @@ export default function ChangelogPage() {
               Change tracking started on February 21, 2026
             </p>
             <p className="text-fluent-sm text-fluent-text-secondary mt-0.5">
-              The Settings Catalog is checked periodically for changes by comparing each snapshot against the previous one. Entries only appear here when additions, removals, or modifications are actually detected &mdash; not every check results in an update.
+              The Settings Catalog is checked periodically by comparing each snapshot against the previous one. Version-only setting updates are hidden from the main review so the feed stays focused on meaningful catalog changes.
             </p>
           </div>
         </div>
       </div>
 
-      <ChangelogViewer entries={changelog} deprecatedCount={deprecatedCount} />
+      <ChangelogViewer entries={changelog} categories={categories} deprecatedCount={deprecatedCount} />
     </div>
   );
 }
