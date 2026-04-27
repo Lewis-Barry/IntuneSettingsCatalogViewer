@@ -28,6 +28,7 @@ data/settings-previous.json
 data/categories-previous.json
 data/last-updated.json
 public/search-index.json
+public/changelog-settings/
 
 # keep sample data and changelog
 !data/sample-*.json

@@ -51,6 +51,9 @@ jobs:
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
 
+      - name: Generate per-setting changelog JSON
+        run: npx tsx scripts/generate-changelog-settings.ts
+
       - name: Build site
         run: npm run build
 

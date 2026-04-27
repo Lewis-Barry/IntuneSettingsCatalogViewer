@@ -52,6 +52,10 @@ jobs:
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
 
+      # ── Pre-generate per-setting JSON for changelog row expand ──
+      - name: Generate per-setting changelog JSON
+        run: npx tsx scripts/generate-changelog-settings.ts
+
       # ── Commit updated data files back to repo ──
       - name: Commit data updates
         run: |

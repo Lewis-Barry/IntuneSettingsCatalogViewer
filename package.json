@@ -11,8 +11,9 @@
     "fetch-settings": "tsx scripts/fetch-settings.ts",
     "fetch-oib": "tsx scripts/fetch-oib-data.ts",
     "generate-changelog": "tsx scripts/generate-changelog.ts",
+    "generate-changelog-settings": "tsx scripts/generate-changelog-settings.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
-    "refresh": "npm run fetch-settings && npm run generate-changelog && npm run build-search-index",
+    "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index",
     "postinstall": "echo 'Run npm run refresh to fetch settings data'"
   },
   "dependencies": {

@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
-import type { ChangelogEntry, SettingCategory, SettingDefinition } from '@/lib/types';
+import { useEffect, useState, useMemo } from 'react';
+import type { ChangelogEntry, ChangelogSettingSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
 import SettingDetail from './SettingDetail';
@@ -10,7 +9,35 @@ import SettingDetail from './SettingDetail';
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
   categories: SettingCategory[];
-  settings: SettingDefinition[];
+  /** Stripped-down settings (changelog-referenced only). Full setting is
+   *  lazy-fetched per row from /changelog-settings/{slug}.json on expand. */
+  settings: ChangelogSettingSummary[];
+}
+
+// Module-level cache so re-expanding (or expanding the same setting via two
+// different changelog entries) doesn't refetch.
+const fullSettingCache = new Map<string, SettingDefinition>();
+const inFlight = new Map<string, Promise<SettingDefinition | null>>();
+
+function fetchFullSetting(id: string): Promise<SettingDefinition | null> {
+  const cached = fullSettingCache.get(id);
+  if (cached) return Promise.resolve(cached);
+  const existing = inFlight.get(id);
+  if (existing) return existing;
+
+  const url = `/changelog-settings/${encodeURIComponent(settingSlug(id))}.json`;
+  const promise = fetch(url)
+    .then((r) => (r.ok ? (r.json() as Promise<SettingDefinition>) : null))
+    .then((data) => {
+      if (data) fullSettingCache.set(id, data);
+      return data;
+    })
+    .catch(() => null)
+    .finally(() => {
+      inFlight.delete(id);
+    });
+  inFlight.set(id, promise);
+  return promise;
 }
 
 type FilterType = 'all' | 'added' | 'removed' | 'changed';
@@ -33,7 +60,7 @@ interface ChangeFeedItem {
   contextDetail?: string;
   platform?: string;
   href?: string;
-  setting?: SettingDefinition;
+  setting?: ChangelogSettingSummary;
   fields?: Array<{ field: string; oldValue: string; newValue: string }>;
 }
 
@@ -380,7 +407,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
 
   return (
     <div className="space-y-6">
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
         <div className="fluent-card p-4 sm:p-5">
           <div className="flex h-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -418,7 +445,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         </div>
       </section>
 
-      <section className="fluent-card p-3 sm:p-4 sticky top-0 z-10">
+      <section className="fluent-card p-3 sm:p-4 lg:sticky lg:top-0 lg:z-10">
         <div className="grid gap-3 xl:grid-cols-[minmax(18rem,1fr)_auto] xl:items-center">
           <label className="relative block">
             <span className="sr-only">Search changes</span>
@@ -515,7 +542,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="space-y-3 lg:sticky lg:top-36 lg:self-start">
           <div>
             <h2 className="text-fluent-base font-semibold text-fluent-text">Hotspots</h2>
@@ -605,7 +632,6 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
                 <ChangeFeedRow
                   key={item.key}
                   item={item}
-                  allSettings={settings}
                   expanded={expandedItems.has(item.key)}
                   onToggle={() => toggleItem(item.key)}
                 />
@@ -716,10 +742,25 @@ function MiniCount({ label, value, tone }: { label: string; value: number; tone:
   );
 }
 
-function ChangeFeedRow({ item, allSettings, expanded, onToggle }: { item: ChangeFeedItem; allSettings: SettingDefinition[]; expanded: boolean; onToggle: () => void }) {
+function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; expanded: boolean; onToggle: () => void }) {
   const actionStyles = getActionStyles(item.action);
   const hasDetails = (item.fields?.length ?? 0) > 0;
-  const settingDetail = item.action === 'added' ? item.setting : undefined;
+  const showSettingDetail = item.action === 'added' && Boolean(item.setting);
+
+  const [fullSetting, setFullSetting] = useState<SettingDefinition | null>(() =>
+    item.setting ? fullSettingCache.get(item.setting.id) ?? null : null,
+  );
+
+  useEffect(() => {
+    if (!expanded || !showSettingDetail || fullSetting || !item.setting) return;
+    let cancelled = false;
+    fetchFullSetting(item.setting.id).then((data) => {
+      if (!cancelled && data) setFullSetting(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [expanded, showSettingDetail, fullSetting, item.setting]);
 
   return (
     <div className={`fluent-card overflow-hidden border-l-4 ${actionStyles.border}`}>
@@ -757,24 +798,26 @@ function ChangeFeedRow({ item, allSettings, expanded, onToggle }: { item: Change
 
       {expanded && (
         <div className="border-t border-fluent-border px-4 py-3">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="text-fluent-sm text-fluent-text-secondary">
-              {formatDate(item.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-            </div>
-            {item.href && (
-              <Link href={item.href} className="text-fluent-sm font-semibold text-fluent-blue hover:underline" prefetch={false}>
-                Open setting
-              </Link>
-            )}
+          <div className="mb-3 text-fluent-sm text-fluent-text-secondary">
+            {formatDate(item.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </div>
           {item.contextDetail && (
             <div className="mb-3 rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 text-fluent-sm text-fluent-text-secondary dark:bg-[#1c1c1e]">
               <span className="font-semibold text-fluent-text">Path:</span> {item.contextDetail}
             </div>
           )}
-          {settingDetail ? (
+          {showSettingDetail ? (
             <div className="rounded border border-fluent-border bg-fluent-bg dark:bg-[#1c1c1e]">
-              <SettingDetail setting={settingDetail} allSettings={allSettings} />
+              {fullSetting ? (
+                <SettingDetail setting={fullSetting} />
+              ) : (
+                <div className="px-4 md:px-6 py-6 text-fluent-sm text-fluent-text-secondary flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M7.757 16.243l-2.121 2.121m12.728 0l-2.121-2.121M7.757 7.757L5.636 5.636" />
+                  </svg>
+                  Loading details…
+                </div>
+              )}
             </div>
           ) : hasDetails ? (
             <DiffBlock title={item.title} badge={item.categoryName} platform={item.platform} fields={item.fields!} />
@@ -834,12 +877,11 @@ function getActionStyles(action: ActionType) {
   return { border: 'border-l-fluent-warning/70', badge: 'bg-fluent-warning/10 text-fluent-warning' };
 }
 
-function getSettingSearchText(setting?: SettingDefinition): string {
+function getSettingSearchText(setting?: ChangelogSettingSummary): string {
   if (!setting) return '';
 
-  const optionText = setting.options
-    ?.map((option) => [option.displayName, option.description, option.helpText].filter(Boolean).join(' '))
-    .join(' ');
+  // Note: option-level text isn't searchable on the changelog page since
+  // options are excluded from the initial payload (lazy-fetched on expand).
   const cspPath = setting.baseUri && setting.offsetUri
     ? `${setting.baseUri}/${setting.offsetUri}`
     : setting.baseUri || setting.offsetUri;
@@ -852,7 +894,6 @@ function getSettingSearchText(setting?: SettingDefinition): string {
     setting.applicability?.technologies,
     setting.defaultValue === undefined ? undefined : String(setting.defaultValue),
     cspPath,
-    optionText,
   ].filter(Boolean).join(' ');
 }
 

@@ -6,7 +6,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry } from './types';
+import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -60,4 +60,44 @@ export function getLastUpdated(): string | null {
 /** Load the category merge map (secondary ID → primary ID) produced by build-search-index */
 export function loadCategoryMergeMap(): Record<string, string> {
   return readJSON<Record<string, string>>('category-merge-map.json') || {};
+}
+
+/**
+ * Return only the settings referenced by the changelog (added or changed),
+ * stripped to the fields needed for the changelog row display + search.
+ *
+ * The full setting (with `options`, `keywords`, dependency arrays etc.) is
+ * lazy-fetched per row from /changelog-settings/{slug}.json on expand.
+ */
+export function loadChangelogSettingSummaries(): ChangelogSettingSummary[] {
+  const settings = loadSettings();
+  const changelog = loadChangelog();
+
+  const referencedIds = new Set<string>();
+  for (const entry of changelog) {
+    entry.added.forEach((s) => referencedIds.add(s.id));
+    entry.changed.forEach((s) => referencedIds.add(s.id));
+  }
+
+  const summaries: ChangelogSettingSummary[] = [];
+  for (const setting of settings) {
+    if (!referencedIds.has(setting.id)) continue;
+    summaries.push({
+      id: setting.id,
+      displayName: setting.displayName,
+      name: setting.name,
+      description: setting.description,
+      helpText: setting.helpText,
+      applicability: setting.applicability
+        ? {
+            platform: setting.applicability.platform,
+            technologies: setting.applicability.technologies,
+          }
+        : undefined,
+      defaultValue: setting.defaultValue,
+      baseUri: setting.baseUri,
+      offsetUri: setting.offsetUri,
+    });
+  }
+  return summaries;
 }

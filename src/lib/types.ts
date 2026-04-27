@@ -142,6 +142,24 @@ export interface SettingDefinition {
   }>;
 }
 
+/**
+ * Lightweight subset of SettingDefinition included in the initial changelog
+ * page payload. Carries only the fields needed for row display and the
+ * search-text filter — the heavy `options` array (with per-option descriptions
+ * and helpText) is excluded and lazy-fetched per row on expand.
+ */
+export interface ChangelogSettingSummary {
+  id: string;
+  displayName: string;
+  name: string;
+  description?: string;
+  helpText?: string;
+  applicability?: { platform?: Platform; technologies?: string };
+  defaultValue?: unknown;
+  baseUri?: string;
+  offsetUri?: string;
+}
+
 export interface ChoiceOption {
   itemId: string;
   name?: string;

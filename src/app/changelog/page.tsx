@@ -1,4 +1,4 @@
-import { loadCategories, loadChangelog, loadSettings } from '@/lib/data';
+import { loadCategories, loadChangelog, loadChangelogSettingSummaries } from '@/lib/data';
 import ChangelogViewer from '@/components/ChangelogViewer';
 import type { Metadata } from 'next';
 
@@ -12,7 +12,10 @@ export const dynamic = 'force-static';
 export default function ChangelogPage() {
   const changelog = loadChangelog();
   const categories = loadCategories();
-  const settings = loadSettings();
+  // Pass only the changelog-referenced settings, with heavy fields (options,
+  // helpText for options, dependency arrays) stripped. Full setting JSON is
+  // lazy-fetched per row from /changelog-settings/{slug}.json on expand.
+  const settings = loadChangelogSettingSummaries();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
