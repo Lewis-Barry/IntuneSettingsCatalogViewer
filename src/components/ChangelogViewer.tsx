@@ -2,13 +2,15 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import type { ChangelogEntry, SettingCategory } from '@/lib/types';
+import type { ChangelogEntry, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
+import SettingDetail from './SettingDetail';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
   categories: SettingCategory[];
+  settings: SettingDefinition[];
 }
 
 type FilterType = 'all' | 'added' | 'removed' | 'changed';
@@ -31,6 +33,7 @@ interface ChangeFeedItem {
   contextDetail?: string;
   platform?: string;
   href?: string;
+  setting?: SettingDefinition;
   fields?: Array<{ field: string; oldValue: string; newValue: string }>;
 }
 
@@ -61,7 +64,7 @@ const PLATFORMS = [
   { value: 'linux', label: 'Linux' },
 ];
 
-export default function ChangelogViewer({ entries, categories }: ChangelogViewerProps) {
+export default function ChangelogViewer({ entries, categories, settings }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -93,12 +96,14 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
 
   const categoriesById = useMemo(() => new Map(categories.map((category) => [category.id, category])), [categories]);
   const categoryRollups = useMemo(() => buildCategoryRollupMap(categoriesById), [categoriesById]);
+  const settingsById = useMemo(() => new Map(settings.map((setting) => [setting.id, setting])), [settings]);
 
   const feedItems = useMemo<ChangeFeedItem[]>(() => {
     const items: ChangeFeedItem[] = [];
 
     for (const entry of cleanedEntries) {
       entry.added.forEach((setting, index) => {
+        const currentSetting = settingsById.get(setting.id);
         items.push({
           key: `${entry.date}:added:setting:${setting.id}:${index}`,
           date: entry.date,
@@ -110,6 +115,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
           platform: setting.platform,
           href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
+          setting: currentSetting,
         });
       });
 
@@ -128,6 +134,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
       });
 
       entry.changed.forEach((setting, index) => {
+        const currentSetting = settingsById.get(setting.id);
         items.push({
           key: `${entry.date}:changed:setting:${setting.id}:${index}`,
           date: entry.date,
@@ -139,6 +146,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
           platform: setting.platform,
           href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
+          setting: currentSetting,
           fields: setting.fields,
         });
       });
@@ -188,7 +196,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
     }
 
     return items;
-  }, [categoriesById, categoryRollups, cleanedEntries]);
+  }, [categoriesById, categoryRollups, cleanedEntries, settingsById]);
 
   const dateOptions = useMemo(() => {
     return Array.from(new Set(feedItems.map((item) => item.date))).sort((a, b) => b.localeCompare(a));
@@ -307,6 +315,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
         item.contextDetail,
         item.platform,
         item.date,
+        getSettingSearchText(item.setting),
         item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
       ].filter(Boolean).join(' ').toLowerCase();
 
@@ -336,6 +345,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
           item.contextDetail,
           item.platform,
           item.date,
+          getSettingSearchText(item.setting),
           item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
         ].filter(Boolean).join(' ').toLowerCase();
 
@@ -595,6 +605,7 @@ export default function ChangelogViewer({ entries, categories }: ChangelogViewer
                 <ChangeFeedRow
                   key={item.key}
                   item={item}
+                  allSettings={settings}
                   expanded={expandedItems.has(item.key)}
                   onToggle={() => toggleItem(item.key)}
                 />
@@ -705,9 +716,10 @@ function MiniCount({ label, value, tone }: { label: string; value: number; tone:
   );
 }
 
-function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; expanded: boolean; onToggle: () => void }) {
+function ChangeFeedRow({ item, allSettings, expanded, onToggle }: { item: ChangeFeedItem; allSettings: SettingDefinition[]; expanded: boolean; onToggle: () => void }) {
   const actionStyles = getActionStyles(item.action);
   const hasDetails = (item.fields?.length ?? 0) > 0;
+  const settingDetail = item.action === 'added' ? item.setting : undefined;
 
   return (
     <div className={`fluent-card overflow-hidden border-l-4 ${actionStyles.border}`}>
@@ -760,7 +772,11 @@ function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; exp
               <span className="font-semibold text-fluent-text">Path:</span> {item.contextDetail}
             </div>
           )}
-          {hasDetails ? (
+          {settingDetail ? (
+            <div className="rounded border border-fluent-border bg-fluent-bg dark:bg-[#1c1c1e]">
+              <SettingDetail setting={settingDetail} allSettings={allSettings} />
+            </div>
+          ) : hasDetails ? (
             <DiffBlock title={item.title} badge={item.categoryName} platform={item.platform} fields={item.fields!} />
           ) : (
             <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 text-fluent-sm text-fluent-text-secondary dark:bg-[#1c1c1e]">
@@ -816,6 +832,28 @@ function getActionStyles(action: ActionType) {
     return { border: 'border-l-fluent-error/60', badge: 'bg-fluent-error/10 text-fluent-error' };
   }
   return { border: 'border-l-fluent-warning/70', badge: 'bg-fluent-warning/10 text-fluent-warning' };
+}
+
+function getSettingSearchText(setting?: SettingDefinition): string {
+  if (!setting) return '';
+
+  const optionText = setting.options
+    ?.map((option) => [option.displayName, option.description, option.helpText].filter(Boolean).join(' '))
+    .join(' ');
+  const cspPath = setting.baseUri && setting.offsetUri
+    ? `${setting.baseUri}/${setting.offsetUri}`
+    : setting.baseUri || setting.offsetUri;
+
+  return [
+    setting.displayName,
+    setting.name,
+    setting.description,
+    setting.helpText,
+    setting.applicability?.technologies,
+    setting.defaultValue === undefined ? undefined : String(setting.defaultValue),
+    cspPath,
+    optionText,
+  ].filter(Boolean).join(' ');
 }
 
 /** Strip surrounding JSON quotes so values display cleanly */
