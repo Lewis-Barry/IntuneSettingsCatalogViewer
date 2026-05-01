@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import type { ChangelogEntry, ChangelogSettingSummary, SettingCategory, SettingDefinition } from '@/lib/types';
+import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
 import SettingDetail from './SettingDetail';
@@ -114,16 +114,21 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
     );
   };
 
+  const settingsById = useMemo(() => new Map(settings.map((setting) => [setting.id, setting])), [settings]);
   const cleanedEntries = useMemo(() => entries.map((e) => ({
     ...e,
-    changed: e.changed
+    added: dedupeSettingRefs(e.added, settingsById),
+    removed: dedupeSettingRefs(e.removed, settingsById),
+    changed: dedupeSettingRefs(
+      e.changed
       .map((c) => ({ ...c, fields: c.fields.filter((f) => f.field !== 'version') }))
       .filter((c) => c.fields.length > 0),
-  })), [entries]);
+      settingsById,
+    ),
+  })), [entries, settingsById]);
 
   const categoriesById = useMemo(() => new Map(categories.map((category) => [category.id, category])), [categories]);
   const categoryRollups = useMemo(() => buildCategoryRollupMap(categoriesById), [categoriesById]);
-  const settingsById = useMemo(() => new Map(settings.map((setting) => [setting.id, setting])), [settings]);
 
   const feedItems = useMemo<ChangeFeedItem[]>(() => {
     const items: ChangeFeedItem[] = [];
@@ -895,6 +900,55 @@ function getSettingSearchText(setting?: ChangelogSettingSummary): string {
     setting.defaultValue === undefined ? undefined : String(setting.defaultValue),
     cspPath,
   ].filter(Boolean).join(' ');
+}
+
+function dedupeSettingRefs<T extends ChangelogSettingRef>(
+  refs: T[],
+  settingsById: Map<string, ChangelogSettingSummary>,
+): T[] {
+  const refsById = new Map(refs.map((ref) => [ref.id, ref]));
+
+  return refs.filter((ref) => {
+    const parent = getDuplicateParentRef(ref, refsById, settingsById);
+    return !parent || !hasSameFeedIdentity(ref, parent);
+  });
+}
+
+function getDuplicateParentRef<T extends ChangelogSettingRef>(
+  ref: T,
+  refsById: Map<string, T>,
+  settingsById: Map<string, ChangelogSettingSummary>,
+): T | undefined {
+  const rootDefinitionId = settingsById.get(ref.id)?.rootDefinitionId;
+  if (rootDefinitionId && rootDefinitionId !== ref.id) {
+    const parent = refsById.get(rootDefinitionId);
+    if (parent) return parent;
+  }
+
+  let bestParent: T | undefined;
+  for (const candidate of refsById.values()) {
+    if (
+      candidate.id !== ref.id &&
+      ref.id.startsWith(`${candidate.id}_`) &&
+      (!bestParent || candidate.id.length > bestParent.id.length)
+    ) {
+      bestParent = candidate;
+    }
+  }
+  return bestParent;
+}
+
+function hasSameFeedIdentity(a: ChangelogSettingRef, b: ChangelogSettingRef): boolean {
+  return (
+    a.displayName === b.displayName &&
+    a.categoryId === b.categoryId &&
+    (a.categoryName ?? '') === (b.categoryName ?? '') &&
+    normalizePlatformList(a.platform) === normalizePlatformList(b.platform)
+  );
+}
+
+function normalizePlatformList(platform?: string): string {
+  return platform?.split(',').map((p) => p.trim()).filter(Boolean).sort().join(',') ?? '';
 }
 
 /** Strip surrounding JSON quotes so values display cleanly */

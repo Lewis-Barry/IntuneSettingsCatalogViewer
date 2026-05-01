@@ -84,6 +84,7 @@ export function loadChangelogSettingSummaries(): ChangelogSettingSummary[] {
     if (!referencedIds.has(setting.id)) continue;
     summaries.push({
       id: setting.id,
+      rootDefinitionId: setting.rootDefinitionId,
       displayName: setting.displayName,
       name: setting.name,
       description: setting.description,

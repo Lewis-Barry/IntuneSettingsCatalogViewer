@@ -150,6 +150,7 @@ export interface SettingDefinition {
  */
 export interface ChangelogSettingSummary {
   id: string;
+  rootDefinitionId?: string;
   displayName: string;
   name: string;
   description?: string;
