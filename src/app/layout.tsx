@@ -36,7 +36,7 @@ export default function RootLayout({
       <head>
         {/* Apply theme class before first paint to prevent flash of wrong theme.
             Defaults to dark if no preference is saved in localStorage. */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');var dark=t!==null?t==='dark':true;document.documentElement.classList.toggle('dark',dark)}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme')||'dark';var c=t==='cobalt2';document.documentElement.classList.toggle('dark',t!=='light');document.documentElement.classList.toggle('cobalt2',c)}catch(e){}})()` }} />
         {/* Detect mobile UA before first paint so CSS can apply larger touch targets */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;var s=window.matchMedia&&window.matchMedia('(max-width:767px)').matches;if(m||(p&&s)){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
       </head>

@@ -843,7 +843,7 @@ function ActionIcon({ action }: { action: ActionType }) {
       ? 'M12 5v14M5 12h14' // plus
       : action === 'removed'
         ? 'M5 12h14' // minus
-        : 'M4 12c2-3 4-3 6 0s4 3 6 0 4-3 4-3'; // tilde / change
+        : 'M4 13c2.25-3.5 5-3.5 8 0s5.75 3.5 8 0'; // tilde / change
 
   return (
     <svg

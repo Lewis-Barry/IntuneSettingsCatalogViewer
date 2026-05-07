@@ -46,6 +46,30 @@
     --fluent-error-rgb: 255 107 105;   /* #ff6b69 — 5.8:1 on dark bg */
   }
 
+  /* ── Cobalt2 theme tokens ──
+     Official palette: #ffc600, #ff9d00, #2affdf, #193549, #0d3a58,
+     #35434d, #15232d, #fb94ff, #9effff. */
+  .cobalt2 {
+    --fluent-blue: #ffc600;
+    --fluent-blue-hover: #ffd43b;
+    --fluent-blue-pressed: #ff9d00;
+    --fluent-light-blue: #0d3a58;
+    --fluent-bg: #193549;
+    --fluent-bg-alt: #0d3a58;
+    --fluent-border: #35434d;
+    --fluent-border-strong: #9effff;
+    --fluent-text: #ffffff;
+    --fluent-text-secondary: #9effff;
+    --fluent-text-disabled: #8aa4b2;
+    --fluent-info: #2affdf;
+    --fluent-page-bg: #193549;
+    --fluent-surface: #0d3a58;
+    --fluent-surface-strong: #15232d;
+    --fluent-success-rgb: 42 255 223;  /* #2affdf */
+    --fluent-warning-rgb: 255 198 0;   /* #ffc600 */
+    --fluent-error-rgb: 251 148 255;   /* #fb94ff */
+  }
+
   html {
     font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system,
       BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
@@ -56,7 +80,8 @@
   }
 
   body {
-    @apply bg-white dark:bg-[#1c1c1e] text-fluent-text;
+    background: var(--fluent-page-bg, #ffffff);
+    color: var(--fluent-text);
   }
 
   /* Restore visible caret for actual text inputs */
@@ -92,6 +117,11 @@
   /* Fluent-style card */
   .fluent-card {
     @apply bg-white dark:bg-[#2c2c2e] rounded shadow-sm border border-fluent-border;
+  }
+
+  .cobalt2 .fluent-card {
+    background: var(--fluent-surface);
+    box-shadow: 0 1px 0 rgb(255 198 0 / 0.18);
   }
 
   /* Category tree item (rendered as <button>) */
@@ -159,6 +189,10 @@
     scrollbar-color: #48484a transparent;
   }
 
+  .cobalt2 .fluent-scroll {
+    scrollbar-color: #ffc600 transparent;
+  }
+
   .fluent-scroll::-webkit-scrollbar {
     width: 6px;
   }
@@ -176,6 +210,10 @@
     background-color: #48484a;
   }
 
+  .cobalt2 .fluent-scroll::-webkit-scrollbar-thumb {
+    background-color: #ffc600;
+  }
+
   .fluent-scroll::-webkit-scrollbar-thumb:hover {
     background-color: #a19f9d;
   }
@@ -183,6 +221,44 @@
   .dark .fluent-scroll::-webkit-scrollbar-thumb:hover {
     background-color: #636366;
   }
+
+  .cobalt2 .fluent-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #ff9d00;
+  }
+}
+
+.cobalt2 body,
+.cobalt2 header,
+.cobalt2 footer,
+.cobalt2 [class*="dark:bg-[#1c1c1e]"] {
+  background-color: var(--fluent-surface-strong) !important;
+}
+
+.cobalt2 main {
+  background-color: var(--fluent-page-bg) !important;
+}
+
+.cobalt2 [class*="dark:bg-[#2c2c2e]"] {
+  background-color: var(--fluent-surface) !important;
+}
+
+.cobalt2 input,
+.cobalt2 select,
+.cobalt2 textarea,
+.cobalt2 [class*="dark:border-[#636366]"] {
+  border-color: var(--fluent-border) !important;
+}
+
+.cobalt2 input,
+.cobalt2 select,
+.cobalt2 textarea {
+  background-color: var(--fluent-surface-strong) !important;
+  color: var(--fluent-text) !important;
+}
+
+.cobalt2 .fluent-btn-primary,
+.cobalt2 .bg-fluent-blue {
+  color: #15232d !important;
 }
 
 /* ── Pre-hydration: hide sidebar on small screens so it doesn't flash open ── */
