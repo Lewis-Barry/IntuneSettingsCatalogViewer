@@ -17,6 +17,7 @@
     --fluent-text-secondary: #605e5c;
     --fluent-text-disabled: #a19f9d;
     --fluent-info: #0078d4;
+    --fluent-page-bg: #ffffff;
     /* RGB channel values for opacity modifier support */
     --fluent-success-rgb: 16 124 16;   /* #107c10 */
     --fluent-warning-rgb: 255 185 0;   /* #ffb900 */
@@ -40,6 +41,7 @@
     --fluent-text-secondary: #aeaeb2;
     --fluent-text-disabled: #636366;
     --fluent-info: #60cdff;
+    --fluent-page-bg: #1c1c1e;
     /* Brighter semantic colors for dark backgrounds */
     --fluent-success-rgb: 76 199 76;   /* #4cc74c — 6.2:1 on dark bg */
     --fluent-warning-rgb: 255 214 10;  /* #ffd60a — 12.4:1 on dark bg */
