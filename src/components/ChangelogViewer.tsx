@@ -907,11 +907,24 @@ function dedupeSettingRefs<T extends ChangelogSettingRef>(
   settingsById: Map<string, ChangelogSettingSummary>,
 ): T[] {
   const refsById = new Map(refs.map((ref) => [ref.id, ref]));
-
-  return refs.filter((ref) => {
+  const withoutChildren = refs.filter((ref) => {
     const parent = getDuplicateParentRef(ref, refsById, settingsById);
     return !parent || !hasSameFeedIdentity(ref, parent);
   });
+
+  const merged = new Map<string, T>();
+  for (const ref of withoutChildren) {
+    const key = getEquivalentSettingKey(ref, settingsById);
+    const existing = merged.get(key);
+    if (!existing) {
+      merged.set(key, { ...ref });
+      continue;
+    }
+
+    existing.platform = mergePlatformLists(existing.platform, ref.platform);
+  }
+
+  return Array.from(merged.values());
 }
 
 function getDuplicateParentRef<T extends ChangelogSettingRef>(
@@ -942,13 +955,60 @@ function hasSameFeedIdentity(a: ChangelogSettingRef, b: ChangelogSettingRef): bo
   return (
     a.displayName === b.displayName &&
     a.categoryId === b.categoryId &&
-    (a.categoryName ?? '') === (b.categoryName ?? '') &&
-    normalizePlatformList(a.platform) === normalizePlatformList(b.platform)
+    (a.categoryName ?? '') === (b.categoryName ?? '')
   );
 }
 
-function normalizePlatformList(platform?: string): string {
-  return platform?.split(',').map((p) => p.trim()).filter(Boolean).sort().join(',') ?? '';
+function getEquivalentSettingKey(
+  ref: ChangelogSettingRef,
+  settingsById: Map<string, ChangelogSettingSummary>,
+): string {
+  const setting = settingsById.get(ref.id);
+  const fields = 'fields' in ref && Array.isArray(ref.fields)
+    ? ref.fields
+        .map((field) => [
+          normalizeIdentityText(field.field),
+          normalizeIdentityText(field.oldValue),
+          normalizeIdentityText(field.newValue),
+        ].join('\u001f'))
+        .sort()
+        .join('\u001e')
+    : '';
+
+  return [
+    normalizeIdentityText(ref.displayName),
+    ref.categoryId,
+    normalizeIdentityText(ref.categoryName),
+    normalizeIdentityText(setting?.name),
+    normalizeIdentityDescription(setting?.description),
+    normalizeIdentityText(setting?.helpText),
+    fields,
+  ].join('\u001f');
+}
+
+function normalizeIdentityText(value?: string | null): string {
+  return (value ?? '').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeIdentityDescription(value?: string | null): string {
+  return normalizeIdentityText(value).replace(/\s*Example value:\s*.*$/i, '').trim();
+}
+
+function mergePlatformLists(a?: string, b?: string): string | undefined {
+  const raw = [a, b]
+    .filter(Boolean)
+    .flatMap((platform) => platform!.split(',').map((p) => p.trim()).filter(Boolean));
+  if (raw.length === 0) return undefined;
+
+  const byKey = new Map<string, string>();
+  for (const platform of raw) {
+    const key = normalizePlatformKey(platform) ?? platform;
+    if (!byKey.has(key)) byKey.set(key, platform);
+  }
+
+  return Array.from(byKey.entries())
+    .map(([key, label]) => PLATFORM_LABELS[key] ? key : label)
+    .join(',');
 }
 
 /** Strip surrounding JSON quotes so values display cleanly */
