@@ -1,5 +1,90 @@
 [
   {
+    "date": "2026-05-21",
+    "added": [
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories_directorypath",
+        "displayName": "Directory",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution",
+        "displayName": "Allow agent tool execution",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_agentuser",
+        "displayName": "Agent user",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories_accesslevel",
+        "displayName": "Access level",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_agentuser_userprofile",
+        "displayName": "User profile",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance",
+        "displayName": "Agent Governance",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories",
+        "displayName": "Allowed filesystem directories",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allownetworkaccess",
+        "displayName": "Allow network access",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_targetedagentid",
+        "displayName": "Targeted agent",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_dynamicremovallist",
+        "displayName": "Specify additional package family names to remove (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      }
+    ],
+    "changed": [],
+    "categoriesAdded": [
+      {
+        "id": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "displayName": "Agent Governance",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  {
     "date": "2026-04-30",
     "added": [
       {
