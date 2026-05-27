@@ -1,5 +1,1135 @@
 [
   {
+    "date": "2026-05-27",
+    "added": [
+      {
+        "id": "ade_setupassistant_filevault",
+        "displayName": "FileVault",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_safetyandhandling",
+        "displayName": "Safety and handling",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS"
+      },
+      {
+        "id": "ade_setupassistant_unlockwithwatch",
+        "displayName": "Auto unlock with Apple Watch",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_webcontentfiltering",
+        "displayName": "Web Content Filtering",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_copilotnewtabpageenabled",
+        "displayName": "Enable the Copilot new tab page",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended~startup_recommended_setntpdefaultfeedtab_recommended_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (Device)",
+        "categoryId": "1653fa6c-aa99-4918-92c7-1df85d8843e1",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityblocklist_developertoolsavailabilityblocklistdesc",
+        "displayName": "List of URL patterns for which developer tools are blocked (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotblocklist_browsingwithcopilotblocklistdesc",
+        "displayName": "Browsing with Copilot Blocked URLs (Device)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_setntpdefaultfeedtab_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (User)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotallowlist",
+        "displayName": "Browsing with Copilot Allowed URLs",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotblocklist",
+        "displayName": "Browsing with Copilot Blocked URLs (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityblocklist_developertoolsavailabilityblocklistdesc",
+        "displayName": "List of URL patterns for which developer tools are blocked (Device)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~manageability_mamwithdevicedlpenabled",
+        "displayName": "Allow MAM enrollment when managed device has Purview DLP policy configured (User)",
+        "categoryId": "dfab5866-1712-4bbf-8edf-5b080b315b9b",
+        "categoryName": "Manageability",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_configurentpfeedtabvisibility",
+        "displayName": "Configure whether the Discover or Work feed tabs are shown on the New Tab Page. (User)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v23~policy~l_microsoftofficesystem~l_securitysettings_l_blockinsecureprotocols",
+        "displayName": "Block Insecure Protocols (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "ade_macos_authenticationmethod",
+        "displayName": "Intune authentication method",
+        "categoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+        "categoryName": "Management settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_appstore",
+        "displayName": "App Store",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "ade_setupassistant_multitasking",
+        "displayName": "Multitasking",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended~startup_recommended_setntpdefaultfeedtab_recommended_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (User)",
+        "categoryId": "1653fa6c-aa99-4918-92c7-1df85d8843e1",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_configurentpfeedtabvisibility_configurentpfeedtabvisibility",
+        "displayName": "Configure whether the Discover or Work feed tabs are shown on the New Tab Page. (User)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotallowlist_browsingwithcopilotallowlistdesc",
+        "displayName": "Browsing with Copilot Allowed URLs (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_m365linksautoopencopilotenabled",
+        "displayName": "Automatically open Copilot side pane with contextual insights for links opened from Outlook",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_ppt16v5~policy~l_microsoftofficepowerpoint~l_powerpointoptions~l_security_l_oleactions",
+        "displayName": "OLE Active Content (User)",
+        "categoryId": "85810387-3320-4056-bae2-953beeb246f7",
+        "categoryName": "Security",
+        "platform": "windows10"
+      },
+      {
+        "id": "ade_accountsettings_adminaccountname",
+        "displayName": "Admin account username",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_accountsettings_restrictediting",
+        "displayName": "Restrict editing",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_accountsettings_createlocalprimary",
+        "displayName": "Create a local primary account",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_accountsettings_adminaccountpasswordrotation",
+        "displayName": "Admin account password rotation period (days)",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_accountsettings_adminaccountfullname",
+        "displayName": "Admin account full name",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_appleconfiguratorcertificates",
+        "displayName": "Apple Configurator certificates",
+        "categoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+        "categoryName": "Management settings",
+        "platform": "iOS"
+      },
+      {
+        "id": "ade_setupassistant_icloudstorage",
+        "displayName": "iCloud Storage",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "macOS"
+      },
+      {
+        "id": "com.apple.extensiblesso_platformsso_enablecreatefirstuserduringsetup",
+        "displayName": "Enable Create First User During Setup",
+        "categoryId": "7b6ddf4e-7136-4fde-adbf-38e6bdfcc962",
+        "categoryName": "Extensible Single Sign On (SSO)",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended~startup_recommended_setntpdefaultfeedtab_recommended",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (User)",
+        "categoryId": "1653fa6c-aa99-4918-92c7-1df85d8843e1",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_sharedworkerextendedlifetimeenabled",
+        "displayName": "Enable the extended lifetime option for SharedWorkers (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "ade_accountsettings_primaryaccountfullname",
+        "displayName": "Primary account full name",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_macos_useraffinity",
+        "displayName": "User affinity",
+        "categoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+        "categoryName": "Management settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_camerabutton",
+        "displayName": "Camera button",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS"
+      },
+      {
+        "id": "ade_setupassistant_osshowcase",
+        "displayName": "OS showcase",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_allowbrowsingwithcopilot_recommended",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge. (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityallowlist_developertoolsavailabilityallowlistdesc",
+        "displayName": "List of URL patterns for which developer tools are allowed to be opened (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_sharedworkerextendedlifetimeenabled",
+        "displayName": "Enable the extended lifetime option for SharedWorkers",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~identity_m365authpopupsinworkenabled",
+        "displayName": "Allow M365 authentication popups in work profiles (User)",
+        "categoryId": "45a89c1f-0a34-4f78-b28f-d30b623fa423",
+        "categoryName": "Identity and sign-in",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityallowlist",
+        "displayName": "List of URL patterns for which developer tools are allowed to be opened (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotallowlist_browsingwithcopilotallowlistdesc",
+        "displayName": "Browsing with Copilot Allowed URLs (Device)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~manageability_mamwithdevicedlpenabled",
+        "displayName": "Allow MAM enrollment when managed device has Purview DLP policy configured",
+        "categoryId": "dfab5866-1712-4bbf-8edf-5b080b315b9b",
+        "categoryName": "Manageability",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended~startup_recommended_setntpdefaultfeedtab_recommended",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover",
+        "categoryId": "1653fa6c-aa99-4918-92c7-1df85d8843e1",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_configurentpfeedtabvisibility",
+        "displayName": "Configure whether the Discover or Work feed tabs are shown on the New Tab Page.",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_copilotnewtabpageenabled_recommended",
+        "displayName": "Enable the Copilot new tab page",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~identity_m365authpopupsinworkenabled",
+        "displayName": "Allow M365 authentication popups in work profiles",
+        "categoryId": "45a89c1f-0a34-4f78-b28f-d30b623fa423",
+        "categoryName": "Identity and sign-in",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v23~policy~l_microsoftofficesystem~l_securitysettings_l_blockolegraph",
+        "displayName": "Block OLE Graph (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v23~policy~l_microsoftofficesystem~l_securitysettings_l_blockwecfallback",
+        "displayName": "Restrict Apps from FPRPC Fallback (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "ade_accountsettings_createlocaladmin",
+        "displayName": "Create a local admin account",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_accessibility",
+        "displayName": "Accessibility",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "macOS"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_allowbrowsingwithcopilot",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge.",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximum number of concurrent connections to the proxy server for WebSocket requests (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_copilotnewtabpageenabled_recommended",
+        "displayName": "Enable the Copilot new tab page (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityallowlist",
+        "displayName": "List of URL patterns for which developer tools are allowed to be opened",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityblocklist",
+        "displayName": "List of URL patterns for which developer tools are blocked",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_copilotnewtabpageenabled",
+        "displayName": "Enable the Copilot new tab page (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_maxconnectionsperproxyforwebsocket_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximum number of concurrent connections to the proxy server for WebSocket requests: (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotblocklist_browsingwithcopilotblocklistdesc",
+        "displayName": "Browsing with Copilot Blocked URLs (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotallowlist",
+        "displayName": "Browsing with Copilot Allowed URLs (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (User)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityallowlist_developertoolsavailabilityallowlistdesc",
+        "displayName": "List of URL patterns for which developer tools are allowed to be opened (Device)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_ppt16v5~policy~l_microsoftofficepowerpoint~l_powerpointoptions~l_security_l_oleactions_l_empty",
+        "displayName": "",
+        "categoryId": "85810387-3320-4056-bae2-953beeb246f7",
+        "categoryName": "Security",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_maxconnectionsperproxyforwebsocket_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximum number of concurrent connections to the proxy server for WebSocket requests: (Device)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximum number of concurrent connections to the proxy server for WebSocket requests",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_setntpdefaultfeedtab_setntpdefaultfeedtab",
+        "displayName": "Set the default New Tab Page feed tab to Work or Discover (Device)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "ade_accountsettings_prefillaccountinfo",
+        "displayName": "Prefill account info",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_macos_awaitconfiguration",
+        "displayName": "Await final configuration",
+        "categoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+        "categoryName": "Management settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_setupassistant_iclouddiagnostics",
+        "displayName": "iCloud Diagnostics",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_m365linksautoopencopilotenabled",
+        "displayName": "Automatically open Copilot side pane with contextual insights for links opened from Outlook (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.bluetoothblocksharing",
+        "displayName": "Block Bluetooth sharing",
+        "categoryId": "b6733d23-eadc-486a-abfc-62b78698a16c",
+        "categoryName": "General",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "ade_accountsettings_hideusersgroups",
+        "displayName": "Hide in Users and Groups",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "ade_accountsettings_primaryaccountname",
+        "displayName": "Primary account name",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_developertoolsavailabilityblocklist",
+        "displayName": "List of URL patterns for which developer tools are blocked (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge~startup_configurentpfeedtabvisibility_configurentpfeedtabvisibility",
+        "displayName": "Configure whether the Discover or Work feed tabs are shown on the New Tab Page. (Device)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_allowbrowsingwithcopilot",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge. (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_browsingwithcopilotblocklist",
+        "displayName": "Browsing with Copilot Blocked URLs",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_allowbrowsingwithcopilot_recommended",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge.",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_office16v23~policy~l_microsoftofficesystem~l_securitysettings_l_blockorgchart",
+        "displayName": "Block OrgChart (User)",
+        "categoryId": "50b4bc60-802c-477a-9366-80e09154595f",
+        "categoryName": "Security Settings",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "com.apple.applicationaccess_allowassistantwhilelocked",
+        "displayName": "Allow Assistant While Locked (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Assistant While Locked\"",
+            "newValue": "\"Allow Assistant While Locked (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories_directorypath",
+        "displayName": "Directory",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"The filesystem directory path.\"",
+            "newValue": "\"The filesystem directory path to which this access rule applies. Supports absolute paths and environment variables (e.g. D:\\\\Repos, %USERPROFILE%).\""
+          },
+          {
+            "field": "helpText",
+            "oldValue": "\"e.g. C:\\\\Repos\\\\**\"",
+            "newValue": "\"\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution",
+        "displayName": "Allow agent execution in container",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow agent tool execution\"",
+            "newValue": "\"Allow agent execution in container\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"When enabled, the agent is allowed to execute tools with the specified resource policies.\"",
+            "newValue": "\"Controls whether agent tools and loops can execute. The specific behavior depends on the selected agent.\""
+          },
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "2 options"
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_agentuser",
+        "displayName": "Agent user account",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Agent user\"",
+            "newValue": "\"Agent user account\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"Specifies how the agent user identity is determined.\"",
+            "newValue": "\"\""
+          },
+          {
+            "field": "options",
+            "oldValue": "1 options",
+            "newValue": "2 options"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowgenmoji",
+        "displayName": "Allow Genmoji (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Genmoji\"",
+            "newValue": "\"Allow Genmoji (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowdictation",
+        "displayName": "Allow Dictation (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Dictation\"",
+            "newValue": "\"Allow Dictation (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_forceondeviceonlydictation",
+        "displayName": "Force On Device Only Dictation (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Force On Device Only Dictation\"",
+            "newValue": "\"Force On Device Only Dictation (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowexternalintelligenceintegrationssignin",
+        "displayName": "Allow External Intelligence Integrations Sign In (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow External Intelligence Integrations Sign In\"",
+            "newValue": "\"Allow External Intelligence Integrations Sign In (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories_accesslevel",
+        "displayName": "Access level",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"The level of filesystem access granted for this directory.\"",
+            "newValue": "\"Level of filesystem access granted for this directory. Subdirectories inherit the same access level unless they have their own rule.\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_agentuser_userprofile",
+        "displayName": "Identity profile",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"User profile\"",
+            "newValue": "\"Identity profile\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_fileexplorer_disablegraphrecentitems",
+        "displayName": "Disable Graph Recent Items",
+        "categoryId": "63b9904f-bbdf-4461-954a-c1d67fa8b357",
+        "categoryName": "File Explorer",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Turning off files from Office.com will prevent File Explorer from requesting recent cloud file metadata and displaying it in the Quick access view.\"",
+            "newValue": "\"Turning off this setting will prevent File Explorer from displaying files based on account and cloud provider activity.\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowassistantusergeneratedcontent",
+        "displayName": "Allow Assistant User Generated Content (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Assistant User Generated Content\"",
+            "newValue": "\"Allow Assistant User Generated Content (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "ade_lockedenrollment",
+        "displayName": "Locked enrollment",
+        "categoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+        "categoryName": "Management settings",
+        "platform": "iOS,macOS,visionOS,tvOS",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Blocks the user from removing the management profile through the iOS/iPadOS Settings menu.\"",
+            "newValue": "\"Blocks the user from removing the management profile through the Settings menu.\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowvisualintelligencesummary",
+        "displayName": "Allow Visual Intelligence Summary (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Visual Intelligence Summary\"",
+            "newValue": "\"Allow Visual Intelligence Summary (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowdefinitionlookup",
+        "displayName": "Allow Definition Lookup (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Definition Lookup\"",
+            "newValue": "\"Allow Definition Lookup (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowimageplayground",
+        "displayName": "Allow Image Playground (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Image Playground\"",
+            "newValue": "\"Allow Image Playground (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allowedfilesystemdirectories",
+        "displayName": "Allowed filesystem directories",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"A collection of filesystem directory rules.\"",
+            "newValue": "\"Specifies filesystem directories the contained agent can access. If no directories are configured, filesystem access is denied by default.\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowmailsmartreplies",
+        "displayName": "Allow Mail Smart Replies (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Mail Smart Replies\"",
+            "newValue": "\"Allow Mail Smart Replies (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allownotestranscriptionsummary",
+        "displayName": "Allow Notes Transcription Summary (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Notes Transcription Summary\"",
+            "newValue": "\"Allow Notes Transcription Summary (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowexternalintelligenceintegrations",
+        "displayName": "Allow External Intelligence Integrations (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow External Intelligence Integrations\"",
+            "newValue": "\"Allow External Intelligence Integrations (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowcontinuouspathkeyboard",
+        "displayName": "Allow Continuous Path Keyboard (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Continuous Path Keyboard\"",
+            "newValue": "\"Allow Continuous Path Keyboard (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowedexternalintelligenceworkspaceids",
+        "displayName": "Allowed External Intelligence Workspace IDs (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allowed External Intelligence Workspace IDs\"",
+            "newValue": "\"Allowed External Intelligence Workspace IDs (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowappleintelligencereport",
+        "displayName": "Allow Apple Intelligence Report (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Apple Intelligence Report\"",
+            "newValue": "\"Allow Apple Intelligence Report (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_forceondeviceonlytranslation",
+        "displayName": "Force On Device Only Translation (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Force On Device Only Translation\"",
+            "newValue": "\"Force On Device Only Translation (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowassistant",
+        "displayName": "Allow Assistant (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Assistant\"",
+            "newValue": "\"Allow Assistant (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_{profileid}_resourcepolicy_allowagenttoolexecution_allownetworkaccess",
+        "displayName": "Allow network access",
+        "categoryId": "ea5fabb0-6eec-4c3e-8c6d-7523739207c3",
+        "categoryName": "Agent Governance",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Controls whether the contained agent can access the network. 0=blocked, 1=allowed.\"",
+            "newValue": "\"Controls whether the contained agent is allowed to access the network. 0=blocked, 1=allowed.\""
+          },
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "2 options"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allownotestranscription",
+        "displayName": "Allow Notes Transcription (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Notes Transcription\"",
+            "newValue": "\"Allow Notes Transcription (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_forceassistantprofanityfilter",
+        "displayName": "Force Assistant Profanity Filter (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Force Assistant Profanity Filter\"",
+            "newValue": "\"Force Assistant Profanity Filter (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowspellcheck",
+        "displayName": "Allow Spell Check (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Spell Check\"",
+            "newValue": "\"Allow Spell Check (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowautocorrection",
+        "displayName": "Allow Auto Correction (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Auto Correction\"",
+            "newValue": "\"Allow Auto Correction (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowpredictivekeyboard",
+        "displayName": "Allow Predictive Keyboard (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Predictive Keyboard\"",
+            "newValue": "\"Allow Predictive Keyboard (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowimagewand",
+        "displayName": "Allow Image Wand (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Image Wand\"",
+            "newValue": "\"Allow Image Wand (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowsafarisummary",
+        "displayName": "Allow Safari Summary (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Safari Summary\"",
+            "newValue": "\"Allow Safari Summary (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowwritingtools",
+        "displayName": "Allow Writing Tools (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Writing Tools\"",
+            "newValue": "\"Allow Writing Tools (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowmailsummary",
+        "displayName": "Allow Mail Summary (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Mail Summary\"",
+            "newValue": "\"Allow Mail Summary (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowkeyboardshortcuts",
+        "displayName": "Allow Keyboard Shortcuts (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Keyboard Shortcuts\"",
+            "newValue": "\"Allow Keyboard Shortcuts (Deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowpersonalizedhandwritingresults",
+        "displayName": "Allow Personalized Handwriting Results (Deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Personalized Handwriting Results\"",
+            "newValue": "\"Allow Personalized Handwriting Results (Deprecated)\""
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "displayName": "Account settings",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  {
     "date": "2026-05-21",
     "added": [
       {
