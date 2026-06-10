@@ -15234,21 +15234,6 @@
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
-    "id": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
-    "name": null,
-    "displayName": "Setup Assistant",
-    "description": "Setup Assistant",
-    "categoryDescription": null,
-    "helpText": null,
-    "platforms": "iOS,macOS,visionOS,tvOS",
-    "technologies": "enrollment",
-    "settingUsage": "configuration",
-    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
-    "rootCategoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
-    "childCategoryIds": []
-  },
-  {
-    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
     "id": "75e27534-3163-45b1-b34e-ca79b077b286",
     "name": null,
     "displayName": "Management settings",
@@ -15260,6 +15245,21 @@
     "settingUsage": "configuration",
     "parentCategoryId": "00000000-0000-0000-0000-000000000000",
     "rootCategoryId": "75e27534-3163-45b1-b34e-ca79b077b286",
+    "childCategoryIds": []
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+    "name": null,
+    "displayName": "Setup Assistant",
+    "description": "Setup Assistant",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "iOS,macOS,visionOS,tvOS",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
     "childCategoryIds": []
   },
   {

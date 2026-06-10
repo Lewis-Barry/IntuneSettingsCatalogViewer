@@ -8812,7 +8812,7 @@
         "rootCategoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 34
+        "settingCount": 35
       },
       {
         "id": "526e363a-84db-4256-a13c-e01c8c646e26",
@@ -9132,7 +9132,7 @@
         "rootCategoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 72
+        "settingCount": 75
       },
       {
         "id": "2e241b46-e5ae-41d7-a559-fe40819e86f4",
@@ -9164,7 +9164,7 @@
         "rootCategoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
         "childCategoryIds": [],
         "children": [],
-        "settingCount": 343
+        "settingCount": 353
       },
       {
         "id": "08677354-6f67-455e-a430-4d8d2fbabe84",
@@ -9183,7 +9183,7 @@
         "settingCount": 7
       }
     ],
-    "settingCount": 1996
+    "settingCount": 2010
   },
   {
     "id": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
