@@ -39,6 +39,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme')||'dark';var c=t==='cobalt2';document.documentElement.classList.toggle('dark',t!=='light');document.documentElement.classList.toggle('cobalt2',c)}catch(e){}})()` }} />
         {/* Detect mobile UA before first paint so CSS can apply larger touch targets */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;var s=window.matchMedia&&window.matchMedia('(max-width:767px)').matches;if(m||(p&&s)){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `var _paq = window._paq = window._paq || [];_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);(function(){var u="//stats.conditionalaccess.uk/";_paq.push(['setTrackerUrl',u+'matomo.php']);_paq.push(['setSiteId','2']);var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];g.async=true;g.src=u+'matomo.js';s.parentNode.insertBefore(g,s);})();` }} />
       </head>
       <body className="min-h-screen flex flex-col">
         {/* ── Header ── */}
