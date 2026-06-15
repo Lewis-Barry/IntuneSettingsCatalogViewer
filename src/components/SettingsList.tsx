@@ -12,8 +12,6 @@ import HighlightText from './HighlightText';
 interface SettingsListProps {
   settings: SettingDefinition[];
   categoryName: string;
-  /** Total count (may differ from settings.length if paginated) */
-  totalCount?: number;
   /** If true, this is a search result group — show the category as a styled header */
   isSearchResult?: boolean;
   /** The raw search query to highlight matched characters */
@@ -31,7 +29,6 @@ const PAGE_SIZE = 500;
 export default function SettingsList({
   settings,
   categoryName,
-  totalCount,
   isSearchResult = false,
   highlightQuery,
   scrollContainerRef,
@@ -76,8 +73,7 @@ export default function SettingsList({
   }, [rootSettings, categoryMap, categoryName]);
 
   // Compute visible settings count: root settings + all non-duplicate children
-  // that survived the CSP-path deduplication and grouping logic.  This is more
-  // accurate than the raw `totalCount` prop which includes hidden duplicates.
+  // that survived the CSP-path deduplication and grouping logic.
   const count = useMemo(() => {
     let total = rootSettings.length;
     for (const [, children] of childMap) {

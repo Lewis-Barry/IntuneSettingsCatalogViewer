@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { search as flexSearch, preloadIndex } from '@/lib/search';
+import { search as flexSearch, ensureIndex } from '@/lib/search';
 import type { SearchIndexEntry } from '@/lib/types';
 
 interface SearchBarProps {
@@ -31,7 +31,7 @@ export default function SearchBar({
   useEffect(() => clearPendingDebounce, [clearPendingDebounce]);
 
   const handleFocus = useCallback(() => {
-    preloadIndex();
+    ensureIndex().catch(() => {});
   }, []);
 
   // Debounced search — fires results to parent, no dropdown
@@ -72,43 +72,6 @@ export default function SearchBar({
     [clearPendingDebounce, onSearchResults, onQueryChange]
   );
 
-  // Handle search button / Enter key
-  const handleSearch = useCallback(async () => {
-    const trimmedQuery = query.trim();
-    clearPendingDebounce();
-
-    if (!trimmedQuery) {
-      ++searchSeqRef.current;
-      setIsLoading(false);
-      return;
-    }
-
-    const searchSeq = ++searchSeqRef.current;
-    setIsLoading(true);
-    try {
-      const res = await flexSearch(trimmedQuery, 200);
-      if (searchSeq === searchSeqRef.current) {
-        onSearchResults?.(res);
-      }
-    } catch (err) {
-      console.error('Search failed:', err);
-    } finally {
-      if (searchSeq === searchSeqRef.current) {
-        setIsLoading(false);
-      }
-    }
-  }, [clearPendingDebounce, query, onSearchResults]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSearch();
-      }
-    },
-    [handleSearch]
-  );
-
   return (
     <div>
       {/* Search instruction */}
@@ -145,7 +108,6 @@ export default function SearchBar({
             value={query}
             onChange={handleChange}
             onFocus={handleFocus}
-            onKeyDown={handleKeyDown}
             placeholder={placeholder}
             className="w-full pl-10 pr-8 py-2 text-fluent-base bg-white dark:bg-[#2c2c2e] border border-fluent-border-strong rounded
                        focus:outline-none focus:border-fluent-blue focus:ring-1 focus:ring-fluent-blue

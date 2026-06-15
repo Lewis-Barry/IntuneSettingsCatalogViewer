@@ -8,7 +8,7 @@ type SearchWorkerResponse =
 let worker: Worker | null = null;
 let nextRequestId = 1;
 const pendingRequests = new Map<number, {
-  resolve: (value: SearchIndexEntry[] | void) => void;
+  resolve: (value: SearchIndexEntry[]) => void;
   reject: (reason?: unknown) => void;
 }>();
 
@@ -31,7 +31,8 @@ function getWorker(): Worker {
     } else if (response.type === 'results') {
       pending.resolve(response.results);
     } else {
-      pending.resolve();
+      // 'ready' — index loaded, no results to return.
+      pending.resolve([]);
     }
   };
 
@@ -48,25 +49,16 @@ function getWorker(): Worker {
   return worker;
 }
 
-function postWorkerRequest<T extends SearchIndexEntry[] | void>(message: Record<string, unknown>): Promise<T> {
+function postWorkerRequest(message: Record<string, unknown>): Promise<SearchIndexEntry[]> {
   const id = nextRequestId++;
-  return new Promise<T>((resolve, reject) => {
-    pendingRequests.set(id, {
-      resolve: (value) => resolve(value as T),
-      reject,
-    });
+  return new Promise<SearchIndexEntry[]>((resolve, reject) => {
+    pendingRequests.set(id, { resolve, reject });
     getWorker().postMessage({ ...message, id, basePath: getBasePath() });
   });
 }
 
 export async function ensureIndex(): Promise<void> {
-  await postWorkerRequest<void>({ type: 'ensureIndex' });
-}
-
-export function preloadIndex(): void {
-  ensureIndex().catch(() => {
-    // ensureIndex will retry on next call.
-  });
+  await postWorkerRequest({ type: 'ensureIndex' });
 }
 
 export async function search(
@@ -74,7 +66,7 @@ export async function search(
   limit: number = 50
 ): Promise<SearchIndexEntry[]> {
   if (!query.trim()) return [];
-  return postWorkerRequest<SearchIndexEntry[]>({ type: 'search', query, limit });
+  return postWorkerRequest({ type: 'search', query, limit });
 }
 
 

@@ -14,6 +14,22 @@ No installation, no sign-in. Data is refreshed automatically every day.
 
 ---
 
+## Local Development
+
+```bash
+npm install
+npm run build-search-index   # build search index + per-category browse files from data/settings.json
+npm run dev                  # http://localhost:3000
+```
+
+> **Tip:** `npm run dev` does **not** regenerate the search index or the per-category browse files
+> (`public/settings-by-category/`, `public/settings-browse.json`). They're derived from
+> `data/settings.json`, so after pulling new data run `npm run build-search-index` again — otherwise
+> newly added categories show in the sidebar but appear empty locally. (Live is unaffected: CI
+> rebuilds these on every deploy.)
+
+---
+
 ## Features
 
 ### Browse by Category

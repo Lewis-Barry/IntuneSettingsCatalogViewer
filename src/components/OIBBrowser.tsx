@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue, memo } from 'react';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { detectMatchSources } from '@/lib/types';
 import { getAsrRuleInfo } from '@/lib/asr-rules';
@@ -15,6 +15,7 @@ import {
   type OIBFolderNode,
   type OIBCategoryNode,
 } from '@/lib/oib-types';
+import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 
 // ── (Value resolution removed — OIB selections are now shown in the expanded detail panel) ──
 
@@ -349,94 +350,13 @@ export default function OIBBrowser() {
   const [selectedNode, setSelectedNode] = useState<{ folder: string; category: string } | null>(null);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [isSearchPending, setIsSearchPending] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const deferredQuery = useDeferredValue(searchQuery);
+  const isSearchPending = searchQuery !== deferredQuery;
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const isDesktop = useIsDesktop();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarWidth, setSidebarWidth] = useState(320);
-  const isResizing = useRef(false);
-  const [sidebarHydrated, setSidebarHydrated] = useState(false);
   const mainScrollRef = useRef<HTMLDivElement>(null);
-  const MIN_SIDEBAR = 200;
-  const MAX_SIDEBAR = 600;
-
-  const [fabHidden, setFabHidden] = useState(false);
-  const fabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fabRef = useRef<HTMLButtonElement>(null);
-
-  // ── FAB auto-hide (mobile) ──
-  const scheduleFabShow = useCallback(() => {
-    if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-    fabTimerRef.current = setTimeout(() => setFabHidden(false), 800);
-  }, []);
-
-  const hideFab = useCallback(() => {
-    setFabHidden(true);
-    scheduleFabShow();
-  }, [scheduleFabShow]);
-
-  useEffect(() => {
-    if (isDesktop) return;
-    const onTouchStart = (e: TouchEvent) => {
-      if (fabRef.current?.contains(e.target as Node)) return;
-      hideFab();
-    };
-    const onTouchMove = () => hideFab();
-    const vv = window.visualViewport;
-    let lastHeight = vv?.height ?? window.innerHeight;
-    const onViewportResize = () => {
-      const currentHeight = vv?.height ?? window.innerHeight;
-      if (currentHeight < lastHeight - 50) {
-        setFabHidden(true);
-        if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-      } else if (currentHeight > lastHeight + 50) {
-        scheduleFabShow();
-      }
-      lastHeight = currentHeight;
-    };
-    document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: true });
-    vv?.addEventListener('resize', onViewportResize);
-    return () => {
-      document.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
-      vv?.removeEventListener('resize', onViewportResize);
-      if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-    };
-  }, [isDesktop, hideFab, scheduleFabShow]);
-
-  useEffect(() => {
-    const isMobile = !window.matchMedia('(min-width: 768px)').matches;
-    if (isMobile) setSidebarOpen(false);
-    setSidebarHydrated(true);
-  }, []);
-
-  // ── Sidebar resize (desktop) ──
-  const handleResizeStart = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    isResizing.current = true;
-    const startX = e.clientX;
-    const startWidth = sidebarWidth;
-    const onMouseMove = (ev: MouseEvent) => {
-      if (!isResizing.current) return;
-      const delta = ev.clientX - startX;
-      setSidebarWidth(Math.min(MAX_SIDEBAR, Math.max(MIN_SIDEBAR, startWidth + delta)));
-    };
-    const onMouseUp = () => {
-      isResizing.current = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    };
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }, [sidebarWidth]);
+  const { sidebarOpen, setSidebarOpen, sidebarWidth, sidebarHydrated, handleResizeStart } = useBrowserSidebar();
 
   // ── Load data ──
   useEffect(() => {
@@ -477,27 +397,8 @@ export default function OIBBrowser() {
 
   const isLoading = !oibLoaded || !defsLoaded;
 
-  // ── Debounced search ──
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (!value.trim()) {
-      setDebouncedQuery('');
-      setIsSearchPending(false);
-      return;
-    }
-    setIsSearchPending(true);
-    debounceRef.current = setTimeout(() => {
-      setDebouncedQuery(value);
-      setIsSearchPending(false);
-    }, 200);
-  }, []);
-
   const clearSearch = useCallback(() => {
     setSearchQuery('');
-    setDebouncedQuery('');
-    setIsSearchPending(false);
     searchInputRef.current?.focus();
   }, []);
 
@@ -521,8 +422,8 @@ export default function OIBBrowser() {
 
   // ── Search results ──
   const searchHits = useMemo((): SearchHit[] | null => {
-    if (!oibData || !debouncedQuery.trim()) return null;
-    const q = debouncedQuery.trim().toLowerCase();
+    if (!oibData || !deferredQuery.trim()) return null;
+    const q = deferredQuery.trim().toLowerCase();
     const hits: SearchHit[] = [];
     const policies = selectedFolder
       ? oibData.policies.filter((p) => p.oibFolder === selectedFolder)
@@ -545,18 +446,17 @@ export default function OIBBrowser() {
       }
     }
     return hits;
-  }, [oibData, defsMap, debouncedQuery, selectedFolder]);
+  }, [oibData, defsMap, deferredQuery, selectedFolder]);
 
   // ── Handlers ──
   const handleSelectCategory = useCallback(
     (node: { folder: string; category: string }) => {
       setSelectedNode(node);
       setSearchQuery('');
-      setDebouncedQuery('');
       mainScrollRef.current?.scrollTo({ top: 0 });
       if (!isDesktop) setSidebarOpen(false);
     },
-    [isDesktop],
+    [isDesktop, setSidebarOpen],
   );
 
   const handleFolderFilter = useCallback((folder: string | null) => {
@@ -662,7 +562,7 @@ export default function OIBBrowser() {
                 ref={searchInputRef}
                 type="text"
                 value={searchQuery}
-                onChange={handleSearchChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for a setting"
                 className="w-full pl-10 pr-8 py-2 text-fluent-base bg-white dark:bg-[#2c2c2e] border border-fluent-border-strong rounded
                            focus:outline-none focus:border-fluent-blue focus:ring-1 focus:ring-fluent-blue
@@ -719,106 +619,28 @@ export default function OIBBrowser() {
         </div>
       </div>
 
-      {/* ── Mobile FAB ── */}
-      {!isDesktop && !sidebarOpen && (
-        <button
-          ref={fabRef}
-          onClick={() => setSidebarOpen(true)}
-          className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white dark:text-[#1c1c1e] shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
-            fabHidden ? 'opacity-25' : 'opacity-100'
-          }`}
-          aria-label="Open categories"
-          title="Browse categories"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
-        </button>
-      )}
-
-      {/* ── Mobile backdrop ── */}
-      {!isDesktop && sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 transition-opacity"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* ── Main content: sidebar + settings ── */}
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Sidebar */}
-        <aside
-          className={`${!sidebarHydrated ? 'sidebar-mobile-init ' : ''}${
-            isDesktop
-              ? 'flex-shrink-0 border-r border-fluent-border bg-white dark:bg-[#1c1c1e] overflow-hidden transition-all duration-200'
-              : `fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[360px] bg-white dark:bg-[#1c1c1e] shadow-2xl transition-transform duration-300 ease-in-out ${
-                  sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                }`
-          }`}
-          style={isDesktop ? { width: sidebarOpen ? sidebarWidth : 0 } : undefined}
-        >
-          {!isDesktop && (
-            <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-fluent-bg-alt">
-              <span className="text-fluent-base font-semibold">Categories</span>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-fluent-bg text-fluent-text-secondary hover:text-fluent-text transition-colors"
-                aria-label="Close categories"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+      <BrowserSidebar
+        isDesktop={isDesktop}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        sidebarWidth={sidebarWidth}
+        sidebarHydrated={sidebarHydrated}
+        handleResizeStart={handleResizeStart}
+        sidebarBody={
+          isLoading ? (
+            <div className="flex flex-col items-center justify-center py-8 text-fluent-text-secondary">
+              <div className="w-6 h-6 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin mb-3" />
+              <p className="text-fluent-sm">Loading…</p>
             </div>
-          )}
-          <div className="h-full overflow-y-auto fluent-scroll py-2" style={isDesktop ? { minWidth: MIN_SIDEBAR } : undefined}>
-            {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-8 text-fluent-text-secondary">
-                <div className="w-6 h-6 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin mb-3" />
-                <p className="text-fluent-sm">Loading…</p>
-              </div>
-            ) : (
-              <OIBSidebarTree
-                tree={sidebarTree}
-                selectedNode={selectedNode}
-                onSelect={handleSelectCategory}
-              />
-            )}
-          </div>
-        </aside>
-
-        {/* Desktop resize handle + toggle */}
-        {isDesktop && (
-          <div className={`flex-shrink-0 flex flex-col relative${!sidebarHydrated ? ' sidebar-mobile-init' : ''}`}>
-            {sidebarOpen && (
-              <div
-                className="absolute inset-y-0 -left-1 w-2 cursor-col-resize z-20 group"
-                onMouseDown={handleResizeStart}
-                title="Drag to resize sidebar"
-              >
-                <div className="absolute inset-y-0 left-[3px] w-px bg-transparent group-hover:bg-fluent-blue transition-colors" />
-              </div>
-            )}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="flex-shrink-0 w-8 h-full flex items-center justify-center bg-fluent-bg hover:bg-fluent-bg-alt border-r border-fluent-border transition-colors"
-              aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-            >
-              <svg
-                className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform ${sidebarOpen ? '' : 'rotate-180'}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-          </div>
-        )}
-
+          ) : (
+            <OIBSidebarTree
+              tree={sidebarTree}
+              selectedNode={selectedNode}
+              onSelect={handleSelectCategory}
+            />
+          )
+        }
+      >
         {/* ── Settings panel ── */}
         <div ref={mainScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {hasSearchResults ? (
@@ -827,7 +649,7 @@ export default function OIBBrowser() {
                 <svg className="w-12 h-12 mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <p className="text-fluent-lg font-medium mb-1">No results for &ldquo;{debouncedQuery}&rdquo;</p>
+                <p className="text-fluent-lg font-medium mb-1">No results for &ldquo;{deferredQuery}&rdquo;</p>
                 <p className="text-fluent-base">Try a different search term.</p>
               </div>
             ) : (
@@ -848,7 +670,7 @@ export default function OIBBrowser() {
                       policy={hit.policy}
                       defsMap={defsMap}
                       highlightSettings={highlightMap}
-                      highlightQuery={debouncedQuery}
+                      highlightQuery={deferredQuery}
                       breadcrumb={breadcrumb}
                     />
                   );
@@ -902,7 +724,7 @@ export default function OIBBrowser() {
             </div>
           )}
         </div>
-      </div>
+      </BrowserSidebar>
     </div>
   );
 }

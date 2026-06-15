@@ -6,8 +6,9 @@ import SettingsList from './SettingsList';
 import SearchBar from './SearchBar';
 import PlatformFilter from './PlatformFilter';
 import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
-import { countVisibleRootSettings } from '@/lib/settings-grouping';
+import { countVisibleRootSettings, getCspPath } from '@/lib/settings-grouping';
 import { useIsDesktop } from '@/lib/useMediaQuery';
+import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -75,9 +76,13 @@ function buildBreadcrumb(
   return crumbs;
 }
 
+function getBasePath(): string {
+  return (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
+}
+
 export default function SettingsCatalogBrowser({
   categoryTree,
-  categoryMap: initialCategoryMap,
+  categoryMap,
   categoryParentMap,
   totalSettings,
   lastUpdated,
@@ -95,7 +100,6 @@ export default function SettingsCatalogBrowser({
   // from per-category shards when the user selects a category; the full browse
   // payload is kept as a fallback for global filters and search result grouping.
   const [settingsByCategory, setSettingsByCategory] = useState<Record<string, SettingDefinition[]>>({});
-  const [categoryMap, setCategoryMap] = useState<Record<string, string>>(initialCategoryMap);
   const [fullBrowseLoaded, setFullBrowseLoaded] = useState(false);
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [loadingCategoryId, setLoadingCategoryId] = useState<string | null>(null);
@@ -104,24 +108,8 @@ export default function SettingsCatalogBrowser({
   const fullBrowsePromiseRef = useRef<Promise<void> | null>(null);
   const pendingCategoryIdRef = useRef<string | null>(null);
 
-  const getBasePath = useCallback(() => {
-    const basePath = (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
-    return basePath;
-  }, []);
-
   const mergeSettingsByCategory = useCallback((byCat: Record<string, SettingDefinition[]>) => {
     setSettingsByCategory((prev) => ({ ...prev, ...byCat }));
-    setCategoryMap((prev) => {
-      let changed = false;
-      const mergedMap = { ...prev };
-      for (const catId of Object.keys(byCat)) {
-        if (!mergedMap[catId]) {
-          mergedMap[catId] = 'Unknown Category';
-          changed = true;
-        }
-      }
-      return changed ? mergedMap : prev;
-    });
   }, []);
 
   const loadSettingsForCategories = useCallback(async (categoryIds: string[]) => {
@@ -162,7 +150,7 @@ export default function SettingsCatalogBrowser({
     } finally {
       setSettingsLoading(false);
     }
-  }, [getBasePath, mergeSettingsByCategory]);
+  }, [mergeSettingsByCategory]);
 
   const loadFullBrowseSettings = useCallback(async () => {
     if (fullBrowseLoaded) return;
@@ -198,110 +186,20 @@ export default function SettingsCatalogBrowser({
       });
 
     return fullBrowsePromiseRef.current;
-  }, [fullBrowseLoaded, getBasePath, mergeSettingsByCategory]);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarWidth, setSidebarWidth] = useState(320);
-  const isResizing = useRef(false);
+  }, [fullBrowseLoaded, mergeSettingsByCategory]);
+  const { sidebarOpen, setSidebarOpen, sidebarWidth, sidebarHydrated, handleResizeStart } = useBrowserSidebar();
   const settingsScrollRef = useRef<HTMLDivElement>(null);
-  const [sidebarHydrated, setSidebarHydrated] = useState(false);
-  const MIN_SIDEBAR = 200;
-  const MAX_SIDEBAR = 600;
-
-  // ── FAB auto-hide on touch / keyboard activity ──
-  const [fabHidden, setFabHidden] = useState(false);
-  const fabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fabRef = useRef<HTMLButtonElement>(null);
-
-  // Show the FAB again after a delay with no interaction
-  const scheduleFabShow = useCallback(() => {
-    if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-    fabTimerRef.current = setTimeout(() => setFabHidden(false), 800);
-  }, []);
-
-  // Hide FAB immediately and schedule re-show
-  const hideFab = useCallback(() => {
-    setFabHidden(true);
-    scheduleFabShow();
-  }, [scheduleFabShow]);
-
-  useEffect(() => {
-    if (isDesktop) return;
-
-    // Touch activity on the document — ignore touches on the FAB itself
-    const onTouchStart = (e: TouchEvent) => {
-      if (fabRef.current?.contains(e.target as Node)) return;
-      hideFab();
-    };
-    const onTouchMove = () => hideFab();
-
-    // Keyboard open / close (visual viewport resize on mobile)
-    const vv = window.visualViewport;
-    let lastHeight = vv?.height ?? window.innerHeight;
-    const onViewportResize = () => {
-      const currentHeight = vv?.height ?? window.innerHeight;
-      if (currentHeight < lastHeight - 50) {
-        // Keyboard probably opened
-        setFabHidden(true);
-        if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-      } else if (currentHeight > lastHeight + 50) {
-        // Keyboard probably closed
-        scheduleFabShow();
-      }
-      lastHeight = currentHeight;
-    };
-
-    document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: true });
-    vv?.addEventListener('resize', onViewportResize);
-
-    return () => {
-      document.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
-      vv?.removeEventListener('resize', onViewportResize);
-      if (fabTimerRef.current) clearTimeout(fabTimerRef.current);
-    };
-  }, [isDesktop, hideFab, scheduleFabShow]);
-
-  // After first client render: close sidebar on mobile, then hand control to React.
-  // We check window.matchMedia directly because the useIsDesktop hook hasn't
-  // updated its state yet when this first effect fires (stale closure).
-  useEffect(() => {
-    const isMobile = !window.matchMedia('(min-width: 768px)').matches;
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
-    setSidebarHydrated(true);
-  }, []);
-
-  const handleResizeStart = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    isResizing.current = true;
-    const startX = e.clientX;
-    const startWidth = sidebarWidth;
-
-    const onMouseMove = (ev: MouseEvent) => {
-      if (!isResizing.current) return;
-      const delta = ev.clientX - startX;
-      const newWidth = Math.min(MAX_SIDEBAR, Math.max(MIN_SIDEBAR, startWidth + delta));
-      setSidebarWidth(newWidth);
-    };
-
-    const onMouseUp = () => {
-      isResizing.current = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    };
-
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }, [sidebarWidth]);
 
   const handleSelectCategory = useCallback(
     (categoryId: string, categoryName: string) => {
+      // Click the selected category again to deselect it.
+      if (categoryId === selectedCategoryId) {
+        pendingCategoryIdRef.current = null;
+        setSelectedCategoryId(null);
+        setSelectedCategoryName('');
+        setLoadingCategoryId(null);
+        return;
+      }
       const categoryIds = collectCategoryIds(categoryTree, categoryId);
       const hasMissingSettings = categoryIds.some((id) => !loadedCategoryIdsRef.current.has(id));
 
@@ -330,7 +228,7 @@ export default function SettingsCatalogBrowser({
         setLoadingCategoryId(null);
       });
     },
-    [categoryTree, loadSettingsForCategories]
+    [categoryTree, loadSettingsForCategories, selectedCategoryId]
   );
 
   const handleSearchResults = useCallback((results: SearchIndexEntry[]) => {
@@ -362,10 +260,6 @@ export default function SettingsCatalogBrowser({
     for (const catSettings of Object.values(settingsByCategory)) {
       for (const s of catSettings) settingById.set(s.id, s);
     }
-    const getCspPath = (s: SettingDefinition) =>
-      s.baseUri && s.offsetUri
-        ? `${s.baseUri}/${s.offsetUri}`
-        : s.baseUri || s.offsetUri || '';
 
     function isVisibleSetting(s: SettingDefinition): boolean {
       const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
@@ -545,7 +439,7 @@ export default function SettingsCatalogBrowser({
         setSidebarOpen(false);
       }
     },
-    [handleSelectCategory, isDesktop]
+    [handleSelectCategory, isDesktop, setSidebarOpen]
   );
 
   return (
@@ -592,104 +486,22 @@ export default function SettingsCatalogBrowser({
 
       </div>
 
-      {/* Mobile sidebar toggle FAB */}
-      {!isDesktop && !sidebarOpen && (
-        <button
-          ref={fabRef}
-          onClick={() => setSidebarOpen(true)}
-          className={`fixed bottom-6 left-4 z-50 w-12 h-12 rounded-full bg-fluent-blue text-white dark:text-[#1c1c1e] shadow-lg flex items-center justify-center hover:bg-fluent-blue-hover active:bg-fluent-blue-pressed transition-all duration-200 ${
-            fabHidden ? 'opacity-25' : 'opacity-100'
-          }`}
-          aria-label="Open categories"
-          title="Browse categories"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
-        </button>
-      )}
-
-      {/* Mobile sidebar backdrop */}
-      {!isDesktop && sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 transition-opacity"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Main content: sidebar + settings list */}
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Category sidebar — drawer on mobile, inline on desktop */}
-        <aside
-          className={`${!sidebarHydrated ? 'sidebar-mobile-init ' : ''}${
-            isDesktop
-              ? 'flex-shrink-0 border-r border-fluent-border bg-white dark:bg-[#1c1c1e] overflow-hidden transition-all duration-200'
-              : `fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[360px] bg-white dark:bg-[#1c1c1e] shadow-2xl transition-transform duration-300 ease-in-out ${
-                  sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                }`
-          }`}
-          style={isDesktop ? { width: sidebarOpen ? sidebarWidth : 0 } : undefined}
-        >
-          {/* Mobile drawer header */}
-          {!isDesktop && (
-            <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-fluent-bg-alt">
-              <span className="text-fluent-base font-semibold">Categories</span>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-fluent-bg text-fluent-text-secondary hover:text-fluent-text transition-colors"
-                aria-label="Close categories"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          )}
-          <div className="h-full overflow-y-auto fluent-scroll py-2" style={isDesktop ? { minWidth: MIN_SIDEBAR } : undefined}>
-            <CategoryTree
-              categories={filteredCategoryTree}
-              selectedCategoryId={selectedCategoryId}
-              loadingCategoryId={loadingCategoryId}
-              onSelectCategory={handleSelectCategoryMobile}
-            />
-          </div>
-        </aside>
-
-        {/* Desktop resize handle + toggle */}
-        {isDesktop && (
-          <div className={`flex-shrink-0 flex flex-col relative${!sidebarHydrated ? ' sidebar-mobile-init' : ''}`}>
-            {/* Drag handle */}
-            {sidebarOpen && (
-              <div
-                className="absolute inset-y-0 -left-1 w-2 cursor-col-resize z-20 group"
-                onMouseDown={handleResizeStart}
-                title="Drag to resize sidebar"
-              >
-                <div className="absolute inset-y-0 left-[3px] w-px bg-transparent group-hover:bg-fluent-blue transition-colors" />
-              </div>
-            )}
-
-            {/* Toggle button */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="flex-shrink-0 w-8 h-full flex items-center justify-center bg-fluent-bg hover:bg-fluent-bg-alt border-r border-fluent-border transition-colors"
-              aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-            >
-              <svg
-                className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform ${sidebarOpen ? '' : 'rotate-180'}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-          </div>
-        )}
-
+      <BrowserSidebar
+        isDesktop={isDesktop}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        sidebarWidth={sidebarWidth}
+        sidebarHydrated={sidebarHydrated}
+        handleResizeStart={handleResizeStart}
+        sidebarBody={
+          <CategoryTree
+            categories={filteredCategoryTree}
+            selectedCategoryId={selectedCategoryId}
+            loadingCategoryId={loadingCategoryId}
+            onSelectCategory={handleSelectCategoryMobile}
+          />
+        }
+      >
         {/* Settings list */}
         <div ref={settingsScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {isSearching ? (
@@ -718,7 +530,6 @@ export default function SettingsCatalogBrowser({
             <SettingsList
               settings={categorySettings}
               categoryName={selectedCategoryName}
-              totalCount={categorySettings.length}
               scrollContainerRef={settingsScrollRef}
               categoryMap={categoryMap}
             />
@@ -734,7 +545,7 @@ export default function SettingsCatalogBrowser({
             </div>
           )}
         </div>
-      </div>
+      </BrowserSidebar>
     </div>
   );
 }

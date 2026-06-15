@@ -8,7 +8,8 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Intune Settings Catalog Viewer',
   description:
-    'Browse, search, and explore all Microsoft Intune Settings Catalog definitions — fast, offline, and without needing Intune access.',
+    'Browse, search, and explore all Microsoft Intune Settings Catalog definitions — fast, and without needing Intune access.',
+  authors: [{ name: 'Lewis Barry, Microsoft MVP for Intune' }],
   keywords: [
     'Intune',
     'Settings Catalog',
@@ -99,7 +100,11 @@ export default function RootLayout({
         <footer className="border-t border-fluent-border bg-fluent-bg dark:bg-[#1c1c1e] py-4">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-fluent-sm text-fluent-text-secondary">
             <p>
-              Data sourced from Microsoft Graph API. Not affiliated with Microsoft.
+              Data sourced from Microsoft Graph API. Not affiliated with Microsoft. By{' '}
+              <a href="https://conditionalaccess.uk" className="text-fluent-blue hover:underline">
+                Lewis Barry
+              </a>
+              .
             </p>
             <p>
               Last updated: <span className="font-medium">{(() => { const d = getLastUpdated(); return d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '—'; })()}</span>

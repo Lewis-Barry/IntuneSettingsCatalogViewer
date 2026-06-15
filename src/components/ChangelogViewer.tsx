@@ -339,19 +339,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
       }
       if (!normalizedQuery) return true;
 
-      const haystack = [
-        item.title,
-        item.hotspotCategory,
-        item.categoryName,
-        item.contextLabel,
-        item.contextDetail,
-        item.platform,
-        item.date,
-        getSettingSearchText(item.setting),
-        item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
-      ].filter(Boolean).join(' ').toLowerCase();
-
-      return haystack.includes(normalizedQuery);
+      return buildHaystack(item).includes(normalizedQuery);
     });
   }, [dateScopedItems, filter, query, selectedCategory, selectedPlatforms]);
 
@@ -368,21 +356,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         const platformKeys = getPlatformKeys(item.platform);
         if (!selectedPlatforms.some((p) => platformKeys.includes(p))) return;
       }
-      if (normalizedQuery) {
-        const haystack = [
-          item.title,
-          item.hotspotCategory,
-          item.categoryName,
-          item.contextLabel,
-          item.contextDetail,
-          item.platform,
-          item.date,
-          getSettingSearchText(item.setting),
-          item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
-        ].filter(Boolean).join(' ').toLowerCase();
-
-        if (!haystack.includes(normalizedQuery)) return;
-      }
+      if (normalizedQuery && !buildHaystack(item).includes(normalizedQuery)) return;
 
       counts.set(item.hotspotCategory, (counts.get(item.hotspotCategory) ?? 0) + 1);
       total += 1;
@@ -649,22 +623,17 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
   );
 }
 
-function StatCard({ label, value, displayValue, subtitle, color }: {
+function StatCard({ label, value, color }: {
   label: string;
   value?: number;
-  displayValue?: string;
-  subtitle?: string;
   color: string;
 }) {
   return (
     <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#1c1c1e]">
       <div className={`text-fluent-xl font-bold ${color}`}>
-        {displayValue ?? value?.toLocaleString() ?? '—'}
+        {value?.toLocaleString() ?? '—'}
       </div>
       <div className="text-fluent-xs text-fluent-text-secondary">{label}</div>
-      {subtitle && (
-        <div className="text-fluent-xs text-fluent-text-disabled mt-0.5">{subtitle}</div>
-      )}
     </div>
   );
 }
@@ -880,6 +849,20 @@ function getActionStyles(action: ActionType) {
     return { border: 'border-l-fluent-error/60', badge: 'bg-fluent-error/10 text-fluent-error' };
   }
   return { border: 'border-l-fluent-warning/70', badge: 'bg-fluent-warning/10 text-fluent-warning' };
+}
+
+function buildHaystack(item: ChangeFeedItem): string {
+  return [
+    item.title,
+    item.hotspotCategory,
+    item.categoryName,
+    item.contextLabel,
+    item.contextDetail,
+    item.platform,
+    item.date,
+    getSettingSearchText(item.setting),
+    item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
+  ].filter(Boolean).join(' ').toLowerCase();
 }
 
 function getSettingSearchText(setting?: ChangelogSettingSummary): string {
@@ -1225,9 +1208,8 @@ function PlatformBadges({ platform }: { platform?: string }) {
 }
 
 /** GitHub-style unified diff box for a single changed item */
-function DiffBlock({ title, href, badge, platform, fields }: {
+function DiffBlock({ title, badge, platform, fields }: {
   title: string;
-  href?: string;
   badge?: string;
   platform?: string;
   fields: Array<{ field: string; oldValue: string; newValue: string }>;
@@ -1239,13 +1221,7 @@ function DiffBlock({ title, href, badge, platform, fields }: {
         <svg className="w-4 h-4 text-[#656d76] dark:text-[#8b949e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
         </svg>
-        {href ? (
-          <a href={href} className="font-semibold text-fluent-sm text-fluent-blue hover:underline truncate">
-            {title}
-          </a>
-        ) : (
-          <span className="font-semibold text-fluent-sm text-fluent-text truncate">{title}</span>
-        )}
+        <span className="font-semibold text-fluent-sm text-fluent-text truncate">{title}</span>
         <span className="shrink-0 ml-auto inline-flex items-center gap-1.5">
           {badge && (
             <span className="text-[11px] text-[#0550ae] dark:text-[#79c0ff] bg-[#ddf4ff] dark:bg-[#1f4173] rounded-full px-2 py-0.5 font-medium">
