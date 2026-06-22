@@ -22,18 +22,23 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/app/setting/` | Individual setting detail pages (slug-based) |
 | `src/app/changelog/` | Changelog viewer |
 | `src/app/baseline/` | OpenIntuneBaseline (OIB) policy browser |
-| `src/app/baseline/changelog/` | Baseline Diff — compare any two OIB versions |
+| `src/app/baseline/changelog/` | OIB Changelog — compare any two OIB versions (grouped under "OIB Lookup" hover menu in nav) |
 | `src/components/SettingsCatalogBrowser.tsx` | Main container component |
 | `src/components/SettingsList.tsx` | Virtualized list (@tanstack/react-virtual) |
 | `src/components/SearchBar.tsx` | Delegates queries to Web Worker |
 | `src/components/CategoryTree.tsx` | Hierarchical sidebar |
 | `src/components/OIBBrowser.tsx` | OIB policy browser — fetches `public/oib-data.json` at runtime, cross-references settings catalog |
-| `src/components/OIBChangelogViewer.tsx` | Baseline Diff UI — version pickers, fetches two shards, diffs client-side via `oib-diff.ts` |
+| `src/components/OIBChangelogViewer.tsx` | OIB Changelog UI — version pickers, fetches two shards, diffs client-side via `oib-diff.ts`; reuses `SettingRow` for drilldowns; Export dropdown (CSV/HTML) |
 | `src/lib/search.ts` + `search.worker.ts` | Flexsearch index loaded/queried in Web Worker |
 | `src/lib/data.ts` | Build-time JSON loaders with module-level caching |
 | `src/lib/types.ts` | Shared TypeScript types |
 | `src/lib/oib-types.ts` | OIB-specific types and helpers |
 | `src/lib/oib-diff.ts` | Version diff engine — 3-tier policy matching (oibId → title → fuzzy) + setting compare; shared by browser & `scripts/oib-diff-check.ts` |
+| `src/lib/oib-changelog-types.ts` | Types for the version index, shards, and diff records (`VersionDiff`/`PolicyDiff`/`SettingChange`) |
+| `src/lib/oib-export-shared.ts` | Shared plain-text export helpers (`fmtValue`, `settingName`, `kindWord`, `policyDisplayName`) used by both exporters |
+| `src/lib/oib-html-export.ts` | Renders a comparison as a self-contained styled HTML report |
+| `src/lib/oib-csv-export.ts` | Renders a comparison as CSV (one row per setting change), same content as the HTML report |
+| `src/lib/pill.ts` | Shared segmented-pill class helper (platform filter + version picker) |
 | `src/lib/slug.ts` | URL slug generation |
 
 ### Performance
@@ -49,7 +54,10 @@ npm run dev                  # Start dev server
 npm run build                # Static export to out/
 npm run build-search-index   # Regenerate search index + shards from data/settings.json
 npm run refresh              # Full data refresh (requires Azure credentials in env)
+npm run fetch-oib            # Refresh OIB data: current snapshot + per-version shards (run on new OIB release)
+npm run check-oib-diff       # Self-check for the OIB version diff engine (src/lib/oib-diff.ts)
 ```
 
-## Env Vars (for data refresh only)
-`AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`
+## Env Vars
+- Data refresh: `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`
+- OIB fetch (optional): `GITHUB_TOKEN` — raises GitHub API rate limit from 60/hr to 5,000/hr

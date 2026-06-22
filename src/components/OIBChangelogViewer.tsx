@@ -5,6 +5,8 @@ import { pillClass } from '@/lib/pill';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import SettingRow from './SettingRow';
 import { diffVersions } from '@/lib/oib-diff';
+import { generateOIBChangelogHtml } from '@/lib/oib-html-export';
+import { generateOIBChangelogCsv } from '@/lib/oib-csv-export';
 import type { OIBValue } from '@/lib/oib-types';
 import type {
   OIBVersionIndex,
@@ -241,6 +243,29 @@ export default function OIBChangelogViewer() {
     setCompareTag(baseTag);
   };
 
+  const downloadExport = (format: 'html' | 'csv') => {
+    if (!diff || !platform || !baseTag || !compareTag) return;
+
+    const baseVersionLabel = versionLabel(baseTag);
+    const compareVersionLabel = versionLabel(compareTag);
+    const content =
+      format === 'html'
+        ? generateOIBChangelogHtml({ diff, grouped, defsMap, platformLabel: platform.label, baseVersionLabel, compareVersionLabel })
+        : generateOIBChangelogCsv({ grouped, defsMap, baseVersionLabel, compareVersionLabel });
+
+    const mime = format === 'html' ? 'text/html;charset=utf-8' : 'text/csv;charset=utf-8';
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    const safePlatform = platform.label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    anchor.href = url;
+    anchor.download = `oib-changelog-${safePlatform}-v${baseVersionLabel}-to-v${compareVersionLabel}.${format}`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
+
   if (error) {
     return <p className="text-fluent-error text-fluent-base p-4">Failed to load baseline data: {error}</p>;
   }
@@ -299,6 +324,34 @@ export default function OIBChangelogViewer() {
             >
               ⇄
             </button>
+
+            {/* Export — click dropdown (native <details>) */}
+            <details className="relative group/export">
+              <summary
+                className="fluent-btn-secondary text-fluent-sm cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden"
+                aria-label="Export the current comparison"
+              >
+                Export
+                <svg className="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="absolute right-0 mt-1 z-50 min-w-[8rem] bg-fluent-bg border border-fluent-border rounded-md shadow-lg py-1">
+                {(['csv', 'html'] as const).map((fmt) => (
+                  <button
+                    key={fmt}
+                    onClick={(e) => {
+                      downloadExport(fmt);
+                      e.currentTarget.closest('details')?.removeAttribute('open');
+                    }}
+                    disabled={!diff}
+                    className="block w-full text-left px-3 py-2 text-fluent-sm text-fluent-text hover:bg-fluent-bg-alt disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {fmt.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </details>
           </>
         )}
       </div>
