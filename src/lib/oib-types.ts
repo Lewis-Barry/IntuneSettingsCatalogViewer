@@ -14,6 +14,8 @@ export interface OIBPolicy {
   technologies: string;
   oibFolder: string;
   githubUrl: string;
+  /** Stable GUID from PolicyManifest.json, where the version ships one. */
+  oibId?: string;
   settings: OIBSetting[];
 }
 

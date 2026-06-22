@@ -1,6 +1,7 @@
 'use client';
 
 import { PLATFORM_ICONS } from './PlatformIcons';
+import { pillClass } from '@/lib/pill';
 
 interface PlatformFilterProps {
   selectedPlatforms: string[];
@@ -40,11 +41,7 @@ export default function PlatformFilter({
       {/* All button */}
       <button
         onClick={() => onPlatformsChange([])}
-        className={`platform-filter-btn inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
-          allSelected
-            ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
-            : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
-        }`}
+        className={`platform-filter-btn ${pillClass(allSelected)}`}
       >
         All
       </button>
@@ -56,11 +53,7 @@ export default function PlatformFilter({
           <button
             key={p.value}
             onClick={() => togglePlatform(p.value)}
-            className={`platform-filter-btn inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
-              isActive
-                ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
-                : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
-            }`}
+            className={`platform-filter-btn ${pillClass(isActive)}`}
           >
             {Icon && <Icon className="w-4 h-4" />}
             {p.label}

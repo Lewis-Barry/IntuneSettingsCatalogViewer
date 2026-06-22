@@ -24,6 +24,7 @@ import * as path from 'path';
 
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
 const OIB_DATA_FILE = path.join(PUBLIC_DIR, 'oib-data.json');
+const VERSIONS_DIR = path.join(PUBLIC_DIR, 'oib-versions');
 
 const OIB_OWNER = 'SkipToTheEndpoint';
 const OIB_REPO = 'OpenIntuneBaseline';
@@ -50,6 +51,8 @@ export interface OIBPolicy {
   technologies: string;
   oibFolder: string;
   githubUrl: string;
+  /** Stable GUID from PolicyManifest.json, where the version ships one. */
+  oibId?: string;
   settings: OIBSetting[];
 }
 
@@ -87,11 +90,44 @@ async function githubApiGet(url: string): Promise<unknown> {
   return res.json();
 }
 
-async function fetchRawJson(filePath: string): Promise<RawInstance> {
-  const url = `https://raw.githubusercontent.com/${OIB_OWNER}/${OIB_REPO}/${OIB_BRANCH}/${filePath}`;
+// OIB files arrive in a few encodings: plain UTF-8, UTF-16 (BOM), and a handful
+// that are double-encoded in the repo (original bytes read as UTF-16BE then
+// re-saved as UTF-8, so each char holds two original bytes). Try clean parse,
+// then repair the double-encoding before giving up.
+function parseLoose(buf: Buffer): RawInstance {
+  let text: string;
+  if (buf[0] === 0xff && buf[1] === 0xfe) text = buf.toString('utf16le');
+  else if (buf[0] === 0xfe && buf[1] === 0xff) text = buf.swap16().toString('utf16le');
+  else text = buf.toString('utf8');
+  text = text.replace(/^﻿/, '');
+
+  try {
+    return JSON.parse(text) as RawInstance;
+  } catch (firstErr) {
+    // Repair: each char ≥0x100 packs two original bytes (big-endian).
+    const bytes: number[] = [];
+    for (const ch of text) {
+      const c = ch.codePointAt(0)!;
+      if (c > 0xff) bytes.push((c >> 8) & 0xff, c & 0xff);
+      else bytes.push(c);
+    }
+    const repaired = Buffer.from(bytes).toString('utf8').replace(/^﻿/, '');
+    try {
+      return JSON.parse(repaired) as RawInstance;
+    } catch {
+      throw firstErr; // not the corruption we know how to fix
+    }
+  }
+}
+
+async function fetchRawJson(filePath: string, ref = OIB_BRANCH): Promise<RawInstance> {
+  // raw.githubusercontent.com serves any ref (branch or tag) and does NOT count
+  // against the api.github.com rate limit, so bulk file fetches are cheap.
+  const url = `https://raw.githubusercontent.com/${OIB_OWNER}/${OIB_REPO}/${ref}/${filePath}`;
   const res = await fetch(url);
+  if (res.status === 404) return {};
   if (!res.ok) throw new Error(`Raw fetch ${res.status} for: ${url}`);
-  return res.json() as Promise<RawInstance>;
+  return parseLoose(Buffer.from(await res.arrayBuffer()));
 }
 
 async function getLatestCommitSha(): Promise<string> {
@@ -107,9 +143,9 @@ interface GithubFile {
   path: string;
 }
 
-async function listDirectory(dirPath: string): Promise<GithubFile[] | null> {
+async function listDirectory(dirPath: string, ref = OIB_BRANCH): Promise<GithubFile[] | null> {
   const data = await githubApiGet(
-    `https://api.github.com/repos/${OIB_OWNER}/${OIB_REPO}/contents/${dirPath}?ref=${OIB_BRANCH}`
+    `https://api.github.com/repos/${OIB_OWNER}/${OIB_REPO}/contents/${dirPath}?ref=${ref}`
   );
   if (!data || !Array.isArray(data)) return null;
   return data as GithubFile[];
@@ -172,9 +208,106 @@ function normaliseChildren(instances: RawInstance[]): OIBSetting[] {
     .filter((s): s is OIBSetting => s !== null);
 }
 
-function buildGithubUrl(filePath: string): string {
+function buildGithubUrl(filePath: string, ref = OIB_BRANCH): string {
   const encoded = filePath.split('/').map(encodeURIComponent).join('/');
-  return `https://github.com/${OIB_OWNER}/${OIB_REPO}/blob/${OIB_BRANCH}/${encoded}`;
+  return `https://github.com/${OIB_OWNER}/${OIB_REPO}/blob/${ref}/${encoded}`;
+}
+
+// ── Per-platform policy fetch (shared by main snapshot + version shards) ──
+
+/** name → oibId, read from a version's PolicyManifest.json (empty if absent). */
+async function fetchManifestIds(folder: string, ref: string): Promise<Map<string, string>> {
+  const raw = await fetchRawJson(`${folder}/PolicyManifest.json`, ref);
+  const map = new Map<string, string>();
+  for (const p of (raw['policies'] as RawInstance[]) ?? []) {
+    const name = p['name'] as string;
+    const oibId = p['oibId'] as string;
+    if (name && oibId) map.set(name, oibId);
+  }
+  return map;
+}
+
+async function fetchPlatformPolicies(
+  folder: string,
+  catalogPath: string,
+  ref: string,
+  manifest: Map<string, string>
+): Promise<OIBPolicy[]> {
+  const files = await listDirectory(catalogPath, ref);
+  if (!files) return [];
+
+  const jsonFiles = files.filter((f) => f.type === 'file' && f.name.endsWith('.json'));
+  const policies: OIBPolicy[] = [];
+
+  for (const file of jsonFiles) {
+    try {
+      const raw = await fetchRawJson(file.path, ref);
+      const settings = ((raw['settings'] as RawInstance[]) ?? [])
+        .map((s) => normaliseInstance((s['settingInstance'] as RawInstance) ?? {}))
+        .filter((s): s is OIBSetting => s !== null);
+
+      const name = (raw['name'] as string) ?? file.name.replace('.json', '');
+      policies.push({
+        name,
+        platform: (raw['platforms'] as string) ?? '',
+        technologies: (raw['technologies'] as string) ?? '',
+        oibFolder: folder,
+        githubUrl: buildGithubUrl(file.path, ref),
+        ...(manifest.get(name) ? { oibId: manifest.get(name) } : {}),
+        settings,
+      });
+    } catch (err) {
+      console.error(`   FAILED ${file.name} — ${err}`);
+    }
+  }
+  return policies;
+}
+
+// ── Version (release tag) enumeration ──
+
+interface VersionShard {
+  tag: string;
+  folder: string;
+  version: string;
+  date: string;
+  policies: OIBPolicy[];
+}
+
+const TAG_FOLDER: Array<{ re: RegExp; folder: string }> = [
+  { re: /^windows-v([\d.]+)$/, folder: 'WINDOWS' },
+  { re: /^macos-v([\d.]+)$/, folder: 'MACOS' },
+  { re: /^win365-v([\d.]+)$/, folder: 'WINDOWS365' },
+  { re: /^v([\d.]+)$/, folder: 'WINDOWS' }, // legacy untagged-platform Windows releases (e.g. v3.2)
+];
+
+function parseTag(tag: string): { folder: string; version: string } | null {
+  for (const { re, folder } of TAG_FOLDER) {
+    const m = tag.match(re);
+    if (m) return { folder, version: m[1] };
+  }
+  return null;
+}
+
+async function fetchAllTags(): Promise<Array<{ name: string }>> {
+  const out: Array<{ name: string }> = [];
+  for (let page = 1; page <= 5; page++) {
+    const data = (await githubApiGet(
+      `https://api.github.com/repos/${OIB_OWNER}/${OIB_REPO}/tags?per_page=100&page=${page}`
+    )) as Array<{ name: string }> | null;
+    if (!data || data.length === 0) break;
+    out.push(...data);
+    if (data.length < 100) break;
+  }
+  return out;
+}
+
+async function fetchReleaseDates(): Promise<Map<string, string>> {
+  const data = (await githubApiGet(
+    `https://api.github.com/repos/${OIB_OWNER}/${OIB_REPO}/releases?per_page=100`
+  )) as Array<{ tag_name: string; published_at: string }> | null;
+  const map = new Map<string, string>();
+  for (const r of data ?? []) map.set(r.tag_name, r.published_at);
+  return map;
 }
 
 // ── Main ──
@@ -190,56 +323,94 @@ async function main() {
   const oibCommitSha = await getLatestCommitSha();
   console.log(`OIB @ ${oibCommitSha.slice(0, 7)}`);
 
+  // ── 1. Current snapshot from main (powers the existing /baseline browser) ──
+  const mainManifests = new Map<string, Map<string, string>>();
   const policies: OIBPolicy[] = [];
 
   for (const { folder, catalogPath } of PLATFORM_PATHS) {
-    console.log(`\n── ${folder} (${catalogPath})`);
-
-    const files = await listDirectory(catalogPath);
-    if (!files) {
-      console.log('   No SettingsCatalog directory found, skipping.');
-      continue;
-    }
-
-    const jsonFiles = files.filter((f) => f.type === 'file' && f.name.endsWith('.json'));
-    console.log(`   ${jsonFiles.length} policy files`);
-
-    for (const file of jsonFiles) {
-      process.stdout.write(`   ${file.name} ... `);
-      try {
-        const raw = await fetchRawJson(file.path);
-
-        const settings = ((raw['settings'] as RawInstance[]) ?? [])
-          .map((s) => normaliseInstance((s['settingInstance'] as RawInstance) ?? {}))
-          .filter((s): s is OIBSetting => s !== null);
-
-        policies.push({
-          name: (raw['name'] as string) ?? file.name.replace('.json', ''),
-          platform: (raw['platforms'] as string) ?? '',
-          technologies: (raw['technologies'] as string) ?? '',
-          oibFolder: folder,
-          githubUrl: buildGithubUrl(file.path),
-          settings,
-        });
-
-        console.log(`${settings.length} settings`);
-      } catch (err) {
-        console.error(`FAILED — ${err}`);
-      }
-    }
+    console.log(`\n── ${folder} (main)`);
+    const manifest = await fetchManifestIds(folder, OIB_BRANCH);
+    mainManifests.set(folder, manifest);
+    const p = await fetchPlatformPolicies(folder, catalogPath, OIB_BRANCH, manifest);
+    console.log(`   ${p.length} policies`);
+    policies.push(...p);
   }
 
-  const output: OIBOutput = {
-    fetchedAt: new Date().toISOString(),
-    oibCommitSha,
-    policies,
-  };
-
+  const output: OIBOutput = { fetchedAt: new Date().toISOString(), oibCommitSha, policies };
   fs.mkdirSync(PUBLIC_DIR, { recursive: true });
   fs.writeFileSync(OIB_DATA_FILE, JSON.stringify(output), 'utf-8');
-
   console.log(`\n✓ ${policies.length} policies written to ${OIB_DATA_FILE}`);
+
+  // ── 2. Per-version shards from release tags (powers /baseline/changelog) ──
+  console.log('\nEnumerating release tags...');
+  const [tags, releaseDates] = await Promise.all([fetchAllTags(), fetchReleaseDates()]);
+
+  const versionTags = tags
+    .map((t) => ({ tag: t.name, ...parseTag(t.name) }))
+    .filter((t): t is { tag: string; folder: string; version: string } => !!t.folder);
+  console.log(`   ${versionTags.length} version tags: ${versionTags.map((t) => t.tag).join(', ')}`);
+
+  const catalogFor = new Map(PLATFORM_PATHS.map((p) => [p.folder, p.catalogPath]));
+  const shards: VersionShard[] = [];
+
+  for (const { tag, folder, version } of versionTags) {
+    const catalogPath = catalogFor.get(folder);
+    if (!catalogPath) continue;
+    process.stdout.write(`   ${tag} (${folder} v${version}) ... `);
+    const manifest = await fetchManifestIds(folder, tag);
+    const tagPolicies = await fetchPlatformPolicies(folder, catalogPath, tag, manifest);
+    const date = (releaseDates.get(tag) ?? '').slice(0, 10);
+    console.log(`${tagPolicies.length} policies`);
+    if (tagPolicies.length === 0) {
+      console.log(`     ↳ skipping ${tag}: no Settings Catalog policies at this tag (older repo layout)`);
+      continue;
+    }
+    shards.push({ tag, folder, version, date, policies: tagPolicies });
+  }
+
+  fs.mkdirSync(VERSIONS_DIR, { recursive: true });
+  for (const shard of shards) {
+    fs.writeFileSync(path.join(VERSIONS_DIR, `${shard.tag}.json`), JSON.stringify(shard), 'utf-8');
+  }
+
+  // Index: platforms → their versions (newest first), for the picker.
+  const byFolder = new Map<string, VersionShard[]>();
+  for (const s of shards) (byFolder.get(s.folder) ?? byFolder.set(s.folder, []).get(s.folder)!).push(s);
+
+  const index = {
+    generatedAt: new Date().toISOString(),
+    oibCommitSha,
+    platforms: FOLDER_ORDER.filter((f) => byFolder.has(f)).map((folder) => ({
+      folder,
+      label: FOLDER_LABELS[folder] ?? folder,
+      versions: byFolder
+        .get(folder)!
+        .sort((a, b) => compareVersions(b.version, a.version))
+        .map((s) => ({ tag: s.tag, version: s.version, date: s.date, policyCount: s.policies.length })),
+    })),
+  };
+  fs.writeFileSync(path.join(VERSIONS_DIR, 'index.json'), JSON.stringify(index, null, 2), 'utf-8');
+
+  console.log(`\n✓ ${shards.length} version shards + index written to ${VERSIONS_DIR}`);
 }
+
+// Numeric version compare: "3.10" > "3.9".
+function compareVersions(a: string, b: string): number {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (d !== 0) return d;
+  }
+  return 0;
+}
+
+const FOLDER_LABELS: Record<string, string> = {
+  WINDOWS: 'Windows',
+  MACOS: 'macOS',
+  WINDOWS365: 'Windows 365',
+};
+const FOLDER_ORDER = ['WINDOWS', 'MACOS', 'WINDOWS365'];
 
 main().catch((err) => {
   console.error(err);

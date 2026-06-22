@@ -60,9 +60,29 @@ export default function RootLayout({
                 <Link href="/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors">
                   Browse
                 </Link>
-                <Link href="/baseline/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors">
-                  OIB Lookup
-                </Link>
+                {/* OIB menu — hover/focus dropdown */}
+                <div className="relative group">
+                  <Link
+                    href="/baseline/"
+                    className="flex items-center gap-1 px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 group-focus-within:bg-white/10 transition-colors"
+                  >
+                    OIB Lookup
+                    <svg className="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </Link>
+                  {/* pt-1 bridges the gap so the menu doesn't close between trigger and panel */}
+                  <div className="absolute left-0 top-full pt-1 hidden group-hover:block group-focus-within:block z-50 min-w-[11rem]">
+                    <div className="bg-[#1b1b1f] border border-white/10 rounded-md shadow-lg py-1">
+                      <Link href="/baseline/" className="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors">
+                        Lookup
+                      </Link>
+                      <Link href="/baseline/changelog/" className="block px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
+                        Changelog
+                      </Link>
+                    </div>
+                  </div>
+                </div>
                 <Link href="/changelog/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
                   Changelog
                 </Link>

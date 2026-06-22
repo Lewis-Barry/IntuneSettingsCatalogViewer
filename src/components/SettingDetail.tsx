@@ -16,9 +16,11 @@ interface SettingDetailProps {
   activeOptionIds?: string[];
   /** Resolved simple value configured by a baseline (shown when no options list) */
   activeSimpleValue?: string;
+  /** Label shown next to the highlighted value (default "OIB"). */
+  activeLabel?: string;
 }
 
-export default function SettingDetail({ setting, allSettings, highlightQuery, matchSources, activeOptionIds, activeSimpleValue }: SettingDetailProps) {
+export default function SettingDetail({ setting, allSettings, highlightQuery, matchSources, activeOptionIds, activeSimpleValue, activeLabel = 'OIB' }: SettingDetailProps) {
   const cspPath =
     setting.baseUri && setting.offsetUri
       ? `${setting.baseUri}/${setting.offsetUri}`
@@ -84,7 +86,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             <div className="px-3 py-2 text-fluent-sm bg-green-50 dark:bg-green-950/30 border-l-[3px] border-l-green-500 dark:border-l-green-400">
               <div className="font-medium">
                 {activeSimpleValue}
-                <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">(OIB)</span>
+                <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">({activeLabel})</span>
               </div>
             </div>
           </div>
@@ -120,7 +122,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
                       <span className="text-fluent-blue ml-2 text-fluent-xs">(default)</span>
                     )}
                     {isOibSelected && (
-                      <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">(OIB)</span>
+                      <span className="text-green-600 dark:text-green-400 ml-2 text-fluent-xs font-semibold">({activeLabel})</span>
                     )}
                   </div>
                   {opt.description &&

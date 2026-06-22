@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-06-22T17:51:19.366Z",
+  "oibCommitSha": "4844247055305c9eb8dfe4b12c895ec8422dee67",
+  "platforms": [
+    {
+      "folder": "WINDOWS",
+      "label": "Windows",
+      "versions": [
+        {
+          "tag": "windows-v3.8",
+          "version": "3.8",
+          "date": "2026-05-08",
+          "policyCount": 62
+        },
+        {
+          "tag": "windows-v3.7",
+          "version": "3.7",
+          "date": "2025-10-15",
+          "policyCount": 58
+        },
+        {
+          "tag": "windows-v3.6",
+          "version": "3.6",
+          "date": "2025-05-13",
+          "policyCount": 58
+        },
+        {
+          "tag": "windows-v3.5",
+          "version": "3.5",
+          "date": "2025-02-20",
+          "policyCount": 54
+        },
+        {
+          "tag": "windows-v3.4",
+          "version": "3.4",
+          "date": "2025-01-24",
+          "policyCount": 53
+        },
+        {
+          "tag": "windows-v3.3",
+          "version": "3.3",
+          "date": "2024-09-02",
+          "policyCount": 51
+        }
+      ]
+    },
+    {
+      "folder": "MACOS",
+      "label": "macOS",
+      "versions": [
+        {
+          "tag": "macos-v1.0",
+          "version": "1.0",
+          "date": "2024-09-02",
+          "policyCount": 17
+        }
+      ]
+    },
+    {
+      "folder": "WINDOWS365",
+      "label": "Windows 365",
+      "versions": [
+        {
+          "tag": "win365-v1.0",
+          "version": "1.0",
+          "date": "2024-09-02",
+          "policyCount": 2
+        }
+      ]
+    }
+  ]
+}

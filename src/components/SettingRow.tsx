@@ -25,6 +25,8 @@ interface SettingRowProps {
   activeOptionIds?: string[];
   /** Resolved simple value configured by a baseline — shown in expanded detail */
   activeSimpleValue?: string;
+  /** Label shown next to the highlighted value in the detail (default "OIB"). */
+  activeLabel?: string;
   /** Hide the scope badge (useful when scope is shown at a parent level) */
   hideScope?: boolean;
 }
@@ -43,7 +45,7 @@ function getAllDependedOnBy(setting: SettingDefinition): Array<{ dependedOnBy: s
   return deps;
 }
 
-export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, hideScope }: SettingRowProps) {
+export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, activeLabel, hideScope }: SettingRowProps) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
   const isGroup = setting['@odata.type']?.includes('SettingGroup');
@@ -229,7 +231,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
       {/* Expanded detail panel */}
       {expanded && (
         <div className="border-b border-fluent-border bg-fluent-bg">
-          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} matchSources={matchSources} activeOptionIds={activeOptionIds} activeSimpleValue={activeSimpleValue} />
+          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} matchSources={matchSources} activeOptionIds={activeOptionIds} activeSimpleValue={activeSimpleValue} activeLabel={activeLabel} />
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (
