@@ -7,6 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary } from './types';
+import { settingSlug } from './slug';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -30,6 +31,44 @@ export function loadSettings(): SettingDefinition[] {
 
 export function loadCategories(): SettingCategory[] {
   return readJSON<SettingCategory[]>('categories.json') || [];
+}
+
+// ── Indexed lookups (built once, reused across all static pages) ──
+// Without these, each of ~17.7k setting pages re-scanned the full settings
+// array (find + filter) and recomputed every slug — an O(n²) blowup.
+let slugIndex: Map<string, SettingDefinition> | null = null;
+let childIndex: Map<string, SettingDefinition[]> | null = null;
+let categoryIndex: Map<string, SettingCategory> | null = null;
+
+/** Look up a setting by its URL slug. O(1) after the first call. */
+export function getSettingBySlug(slug: string): SettingDefinition | undefined {
+  if (!slugIndex) {
+    slugIndex = new Map();
+    for (const s of loadSettings()) slugIndex.set(settingSlug(s.id), s);
+  }
+  return slugIndex.get(slug);
+}
+
+/** Child settings of a setting (those rooted at it, excluding itself). O(1) lookup. */
+export function getChildSettings(parentId: string): SettingDefinition[] {
+  if (!childIndex) {
+    childIndex = new Map();
+    for (const s of loadSettings()) {
+      if (!s.rootDefinitionId || s.rootDefinitionId === s.id) continue;
+      const arr = childIndex.get(s.rootDefinitionId);
+      if (arr) arr.push(s);
+      else childIndex.set(s.rootDefinitionId, [s]);
+    }
+  }
+  return childIndex.get(parentId) ?? [];
+}
+
+/** Look up a category by id. O(1) after the first call. */
+export function getCategoryById(id: string): SettingCategory | undefined {
+  if (!categoryIndex) {
+    categoryIndex = new Map(loadCategories().map((c) => [c.id, c]));
+  }
+  return categoryIndex.get(id);
 }
 
 export function loadCategoryTree(): CategoryTreeNode[] {

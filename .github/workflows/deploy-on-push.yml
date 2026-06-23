@@ -38,6 +38,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Reuse Next.js compiler/bundler cache across runs (not the page output).
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'next.config.*') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('package-lock.json') }}-
+
       # Uses existing data files (no fetch step)
       # If data files don't exist, falls back to sample data
       - name: Ensure data files exist

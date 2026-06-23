@@ -36,6 +36,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Reuse Next.js compiler/bundler cache across runs (not the page output).
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'next.config.*') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('package-lock.json') }}-
+
       # ── Fetch fresh data from Microsoft Graph ──
       - name: Fetch settings from Intune
         env:

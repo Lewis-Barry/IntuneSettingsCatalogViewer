@@ -339,6 +339,8 @@ const OIBSidebarTree = memo(function OIBSidebarTree({
   );
 });
 
+const FOLDER_LABELS: Record<string, string> = { WINDOWS: 'Windows', MACOS: 'macOS', WINDOWS365: 'Windows 365' };
+
 // ── Main Component ───────────────────────────────────────────────────────────
 
 export default function OIBBrowser() {
@@ -546,7 +548,6 @@ export default function OIBBrowser() {
 
   const hasSearchResults = searchHits !== null;
   const totalSearchMatches = searchHits?.reduce((n, h) => n + h.matchingSettings.length, 0) ?? 0;
-  const FOLDER_LABELS: Record<string, string> = { WINDOWS: 'Windows', MACOS: 'macOS', WINDOWS365: 'Windows 365' };
 
   return (
     <div className="flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100dvh-96px)]">

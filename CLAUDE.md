@@ -49,6 +49,8 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 - Virtual scrolling for large lists
 - Per-category JSON shards (lazy-loaded, not the full 62MB)
 - Module-level JSON caching during static generation
+- Indexed lookups in `data.ts` (`getSettingBySlug`/`getChildSettings`/`getCategoryById`) — built once, so generating the ~17.7k setting pages is O(n), not O(n²)
+- CI caches `.next/cache` between runs (compile/bundle reuse)
 
 ## Dev Commands
 

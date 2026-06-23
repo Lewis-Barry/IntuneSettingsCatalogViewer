@@ -1,4 +1,4 @@
-import { loadSettings, loadCategories } from '@/lib/data';
+import { loadSettings, getSettingBySlug, getChildSettings, getCategoryById } from '@/lib/data';
 import SettingDetail from '@/components/SettingDetail';
 import { getPlatformLabel } from '@/lib/types';
 import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
@@ -21,9 +21,8 @@ export async function generateStaticParams() {
 
 // Dynamic metadata for SEO
 export async function generateMetadata({ params }: SettingPageProps): Promise<Metadata> {
-  const settings = loadSettings();
   const slug = decodeURIComponent(params.id);
-  const setting = settings.find((s) => settingSlug(s.id) === slug);
+  const setting = getSettingBySlug(slug);
 
   if (!setting) {
     return { title: 'Setting Not Found' };
@@ -37,9 +36,7 @@ export async function generateMetadata({ params }: SettingPageProps): Promise<Me
 
 export default function SettingPage({ params }: SettingPageProps) {
   const slug = decodeURIComponent(params.id);
-  const settings = loadSettings();
-  const categories = loadCategories();
-  const setting = settings.find((s) => settingSlug(s.id) === slug);
+  const setting = getSettingBySlug(slug);
 
   if (!setting) {
     return (
@@ -57,10 +54,8 @@ export default function SettingPage({ params }: SettingPageProps) {
     );
   }
 
-  const category = categories.find((c) => c.id === setting.categoryId);
-  const childSettings = settings.filter(
-    (s) => s.rootDefinitionId === setting.id && s.id !== setting.id
-  );
+  const category = setting.categoryId ? getCategoryById(setting.categoryId) : undefined;
+  const childSettings = getChildSettings(setting.id);
 
   // Platform info
   const platform = setting.applicability?.platform;
@@ -71,15 +66,14 @@ export default function SettingPage({ params }: SettingPageProps) {
   const breadcrumbs: Array<{ name: string; id: string }> = [];
   if (category) {
     // Walk up the category hierarchy
-    let current = category;
-    const catMap = new Map(categories.map((c) => [c.id, c]));
+    let current: typeof category | undefined = category;
     const visited = new Set<string>();
 
     while (current && !visited.has(current.id)) {
       visited.add(current.id);
       breadcrumbs.unshift({ name: current.displayName, id: current.id });
       if (current.parentCategoryId && current.parentCategoryId !== current.id) {
-        const parent = catMap.get(current.parentCategoryId);
+        const parent = getCategoryById(current.parentCategoryId);
         if (parent) {
           current = parent;
         } else break;
@@ -158,7 +152,7 @@ export default function SettingPage({ params }: SettingPageProps) {
 
       {/* Setting detail card */}
       <div className="fluent-card">
-        <SettingDetail setting={setting} allSettings={settings} />
+        <SettingDetail setting={setting} />
       </div>
 
       {/* Child settings */}
