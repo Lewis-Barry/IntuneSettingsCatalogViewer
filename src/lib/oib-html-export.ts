@@ -19,7 +19,7 @@ interface GenerateOIBChangelogHtmlOptions {
   generatedAt?: Date;
 }
 
-const STYLE = `<style type="text/css">
+export const STYLE = `<style type="text/css">
 html, body {
   margin: 0;
   padding: 8px;
@@ -192,7 +192,7 @@ html, body {
 }
 </style>`;
 
-function escapeHtml(value: string): string {
+export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -201,7 +201,7 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function formatDefinitionId(value: string): string {
+export function formatDefinitionId(value: string): string {
   return escapeHtml(value).replace(/([_./\\-])/g, '$1<wbr />');
 }
 

@@ -1,3 +1,5 @@
+Update this file as you add/change/remove relevant features
+
 # Intune Settings Catalog Viewer
 
 Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHub Pages via `output: 'export'`. Zero runtime API calls — all data is baked in at build time.
@@ -27,7 +29,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/components/SettingsList.tsx` | Virtualized list (@tanstack/react-virtual) |
 | `src/components/SearchBar.tsx` | Delegates queries to Web Worker |
 | `src/components/CategoryTree.tsx` | Hierarchical sidebar |
-| `src/components/OIBBrowser.tsx` | OIB policy browser — fetches `public/oib-data.json` at runtime, cross-references settings catalog |
+| `src/components/OIBBrowser.tsx` | OIB policy browser — fetches `public/oib-data.json` at runtime, cross-references settings catalog; Export dropdown (CSV/HTML) via `oib-browse-export.ts` |
 | `src/components/OIBChangelogViewer.tsx` | OIB Changelog UI — version pickers, fetches two shards, diffs client-side via `oib-diff.ts`; reuses `SettingRow` for drilldowns; Export dropdown (CSV/HTML) |
 | `src/lib/search.ts` + `search.worker.ts` | Flexsearch index loaded/queried in Web Worker |
 | `src/lib/data.ts` | Build-time JSON loaders with module-level caching |
@@ -38,6 +40,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/oib-export-shared.ts` | Shared plain-text export helpers (`fmtValue`, `settingName`, `kindWord`, `policyDisplayName`) used by both exporters |
 | `src/lib/oib-html-export.ts` | Renders a comparison as a self-contained styled HTML report |
 | `src/lib/oib-csv-export.ts` | Renders a comparison as CSV (one row per setting change), same content as the HTML report |
+| `src/lib/oib-browse-export.ts` | Exports the OIB browse view (policies + configured settings, no change columns) as CSV or styled HTML; reuses `fmtValue` + the HTML `STYLE`/escape helpers. Respects the active platform/category/search filter |
 | `src/lib/pill.ts` | Shared segmented-pill class helper (platform filter + version picker) |
 | `src/lib/slug.ts` | URL slug generation |
 
