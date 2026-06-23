@@ -22,8 +22,10 @@ const FOLDER_LABELS: Record<string, string> = {
 };
 const folderLabel = (folder: string) => FOLDER_LABELS[folder] ?? folder;
 const scopeWord = (scope: 'D' | 'U') => (scope === 'D' ? 'Device' : 'User');
-const settingNameOf = (defId: string, defsMap: Map<string, SettingDefinition>) =>
-  defsMap.get(defId)?.name ?? defId;
+const settingNameOf = (defId: string, defsMap: Map<string, SettingDefinition>) => {
+  const def = defsMap.get(defId);
+  return def?.displayName || def?.name || defId;
+};
 
 interface PreparedPolicy {
   label: string;

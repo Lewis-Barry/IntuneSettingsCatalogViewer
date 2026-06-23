@@ -40,7 +40,8 @@ export function fmtValue(value: OIBValue | undefined, def?: SettingDefinition): 
 }
 
 export function settingName(change: SettingChange, defsMap: Map<string, SettingDefinition>): string {
-  return defsMap.get(change.definitionId)?.name ?? change.definitionId;
+  const def = defsMap.get(change.definitionId);
+  return def?.displayName || def?.name || change.definitionId;
 }
 
 /** Plain word for a change kind ("Added", "Modified", …). */
