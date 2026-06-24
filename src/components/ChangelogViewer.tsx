@@ -1223,6 +1223,9 @@ function DiffBlock({ title, badge, platform, fields }: {
         </svg>
         <span className="font-semibold text-fluent-sm text-fluent-text truncate">{title}</span>
         <span className="shrink-0 ml-auto inline-flex items-center gap-1.5">
+          <span className="text-[11px] text-[#57606a] dark:text-[#8b949e] rounded-full bg-white dark:bg-[#0d1117] border border-[#d0d7de] dark:border-[#30363d] px-2 py-0.5 font-medium">
+            {fields.length} {fields.length === 1 ? 'field changed' : 'fields changed'}
+          </span>
           {badge && (
             <span className="text-[11px] text-[#0550ae] dark:text-[#79c0ff] bg-[#ddf4ff] dark:bg-[#1f4173] rounded-full px-2 py-0.5 font-medium">
               {badge}
@@ -1231,35 +1234,113 @@ function DiffBlock({ title, badge, platform, fields }: {
           <PlatformBadges platform={platform} />
         </span>
       </div>
-      {/* Diff lines */}
-      <div className="font-mono text-fluent-xs leading-[20px] divide-y divide-[#d0d7de] dark:divide-[#30363d]">
-        {fields.map((f, i) => (
-          <div key={i}>
-            {/* Hunk header — field name */}
-            <div className="px-3 py-1 bg-[#ddf4ff] dark:bg-[#1f4173] text-[#0550ae] dark:text-[#79c0ff] font-semibold select-none text-[11px]">
-              @@ {f.field} @@
+      <div className="divide-y divide-[#d0d7de] dark:divide-[#30363d]">
+        {fields.map((f, i) => {
+          const diff = getInlineChange(cleanValue(f.oldValue), cleanValue(f.newValue));
+          return (
+            <div key={i}>
+              <div className="px-3 py-1.5 bg-[#f6f8fa] dark:bg-[#161b22] text-[#57606a] dark:text-[#8b949e] font-semibold text-[11px] tracking-wide uppercase">
+                {f.field}
+              </div>
+
+              <div className="grid gap-2 px-3 py-2 bg-white dark:bg-[#0d1117]">
+                <DiffValueBox
+                  label="Previous"
+                  tone="old"
+                  value={diff.before}
+                  changed={diff.changedOld}
+                  trailing={diff.after}
+                />
+                <DiffValueBox
+                  label="Current"
+                  tone="new"
+                  value={diff.before}
+                  changed={diff.changedNew}
+                  trailing={diff.after}
+                />
+              </div>
             </div>
-            {/* Removed line */}
-            <div className="flex bg-[#ffebe9] dark:bg-[#3d1616]">
-              <span className="select-none shrink-0 w-8 text-center text-[#cf222e] dark:text-[#ff7b72] bg-[#ffcecb]/40 dark:bg-[#6e1f1f]/40 border-r border-[#ffcecb] dark:border-[#6e1f1f]">
-                −
-              </span>
-              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#82071e] dark:text-[#ffa198] min-w-0 flex-1">
-                {cleanValue(f.oldValue)}
-              </span>
-            </div>
-            {/* Added line */}
-            <div className="flex bg-[#e6ffec] dark:bg-[#0d3522]">
-              <span className="select-none shrink-0 w-8 text-center text-[#1a7f37] dark:text-[#3fb950] bg-[#aceebb]/40 dark:bg-[#1e6436]/40 border-r border-[#aceebb] dark:border-[#1e6436]">
-                +
-              </span>
-              <span className="px-2 py-0.5 break-words whitespace-pre-wrap text-[#116329] dark:text-[#56d364] min-w-0 flex-1">
-                {cleanValue(f.newValue)}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
+}
+
+function DiffValueBox({
+  label,
+  tone,
+  value,
+  changed,
+  trailing,
+}: {
+  label: string;
+  tone: 'old' | 'new';
+  value: string;
+  changed: string;
+  trailing: string;
+}) {
+  const toneClasses = tone === 'old'
+    ? {
+      wrapper: 'border-[#ffcecb] dark:border-[#6e1f1f] bg-[#fff8f8] dark:bg-[#2d1416]',
+      label: 'text-[#cf222e] dark:text-[#ff7b72]',
+      highlight: 'bg-[#ffcecb]/70 dark:bg-[#6e1f1f]/80 text-[#82071e] dark:text-[#ffa198]',
+    }
+    : {
+      wrapper: 'border-[#aceebb] dark:border-[#1e6436] bg-[#f0fff4] dark:bg-[#10281a]',
+      label: 'text-[#1a7f37] dark:text-[#3fb950]',
+      highlight: 'bg-[#aceebb]/70 dark:bg-[#1e6436]/80 text-[#116329] dark:text-[#56d364]',
+    };
+
+  return (
+    <div className={`rounded border px-2.5 py-2 ${toneClasses.wrapper}`}>
+      <div className={`mb-1 text-[11px] font-semibold uppercase tracking-wide ${toneClasses.label}`}>{label}</div>
+      <div className="font-mono text-[12px] leading-[1.5] break-words whitespace-pre-wrap text-fluent-text">
+        {value}
+        {changed ? <mark className={`rounded px-0.5 ${toneClasses.highlight}`}>{changed}</mark> : null}
+        {trailing}
+      </div>
+    </div>
+  );
+}
+
+function getInlineChange(oldValue: string, newValue: string) {
+  if (oldValue === newValue) {
+    return {
+      before: oldValue,
+      changedOld: '',
+      changedNew: '',
+      after: '',
+    };
+  }
+
+  let start = 0;
+  const minLength = Math.min(oldValue.length, newValue.length);
+  while (start < minLength && oldValue[start] === newValue[start]) {
+    start += 1;
+  }
+
+  let oldEnd = oldValue.length - 1;
+  let newEnd = newValue.length - 1;
+  while (oldEnd >= start && newEnd >= start && oldValue[oldEnd] === newValue[newEnd]) {
+    oldEnd -= 1;
+    newEnd -= 1;
+  }
+
+  const before = oldValue.slice(0, start);
+  const changedOld = oldValue.slice(start, oldEnd + 1);
+  const changedNew = newValue.slice(start, newEnd + 1);
+  const after = oldValue.slice(oldEnd + 1);
+
+  // Keep long unchanged context concise so the changed region stands out.
+  const contextLimit = 120;
+  const beforeClipped = before.length > contextLimit ? `...${before.slice(before.length - contextLimit)}` : before;
+  const afterClipped = after.length > contextLimit ? `${after.slice(0, contextLimit)}...` : after;
+
+  return {
+    before: beforeClipped,
+    changedOld,
+    changedNew,
+    after: afterClipped,
+  };
 }
