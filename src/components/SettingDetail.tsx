@@ -1,5 +1,6 @@
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { getPlatformLabel } from '@/lib/types';
+import { skuLabel } from '@/lib/sku-labels';
 import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import HighlightText from './HighlightText';
@@ -63,6 +64,32 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
         )}
 
       </div>
+
+      {/* Windows editions (SKUs) this setting applies to */}
+      {setting.applicability?.windowsSkus && setting.applicability.windowsSkus.length > 0 && (
+        <div>
+          <h4 className="text-fluent-sm font-semibold text-fluent-text-secondary mb-1.5">
+            Windows editions
+          </h4>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {setting.applicability.windowsSkus.map((sku) => {
+              const isPro = sku === 'windowsProfessional';
+              return (
+                <span
+                  key={sku}
+                  className={`inline-flex items-center px-2.5 py-1 rounded-md text-fluent-xs font-medium border ${
+                    isPro
+                      ? 'bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600'
+                  }`}
+                >
+                  {skuLabel(sku)}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       {setting.description && (

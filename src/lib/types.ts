@@ -87,6 +87,7 @@ export interface SettingApplicability {
   platform?: Platform;
   deviceMode?: string;
   technologies?: string;
+  windowsSkus?: string[];
 }
 
 // ─── Setting Definition (base) ───

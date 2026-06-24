@@ -83,6 +83,9 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
+                <Link href="/ent-exclusive/" className="inline-flex items-center gap-1 px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors">
+                  I{' '}<span className="text-red-400" aria-hidden="true">♥</span>{' '}Windows Pro
+                </Link>
                 <Link href="/changelog/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
                   Changelog
                 </Link>

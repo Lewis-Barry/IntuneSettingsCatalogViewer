@@ -363,6 +363,51 @@ function main() {
   }
   console.log(`Browse category shards: ${browseByCategory.size} files → ${BROWSE_BY_CATEGORY_DIR}`);
 
+  // ── Generate pro-exclusive.json ──
+  // Settings that include windowsEnterprise in windowsSkus but NOT windowsProfessional.
+  // Includes both root and child settings so the groupSettings rendering logic
+  // can nest them correctly at runtime.
+  console.log('Building pro-exclusive.json...');
+  const PRO_EXCLUSIVE_FILE = path.join(PUBLIC_DIR, 'pro-exclusive.json');
+
+  const proExclusiveSettings = settings.filter((s) => {
+    const skus: string[] | undefined = (s.applicability as Record<string, unknown> | undefined)?.windowsSkus as string[] | undefined;
+    if (!skus || skus.length === 0) return false;
+    return skus.includes('windowsEnterprise') && !skus.includes('windowsProfessional');
+  }).map((s) => {
+    // Apply category merge map
+    const effectiveCatId = mergeMap[s.categoryId] || s.categoryId;
+    const slim: Record<string, unknown> = {
+      '@odata.type': s['@odata.type'],
+      id: s.id,
+      name: s.name,
+      displayName: s.displayName,
+      description: s.description || undefined,
+      helpText: s.helpText || undefined,
+      categoryId: effectiveCatId,
+      baseUri: s.baseUri || undefined,
+      offsetUri: s.offsetUri || undefined,
+      rootDefinitionId: s.rootDefinitionId || undefined,
+      uxBehavior: s.uxBehavior || undefined,
+      settingUsage: s.settingUsage || undefined,
+      infoUrls: s.infoUrls?.length ? s.infoUrls : undefined,
+      keywords: s.keywords?.length ? s.keywords : undefined,
+      applicability: s.applicability || undefined,
+      dependedOnBy: s.dependedOnBy || undefined,
+      dependentOn: s.dependentOn || undefined,
+      defaultOptionId: s.defaultOptionId || undefined,
+      defaultValue: s.defaultValue !== undefined ? s.defaultValue : undefined,
+      valueDefinition: s.valueDefinition || undefined,
+      options: s.options || undefined,
+      childIds: s.childIds || undefined,
+    };
+    return JSON.parse(JSON.stringify(slim));
+  });
+
+  fs.writeFileSync(PRO_EXCLUSIVE_FILE, JSON.stringify({ settings: proExclusiveSettings }), 'utf-8');
+  const proSizeMB = (fs.statSync(PRO_EXCLUSIVE_FILE).size / 1024 / 1024).toFixed(2);
+  console.log(`Pro-exclusive: ${proExclusiveSettings.length} settings (${proSizeMB} MB) → ${PRO_EXCLUSIVE_FILE}`);
+
   console.log('\nDone!');
 }
 
