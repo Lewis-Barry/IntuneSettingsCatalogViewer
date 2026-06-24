@@ -1295,9 +1295,9 @@ function DiffValueBox({
   return (
     <div className={`rounded border px-2.5 py-2 ${toneClasses.wrapper}`}>
       <div className={`mb-1 text-[11px] font-semibold uppercase tracking-wide ${toneClasses.label}`}>{label}</div>
-      <div className="font-mono text-[12px] leading-[1.5] break-words whitespace-pre-wrap text-fluent-text">
+      <div className="font-mono text-[12px] leading-[1.5] break-words whitespace-pre-wrap [overflow-wrap:anywhere] text-fluent-text">
         {value}
-        {changed ? <mark className={`rounded px-0.5 ${toneClasses.highlight}`}>{changed}</mark> : null}
+        {changed ? <mark className={`rounded px-0.5 break-words whitespace-pre-wrap [overflow-wrap:anywhere] ${toneClasses.highlight}`}>{changed}</mark> : null}
         {trailing}
       </div>
     </div>
