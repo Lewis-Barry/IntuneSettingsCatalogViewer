@@ -75,26 +75,34 @@ export function parsePolicy(policy: OIBPolicy): ParsedPolicy {
 export interface FlatSetting {
   definitionId: string;
   value: OIBValue;
+  /** Identifies which groupCollection instance (e.g. one firewall rule) a leaf
+   *  came from — `<collectionDefId>#<index>`. Undefined for non-collection leaves. */
+  instanceId?: string;
 }
 
 /**
  * Recursively flatten OIB settings to leaf (choice / simple / collection) entries.
  * Group and GroupCollection containers are traversed but not emitted as rows.
  * Choice children (dependent settings) are emitted after their parent.
+ * Leaves inside a groupCollection carry an `instanceId` so callers can regroup
+ * them per instance — the flatten otherwise loses that boundary.
  */
 export function flattenOIBSettings(settings: OIBSetting[]): FlatSetting[] {
   const result: FlatSetting[] = [];
 
-  function walk(s: OIBSetting) {
+  function walk(s: OIBSetting, instanceId?: string) {
     const v = s.value;
     if (v.type === 'groupCollection') {
-      for (const group of v.groups) for (const child of group) walk(child);
+      v.groups.forEach((group, i) => {
+        const iid = `${s.definitionId}#${i}`;
+        for (const child of group) walk(child, iid);
+      });
     } else if (v.type === 'group') {
-      for (const member of v.members) walk(member);
+      for (const member of v.members) walk(member, instanceId);
     } else {
-      result.push({ definitionId: s.definitionId, value: v });
+      result.push({ definitionId: s.definitionId, value: v, instanceId });
       if (v.type === 'choice' && v.children) {
-        for (const child of v.children) walk(child);
+        for (const child of v.children) walk(child, instanceId);
       }
     }
   }
@@ -108,7 +116,12 @@ export function flattenOIBSettings(settings: OIBSetting[]): FlatSetting[] {
 import type { SettingDefinition } from './types';
 
 export interface RootGroup<T> {
+  /** Real rootDefinitionId (parent group/collection) — use for `<root>_name` lookups. */
   rootId: string;
+  /** Unique grouping key: rootId, plus an instance discriminator when the items
+   *  carry one. Use this for React keys / toggle state, not rootId (which repeats
+   *  across instances of the same collection). */
+  key: string;
   /** Display label for the parent group, set ONLY when the group has >1 member
    *  and the root definition is known. null → render members flat (ungrouped). */
   label: string | null;
@@ -116,32 +129,35 @@ export interface RootGroup<T> {
 }
 
 /**
- * Group leaf items (anything carrying a `definitionId`) by their setting's
- * `rootDefinitionId` — the parent SettingGroup/GroupCollection definition.
- * Collection instances (e.g. firewall rule fields) all share one root, so they
- * collapse under a single labelled group. Standalone settings have
- * rootDefinitionId === id and stay as groups-of-one (label null).
- * First-appearance order is preserved.
+ * Group leaf items by their setting's `rootDefinitionId` — the parent
+ * SettingGroup/GroupCollection definition. Collection-instance fields (e.g. one
+ * firewall rule's fields) collapse under a single labelled group; when items
+ * carry an `instanceId`, each instance becomes its own group so distinct rules
+ * stay separate. Standalone settings (rootDefinitionId === id) stay as
+ * groups-of-one (label null). First-appearance order is preserved.
  */
-export function groupByRoot<T extends { definitionId: string }>(
+export function groupByRoot<T extends { definitionId: string; instanceId?: string }>(
   items: T[],
   defsMap: Map<string, SettingDefinition>,
 ): RootGroup<T>[] {
   const order: string[] = [];
-  const groups = new Map<string, T[]>();
+  const groups = new Map<string, { rootId: string; members: T[] }>();
   for (const it of items) {
     const rootId = defsMap.get(it.definitionId)?.rootDefinitionId ?? it.definitionId;
-    if (!groups.has(rootId)) {
-      groups.set(rootId, []);
-      order.push(rootId);
+    const key = it.instanceId ? `${rootId}::${it.instanceId}` : rootId;
+    let g = groups.get(key);
+    if (!g) {
+      g = { rootId, members: [] };
+      groups.set(key, g);
+      order.push(key);
     }
-    groups.get(rootId)!.push(it);
+    g.members.push(it);
   }
-  return order.map((rootId) => {
-    const members = groups.get(rootId)!;
+  return order.map((key) => {
+    const { rootId, members } = groups.get(key)!;
     const rootDef = defsMap.get(rootId);
     const label = members.length > 1 && rootDef ? rootDef.displayName.trim() : null;
-    return { rootId, label, members };
+    return { rootId, key, label, members };
   });
 }
 

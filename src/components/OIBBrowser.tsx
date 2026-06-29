@@ -246,13 +246,13 @@ const PolicySection = memo(function PolicySection({
             if (!g.label) return g.members.map((flat, i) => renderFlat(flat, i));
             // ponytail: during search, matched rows must be visible, so groups
             // default open — invert the toggle set (membership = collapsed).
-            const inSet = openGroups.has(g.rootId);
+            const inSet = openGroups.has(g.key);
             const isOpen = highlightSettings ? !inSet : inSet;
             const label = instanceName(g.rootId, g.members, (m) => m.value) ?? g.label;
             return (
-              <div key={g.rootId} className="border-b border-fluent-border/50">
+              <div key={g.key} className="border-b border-fluent-border">
                 <button
-                  onClick={() => toggleGroup(g.rootId)}
+                  onClick={() => toggleGroup(g.key)}
                   className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-fluent-bg-alt/50 transition-colors"
                   aria-expanded={isOpen}
                 >

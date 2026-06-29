@@ -283,7 +283,7 @@ export default function OIBChangelogViewer() {
     const src = c.kind === 'removed' ? c.baseValue : c.compareValue;
     if (!def) {
       return (
-        <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border/50 border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+        <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
           <span className="flex-1 font-mono text-[12px] text-fluent-text-secondary truncate">{c.definitionId}</span>
           {changeBadge(c, def)}
         </div>
@@ -455,7 +455,7 @@ export default function OIBChangelogViewer() {
                         </button>
 
                         {isOpen && expandable && (
-                          <div className="border-t border-fluent-border/30 [&_.setting-row]:border-fluent-border/30">
+                          <div className="border-t border-fluent-border">
                             {p.settingChanges.length === 0 ? (
                               <p className="text-fluent-sm text-fluent-text-secondary px-4 py-3">
                                 Renamed; settings unchanged.
@@ -474,7 +474,7 @@ export default function OIBChangelogViewer() {
                                 const removed = g.members.filter((m) => m.kind === 'removed').length;
                                 const changed = g.members.filter((m) => m.kind === 'changed').length;
                                 return (
-                                  <div key={gkey} className="border-b border-fluent-border/50">
+                                  <div key={gkey} className="border-b border-fluent-border">
                                     <button
                                       onClick={() => toggle(gkey)}
                                       className="w-full flex items-center gap-2 px-4 py-2 text-left hover:bg-fluent-bg-alt"
