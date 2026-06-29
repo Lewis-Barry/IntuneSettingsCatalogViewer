@@ -12,6 +12,8 @@ import {
   parsePolicy,
   flattenOIBSettings,
   buildSidebarTree,
+  groupByRoot,
+  instanceName,
   type OIBFolderNode,
   type OIBCategoryNode,
 } from '@/lib/oib-types';
@@ -104,6 +106,13 @@ const PolicySection = memo(function PolicySection({
   defaultCollapsed = false,
 }: PolicySectionProps) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const toggleGroup = (rootId: string) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      next.has(rootId) ? next.delete(rootId) : next.add(rootId);
+      return next;
+    });
   const parsed = parsePolicy(policy);
   const allFlat = useMemo(() => flattenOIBSettings(policy.settings), [policy.settings]);
   const displayed = highlightSettings
@@ -113,6 +122,50 @@ const PolicySection = memo(function PolicySection({
   // Helper to look up match sources for a given setting
   const getMatchSources = (defId: string): MatchSource[] | undefined =>
     highlightSettings?.get(defId);
+
+  // Render a single setting row (reused for grouped + ungrouped).
+  const renderFlat = (flat: FlatSetting, i: number) => {
+    const def = defsMap.get(flat.definitionId);
+    if (!def) {
+      return (
+        <div
+          key={`${flat.definitionId}-${i}`}
+          className="flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border/50 hover:bg-fluent-bg-alt/50 transition-colors"
+        >
+          <span className="w-5 flex-shrink-0" />
+          <span className="flex-1 text-fluent-base text-fluent-text-secondary truncate font-mono text-[12px]">
+            {flat.definitionId}
+          </span>
+        </div>
+      );
+    }
+
+    // Extract OIB selection info for the expanded detail panel
+    const oibValue = flat.value;
+    let activeOptionIds: string[] | undefined;
+    let activeSimpleValue: string | undefined;
+    if (oibValue.type === 'choice') {
+      activeOptionIds = [oibValue.optionId];
+    } else if (oibValue.type === 'choiceCollection') {
+      activeOptionIds = oibValue.optionIds;
+    } else if (oibValue.type === 'simple') {
+      activeSimpleValue = oibValue.value == null ? undefined : String(oibValue.value);
+    } else if (oibValue.type === 'simpleCollection') {
+      activeSimpleValue = oibValue.values.map((v) => (v == null ? '' : String(v))).join(', ');
+    }
+
+    return (
+      <SettingRow
+        key={`${flat.definitionId}-${i}`}
+        setting={def}
+        highlightQuery={highlightQuery}
+        matchSources={getMatchSources(flat.definitionId)}
+        activeOptionIds={activeOptionIds}
+        activeSimpleValue={activeSimpleValue}
+        hideScope
+      />
+    );
+  };
 
   if (displayed.length === 0) return null;
 
@@ -188,46 +241,35 @@ const PolicySection = memo(function PolicySection({
             </div>
           </div>
 
-          {displayed.map((flat, i) => {
-            const def = defsMap.get(flat.definitionId);
-            if (!def) {
-              return (
-                <div
-                  key={`${flat.definitionId}-${i}`}
-                  className="flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border/50 hover:bg-fluent-bg-alt/50 transition-colors"
-                >
-                  <span className="w-5 flex-shrink-0" />
-                  <span className="flex-1 text-fluent-base text-fluent-text-secondary truncate font-mono text-[12px]">
-                    {flat.definitionId}
-                  </span>
-                </div>
-              );
-            }
-
-            // Extract OIB selection info for the expanded detail panel
-            const oibValue = flat.value;
-            let activeOptionIds: string[] | undefined;
-            let activeSimpleValue: string | undefined;
-            if (oibValue.type === 'choice') {
-              activeOptionIds = [oibValue.optionId];
-            } else if (oibValue.type === 'choiceCollection') {
-              activeOptionIds = oibValue.optionIds;
-            } else if (oibValue.type === 'simple') {
-              activeSimpleValue = oibValue.value == null ? undefined : String(oibValue.value);
-            } else if (oibValue.type === 'simpleCollection') {
-              activeSimpleValue = oibValue.values.map((v) => (v == null ? '' : String(v))).join(', ');
-            }
-
+          {groupByRoot(displayed, defsMap).map((g) => {
+            // Singletons (and groups with no known root) render flat.
+            if (!g.label) return g.members.map((flat, i) => renderFlat(flat, i));
+            // ponytail: during search, matched rows must be visible, so groups
+            // default open — invert the toggle set (membership = collapsed).
+            const inSet = openGroups.has(g.rootId);
+            const isOpen = highlightSettings ? !inSet : inSet;
+            const label = instanceName(g.rootId, g.members, (m) => m.value) ?? g.label;
             return (
-              <SettingRow
-                key={`${flat.definitionId}-${i}`}
-                setting={def}
-                highlightQuery={highlightQuery}
-                matchSources={getMatchSources(flat.definitionId)}
-                activeOptionIds={activeOptionIds}
-                activeSimpleValue={activeSimpleValue}
-                hideScope
-              />
+              <div key={g.rootId} className="border-b border-fluent-border/50">
+                <button
+                  onClick={() => toggleGroup(g.rootId)}
+                  className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-fluent-bg-alt/50 transition-colors"
+                  aria-expanded={isOpen}
+                >
+                  <svg
+                    className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform duration-150 flex-shrink-0 ${isOpen ? 'rotate-90' : ''}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span className="flex-1 text-fluent-base font-medium text-fluent-text truncate">{label}</span>
+                  <span className="text-fluent-sm text-fluent-text-secondary flex-shrink-0">({g.members.length})</span>
+                </button>
+                {isOpen && <div className="pl-3">{g.members.map((flat, i) => renderFlat(flat, i))}</div>}
+              </div>
             );
           })}
         </div>

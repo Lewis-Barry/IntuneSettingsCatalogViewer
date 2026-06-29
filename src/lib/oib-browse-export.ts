@@ -4,7 +4,7 @@
 // columns — just the configured value per setting, plus per-policy scope/tier.
 
 import type { OIBPolicy, FlatSetting } from './oib-types';
-import { parsePolicy } from './oib-types';
+import { parsePolicy, groupByRoot, instanceName } from './oib-types';
 import type { SettingDefinition } from './types';
 import { fmtValue } from './oib-export-shared';
 import { STYLE, escapeHtml, formatDefinitionId } from './oib-html-export';
@@ -27,18 +27,60 @@ const settingNameOf = (defId: string, defsMap: Map<string, SettingDefinition>) =
   return def?.displayName || def?.name || defId;
 };
 
+interface Row {
+  name: string;
+  definitionId: string;
+  value: string;
+}
+
+interface RuleGroup {
+  rule: string;
+  rows: Row[];
+}
+
 interface PreparedPolicy {
   label: string;
   version: string;
   scope: string;
   tier: string;
   githubUrl: string;
-  rows: { name: string; definitionId: string; value: string }[];
+  /** Standalone settings (no parent collection), sorted by name. */
+  ungrouped: Row[];
+  /** Collection instances (e.g. firewall rules), each under its own name. */
+  groups: RuleGroup[];
+  settingCount: number;
 }
 
 interface Section {
   heading: string;
   policies: PreparedPolicy[];
+}
+
+const byName = (a: Row, b: Row) => a.name.localeCompare(b.name);
+
+/** Split a policy's flat settings into ungrouped rows + named collection groups. */
+function prepareGroups(
+  flats: FlatSetting[],
+  defsMap: Map<string, SettingDefinition>,
+): { ungrouped: Row[]; groups: RuleGroup[] } {
+  const toRow = (f: FlatSetting): Row => ({
+    name: settingNameOf(f.definitionId, defsMap),
+    definitionId: f.definitionId,
+    value: fmtValue(f.value, defsMap.get(f.definitionId)),
+  });
+  const ungrouped: Row[] = [];
+  const groups: RuleGroup[] = [];
+  for (const g of groupByRoot(flats, defsMap)) {
+    if (!g.label) {
+      ungrouped.push(...g.members.map(toRow));
+      continue;
+    }
+    const rule = instanceName(g.rootId, g.members, (m) => m.value) ?? g.label;
+    groups.push({ rule, rows: g.members.map(toRow).sort(byName) });
+  }
+  ungrouped.sort(byName);
+  groups.sort((a, b) => a.rule.localeCompare(b.rule));
+  return { ungrouped, groups };
 }
 
 /**
@@ -60,13 +102,7 @@ function prepareSections(
       ? `${folderLabel(policy.oibFolder)} › ${parsed.category}`
       : parsed.category;
 
-    const rows = flats
-      .map((f) => ({
-        name: settingNameOf(f.definitionId, defsMap),
-        definitionId: f.definitionId,
-        value: fmtValue(f.value, defsMap.get(f.definitionId)),
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const { ungrouped, groups } = prepareGroups(flats, defsMap);
 
     const list = sections.get(heading) ?? [];
     list.push({
@@ -75,7 +111,9 @@ function prepareSections(
       scope: scopeWord(parsed.scope),
       tier: parsed.tier ?? '',
       githubUrl: policy.githubUrl,
-      rows,
+      ungrouped,
+      groups,
+      settingCount: ungrouped.length + groups.reduce((n, g) => n + g.rows.length, 0),
     });
     sections.set(heading, list);
   }
@@ -104,6 +142,7 @@ export function generateOIBBrowseCsv(
     'Policy',
     'Scope',
     'Tier',
+    'Rule',
     'Setting',
     'Definition ID',
     'Value',
@@ -115,27 +154,24 @@ export function generateOIBBrowseCsv(
     if (flats.length === 0) continue;
     const parsed = parsePolicy(policy);
     const platform = folderLabel(policy.oibFolder);
-    const sorted = flats
-      .map((f) => ({
-        name: settingNameOf(f.definitionId, defsMap),
-        definitionId: f.definitionId,
-        value: fmtValue(f.value, defsMap.get(f.definitionId)),
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const { ungrouped, groups } = prepareGroups(flats, defsMap);
 
-    for (const r of sorted) {
+    const push = (r: Row, rule: string) =>
       rows.push([
         platform,
         parsed.category,
         parsed.policyLabel,
         scopeWord(parsed.scope),
         parsed.tier ?? '',
+        rule,
         r.name,
         r.definitionId,
         r.value,
         policy.githubUrl,
       ]);
-    }
+
+    for (const r of ungrouped) push(r, '');
+    for (const g of groups) for (const r of g.rows) push(r, g.rule);
   }
 
   const lines = [header, ...rows].map((cells) => cells.map(csvCell).join(','));
@@ -156,15 +192,20 @@ function policyMeta(p: PreparedPolicy): string {
 }
 
 function renderPolicy(p: PreparedPolicy): string {
-  const rows = p.rows
-    .map(
-      (r) => `
+  const renderRow = (r: Row) => `
 <tr>
   <td>${escapeHtml(r.name)}<br /><span class="meta mono">${formatDefinitionId(r.definitionId)}</span></td>
   <td>${escapeHtml(r.value)}</td>
-</tr>`,
+</tr>`;
+
+  const groupRows = p.groups
+    .map(
+      (g) => `
+<tr class="category-level1"><td colspan="2">${escapeHtml(g.rule)} <span class="meta">(${g.rows.length})</span></td></tr>${g.rows.map(renderRow).join('')}`,
     )
     .join('');
+
+  const rows = p.ungrouped.map(renderRow).join('') + groupRows;
 
   return `
 <div class="policy-block">
@@ -185,7 +226,7 @@ export function generateOIBBrowseHtml(
 ): string {
   const sections = prepareSections(entries, defsMap);
   const totalSettings = sections.reduce(
-    (n, s) => n + s.policies.reduce((m, p) => m + p.rows.length, 0),
+    (n, s) => n + s.policies.reduce((m, p) => m + p.settingCount, 0),
     0,
   );
   const totalPolicies = sections.reduce((n, s) => n + s.policies.length, 0);

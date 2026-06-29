@@ -103,6 +103,70 @@ export function flattenOIBSettings(settings: OIBSetting[]): FlatSetting[] {
   return result;
 }
 
+// ── Group leaves by their parent collection/group ──
+
+import type { SettingDefinition } from './types';
+
+export interface RootGroup<T> {
+  rootId: string;
+  /** Display label for the parent group, set ONLY when the group has >1 member
+   *  and the root definition is known. null → render members flat (ungrouped). */
+  label: string | null;
+  members: T[];
+}
+
+/**
+ * Group leaf items (anything carrying a `definitionId`) by their setting's
+ * `rootDefinitionId` — the parent SettingGroup/GroupCollection definition.
+ * Collection instances (e.g. firewall rule fields) all share one root, so they
+ * collapse under a single labelled group. Standalone settings have
+ * rootDefinitionId === id and stay as groups-of-one (label null).
+ * First-appearance order is preserved.
+ */
+export function groupByRoot<T extends { definitionId: string }>(
+  items: T[],
+  defsMap: Map<string, SettingDefinition>,
+): RootGroup<T>[] {
+  const order: string[] = [];
+  const groups = new Map<string, T[]>();
+  for (const it of items) {
+    const rootId = defsMap.get(it.definitionId)?.rootDefinitionId ?? it.definitionId;
+    if (!groups.has(rootId)) {
+      groups.set(rootId, []);
+      order.push(rootId);
+    }
+    groups.get(rootId)!.push(it);
+  }
+  return order.map((rootId) => {
+    const members = groups.get(rootId)!;
+    const rootDef = defsMap.get(rootId);
+    const label = members.length > 1 && rootDef ? rootDef.displayName.trim() : null;
+    return { rootId, label, members };
+  });
+}
+
+/**
+ * Pull a collection instance's own name from its `<root>_name` member (e.g. a
+ * firewall rule's "LOLBIN Security - Block 32-bit calc.exe"). Returns null when
+ * there's no name field or the group merges multiple instances with different
+ * names (the templated-id ceiling — caller falls back to the generic label).
+ */
+export function instanceName<T extends { definitionId: string }>(
+  rootId: string,
+  members: T[],
+  getValue: (m: T) => OIBValue | undefined,
+): string | null {
+  const names = new Set<string>();
+  for (const m of members) {
+    if (m.definitionId !== `${rootId}_name`) continue;
+    const v = getValue(m);
+    if (v?.type === 'simple' && v.value != null && String(v.value).trim()) {
+      names.add(String(v.value).trim());
+    }
+  }
+  return names.size === 1 ? [...names][0] : null;
+}
+
 // ── Sidebar tree ──
 
 export interface OIBFolderNode {

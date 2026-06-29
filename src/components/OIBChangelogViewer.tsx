@@ -7,6 +7,7 @@ import SettingRow from './SettingRow';
 import { diffVersions } from '@/lib/oib-diff';
 import { generateOIBChangelogHtml } from '@/lib/oib-html-export';
 import { generateOIBChangelogCsv } from '@/lib/oib-csv-export';
+import { groupByRoot, instanceName } from '@/lib/oib-types';
 import type { OIBValue } from '@/lib/oib-types';
 import type {
   OIBVersionIndex,
@@ -276,6 +277,34 @@ export default function OIBChangelogViewer() {
   const versionLabel = (tag: string | null) =>
     platform?.versions.find((v) => v.tag === tag)?.version ?? '';
 
+  // Render a single setting change row (reused for grouped + ungrouped).
+  const renderChange = (c: SettingChange) => {
+    const def = defsMap.get(c.definitionId);
+    const src = c.kind === 'removed' ? c.baseValue : c.compareValue;
+    if (!def) {
+      return (
+        <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border/50 border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+          <span className="flex-1 font-mono text-[12px] text-fluent-text-secondary truncate">{c.definitionId}</span>
+          {changeBadge(c, def)}
+        </div>
+      );
+    }
+    const { activeOptionIds, activeSimpleValue } = activeFrom(src);
+    const srcVersion = c.kind === 'removed' ? versionLabel(baseTag) : versionLabel(compareTag);
+    return (
+      <div key={c.definitionId + c.kind} className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+        <SettingRow
+          setting={def}
+          valueBadge={changeBadge(c, def)}
+          activeOptionIds={activeOptionIds}
+          activeSimpleValue={activeSimpleValue}
+          activeLabel={`OIB ${srcVersion}`}
+          hideScope
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="p-4 md:p-6">
       {/* ── Header (mirrors the home screen) ── */}
@@ -432,29 +461,34 @@ export default function OIBChangelogViewer() {
                                 Renamed; settings unchanged.
                               </p>
                             ) : (
-                              p.settingChanges.map((c) => {
-                                const def = defsMap.get(c.definitionId);
-                                const src = c.kind === 'removed' ? c.baseValue : c.compareValue;
-                                if (!def) {
-                                  return (
-                                    <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border/50 border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
-                                      <span className="flex-1 font-mono text-[12px] text-fluent-text-secondary truncate">{c.definitionId}</span>
-                                      {changeBadge(c, def)}
-                                    </div>
-                                  );
-                                }
-                                const { activeOptionIds, activeSimpleValue } = activeFrom(src);
-                                const srcVersion = c.kind === 'removed' ? versionLabel(baseTag) : versionLabel(compareTag);
+                              groupByRoot(p.settingChanges, defsMap).map((g) => {
+                                // Singletons (and groups with no known root) render flat.
+                                if (!g.label) return g.members.map(renderChange);
+                                const gkey = `${key}::${g.rootId}`;
+                                const gOpen = expanded.has(gkey);
+                                const label =
+                                  instanceName(g.rootId, g.members, (c) =>
+                                    c.kind === 'removed' ? c.baseValue : c.compareValue,
+                                  ) ?? g.label;
+                                const added = g.members.filter((m) => m.kind === 'added').length;
+                                const removed = g.members.filter((m) => m.kind === 'removed').length;
+                                const changed = g.members.filter((m) => m.kind === 'changed').length;
                                 return (
-                                  <div key={c.definitionId + c.kind} className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
-                                    <SettingRow
-                                      setting={def}
-                                      valueBadge={changeBadge(c, def)}
-                                      activeOptionIds={activeOptionIds}
-                                      activeSimpleValue={activeSimpleValue}
-                                      activeLabel={`OIB ${srcVersion}`}
-                                      hideScope
-                                    />
+                                  <div key={gkey} className="border-b border-fluent-border/50">
+                                    <button
+                                      onClick={() => toggle(gkey)}
+                                      className="w-full flex items-center gap-2 px-4 py-2 text-left hover:bg-fluent-bg-alt"
+                                      aria-expanded={gOpen}
+                                    >
+                                      <span className="w-3.5 flex items-center justify-center text-fluent-text-secondary shrink-0">
+                                        <Chevron open={gOpen} />
+                                      </span>
+                                      <span className="flex-1 text-fluent-sm font-medium text-fluent-text">{label}</span>
+                                      <span className="text-fluent-xs text-fluent-text-secondary tabular-nums shrink-0">
+                                        +{added} −{removed} ~{changed}
+                                      </span>
+                                    </button>
+                                    {gOpen && <div className="pl-3">{g.members.map(renderChange)}</div>}
                                   </div>
                                 );
                               })

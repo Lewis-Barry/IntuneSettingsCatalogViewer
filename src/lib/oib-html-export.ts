@@ -8,6 +8,7 @@ import {
   policyDisplayName,
   type GroupedPolicyDiff,
 } from './oib-export-shared';
+import { groupByRoot, instanceName } from './oib-types';
 
 interface GenerateOIBChangelogHtmlOptions {
   diff: VersionDiff;
@@ -260,20 +261,36 @@ function renderPolicyDetailsTable(
     return '<p class="meta">No setting-level changes.</p>';
   }
 
-  const rows = policy.settingChanges
-    .slice()
-    .sort((left, right) => settingName(left, defsMap).localeCompare(settingName(right, defsMap)))
-    .map((change) => {
-      const def = defsMap.get(change.definitionId);
-      const before = change.kind === 'added' ? '' : fmtValue(change.baseValue, def);
-      const after = change.kind === 'removed' ? '' : fmtValue(change.compareValue, def);
-      return `
+  const renderRow = (change: SettingChange): string => {
+    const def = defsMap.get(change.definitionId);
+    const before = change.kind === 'added' ? '' : fmtValue(change.baseValue, def);
+    const after = change.kind === 'removed' ? '' : fmtValue(change.compareValue, def);
+    return `
 <tr>
   <td>${escapeHtml(settingName(change, defsMap))}<br /><span class="meta mono">${formatDefinitionId(change.definitionId)}</span></td>
   <td>${kindBadge(change.kind)}</td>
   <td>${escapeHtml(before)}</td>
   <td>${escapeHtml(after)}</td>
 </tr>`;
+  };
+
+  const byName = (left: SettingChange, right: SettingChange) =>
+    settingName(left, defsMap).localeCompare(settingName(right, defsMap));
+
+  const rows = groupByRoot(policy.settingChanges, defsMap)
+    .map((g) => {
+      const members = g.members.slice().sort(byName);
+      if (!g.label) return members.map(renderRow).join('');
+      const label =
+        instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ?? g.label;
+      const added = g.members.filter((m) => m.kind === 'added').length;
+      const removed = g.members.filter((m) => m.kind === 'removed').length;
+      const changed = g.members.filter((m) => m.kind === 'changed').length;
+      const header = `
+<tr class="category-level1">
+  <td colspan="4">${escapeHtml(label)} <span class="meta">(+${added} −${removed} ~${changed})</span></td>
+</tr>`;
+      return header + members.map(renderRow).join('');
     })
     .join('');
 

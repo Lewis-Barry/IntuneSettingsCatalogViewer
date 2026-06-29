@@ -9,6 +9,7 @@ import {
   policyDisplayName,
   type GroupedPolicyDiff,
 } from './oib-export-shared';
+import { groupByRoot, instanceName } from './oib-types';
 
 interface GenerateOIBChangelogCsvOptions {
   grouped: GroupedPolicyDiff[];
@@ -32,6 +33,7 @@ export function generateOIBChangelogCsv({
     'Category',
     'Policy',
     'Policy Change',
+    'Rule',
     'Setting',
     'Definition ID',
     'Setting Change',
@@ -49,29 +51,34 @@ export function generateOIBChangelogCsv({
       const source = policy.githubUrl ?? '';
 
       if (policy.settingChanges.length === 0) {
-        rows.push([category, policyName, policyChange, '', '', '', '', '', source]);
+        rows.push([category, policyName, policyChange, '', '', '', '', '', '', source]);
         continue;
       }
 
-      const sorted = policy.settingChanges
-        .slice()
-        .sort((a, b) => settingName(a, defsMap).localeCompare(settingName(b, defsMap)));
-
-      for (const change of sorted) {
-        const def = defsMap.get(change.definitionId);
-        const before = change.kind === 'added' ? '' : fmtValue(change.baseValue, def);
-        const after = change.kind === 'removed' ? '' : fmtValue(change.compareValue, def);
-        rows.push([
-          category,
-          policyName,
-          policyChange,
-          settingName(change, defsMap),
-          change.definitionId,
-          kindWord(change.kind),
-          before,
-          after,
-          source,
-        ]);
+      for (const g of groupByRoot(policy.settingChanges, defsMap)) {
+        const rule = g.label
+          ? instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ?? g.label
+          : '';
+        const sorted = g.members
+          .slice()
+          .sort((a, b) => settingName(a, defsMap).localeCompare(settingName(b, defsMap)));
+        for (const change of sorted) {
+          const def = defsMap.get(change.definitionId);
+          const before = change.kind === 'added' ? '' : fmtValue(change.baseValue, def);
+          const after = change.kind === 'removed' ? '' : fmtValue(change.compareValue, def);
+          rows.push([
+            category,
+            policyName,
+            policyChange,
+            rule,
+            settingName(change, defsMap),
+            change.definitionId,
+            kindWord(change.kind),
+            before,
+            after,
+            source,
+          ]);
+        }
       }
     }
   }
