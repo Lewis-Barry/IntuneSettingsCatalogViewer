@@ -464,12 +464,16 @@ export default function OIBChangelogViewer() {
                               groupByRoot(p.settingChanges, defsMap).map((g) => {
                                 // Singletons (and groups with no known root) render flat.
                                 if (!g.label) return g.members.map(renderChange);
-                                const gkey = `${key}::${g.rootId}`;
+                                const gkey = `${key}::${g.key}`;
                                 const gOpen = expanded.has(gkey);
+                                // Prefer the instance's rule name (carried on the change
+                                // even when the name field itself didn't change).
                                 const label =
+                                  g.members.find((c) => c.instanceId)?.instanceId ??
                                   instanceName(g.rootId, g.members, (c) =>
                                     c.kind === 'removed' ? c.baseValue : c.compareValue,
-                                  ) ?? g.label;
+                                  ) ??
+                                  g.label;
                                 const added = g.members.filter((m) => m.kind === 'added').length;
                                 const removed = g.members.filter((m) => m.kind === 'removed').length;
                                 const changed = g.members.filter((m) => m.kind === 'changed').length;

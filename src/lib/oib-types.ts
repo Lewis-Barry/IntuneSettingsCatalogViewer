@@ -156,7 +156,10 @@ export function groupByRoot<T extends { definitionId: string; instanceId?: strin
   return order.map((key) => {
     const { rootId, members } = groups.get(key)!;
     const rootDef = defsMap.get(rootId);
-    const label = members.length > 1 && rootDef ? rootDef.displayName.trim() : null;
+    // Label multi-member groups, and any collection instance (even single-change),
+    // but never a lone standalone setting (would wrap it in a group of itself).
+    const isInstance = members.some((m) => m.instanceId);
+    const label = (members.length > 1 || isInstance) && rootDef ? rootDef.displayName.trim() : null;
     return { rootId, key, label, members };
   });
 }

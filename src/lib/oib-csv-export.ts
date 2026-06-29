@@ -57,7 +57,9 @@ export function generateOIBChangelogCsv({
 
       for (const g of groupByRoot(policy.settingChanges, defsMap)) {
         const rule = g.label
-          ? instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ?? g.label
+          ? g.members.find((c) => c.instanceId)?.instanceId ??
+            instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ??
+            g.label
           : '';
         const sorted = g.members
           .slice()

@@ -282,7 +282,9 @@ function renderPolicyDetailsTable(
       const members = g.members.slice().sort(byName);
       if (!g.label) return members.map(renderRow).join('');
       const label =
-        instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ?? g.label;
+        g.members.find((c) => c.instanceId)?.instanceId ??
+        instanceName(g.rootId, g.members, (c) => (c.kind === 'removed' ? c.baseValue : c.compareValue)) ??
+        g.label;
       const added = g.members.filter((m) => m.kind === 'added').length;
       const removed = g.members.filter((m) => m.kind === 'removed').length;
       const changed = g.members.filter((m) => m.kind === 'changed').length;

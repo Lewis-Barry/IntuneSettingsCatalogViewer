@@ -9,12 +9,16 @@
 //                   legacy versions that predate the manifest)
 
 import { parsePolicy, flattenOIBSettings } from './oib-types';
-import type { OIBPolicy, OIBValue } from './oib-types';
+import type { OIBPolicy, OIBValue, FlatSetting } from './oib-types';
 import type { PolicyDiff, SettingChange, VersionDiff } from './oib-changelog-types';
 
 // ponytail: fuzzy threshold is a heuristic, not ground truth. One constant to
 // retune against real data; upgrade path is a manual rename-map if it mismatches.
 const FUZZY_MIN_JACCARD = 0.6;
+
+// Minimum similarity for matching two collection instances (e.g. firewall rules)
+// across versions when their names differ — below this they read as add + remove.
+const INSTANCE_MIN_JACCARD = 0.4;
 
 // Boilerplate tokens stripped before comparing titles for the fuzzy tier.
 const STOP_TOKENS = new Set([
@@ -50,16 +54,141 @@ function titleTokens(p: OIBPolicy): Set<string> {
 
 // ── Setting comparison ──
 
-/** Leaf settings keyed by definitionId. Duplicate ids (same setting in multiple
- *  group instances) are collected into a list and compared as a set. */
-function settingMap(p: OIBPolicy): Map<string, OIBValue[]> {
+/** Non-instance leaf settings keyed by definitionId. (Leaves inside a
+ *  groupCollection instance carry an instanceId and are diffed separately.) */
+function settingMap(leaves: FlatSetting[]): Map<string, OIBValue[]> {
   const map = new Map<string, OIBValue[]>();
-  for (const f of flattenOIBSettings(p.settings)) {
+  for (const f of leaves) {
+    if (f.instanceId) continue;
     const arr = map.get(f.definitionId) ?? [];
     arr.push(f.value);
     map.set(f.definitionId, arr);
   }
   return map;
+}
+
+// ── Collection instances (e.g. firewall rules) ──
+
+interface Instance {
+  /** Rule name (from the `<root>_name` leaf) — also the cross-version match key. */
+  name: string;
+  leaves: FlatSetting[];
+}
+
+/** Group a policy's groupCollection leaves into instances, keyed by collection
+ *  definitionId. Each instance keeps its own leaves (one `_name`, `_action`, …). */
+function instancesByCollection(leaves: FlatSetting[]): Map<string, Instance[]> {
+  const byInstance = new Map<string, FlatSetting[]>();
+  const order: string[] = [];
+  for (const f of leaves) {
+    if (!f.instanceId) continue;
+    let arr = byInstance.get(f.instanceId);
+    if (!arr) { arr = []; byInstance.set(f.instanceId, arr); order.push(f.instanceId); }
+    arr.push(f);
+  }
+  const byCollection = new Map<string, Instance[]>();
+  for (const instanceId of order) {
+    const instLeaves = byInstance.get(instanceId)!;
+    const collectionId = instanceId.slice(0, instanceId.lastIndexOf('#'));
+    const nameLeaf = instLeaves.find((l) => l.definitionId === `${collectionId}_name`);
+    const name =
+      nameLeaf && nameLeaf.value.type === 'simple' && nameLeaf.value.value != null
+        ? String(nameLeaf.value.value)
+        : instanceId;
+    const arr = byCollection.get(collectionId) ?? [];
+    arr.push({ name, leaves: instLeaves });
+    byCollection.set(collectionId, arr);
+  }
+  return byCollection;
+}
+
+function fingerprint(inst: Instance): Set<string> {
+  return new Set(inst.leaves.map((l) => `${l.definitionId}=${canonical(l.value)}`));
+}
+
+/** Match base↔compare instances: exact name first, then best similarity. */
+function matchInstances(
+  base: Instance[],
+  compare: Instance[]
+): { pairs: Array<[Instance, Instance]>; added: Instance[]; removed: Instance[] } {
+  const left = new Set(base);
+  const right = new Set(compare);
+  const pairs: Array<[Instance, Instance]> = [];
+
+  // Tier 1: exact name.
+  const byName = new Map<string, Instance>();
+  for (const c of right) byName.set(c.name, c);
+  for (const b of [...left]) {
+    const c = byName.get(b.name);
+    if (c && right.has(c)) {
+      pairs.push([b, c]);
+      left.delete(b);
+      right.delete(c);
+    }
+  }
+
+  // Tier 2: best Jaccard over setting fingerprints (catches name-only changes).
+  for (const b of [...left]) {
+    const fb = fingerprint(b);
+    let best: { c: Instance; sim: number } | null = null;
+    for (const c of right) {
+      const sim = jaccard(fb, fingerprint(c));
+      if (sim >= INSTANCE_MIN_JACCARD && (!best || sim > best.sim)) best = { c, sim };
+    }
+    if (best) {
+      pairs.push([b, best.c]);
+      left.delete(b);
+      right.delete(best.c);
+    }
+  }
+
+  return { pairs, added: [...right], removed: [...left] };
+}
+
+/** Diff one matched instance pair; changes tagged with the (compare) rule name. */
+function diffInstancePair(base: Instance, compare: Instance): SettingChange[] {
+  const instanceId = compare.name || base.name;
+  const bm = new Map<string, OIBValue>();
+  for (const l of base.leaves) bm.set(l.definitionId, l.value);
+  const cm = new Map<string, OIBValue>();
+  for (const l of compare.leaves) cm.set(l.definitionId, l.value);
+
+  const changes: SettingChange[] = [];
+  for (const [id, cv] of cm) {
+    if (!bm.has(id)) changes.push({ kind: 'added', definitionId: id, compareValue: cv, instanceId });
+    else if (canonical(bm.get(id)!) !== canonical(cv))
+      changes.push({ kind: 'changed', definitionId: id, baseValue: bm.get(id)!, compareValue: cv, instanceId });
+  }
+  for (const [id, bv] of bm) {
+    if (!cm.has(id)) changes.push({ kind: 'removed', definitionId: id, baseValue: bv, instanceId });
+  }
+  return changes;
+}
+
+/** Every leaf of an added/removed instance, as change records. */
+function instanceAllAs(inst: Instance, kind: 'added' | 'removed'): SettingChange[] {
+  return inst.leaves.map((l) =>
+    kind === 'added'
+      ? { kind, definitionId: l.definitionId, compareValue: l.value, instanceId: inst.name }
+      : { kind, definitionId: l.definitionId, baseValue: l.value, instanceId: inst.name }
+  );
+}
+
+/** Instance-aware diff of all groupCollections shared by two policies. */
+function diffInstances(baseLeaves: FlatSetting[], compareLeaves: FlatSetting[]): SettingChange[] {
+  const baseColl = instancesByCollection(baseLeaves);
+  const compColl = instancesByCollection(compareLeaves);
+  const changes: SettingChange[] = [];
+  for (const collectionId of new Set([...baseColl.keys(), ...compColl.keys()])) {
+    const { pairs, added, removed } = matchInstances(
+      baseColl.get(collectionId) ?? [],
+      compColl.get(collectionId) ?? []
+    );
+    for (const [b, c] of pairs) changes.push(...diffInstancePair(b, c));
+    for (const c of added) changes.push(...instanceAllAs(c, 'added'));
+    for (const b of removed) changes.push(...instanceAllAs(b, 'removed'));
+  }
+  return changes;
 }
 
 /** Order-independent canonical form so collection reordering isn't a "change". */
@@ -85,10 +214,13 @@ function valuesEqual(a: OIBValue[], b: OIBValue[]): boolean {
 }
 
 function diffSettings(base: OIBPolicy, compare: OIBPolicy): SettingChange[] {
-  const bm = settingMap(base);
-  const cm = settingMap(compare);
+  const baseLeaves = flattenOIBSettings(base.settings);
+  const compareLeaves = flattenOIBSettings(compare.settings);
+  const bm = settingMap(baseLeaves);
+  const cm = settingMap(compareLeaves);
   const changes: SettingChange[] = [];
 
+  // Non-collection settings: compare by definitionId.
   for (const [id, cVals] of cm) {
     if (!bm.has(id)) {
       changes.push({ kind: 'added', definitionId: id, compareValue: cVals[0] });
@@ -99,6 +231,9 @@ function diffSettings(base: OIBPolicy, compare: OIBPolicy): SettingChange[] {
   for (const [id, bVals] of bm) {
     if (!cm.has(id)) changes.push({ kind: 'removed', definitionId: id, baseValue: bVals[0] });
   }
+
+  // Collection instances (firewall rules, …): matched and diffed per instance.
+  changes.push(...diffInstances(baseLeaves, compareLeaves));
   return changes;
 }
 
@@ -113,11 +248,14 @@ function settingIds(p: OIBPolicy): Set<string> {
   return new Set(flattenOIBSettings(p.settings).map((f) => f.definitionId));
 }
 
-/** Every setting of a wholly added/removed policy, as change records (deduped). */
+/** Every setting of a wholly added/removed policy, as change records. Non-instance
+ *  leaves are deduped by id; collection instances are emitted per rule (tagged). */
 function allSettingsAs(p: OIBPolicy, kind: 'added' | 'removed'): SettingChange[] {
+  const leaves = flattenOIBSettings(p.settings);
   const seen = new Set<string>();
   const out: SettingChange[] = [];
-  for (const f of flattenOIBSettings(p.settings)) {
+  for (const f of leaves) {
+    if (f.instanceId) continue;
     if (seen.has(f.definitionId)) continue;
     seen.add(f.definitionId);
     out.push(
@@ -125,6 +263,9 @@ function allSettingsAs(p: OIBPolicy, kind: 'added' | 'removed'): SettingChange[]
         ? { kind, definitionId: f.definitionId, compareValue: f.value }
         : { kind, definitionId: f.definitionId, baseValue: f.value }
     );
+  }
+  for (const insts of instancesByCollection(leaves).values()) {
+    for (const inst of insts) out.push(...instanceAllAs(inst, kind));
   }
   return out;
 }

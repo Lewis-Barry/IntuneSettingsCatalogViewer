@@ -41,6 +41,10 @@ export interface SettingChange {
   definitionId: string;
   baseValue?: OIBValue;
   compareValue?: OIBValue;
+  /** For settings inside a groupCollection instance (e.g. a firewall rule), the
+   *  instance's identity — its rule name. Lets the viewer group changes per rule
+   *  and label the group, even when the name itself didn't change. */
+  instanceId?: string;
 }
 
 export interface PolicyDiff {

@@ -85,4 +85,58 @@ const N = (cat: string, label: string, v: string) => `Win - OIB - ES - ${cat} - 
   assert.equal(d.policies.length, 0, 'unchanged policies omitted');
 }
 
+// ── collection instances: rules matched per-instance, name-only change ──
+{
+  // A firewall-style groupCollection with two rules. In compare, rule "A" only
+  // changes its name → matched by similarity, reported as one changed setting.
+  // Rule "B" changes a real setting. A third rule "C" is added.
+  const root = 'fw_{firewallrulename}';
+  const rule = (name: string, action: string, dir: string) => ({
+    definitionId: root,
+    value: {
+      type: 'groupCollection' as const,
+      groups: [[
+        { definitionId: `${root}_name`, value: { type: 'simple' as const, value: name } },
+        { definitionId: `${root}_action`, value: { type: 'simple' as const, value: action } },
+        { definitionId: `${root}_dir`, value: { type: 'simple' as const, value: dir } },
+      ]],
+    },
+  });
+  const mk = (v: string, rules: ReturnType<typeof rule>[]): OIBPolicy => ({
+    name: N('Firewall', 'Security Rules', v), platform: 'windows10', technologies: 'mdm',
+    oibFolder: 'WINDOWS', githubUrl: '',
+    // Merge all rule instances into one groupCollection setting.
+    settings: [{ definitionId: root, value: { type: 'groupCollection', groups: rules.flatMap((r: any) => r.value.groups) } }],
+  });
+
+  const base = [mk('3.7', [rule('Block calc', 'block', 'out'), rule('Allow ping', 'allow', 'in')])];
+  const compare = [mk('3.8', [
+    rule('Block calc.exe', 'block', 'out'),   // name-only change
+    rule('Allow ping', 'block', 'in'),        // action changed
+    rule('New rule', 'allow', 'out'),         // added
+  ])];
+  const d = diffVersions('v3.7', base, 'v3.8', compare);
+  const mod = d.policies.find((p) => p.kind === 'modified')!;
+  assert.ok(mod, 'firewall policy modified');
+
+  const byInstance = new Map<string, typeof mod.settingChanges>();
+  for (const c of mod.settingChanges) {
+    const k = c.instanceId ?? '(none)';
+    byInstance.set(k, [...(byInstance.get(k) ?? []), c]);
+  }
+  // Name-only rule: matched, exactly one changed setting (the name), nothing else.
+  const renamed = byInstance.get('Block calc.exe')!;
+  assert.equal(renamed.length, 1, 'name-only change → single setting change');
+  assert.equal(renamed[0].kind, 'changed');
+  assert.ok(renamed[0].definitionId.endsWith('_name'), 'the changed setting is the name');
+  // Action-changed rule: matched by name, one changed setting.
+  const actioned = byInstance.get('Allow ping')!;
+  assert.equal(actioned.length, 1, 'action change → single setting change');
+  assert.ok(actioned[0].definitionId.endsWith('_action'));
+  // Added rule: all three settings as added.
+  const added = byInstance.get('New rule')!;
+  assert.equal(added.length, 3, 'added rule → all its settings');
+  assert.ok(added.every((c) => c.kind === 'added'));
+}
+
 console.log('✓ oib-diff self-check passed');
