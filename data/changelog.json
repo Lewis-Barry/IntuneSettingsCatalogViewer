@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-07-01",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_camera_configurecameraoptions",
+        "displayName": "Configure Camera Options",
+        "categoryId": "18893f00-c309-4695-bcaf-b66286ad99c1",
+        "categoryName": "Camera",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
     "date": "2026-06-25",
     "added": [
       {
