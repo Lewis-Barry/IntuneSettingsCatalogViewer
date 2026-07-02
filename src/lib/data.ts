@@ -96,11 +96,6 @@ export function getLastUpdated(): string | null {
   return changelog[0].date;
 }
 
-/** Load the category merge map (secondary ID → primary ID) produced by build-search-index */
-export function loadCategoryMergeMap(): Record<string, string> {
-  return readJSON<Record<string, string>>('category-merge-map.json') || {};
-}
-
 /**
  * Return only the settings referenced by the changelog (added or changed),
  * stripped to the fields needed for the changelog row display + search.

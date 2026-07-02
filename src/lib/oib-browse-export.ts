@@ -4,9 +4,9 @@
 // columns — just the configured value per setting, plus per-policy scope/tier.
 
 import type { OIBPolicy, FlatSetting } from './oib-types';
-import { parsePolicy, groupByRoot, instanceName } from './oib-types';
+import { parsePolicy, groupByRoot, instanceName, FOLDER_LABELS } from './oib-types';
 import type { SettingDefinition } from './types';
-import { fmtValue } from './oib-export-shared';
+import { fmtValue, csvCell } from './oib-export-shared';
 import { STYLE, escapeHtml, formatDefinitionId } from './oib-html-export';
 
 /** A policy plus the (possibly search-filtered) settings to export from it. */
@@ -15,11 +15,6 @@ export interface BrowseExportEntry {
   flats: FlatSetting[];
 }
 
-const FOLDER_LABELS: Record<string, string> = {
-  WINDOWS: 'Windows',
-  MACOS: 'macOS',
-  WINDOWS365: 'Windows 365',
-};
 const folderLabel = (folder: string) => FOLDER_LABELS[folder] ?? folder;
 const scopeWord = (scope: 'D' | 'U') => (scope === 'D' ? 'Device' : 'User');
 const settingNameOf = (defId: string, defsMap: Map<string, SettingDefinition>) => {
@@ -127,10 +122,6 @@ function prepareSections(
 }
 
 // ── CSV ──────────────────────────────────────────────────────────────────────
-
-function csvCell(value: string): string {
-  return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
-}
 
 export function generateOIBBrowseCsv(
   entries: BrowseExportEntry[],

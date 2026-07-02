@@ -103,3 +103,12 @@ export const PLATFORM_ICONS: Record<string, React.FC<IconProps>> = {
   android: AndroidIcon,
   linux: LinuxIcon,
 };
+
+/** Platform value → display label (entry order = platform filter button order) */
+export const PLATFORM_LABELS: Record<string, string> = {
+  windows10: 'Windows',
+  macOS: 'macOS',
+  iOS: 'iOS/iPadOS',
+  android: 'Android',
+  linux: 'Linux',
+};

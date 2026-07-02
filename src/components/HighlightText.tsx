@@ -52,15 +52,14 @@ export default function HighlightText({
 
   return (
     <>
-      {parts.map((part, i) => {
-        // Reset lastIndex since we reuse the regex
-        pattern.lastIndex = 0;
-        return pattern.test(part) ? (
+      {parts.map((part, i) =>
+        // split() with a single capture group alternates non-match / match parts
+        i % 2 === 1 ? (
           <mark key={i} className={highlightClass}>{part}</mark>
         ) : (
           <span key={i}>{part}</span>
-        );
-      })}
+        )
+      )}
     </>
   );
 }

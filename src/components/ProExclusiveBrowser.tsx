@@ -6,15 +6,12 @@ import CategoryTree from './CategoryTree';
 import SettingsList from './SettingsList';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { useIsDesktop } from '@/lib/useMediaQuery';
+import { basePath } from '@/lib/basePath';
 import { countVisibleSettings } from '@/lib/settings-grouping';
 
 interface ProExclusiveBrowserProps {
   categoryTree: CategoryTreeNode[];
   categoryMap: Record<string, string>;
-}
-
-function getBasePath(): string {
-  return (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
 }
 
 export default function ProExclusiveBrowser({
@@ -27,13 +24,11 @@ export default function ProExclusiveBrowser({
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [loadingCategoryId] = useState<string | null>(null);
   const isDesktop = useIsDesktop();
   const { sidebarOpen, setSidebarOpen, sidebarWidth, sidebarHydrated, handleResizeStart } = useBrowserSidebar();
   const settingsScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const basePath = getBasePath();
     fetch(`${basePath}/pro-exclusive.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -215,7 +210,6 @@ export default function ProExclusiveBrowser({
             <CategoryTree
               categories={filteredCategoryTree}
               selectedCategoryId={selectedCategoryId}
-              loadingCategoryId={loadingCategoryId}
               onSelectCategory={handleSelectCategoryMobile}
             />
           )

@@ -21,14 +21,7 @@ export default function SearchBar({
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const searchSeqRef = useRef(0);
 
-  const clearPendingDebounce = useCallback(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-      debounceRef.current = undefined;
-    }
-  }, []);
-
-  useEffect(() => clearPendingDebounce, [clearPendingDebounce]);
+  useEffect(() => () => clearTimeout(debounceRef.current), []);
 
   const handleFocus = useCallback(() => {
     ensureIndex().catch(() => {});
@@ -42,7 +35,7 @@ export default function SearchBar({
       onQueryChange?.(value);
       const searchSeq = ++searchSeqRef.current;
 
-      clearPendingDebounce();
+      clearTimeout(debounceRef.current);
 
       if (!value.trim()) {
         setIsLoading(false);
@@ -69,7 +62,7 @@ export default function SearchBar({
         }
       }, 200);
     },
-    [clearPendingDebounce, onSearchResults, onQueryChange]
+    [onSearchResults, onQueryChange]
   );
 
   return (
@@ -119,7 +112,7 @@ export default function SearchBar({
           {query && (
             <button
               onClick={() => {
-                clearPendingDebounce();
+                clearTimeout(debounceRef.current);
                 setQuery('');
                 ++searchSeqRef.current;
                 setIsLoading(false);

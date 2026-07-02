@@ -200,7 +200,7 @@ export interface OIBCategoryNode {
   policyCount: number;
 }
 
-const FOLDER_LABELS: Record<string, string> = {
+export const FOLDER_LABELS: Record<string, string> = {
   WINDOWS: 'Windows',
   MACOS: 'macOS',
   WINDOWS365: 'Windows 365',

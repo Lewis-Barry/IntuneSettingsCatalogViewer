@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, SettingCategory, SettingDefinition } from '@/lib/types';
-import { PLATFORM_ICONS } from './PlatformIcons';
+import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
+import { basePath } from '@/lib/basePath';
 import SettingDetail from './SettingDetail';
 
 interface ChangelogViewerProps {
@@ -25,7 +26,7 @@ function fetchFullSetting(id: string): Promise<SettingDefinition | null> {
   const existing = inFlight.get(id);
   if (existing) return existing;
 
-  const url = `/changelog-settings/${encodeURIComponent(settingSlug(id))}.json`;
+  const url = `${basePath}/changelog-settings/${encodeURIComponent(settingSlug(id))}.json`;
   const promise = fetch(url)
     .then((r) => (r.ok ? (r.json() as Promise<SettingDefinition>) : null))
     .then((data) => {
@@ -83,13 +84,7 @@ const FILTERS: Array<{ value: FeedFilter; label: string }> = [
   { value: 'categories', label: 'Categories' },
 ];
 
-const PLATFORMS = [
-  { value: 'windows10', label: 'Windows' },
-  { value: 'macOS', label: 'macOS' },
-  { value: 'iOS', label: 'iOS/iPadOS' },
-  { value: 'android', label: 'Android' },
-  { value: 'linux', label: 'Linux' },
-];
+const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
 
 export default function ChangelogViewer({ entries, categories, settings }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
@@ -998,15 +993,6 @@ function mergePlatformLists(a?: string, b?: string): string | undefined {
 function cleanValue(s: string): string {
   return s.replace(/^"|"$/g, '');
 }
-
-/** Platform key → display label (matches PlatformFilter) */
-const PLATFORM_LABELS: Record<string, string> = {
-  windows10: 'Windows',
-  macOS: 'macOS',
-  iOS: 'iOS/iPadOS',
-  android: 'Android',
-  linux: 'Linux',
-};
 
 /** Normalize a raw platform string to its canonical icon key */
 function normalizePlatformKey(p: string): string | null {

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { pillClass } from '@/lib/pill';
+import { basePath } from '@/lib/basePath';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import SettingRow from './SettingRow';
 import { diffVersions } from '@/lib/oib-diff';
@@ -16,11 +17,6 @@ import type {
   SettingChange,
 } from '@/lib/oib-changelog-types';
 import type { SettingDefinition } from '@/lib/types';
-
-const basePath =
-  (typeof process !== 'undefined' &&
-    (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) ||
-  '';
 
 const selectClass =
   'bg-white dark:bg-[#2c2c2e] text-fluent-text border border-fluent-border dark:border-[#636366] rounded px-2 py-1 text-fluent-sm hover:bg-fluent-bg-alt focus:outline-none focus:ring-2 focus:ring-fluent-blue cursor-pointer';

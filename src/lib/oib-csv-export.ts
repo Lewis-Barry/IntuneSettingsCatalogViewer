@@ -7,6 +7,7 @@ import {
   settingName,
   kindWord,
   policyDisplayName,
+  csvCell,
   type GroupedPolicyDiff,
 } from './oib-export-shared';
 import { groupByRoot, instanceName } from './oib-types';
@@ -16,11 +17,6 @@ interface GenerateOIBChangelogCsvOptions {
   defsMap: Map<string, SettingDefinition>;
   baseVersionLabel: string;
   compareVersionLabel: string;
-}
-
-/** Quote a field if it contains comma, quote, or newline; escape inner quotes. */
-function csvCell(value: string): string {
-  return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
 }
 
 export function generateOIBChangelogCsv({

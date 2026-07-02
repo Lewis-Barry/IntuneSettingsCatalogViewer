@@ -1,6 +1,6 @@
 'use client';
 
-import { PLATFORM_ICONS } from './PlatformIcons';
+import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { pillClass } from '@/lib/pill';
 
 interface PlatformFilterProps {
@@ -10,13 +10,7 @@ interface PlatformFilterProps {
   onDeprecatedChange?: (value: boolean) => void;
 }
 
-const PLATFORMS = [
-  { value: 'windows10', label: 'Windows' },
-  { value: 'macOS', label: 'macOS' },
-  { value: 'iOS', label: 'iOS/iPadOS' },
-  { value: 'android', label: 'Android' },
-  { value: 'linux', label: 'Linux' },
-];
+const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
 
 export default function PlatformFilter({
   selectedPlatforms,

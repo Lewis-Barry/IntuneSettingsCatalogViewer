@@ -42,6 +42,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/oib-csv-export.ts` | Renders a comparison as CSV (one row per setting change), same content as the HTML report |
 | `src/lib/oib-browse-export.ts` | Exports the OIB browse view (policies + configured settings, no change columns) as CSV or styled HTML; reuses `fmtValue` + the HTML `STYLE`/escape helpers. Respects the active platform/category/search filter |
 | `src/lib/pill.ts` | Shared segmented-pill class helper (platform filter + version picker) |
+| `src/lib/basePath.ts` | Next.js `basePath` constant (build-time inlined) — prefix for all runtime fetches of `public/` assets |
 | `src/lib/slug.ts` | URL slug generation |
 
 ### Performance

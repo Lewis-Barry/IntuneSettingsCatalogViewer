@@ -8,6 +8,7 @@ import PlatformFilter from './PlatformFilter';
 import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
 import { countVisibleRootSettings, getCspPath } from '@/lib/settings-grouping';
 import { useIsDesktop } from '@/lib/useMediaQuery';
+import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 
 interface SettingsCatalogBrowserProps {
@@ -76,10 +77,6 @@ function buildBreadcrumb(
   return crumbs;
 }
 
-function getBasePath(): string {
-  return (typeof process !== 'undefined' && (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) || '';
-}
-
 export default function SettingsCatalogBrowser({
   categoryTree,
   categoryMap,
@@ -118,7 +115,6 @@ export default function SettingsCatalogBrowser({
 
     setSettingsLoading(true);
     try {
-      const basePath = getBasePath();
       const loads = missingIds.map((categoryId) => {
         const existing = categoryLoadPromisesRef.current.get(categoryId);
         if (existing) return existing;
@@ -158,7 +154,6 @@ export default function SettingsCatalogBrowser({
 
     setSettingsLoading(true);
     fullBrowsePromiseRef.current = (async () => {
-      const basePath = getBasePath();
       const settings = await fetch(`${basePath}/settings-browse.json`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to load settings: ${res.status}`);

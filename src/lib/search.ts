@@ -1,4 +1,5 @@
 import type { SearchIndexEntry } from './types';
+import { basePath } from './basePath';
 
 type SearchWorkerResponse =
   | { id: number; type: 'ready' }
@@ -11,10 +12,6 @@ const pendingRequests = new Map<number, {
   resolve: (value: SearchIndexEntry[]) => void;
   reject: (reason?: unknown) => void;
 }>();
-
-function getBasePath(): string {
-  return process.env.__NEXT_ROUTER_BASEPATH || '';
-}
 
 function getWorker(): Worker {
   if (worker) return worker;
@@ -53,7 +50,7 @@ function postWorkerRequest(message: Record<string, unknown>): Promise<SearchInde
   const id = nextRequestId++;
   return new Promise<SearchIndexEntry[]>((resolve, reject) => {
     pendingRequests.set(id, { resolve, reject });
-    getWorker().postMessage({ ...message, id, basePath: getBasePath() });
+    getWorker().postMessage({ ...message, id, basePath });
   });
 }
 

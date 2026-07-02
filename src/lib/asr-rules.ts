@@ -125,13 +125,6 @@ export function getAsrRuleInfo(settingId: string): AsrRuleInfo | undefined {
   return ASR_RULES[fragment];
 }
 
-/**
- * Check whether a setting ID belongs to the Defender ASR rules family.
- */
-export function isAsrSetting(settingId: string): boolean {
-  return settingId.startsWith(ASR_ID_PREFIX) || settingId === ASR_ID_PREFIX.replace(/_$/, '');
-}
-
 /** Microsoft docs URL for the ASR rules reference page */
 export const ASR_DOCS_URL =
   'https://learn.microsoft.com/defender-endpoint/attack-surface-reduction-rules-reference?wt.mc_id=MVP_310915#asr-rule-to-guid-matrix';

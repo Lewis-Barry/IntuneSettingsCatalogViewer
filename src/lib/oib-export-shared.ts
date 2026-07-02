@@ -60,6 +60,11 @@ export function kindWord(kind: PolicyDiff['kind'] | SettingChange['kind']): stri
   }
 }
 
+/** Quote a CSV field if it contains comma, quote, or newline; escape inner quotes. */
+export function csvCell(value: string): string {
+  return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+}
+
 export function kindSymbol(kind: PolicyDiff['kind'] | SettingChange['kind']): string {
   switch (kind) {
     case 'added':

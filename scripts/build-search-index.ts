@@ -23,7 +23,6 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const SEARCH_INDEX_FILE = path.join(PUBLIC_DIR, 'search-index.json');
 const CATEGORY_TREE_FILE = path.join(DATA_DIR, 'category-tree.json');
-const MERGE_MAP_FILE = path.join(DATA_DIR, 'category-merge-map.json');
 const CATALOG_STATS_FILE = path.join(DATA_DIR, 'catalog-stats.json');
 
 /** Derive scope from baseUri */
@@ -288,11 +287,9 @@ function main() {
   fs.writeFileSync(CATEGORY_TREE_FILE, JSON.stringify(tree, null, 2), 'utf-8');
   console.log(`Category tree: ${tree.length} root categories → ${CATEGORY_TREE_FILE}`);
 
-  // Write merge map (secondary category ID → primary category ID)
-  fs.writeFileSync(MERGE_MAP_FILE, JSON.stringify(mergeMap, null, 2), 'utf-8');
   const mergeCount = Object.keys(mergeMap).length;
   if (mergeCount > 0) {
-    console.log(`Merged ${mergeCount} duplicate categories → ${MERGE_MAP_FILE}`);
+    console.log(`Merged ${mergeCount} duplicate categories`);
   }
 
   fs.writeFileSync(CATALOG_STATS_FILE, JSON.stringify({ totalSettings: settings.length }, null, 2), 'utf-8');

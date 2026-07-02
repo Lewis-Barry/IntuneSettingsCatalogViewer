@@ -14,9 +14,11 @@ import {
   buildSidebarTree,
   groupByRoot,
   instanceName,
+  FOLDER_LABELS,
   type OIBFolderNode,
   type OIBCategoryNode,
 } from '@/lib/oib-types';
+import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { generateOIBBrowseCsv, generateOIBBrowseHtml, type BrowseExportEntry } from '@/lib/oib-browse-export';
 
@@ -381,8 +383,6 @@ const OIBSidebarTree = memo(function OIBSidebarTree({
   );
 });
 
-const FOLDER_LABELS: Record<string, string> = { WINDOWS: 'Windows', MACOS: 'macOS', WINDOWS365: 'Windows 365' };
-
 // ── Main Component ───────────────────────────────────────────────────────────
 
 export default function OIBBrowser() {
@@ -405,11 +405,6 @@ export default function OIBBrowser() {
 
   // ── Load data ──
   useEffect(() => {
-    const basePath =
-      (typeof process !== 'undefined' &&
-        (process.env as Record<string, string>).__NEXT_ROUTER_BASEPATH) ||
-      '';
-
     const loadOib = fetch(`${basePath}/oib-data.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`oib-data.json: ${r.status}`);
@@ -583,9 +578,9 @@ export default function OIBBrowser() {
   const totalPolicies = oibData?.policies.length ?? 0;
 
   const FOLDER_FILTERS = [
-    { folder: 'WINDOWS', label: 'Windows', Icon: WindowsIcon },
-    { folder: 'MACOS', label: 'macOS', Icon: MacOSIcon },
-    { folder: 'WINDOWS365', label: 'Windows 365', Icon: WindowsIcon },
+    { folder: 'WINDOWS', label: FOLDER_LABELS.WINDOWS, Icon: WindowsIcon },
+    { folder: 'MACOS', label: FOLDER_LABELS.MACOS, Icon: MacOSIcon },
+    { folder: 'WINDOWS365', label: FOLDER_LABELS.WINDOWS365, Icon: WindowsIcon },
   ];
 
   const hasSearchResults = searchHits !== null;
