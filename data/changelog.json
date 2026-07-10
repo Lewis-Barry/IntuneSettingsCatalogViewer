@@ -1,5 +1,83 @@
 [
   {
+    "date": "2026-07-10",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_description",
+        "displayName": "Description",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_userapplicabilitytype",
+        "displayName": "User applicability",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_userapplicability",
+        "displayName": "User applicability list",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_name",
+        "displayName": "Rule name",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_elevationaction",
+        "displayName": "Elevation action",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_elevationvalidation",
+        "displayName": "Validation",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_settingtype",
+        "displayName": "Setting type",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}",
+        "displayName": "System Setting Rule Name",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "user_vendor_msft_policy_config_connectivity_disablecrossdeviceresume",
+        "displayName": "Disable Cross Device Resume (User)",
+        "categoryId": "f03f9f2f-f8ba-4c94-ad5f-95ada256c8c6",
+        "categoryName": "Connectivity",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "2 options"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-07-01",
     "added": [
       {
