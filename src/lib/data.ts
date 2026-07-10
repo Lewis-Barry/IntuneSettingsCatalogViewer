@@ -113,6 +113,14 @@ export function loadChangelogSettingSummaries(): ChangelogSettingSummary[] {
     entry.changed.forEach((s) => referencedIds.add(s.id));
   }
 
+  // Include root group/collection definitions so the changelog can label a
+  // set of related child changes with their real parent setting name.
+  const settingsById = new Map(settings.map((setting) => [setting.id, setting]));
+  for (const id of Array.from(referencedIds)) {
+    const rootDefinitionId = settingsById.get(id)?.rootDefinitionId;
+    if (rootDefinitionId) referencedIds.add(rootDefinitionId);
+  }
+
   const summaries: ChangelogSettingSummary[] = [];
   for (const setting of settings) {
     if (!referencedIds.has(setting.id)) continue;

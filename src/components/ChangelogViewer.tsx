@@ -54,6 +54,9 @@ interface ChangeFeedItem {
   action: ActionType;
   entity: EntityType;
   title: string;
+  settingId?: string;
+  groupTitle?: string;
+  children?: ChangeFeedItem[];
   categoryId?: string;
   categoryName?: string;
   hotspotCategory?: string;
@@ -137,6 +140,8 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
           action: 'added',
           entity: 'setting',
           title: setting.displayName,
+          settingId: setting.id,
+          groupTitle: getSettingGroupTitle(currentSetting, settingsById),
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
@@ -153,6 +158,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
           action: 'removed',
           entity: 'setting',
           title: setting.displayName,
+          settingId: setting.id,
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
@@ -168,6 +174,8 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
           action: 'changed',
           entity: 'setting',
           title: setting.displayName,
+          settingId: setting.id,
+          groupTitle: getSettingGroupTitle(currentSetting, settingsById),
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
@@ -364,6 +372,10 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
   }, [dateScopedItems, filter, query, selectedPlatforms]);
 
   const taxonomySummary = useMemo(() => buildTaxonomySummary(filteredItems), [filteredItems]);
+  const displayedItems = useMemo(
+    () => groupRelatedFeedItems(filteredItems, settingsById),
+    [filteredItems, settingsById],
+  );
 
   if (entries.length === 0) {
     return (
@@ -593,16 +605,30 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         <div>
           <div className="mb-3 flex items-center justify-between gap-3">
             <h2 className="text-fluent-base font-semibold text-fluent-text">Change feed</h2>
-            <span className="text-fluent-sm text-fluent-text-secondary">{filteredItems.length.toLocaleString()} results</span>
+            <span className="text-fluent-sm text-fluent-text-secondary">
+              {displayedItems.length.toLocaleString()} results
+              {displayedItems.length !== filteredItems.length && (
+                <> · {filteredItems.length.toLocaleString()} changes</>
+              )}
+            </span>
           </div>
 
-          {filteredItems.length === 0 ? (
+          {displayedItems.length === 0 ? (
             <div className="fluent-card px-4 py-10 text-center text-fluent-text-secondary">
               <p className="text-fluent-base">No matching changes.</p>
             </div>
           ) : (
             <div className="space-y-2">
-              {filteredItems.map((item) => (
+              {displayedItems.map((item) => item.children ? (
+                <ChangeFeedGroupRow
+                  key={item.key}
+                  item={item}
+                  expanded={expandedItems.has(item.key)}
+                  onToggle={() => toggleItem(item.key)}
+                  expandedItems={expandedItems}
+                  onToggleItem={toggleItem}
+                />
+              ) : (
                 <ChangeFeedRow
                   key={item.key}
                   item={item}
@@ -707,6 +733,73 @@ function MiniCount({ label, value, tone }: { label: string; value: number; tone:
     <div className="rounded bg-white px-2 py-1.5 dark:bg-[#1c1c1e]">
       <div className={`text-fluent-base font-semibold ${tone}`}>{value.toLocaleString()}</div>
       <div className="text-fluent-xs text-fluent-text-secondary">{label}</div>
+    </div>
+  );
+}
+
+function ChangeFeedGroupRow({ item, expanded, onToggle, expandedItems, onToggleItem }: {
+  item: ChangeFeedItem;
+  expanded: boolean;
+  onToggle: () => void;
+  expandedItems: Set<string>;
+  onToggleItem: (key: string) => void;
+}) {
+  const actionStyles = getActionStyles(item.action);
+  const children = item.children ?? [];
+
+  return (
+    <div className={`fluent-card overflow-hidden border-l-4 ${actionStyles.border}`}>
+      <button
+        onClick={onToggle}
+        className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-fluent-bg"
+        aria-expanded={expanded}
+      >
+        <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${actionStyles.badge}`}>
+          <ActionIcon action={item.action} />
+        </span>
+
+        <span className="min-w-0 flex-1">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="text-fluent-base font-semibold text-fluent-text">{item.title}</span>
+            <span className="rounded bg-fluent-bg-alt px-1.5 py-0.5 text-fluent-xs text-fluent-text-secondary dark:bg-[#1c1c1e]">
+              Setting group
+            </span>
+            <span className="rounded-full bg-fluent-light-blue px-2 py-0.5 text-fluent-xs font-semibold text-fluent-blue">
+              {children.length} child {children.length === 1 ? 'setting' : 'settings'}
+            </span>
+          </span>
+          <span className="mt-1 flex flex-wrap items-center gap-2 text-fluent-sm text-fluent-text-secondary">
+            <ActionLabel action={item.action} />
+            {item.categoryName && <span>{item.categoryName}</span>}
+            <PlatformBadges platform={item.platform} />
+          </span>
+        </span>
+
+        <span className="flex shrink-0 flex-col items-end gap-2">
+          <span className="text-fluent-sm text-fluent-text-secondary">{formatDate(item.date, { month: 'short', day: 'numeric' })}</span>
+          <svg className={`h-4 w-4 text-fluent-text-secondary transition-transform ${expanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-fluent-border bg-fluent-bg-alt px-3 py-3 dark:bg-[#1c1c1e] sm:px-4">
+          <div className="mb-3 text-fluent-sm text-fluent-text-secondary">
+            These settings share the same parent definition and were grouped into one change.
+          </div>
+          <div className="space-y-2">
+            {children.map((child) => (
+              <ChangeFeedRow
+                key={child.key}
+                item={child}
+                expanded={expandedItems.has(child.key)}
+                onToggle={() => onToggleItem(child.key)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -849,6 +942,7 @@ function getActionStyles(action: ActionType) {
 function buildHaystack(item: ChangeFeedItem): string {
   return [
     item.title,
+    item.groupTitle,
     item.hotspotCategory,
     item.categoryName,
     item.contextLabel,
@@ -858,6 +952,90 @@ function buildHaystack(item: ChangeFeedItem): string {
     getSettingSearchText(item.setting),
     item.fields?.map((f) => `${f.field} ${f.oldValue} ${f.newValue}`).join(' '),
   ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function getSettingGroupTitle(
+  setting: ChangelogSettingSummary | undefined,
+  settingsById: Map<string, ChangelogSettingSummary>,
+): string | undefined {
+  if (!setting?.rootDefinitionId || setting.rootDefinitionId === setting.id) return undefined;
+  return settingsById.get(setting.rootDefinitionId)?.displayName;
+}
+
+function groupRelatedFeedItems(
+  items: ChangeFeedItem[],
+  settingsById: Map<string, ChangelogSettingSummary>,
+): ChangeFeedItem[] {
+  const settingItems = items.filter((item) => item.entity === 'setting' && item.settingId);
+  const itemIds = new Set(settingItems.map((item) => item.settingId!));
+
+  const getRootId = (item: ChangeFeedItem): string | undefined => {
+    if (!item.settingId) return undefined;
+    const rootDefinitionId = settingsById.get(item.settingId)?.rootDefinitionId;
+    if (rootDefinitionId) return rootDefinitionId;
+
+    let inferredRoot: string | undefined;
+    for (const candidateId of itemIds) {
+      if (
+        candidateId !== item.settingId &&
+        item.settingId.startsWith(`${candidateId}_`) &&
+        (!inferredRoot || candidateId.length > inferredRoot.length)
+      ) {
+        inferredRoot = candidateId;
+      }
+    }
+    return inferredRoot ?? item.settingId;
+  };
+
+  const groups = new Map<string, { rootId: string; members: ChangeFeedItem[]; hasChild: boolean }>();
+  for (const item of settingItems) {
+    const rootId = getRootId(item);
+    if (!rootId) continue;
+    const key = [item.date, item.action, item.categoryId ?? '', rootId].join('\u001f');
+    const group = groups.get(key) ?? { rootId, members: [], hasChild: false };
+    group.members.push(item);
+    if (item.settingId !== rootId) group.hasChild = true;
+    groups.set(key, group);
+  }
+
+  const groupByItemKey = new Map<string, { key: string; rootId: string; members: ChangeFeedItem[] }>();
+  for (const [key, group] of groups) {
+    if (group.members.length < 2 || !group.hasChild) continue;
+    group.members.forEach((member) => groupByItemKey.set(member.key, { key, ...group }));
+  }
+
+  const emittedGroups = new Set<string>();
+  const result: ChangeFeedItem[] = [];
+  for (const item of items) {
+    const group = groupByItemKey.get(item.key);
+    if (!group) {
+      result.push(item);
+      continue;
+    }
+    if (emittedGroups.has(group.key)) continue;
+    emittedGroups.add(group.key);
+
+    const parent = group.members.find((member) => member.settingId === group.rootId);
+    const children = group.members.filter((member) => member.settingId !== group.rootId);
+    const rootSetting = settingsById.get(group.rootId);
+    const source = parent ?? group.members[0];
+    result.push({
+      ...source,
+      key: `${source.date}:${source.action}:setting-group:${group.rootId}`,
+      settingId: group.rootId,
+      title: rootSetting?.displayName ?? parent?.title ?? source.groupTitle ?? source.title,
+      groupTitle: rootSetting?.displayName ?? source.groupTitle,
+      platform: group.members.reduce<string | undefined>(
+        (platforms, member) => mergePlatformLists(platforms, member.platform),
+        undefined,
+      ),
+      setting: rootSetting,
+      fields: undefined,
+      children: children.length > 0 ? children : group.members,
+    });
+  }
+
+  return result;
 }
 
 function getSettingSearchText(setting?: ChangelogSettingSummary): string {
