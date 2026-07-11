@@ -15549,21 +15549,6 @@
   },
   {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
-    "id": "a93cb07c-fa96-42af-8987-40f78eae10bd",
-    "name": null,
-    "displayName": "Enrollment",
-    "description": "Enrollment",
-    "categoryDescription": null,
-    "helpText": null,
-    "platforms": "windows10",
-    "technologies": "enrollment",
-    "settingUsage": "configuration",
-    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
-    "rootCategoryId": "a93cb07c-fa96-42af-8987-40f78eae10bd",
-    "childCategoryIds": []
-  },
-  {
-    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
     "id": "db9fc5b8-fb50-437b-aceb-87d9d380def0",
     "name": null,
     "displayName": "Scripts",
@@ -15575,6 +15560,21 @@
     "settingUsage": "configuration",
     "parentCategoryId": "00000000-0000-0000-0000-000000000000",
     "rootCategoryId": "db9fc5b8-fb50-437b-aceb-87d9d380def0",
+    "childCategoryIds": []
+  },
+  {
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationCategories(id,name,displayName,description,categoryDescription,helpText,platforms,technologies,settingUsage,parentCategoryId,rootCategoryId,childCategoryIds)/$entity",
+    "id": "a93cb07c-fa96-42af-8987-40f78eae10bd",
+    "name": null,
+    "displayName": "Enrollment",
+    "description": "Enrollment",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "windows10",
+    "technologies": "enrollment",
+    "settingUsage": "configuration",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "a93cb07c-fa96-42af-8987-40f78eae10bd",
     "childCategoryIds": []
   }
 ]
