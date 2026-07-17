@@ -1,5 +1,653 @@
 [
   {
+    "date": "2026-07-17",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_bingnews",
+        "displayName": "Microsoft News (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowsnotepad",
+        "displayName": "Windows Notepad ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_todo",
+        "displayName": "Microsoft To Do (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_bingweather",
+        "displayName": "MSN Weather (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_wslv4~policy~wsl~wslcontainer_wslcontainerregistryallowlist",
+        "displayName": "Allowlist for WSL container registries",
+        "categoryId": "a787672d-4a33-455b-a2db-e340eb35a5c8",
+        "categoryName": "WSL container",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_xboxtcui",
+        "displayName": "Xbox TCUI * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_microsoftofficehub",
+        "displayName": "Microsoft 365 Copilot (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_microsoftstickynotes",
+        "displayName": "Microsoft Sticky Notes (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_keyboardfilter_disablekeyboardfilterforadministrators",
+        "displayName": "Disable Keyboard Filter For Administrators (Windows Insiders only)",
+        "categoryId": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "categoryName": "Keyboard Filter",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_wslv4~policy~wsl~wslcontainer_wslcontainerregistryallowlist_wslcontainerregistryallowlist_input",
+        "displayName": "Allowed registries (Device)",
+        "categoryId": "a787672d-4a33-455b-a2db-e340eb35a5c8",
+        "categoryName": "WSL container",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2",
+        "displayName": "Remove Microsoft Store apps with dynamic list",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_gamingapp",
+        "displayName": "Xbox Gaming App (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_photos",
+        "displayName": "Microsoft Photos ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_msteams",
+        "displayName": "Microsoft Teams (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_dynamicremovallist",
+        "displayName": "Specify additional package family names to remove (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_xboxspeechtotextoverlay",
+        "displayName": "Xbox Speech To Text Overlay * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowssoundrecorder",
+        "displayName": "Windows Sound Recorder (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_keyboardfilter_breakoutkeyscancode",
+        "displayName": "Breakout Key Scancode (Windows Insiders only)",
+        "categoryId": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "categoryName": "Keyboard Filter",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_microsoftsolitairecollection",
+        "displayName": "Microsoft Solitaire Collection (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_paint",
+        "displayName": "Paint (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowsterminal",
+        "displayName": "Windows Terminal (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_outlookforwindows",
+        "displayName": "Outlook for Windows (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_xboxidentityprovider",
+        "displayName": "Xbox Identity Provider * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_keyboardfilter_blockedscancodes",
+        "displayName": "Blocked Scancodes (Windows Insiders only)",
+        "categoryId": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "categoryName": "Keyboard Filter",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowscamera",
+        "displayName": "Windows Camera ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowsfeedbackhub",
+        "displayName": "Feedback Hub (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_mediaplayer",
+        "displayName": "Windows Media Player ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_quickassist",
+        "displayName": "Quick Assist (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_keyboardfilter_disableaccessibilitysettings",
+        "displayName": "Disable Accessibility Settings (Windows Insiders only)",
+        "categoryId": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "categoryName": "Keyboard Filter",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_clipchamp",
+        "displayName": "Microsoft Clipchamp (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_keyboardfilter_blockedkeys",
+        "displayName": "Blocked Keys (Windows Insiders only)",
+        "categoryId": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "categoryName": "Keyboard Filter",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_wslv4~policy~wsl~wslcontainer_allowwslcontainer",
+        "displayName": "Allow WSL container",
+        "categoryId": "a787672d-4a33-455b-a2db-e340eb35a5c8",
+        "categoryName": "WSL container",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_copilot",
+        "displayName": "Microsoft Copilot (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_screensketch",
+        "displayName": "Snipping Tool (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_2_windowscalculator",
+        "displayName": "Windows Calculator (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages",
+        "displayName": "Remove Default Microsoft Store packages from the system.",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "linux_mdatp_managed_antivirusengine_enforcementlevel",
+        "displayName": "Enforcement Level",
+        "categoryId": "13467142-14e7-4380-8573-4866e842c7f6",
+        "categoryName": "Antivirus engine",
+        "platform": "linux",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Specifies the enforcement preference of antivirus engine. Real-time: Real-time protection (scan files as they're modified) is enabled. On-demand: Files are scanned only on demand and real-time protection is turned off. Passive: Runs the antivirus engine in passive mode.\"",
+            "newValue": "\"Specifies the enforcement preference of antivirus engine. Real-time: Real-time protection (scan files as they're modified) is enabled. On-demand: Files are scanned only on demand and real-time protection is turned off. Passive: Runs the antivirus engine in passive mode. Audit: Similar to on-demand but logs detections without taking action.\""
+          },
+          {
+            "field": "options",
+            "oldValue": "3 options",
+            "newValue": "4 options"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsfeedbackhub",
+        "displayName": "Feedback Hub (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_outlookforwindows",
+        "displayName": "Outlook for Windows (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowscamera",
+        "displayName": "Windows Camera ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_copilot",
+        "displayName": "Microsoft Copilot (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsnotepad",
+        "displayName": "Windows Notepad ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftstickynotes",
+        "displayName": "Microsoft Sticky Notes (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftsolitairecollection",
+        "displayName": "Microsoft Solitaire Collection (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_mediaplayer",
+        "displayName": "Windows Media Player ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_quickassist",
+        "displayName": "Quick Assist (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_photos",
+        "displayName": "Microsoft Photos ** (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxtcui",
+        "displayName": "Xbox TCUI * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsterminal",
+        "displayName": "Windows Terminal (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_screensketch",
+        "displayName": "Snipping Tool (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxspeechtotextoverlay",
+        "displayName": "Xbox Speech To Text Overlay * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_paint",
+        "displayName": "Paint (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_clipchamp",
+        "displayName": "Microsoft Clipchamp (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowssoundrecorder",
+        "displayName": "Windows Sound Recorder (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_todo",
+        "displayName": "Microsoft To Do (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_bingweather",
+        "displayName": "MSN Weather (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_bingnews",
+        "displayName": "Microsoft News (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_gamingapp",
+        "displayName": "Xbox Gaming App (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowscalculator",
+        "displayName": "Windows Calculator (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_msteams",
+        "displayName": "Microsoft Teams (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxidentityprovider",
+        "displayName": "Xbox Identity Provider * (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftofficehub",
+        "displayName": "Microsoft 365 Copilot (Device)",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26100.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"10.0\",\"maximumSupportedVersion\":\"10.0.26200.8116\",\"minimumSupportedVersion\":\"10.0.26100\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"iotEnterpriseSEval\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "a787672d-4a33-455b-a2db-e340eb35a5c8",
+        "displayName": "WSL container",
+        "parentCategoryId": "57514d69-d9b1-469a-9b54-b5e94320c2a1"
+      },
+      {
+        "id": "717b634f-72a6-44f6-92c5-e1397bb10f40",
+        "displayName": "Keyboard Filter",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  {
     "date": "2026-07-10",
     "added": [
       {
