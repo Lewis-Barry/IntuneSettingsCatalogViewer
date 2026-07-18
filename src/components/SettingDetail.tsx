@@ -200,28 +200,20 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
         </span>
         {setting.infoUrls && setting.infoUrls.length > 0 && (
           <div className="flex gap-2 flex-shrink-0">
-            {setting.infoUrls.map((url, i) => {
-              // Insert tracking param before any # fragment
-              const hashIdx = url.indexOf('#');
-              const base = hashIdx >= 0 ? url.slice(0, hashIdx) : url;
-              const fragment = hashIdx >= 0 ? url.slice(hashIdx) : '';
-              const separator = base.includes('?') ? '&' : '?';
-              const href = `${base}${separator}wt.mc_id=MVP_310915${fragment}`;
-              return (
-                <a
-                  key={i}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-fluent-xs font-medium text-fluent-blue bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors whitespace-nowrap"
-                >
-                  <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  MS Learn
-                </a>
-              );
-            })}
+            {setting.infoUrls.map((url, i) => (
+              <a
+                key={i}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-fluent-xs font-medium text-fluent-blue bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors whitespace-nowrap"
+              >
+                <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                MS Learn
+              </a>
+            ))}
           </div>
         )}
       </div>
