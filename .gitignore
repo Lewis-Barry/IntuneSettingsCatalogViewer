@@ -40,3 +40,6 @@ public/changelog-settings/
 
 # turbo
 .turbo
+
+# local-only notes
+*.local.md
