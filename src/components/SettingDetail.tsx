@@ -4,6 +4,7 @@ import { skuLabel } from '@/lib/sku-labels';
 import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import HighlightText from './HighlightText';
+import CopyCspButton from './CopyCspButton';
 
 interface SettingDetailProps {
   setting: SettingDefinition;
@@ -193,8 +194,9 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
 
       {/* CSP Path + MS Learn links */}
       <div className="flex items-end justify-between gap-3 pt-1">
-        <span className="text-fluent-xs text-fluent-text-secondary font-mono break-all">
+        <span className="inline-flex items-start gap-1.5 text-fluent-xs text-fluent-text-secondary font-mono break-all">
           <HighlightText text={cspPath} query={highlightQuery} variant={cspVariant} />
+          {cspPath !== '—' && <CopyCspButton text={cspPath} />}
         </span>
         {setting.infoUrls && setting.infoUrls.length > 0 && (
           <div className="flex gap-2 flex-shrink-0">
