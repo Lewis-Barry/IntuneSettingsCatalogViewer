@@ -8,6 +8,7 @@ import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { useIsDesktop } from '@/lib/useMediaQuery';
 import { basePath } from '@/lib/basePath';
 import { countVisibleSettings } from '@/lib/settings-grouping';
+import { generateProExclusiveCsv, generateProExclusiveHtml } from '@/lib/pro-exclusive-export';
 
 interface ProExclusiveBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -126,6 +127,24 @@ export default function ProExclusiveBrowser({
       ? 'Search results'
       : 'All Enterprise-only settings';
 
+  // Export the currently visible settings (category + search filters applied).
+  const downloadExport = (format: 'html' | 'csv') => {
+    if (visibleSettings.length === 0) return;
+    const content =
+      format === 'html'
+        ? generateProExclusiveHtml({ settings: visibleSettings, categoryMap, categoryLabel })
+        : generateProExclusiveCsv({ settings: visibleSettings, categoryMap, categoryLabel });
+    const blob = new Blob([content], { type: format === 'html' ? 'text/html;charset=utf-8' : 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `enterprise-only-settings.${format}`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100dvh-96px)]">
       {/* ── Top bar ── */}
@@ -157,6 +176,35 @@ export default function ProExclusiveBrowser({
             </p>
           </div>
 
+          {/* Export — same dropdown pattern as the OIB changelog */}
+          {!loading && !fetchError && (
+            <details className="relative flex-none self-start">
+              <summary
+                className="fluent-btn-secondary text-fluent-sm cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden"
+                aria-label="Export the visible settings"
+              >
+                Export
+                <svg className="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="absolute right-0 mt-1 z-50 min-w-[8rem] bg-fluent-bg border border-fluent-border rounded-md shadow-lg py-1">
+                {(['csv', 'html'] as const).map((format) => (
+                  <button
+                    key={format}
+                    onClick={(e) => {
+                      downloadExport(format);
+                      e.currentTarget.closest('details')?.removeAttribute('open');
+                    }}
+                    disabled={visibleSettings.length === 0}
+                    className="block w-full text-left px-3 py-2 text-fluent-sm text-fluent-text hover:bg-fluent-bg-alt disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {format.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </details>
+          )}
         </div>
 
         {/* Search input */}
