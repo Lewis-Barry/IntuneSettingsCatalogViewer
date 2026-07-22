@@ -1,5 +1,298 @@
 [
   {
+    "date": "2026-07-22",
+    "added": [
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsblockedforurls",
+        "displayName": "Block Local Fonts permission on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsblockedforurls_localfontsblockedforurlsdesc",
+        "displayName": "Block Local Fonts permission on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsallowedforurls_localfontsallowedforurlsdesc",
+        "displayName": "Allow Local Fonts permission on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_disableofflinemodeforexternallibraries",
+        "displayName": "Prevent users at your organization from enabling offline mode in OneDrive on the web for libraries and folders that are shared from other organizations",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_addedfolderharddeleteonunmount",
+        "displayName": "Hard-delete the contents of an added folder when unmounted",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_visualstudio~policy~visualstudio~copilotsettings_disablemcp",
+        "displayName": "Disable Model Context Protocol (MCP)",
+        "categoryId": "652a676c-9d60-4c9a-88b6-823a24961a9b",
+        "categoryName": "Copilot Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_updatepolicy",
+        "displayName": "Turn off automatic updates for Windows App",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_updatepolicy_winapp_updatemode",
+        "displayName": "Update restriction:",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_enablewinre",
+        "displayName": "Enable Windows Recovery Environment",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsallowedforurls_localfontsallowedforurlsdesc",
+        "displayName": "Allow Local Fonts permission on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsblockedforurls_localfontsblockedforurlsdesc",
+        "displayName": "Block Local Fonts permission on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsblockedforurls",
+        "displayName": "Block Local Fonts permission on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_sharepointonpremapplicationiduri",
+        "displayName": "Specify the Application ID URI for your Entra application for OIDC",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_adminreleasering_winapp_adminreleaseringvalueenum",
+        "displayName": "Admin Release Ring:",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_copilotaddressbarsuggestionsenabled",
+        "displayName": "Enable Copilot address bar suggestions",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_addedfolderunmountonpermissionsloss",
+        "displayName": "Hard-delete the contents of an added folder when user loses permissions to the folder",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_customsyncrootfoldername_customsyncrootfoldernamelist_value",
+        "displayName": "Value",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_sharepointonpremapplicationiduri_sharepointonpremapplicationiduribox",
+        "displayName": "Entra Application ID URI:",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_customsyncrootfoldername_customsyncrootfoldernamelist",
+        "displayName": "New OneDrive folder name:",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_customsyncrootfoldername_customsyncrootfoldernamelist_key",
+        "displayName": "Name",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_customsyncrootfoldername",
+        "displayName": "Set a custom name for the OneDrive folder",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_dataurlinwebworkeropaqueoriginenabled",
+        "displayName": "Enable opaque origins for data URLs in Web Workers (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_dataurlinwebworkeropaqueoriginenabled",
+        "displayName": "Enable opaque origins for data URLs in Web Workers",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_adminreleasering",
+        "displayName": "Admin Release Ring Policy",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_quickmachinerecovery_allowautoremediation",
+        "displayName": "Allow auto remediation",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsallowedforurls",
+        "displayName": "Allow Local Fonts permission on these sites (User)",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~contentsettings_localfontsallowedforurls",
+        "displayName": "Allow Local Fonts permission on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_sharepointonpremoidc",
+        "displayName": "Enable OpenID Connect (OIDC) authentication for syncing content from an on-prem SharePoint Server using the OneDrive sync app",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_disableofflinemode",
+        "displayName": "Prevent users at your organization from enabling offline mode in OneDrive on the web",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_skipfre",
+        "displayName": "Skip First Run Experience (FRE)",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_autologoff_winapp_autologofftimeout",
+        "displayName": "Inactivity timeout (minutes):",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_autologoff",
+        "displayName": "Automatically log off users after inactive interval",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_copilotaddressbarsuggestionsenabled",
+        "displayName": "Enable Copilot address bar suggestions (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_sharepointonpremoidc_sharepointonpremoidc_dropdown",
+        "displayName": "Allow OIDC authentication:",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_windowsapp~policy~winapp_node_winapp_autocreatedesktopshortcuts",
+        "displayName": "Automatically creates Windows App shortcuts to desktop",
+        "categoryId": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "categoryName": "Windows App",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "ade_accountsettings_adminaccountname",
+        "displayName": "Admin account username",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"The account name for the administrator account. This field is to be defaulted to 'Admin'.\"",
+            "newValue": "\"The account name for the administrator account. This field is to be defaulted to 'Admin'. For macOS ADE enrollment policies without user device affinity, we recommend configuring {{serialNumber}} as the unique identifier of userless devices.\""
+          }
+        ]
+      },
+      {
+        "id": "ade_accountsettings_primaryaccountname",
+        "displayName": "Primary account name",
+        "categoryId": "6c217eb1-e939-4a7d-8a27-da4b6dbf9513",
+        "categoryName": "Account settings",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"The account name for the account. Setup Assistant will use this value to prefill the Account Name field if 'Prefill account info' is set to 'Not configured'. This field is to be defaulted to the variable, {{partialupn}}, for example, 'John'.\"",
+            "newValue": "\"The account name for the account. Setup Assistant will use this value to prefill the Account Name field if 'Prefill account info' is set to 'Not configured'. This field is to be defaulted to the variable, {{partialupn}}, for example, 'John'. For macOS ADE enrollment policies without user device affinity, we recommend configuring {{serialNumber}} as the unique identifier of userless devices.\""
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "fa45b2a8-738c-4bac-acc8-7e5bcd6ea6cb",
+        "displayName": "Windows App",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "id": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "displayName": "Win RE",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  {
     "date": "2026-07-17",
     "added": [
       {
