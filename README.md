@@ -25,6 +25,8 @@ No installation, no sign-in. Data is refreshed automatically every day.
 - Track additions, removals, and changes through the built-in changelog view.
 - Use OIB Lookup to browse OpenIntuneBaseline policies and see configured values.
 - Compare any two OIB versions in OIB Changelog to review adds, removals, renames, and value changes.
+- Browse Microsoft's Intune security baseline templates in MS Baselines, with every recommended default resolved.
+- Compare any two versions of a Microsoft security baseline to see which setting defaults were added, removed, or changed.
 - Explore the Windows Enterprise vs Pro view to find settings not available on Windows Professional.
 - Use shareable deep links for categories and individual settings.
 - Navigate comfortably on desktop and mobile with keyboard-friendly UI patterns.

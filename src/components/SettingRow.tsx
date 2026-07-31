@@ -21,6 +21,8 @@ interface SettingRowProps {
   disambiguationLabel?: string;
   /** Optional value badge (e.g. OIB configured value) shown in the badge area */
   valueBadge?: React.ReactNode;
+  /** Widen the value-badge column (for long before → after value diffs) */
+  wideValueBadge?: boolean;
   /** Option IDs actively selected by a baseline (e.g. OIB) — highlighted in expanded detail */
   activeOptionIds?: string[];
   /** Resolved simple value configured by a baseline — shown in expanded detail */
@@ -45,7 +47,7 @@ function getAllDependedOnBy(setting: SettingDefinition): Array<{ dependedOnBy: s
   return deps;
 }
 
-export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, activeLabel, hideScope }: SettingRowProps) {
+export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, wideValueBadge, activeOptionIds, activeSimpleValue, activeLabel, hideScope }: SettingRowProps) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
   const isGroup = setting['@odata.type']?.includes('SettingGroup');
@@ -159,7 +161,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
         <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
           {/* Value badge (e.g. OIB configured value) */}
           {valueBadge && (
-            <div className="w-[10rem] flex justify-end">
+            <div className={`${wideValueBadge ? 'w-[24rem]' : 'w-[10rem]'} flex justify-end`}>
               {valueBadge}
             </div>
           )}

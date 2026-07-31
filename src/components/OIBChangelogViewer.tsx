@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { pillClass } from '@/lib/pill';
+import { pillClass, selectClass } from '@/lib/pill';
 import { basePath } from '@/lib/basePath';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import SettingRow from './SettingRow';
+import ExportMenu, { downloadTextFile, Chevron, KindIcon, KIND, SETTING_KIND } from './ExportMenu';
 import { diffVersions } from '@/lib/oib-diff';
 import { generateOIBChangelogHtml } from '@/lib/oib-html-export';
 import { generateOIBChangelogCsv } from '@/lib/oib-csv-export';
@@ -19,31 +20,12 @@ import type {
 } from '@/lib/oib-changelog-types';
 import type { SettingDefinition } from '@/lib/types';
 
-const selectClass =
-  'bg-white dark:bg-[#2c2c2e] text-fluent-text border border-fluent-border dark:border-[#636366] rounded px-2 py-1.5 text-fluent-sm hover:bg-fluent-bg-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue cursor-pointer';
-
 // OIB folder → home-page platform-icon key.
 const FOLDER_ICON: Record<string, string> = {
   WINDOWS: 'windows10',
   MACOS: 'macOS',
   WINDOWS365: 'windows10',
 };
-
-// Same chevron element as the home-page setting rows.
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      className={`w-3.5 h-3.5 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-    </svg>
-  );
-}
 
 // ── Value formatting (resolve option ids → display names where possible) ──
 
@@ -65,74 +47,7 @@ function fmt(value: OIBValue | undefined, def?: SettingDefinition): string {
   }
 }
 
-// ── Kind metadata — icon + text + colour (never colour alone, WCAG 1.4.1) ──
-
-function KindIcon({ kind, className = 'w-4 h-4' }: { kind: PolicyChangeKind; className?: string }) {
-  const common = { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', strokeWidth: 2, 'aria-hidden': true } as const;
-  switch (kind) {
-    case 'added':
-      return (
-        <svg {...common} className={className}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M5 12h14" />
-        </svg>
-      );
-    case 'removed':
-      return (
-        <svg {...common} className={className}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-        </svg>
-      );
-    case 'modified':
-      return (
-        <svg {...common} className={className}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
-        </svg>
-      );
-    case 'renamed':
-      return (
-        <svg {...common} className={className}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      );
-  }
-}
-
 const KIND_ORDER: PolicyChangeKind[] = ['added', 'removed', 'modified', 'renamed'];
-
-const KIND: Record<
-  PolicyChangeKind,
-  { label: string; text: string; tint: string; gutter: string; iconBg: string }
-> = {
-  added: {
-    label: 'Added',
-    text: 'text-fluent-success',
-    tint: 'border-fluent-success/40 bg-fluent-success/10',
-    gutter: 'border-l-fluent-success',
-    iconBg: 'bg-fluent-success/15 text-fluent-success',
-  },
-  removed: {
-    label: 'Removed',
-    text: 'text-fluent-error',
-    tint: 'border-fluent-error/40 bg-fluent-error/10',
-    gutter: 'border-l-fluent-error',
-    iconBg: 'bg-fluent-error/15 text-fluent-error',
-  },
-  modified: {
-    label: 'Modified',
-    text: 'text-fluent-warning',
-    tint: 'border-fluent-warning/40 bg-fluent-warning/10',
-    gutter: 'border-l-fluent-warning',
-    iconBg: 'bg-fluent-warning/15 text-fluent-warning',
-  },
-  renamed: {
-    label: 'Renamed',
-    text: 'text-fluent-info',
-    tint: 'border-fluent-info/40 bg-fluent-info/10',
-    gutter: 'border-l-fluent-info',
-    iconBg: 'bg-fluent-info/15 text-fluent-info',
-  },
-};
 
 function KindBadge({ kind }: { kind: PolicyChangeKind }) {
   const k = KIND[kind];
@@ -143,15 +58,6 @@ function KindBadge({ kind }: { kind: PolicyChangeKind }) {
     </span>
   );
 }
-
-const SETTING_KIND: Record<
-  SettingChange['kind'],
-  { pill: string; gutter: string; sym: string; label: string }
-> = {
-  added: { pill: 'text-fluent-success border-fluent-success/40 bg-fluent-success/10', gutter: 'border-l-fluent-success/60', sym: '+', label: 'Added' },
-  removed: { pill: 'text-fluent-error border-fluent-error/40 bg-fluent-error/10', gutter: 'border-l-fluent-error/60', sym: '−', label: 'Removed' },
-  changed: { pill: 'text-fluent-warning border-fluent-warning/40 bg-fluent-warning/10', gutter: 'border-l-fluent-warning/60', sym: '~', label: 'Changed' },
-};
 
 /** Map an OIB value to SettingRow's active-value props (highlights the selection). */
 function activeFrom(value?: OIBValue): { activeOptionIds?: string[]; activeSimpleValue?: string } {
@@ -385,17 +291,8 @@ export default function OIBChangelogViewer() {
         ? generateOIBChangelogHtml({ diff, grouped: groupedAll, defsMap, platformLabel: platform.label, baseVersionLabel, compareVersionLabel })
         : generateOIBChangelogCsv({ grouped: groupedAll, defsMap, baseVersionLabel, compareVersionLabel });
 
-    const mime = format === 'html' ? 'text/html;charset=utf-8' : 'text/csv;charset=utf-8';
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
     const safePlatform = platform.label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    anchor.href = url;
-    anchor.download = `oib-changelog-${safePlatform}-v${baseVersionLabel}-to-v${compareVersionLabel}.${format}`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    URL.revokeObjectURL(url);
+    downloadTextFile(`oib-changelog-${safePlatform}-v${baseVersionLabel}-to-v${compareVersionLabel}.${format}`, content, format);
   };
 
   if (error) {
@@ -519,32 +416,7 @@ export default function OIBChangelogViewer() {
 
               {/* Export — pushed to the far right (visual closure of the row) */}
               <div className="sm:ml-auto self-end">
-                <details className="relative">
-                  <summary
-                    className="fluent-btn-secondary text-fluent-sm cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden"
-                    aria-label="Export the current comparison"
-                  >
-                    Export
-                    <svg className="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </summary>
-                  <div className="absolute right-0 mt-1 z-50 min-w-[8rem] bg-fluent-bg border border-fluent-border rounded-md shadow-lg py-1">
-                    {(['csv', 'html'] as const).map((fmt) => (
-                      <button
-                        key={fmt}
-                        onClick={(e) => {
-                          downloadExport(fmt);
-                          e.currentTarget.closest('details')?.removeAttribute('open');
-                        }}
-                        disabled={!diff}
-                        className="block w-full text-left px-3 py-2 text-fluent-sm text-fluent-text hover:bg-fluent-bg-alt disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      >
-                        {fmt.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
-                </details>
+                <ExportMenu ariaLabel="Export the current comparison" disabled={!diff} onExport={downloadExport} />
               </div>
             </>
           )}
