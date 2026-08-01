@@ -1,5 +1,41 @@
 [
   {
+    "date": "2026-08-01",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_remotedesktopservices_enablemicrosoftentraidauthenticationenforcement",
+        "displayName": "Enable Microsoft Entra ID Authentication Enforcement",
+        "categoryId": "579d6272-8708-4b22-a352-89cbd705ca82",
+        "categoryName": "Security",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "device_vendor_msft_policy_config_admx_terminalserver_ts_select_transport_ts_select_transport_type",
+        "displayName": "Select Transport Type",
+        "categoryId": "5454d0eb-7eaa-4500-a1fb-f69b76aed740",
+        "categoryName": "Connections",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "options",
+            "oldValue": "3 options",
+            "newValue": "3 options"
+          }
+        ]
+      }
+    ],
+    "categoriesRemoved": [
+      {
+        "id": "95000481-a8b5-4e18-99e3-367666aee03f",
+        "displayName": "Power",
+        "parentCategoryId": "89519fc9-9b38-4401-8767-b0a047cae515"
+      }
+    ]
+  },
+  {
     "date": "2026-07-30",
     "added": [
       {
