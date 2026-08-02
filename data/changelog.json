@@ -1,5 +1,45 @@
 [
   {
+    "date": "2026-08-02",
+    "added": [],
+    "removed": [
+      {
+        "id": "com.android.devicerestrictionpolicy.wipedataflag",
+        "displayName": "Remove all eSIMs during a device wipe",
+        "categoryId": "b6733d23-eadc-486a-abfc-62b78698a16c",
+        "categoryName": "General",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.unifiedlocksettings",
+        "displayName": "Require separate work lock",
+        "categoryId": "70c4566f-a079-4a8e-ac97-0736b405df1d",
+        "categoryName": "Work profile password",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.stayonpluggedmodes",
+        "displayName": "Screen on while device plugged in",
+        "categoryId": "95000481-a8b5-4e18-99e3-367666aee03f",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.maxdayswithworkoff",
+        "displayName": "Maximum days to turn off work profile",
+        "categoryId": "b6733d23-eadc-486a-abfc-62b78698a16c",
+        "categoryName": "General",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.screentimeout",
+        "displayName": "Screen timeout",
+        "categoryId": "95000481-a8b5-4e18-99e3-367666aee03f",
+        "platform": "androidEnterprise"
+      }
+    ],
+    "changed": []
+  },
+  {
     "date": "2026-08-01",
     "added": [
       {
