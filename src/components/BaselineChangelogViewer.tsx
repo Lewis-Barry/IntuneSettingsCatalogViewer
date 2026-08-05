@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { basePath } from '@/lib/basePath';
 import { selectClass } from '@/lib/pill';
+import { basePath } from '@/lib/basePath';
 import SettingRow from './SettingRow';
 import ExportMenu, { downloadTextFile, Chevron, KindIcon, KIND, SETTING_KIND } from './ExportMenu';
 import {
@@ -27,7 +27,7 @@ function activeFrom(s?: BaselineSetting): { activeOptionIds?: string[]; activeSi
   return {};
 }
 
-/** Change indicator for SettingRow's badge slot: pill on top, value below. */
+/** Change indicator for SettingRow's 10rem badge slot: pill on top, value below. */
 function changeBadge(c: BaselineSettingChange): React.ReactNode {
   const k = SETTING_KIND[c.kind];
   return (
@@ -49,42 +49,13 @@ function changeBadge(c: BaselineSettingChange): React.ReactNode {
   );
 }
 
-/** Fallback row for the rare settings without a catalog definition — same
- *  layout as OIB's unresolved rows, plus an expandable description. */
-function FallbackChangeRow({ c }: { c: BaselineSettingChange }) {
-  const [open, setOpen] = useState(false);
-  const s = (c.compare ?? c.base)!;
-  const expandable = !!s.description;
+function KindBadge({ kind }: { kind: BaselineChangeKind }) {
+  const k = KIND[kind];
   return (
-    <div className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
-      <div
-        className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border ${expandable ? 'cursor-pointer hover:bg-fluent-bg-alt/50' : ''} transition-colors`}
-        onClick={() => expandable && setOpen(!open)}
-        role="row"
-        aria-expanded={expandable ? open : undefined}
-      >
-        <span className="w-5 flex items-center justify-center text-fluent-text-secondary flex-shrink-0">
-          {expandable && <Chevron open={open} />}
-        </span>
-        <div className="flex-1 min-w-0">
-          <span className="block text-fluent-base text-fluent-text truncate">{s.displayName}</span>
-          {c.parent && (
-            <span className="block text-fluent-xs text-fluent-text-tertiary truncate mt-0.5" title={c.parent}>
-              {c.parent}
-            </span>
-          )}
-        </div>
-        <div className="hidden md:flex w-[24rem] justify-end">{changeBadge(c)}</div>
-      </div>
-      {open && (
-        <div className="border-b border-fluent-border bg-fluent-bg px-4 py-3 pl-12">
-          {s.description && (
-            <p className="text-fluent-sm text-fluent-text-secondary whitespace-pre-line mb-2">{s.description}</p>
-          )}
-          <p className="font-mono text-[12px] text-fluent-text-secondary break-all">{c.settingDefinitionId}</p>
-        </div>
-      )}
-    </div>
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-fluent-xs font-semibold border ${k.tint} ${k.text}`}>
+      <KindIcon kind={kind} className="w-3 h-3" />
+      {k.label}
+    </span>
   );
 }
 
@@ -98,6 +69,7 @@ export default function BaselineChangelogViewer() {
   const [baseVersionId, setBaseVersionId] = useState<string | null>(null);
   const [compareVersionId, setCompareVersionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [kindFilter, setKindFilter] = useState<Set<BaselineChangeKind>>(new Set());
   const [query, setQuery] = useState('');
 
@@ -143,6 +115,7 @@ export default function BaselineChangelogViewer() {
 
   // Reset view state whenever the comparison changes.
   useEffect(() => {
+    setExpanded(new Set());
     setKindFilter(new Set());
     setQuery('');
   }, [baseId, baseVersionId, compareVersionId]);
@@ -210,10 +183,32 @@ export default function BaselineChangelogViewer() {
       });
   }, [visibleChanges]);
 
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+
   const toggleKind = (kind: BaselineChangeKind) =>
     setKindFilter((prev) => {
       const next = new Set(prev);
       next.has(kind) ? next.delete(kind) : next.add(kind);
+      return next;
+    });
+
+  const setAllExpanded = (open: boolean) =>
+    setExpanded(() => {
+      if (!open) return new Set();
+      const next = new Set<string>();
+      for (const { category, changes } of grouped) {
+        for (const c of changes) {
+          const s = c.compare ?? c.base;
+          if (defsMap.has(c.settingDefinitionId) || s?.description) {
+            next.add(`${category}|${c.settingDefinitionId}|${c.kind}`);
+          }
+        }
+      }
       return next;
     });
 
@@ -250,32 +245,6 @@ export default function BaselineChangelogViewer() {
       </div>
     );
   }
-
-  // Render a single setting change row — SettingRow when the definition
-  // resolves in the catalog, otherwise the fallback row.
-  const renderChange = (c: BaselineSettingChange) => {
-    const def = defsMap.get(c.settingDefinitionId);
-    const src = c.kind === 'removed' ? c.base : c.compare;
-    if (!def) {
-      return <FallbackChangeRow key={c.settingDefinitionId + c.kind} c={c} />;
-    }
-    const { activeOptionIds, activeSimpleValue } = activeFrom(src);
-    const srcVersion = c.kind === 'removed' ? versionLabel(baseVersionId) : versionLabel(compareVersionId);
-    return (
-      <div key={c.settingDefinitionId + c.kind} className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
-        <SettingRow
-          setting={def}
-          valueBadge={changeBadge(c)}
-          wideValueBadge
-          activeOptionIds={activeOptionIds}
-          activeSimpleValue={activeSimpleValue}
-          activeLabel={`Baseline ${srcVersion}`}
-          disambiguationLabel={c.parent}
-          hideScope
-        />
-      </div>
-    );
-  };
 
   const canCompare = family != null && family.versions.length >= 2;
   const filtering = kindFilter.size > 0 || query.trim() !== '';
@@ -384,7 +353,7 @@ export default function BaselineChangelogViewer() {
             Select a tile to filter the list below.
           </p>
 
-          <div className="grid grid-cols-3 gap-3 mb-6" role="group" aria-label="Filter by change type">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6" role="group" aria-label="Filter by change type">
             {KIND_ORDER.map((kind) => {
               const k = KIND[kind];
               const count = diff.counts[kind];
@@ -420,7 +389,7 @@ export default function BaselineChangelogViewer() {
             <p className="text-fluent-text-secondary text-fluent-base">No differences between these versions.</p>
           ) : (
             <>
-              {/* ── Filter toolbar ── */}
+              {/* ── Filter / view toolbar ── */}
               <div className="flex items-center gap-3 flex-wrap mb-4">
                 <div className="relative flex-1 min-w-[200px] max-w-sm">
                   <svg
@@ -453,6 +422,22 @@ export default function BaselineChangelogViewer() {
                     Clear filters
                   </button>
                 )}
+
+                <div className="ml-auto flex items-center gap-2">
+                  <button
+                    onClick={() => setAllExpanded(true)}
+                    className="text-fluent-sm text-fluent-text-secondary hover:text-fluent-text hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
+                  >
+                    Expand all
+                  </button>
+                  <span className="text-fluent-text-disabled" aria-hidden>·</span>
+                  <button
+                    onClick={() => setAllExpanded(false)}
+                    className="text-fluent-sm text-fluent-text-secondary hover:text-fluent-text hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
+                  >
+                    Collapse all
+                  </button>
+                </div>
               </div>
 
               {visibleChanges.length === 0 ? (
@@ -494,8 +479,83 @@ export default function BaselineChangelogViewer() {
                       </div>
                     </div>
 
-                    <div className="mt-3 bg-white dark:bg-[#2c2c2e] border border-fluent-border rounded-md overflow-hidden">
-                      {changes.map(renderChange)}
+                    <div className="mt-3 space-y-2">
+                      {changes.map((c) => {
+                        const key = `${category}|${c.settingDefinitionId}|${c.kind}`;
+                        const def = defsMap.get(c.settingDefinitionId);
+                        const s = (c.compare ?? c.base)!;
+                        const expandable = !!def || !!s.description;
+                        const isOpen = expanded.has(key);
+                        const k = KIND[c.kind];
+                        const src = c.kind === 'removed' ? c.base : c.compare;
+                        const srcVersion = c.kind === 'removed' ? versionLabel(baseVersionId) : versionLabel(compareVersionId);
+                        const { activeOptionIds, activeSimpleValue } = activeFrom(src);
+                        return (
+                          <div
+                            key={key}
+                            className={`bg-white dark:bg-[#2c2c2e] border border-fluent-border border-l-4 ${k.gutter} rounded-md overflow-hidden`}
+                          >
+                            <button
+                              onClick={() => expandable && toggle(key)}
+                              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fluent-blue ${
+                                expandable ? 'hover:bg-fluent-bg-alt cursor-pointer' : 'cursor-default'
+                              }`}
+                              aria-expanded={expandable ? isOpen : undefined}
+                            >
+                              {expandable ? (
+                                <span className="w-4 flex items-center justify-center text-fluent-text-secondary shrink-0">
+                                  <Chevron open={isOpen} />
+                                </span>
+                              ) : (
+                                <span className="w-4 shrink-0" aria-hidden />
+                              )}
+                              <KindBadge kind={c.kind} />
+                              <span className="flex-1 min-w-0 text-fluent-base font-medium text-fluent-text truncate">
+                                {s.displayName}
+                              </span>
+                              {c.parent && (
+                                <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
+                                  {c.parent}
+                                </span>
+                              )}
+                              <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
+                                {c.kind === 'changed' ? (
+                                  <><span className="line-through">{valueText(c.base)}</span> → {valueText(c.compare)}</>
+                                ) : c.kind === 'removed' ? (
+                                  valueText(c.base)
+                                ) : (
+                                  valueText(c.compare)
+                                )}
+                              </span>
+                            </button>
+
+                            {isOpen && expandable && (
+                              <div className="border-t border-fluent-border bg-fluent-bg">
+                                {def ? (
+                                  <div className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+                                    <SettingRow
+                                      setting={def}
+                                      valueBadge={changeBadge(c)}
+                                      activeOptionIds={activeOptionIds}
+                                      activeSimpleValue={activeSimpleValue}
+                                      activeLabel={`Baseline ${srcVersion}`}
+                                      disambiguationLabel={c.parent}
+                                      hideScope
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="px-4 py-3 pl-12">
+                                    {s.description && (
+                                      <p className="text-fluent-sm text-fluent-text-secondary whitespace-pre-line mb-2">{s.description}</p>
+                                    )}
+                                    <p className="font-mono text-[12px] text-fluent-text-secondary break-all">{c.settingDefinitionId}</p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </section>
                 ))

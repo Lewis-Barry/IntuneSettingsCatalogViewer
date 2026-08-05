@@ -145,7 +145,7 @@ export const KIND: Record<
     iconBg: 'bg-fluent-info/15 text-fluent-info',
   },
   changed: {
-    label: 'Changed',
+    label: 'Modified',
     text: 'text-fluent-warning',
     tint: 'border-fluent-warning/40 bg-fluent-warning/10',
     gutter: 'border-l-fluent-warning',
@@ -160,5 +160,5 @@ export const SETTING_KIND: Record<
 > = {
   added: { pill: 'text-fluent-success border-fluent-success/40 bg-fluent-success/10', gutter: 'border-l-fluent-success/60', sym: '+', label: 'Added' },
   removed: { pill: 'text-fluent-error border-fluent-error/40 bg-fluent-error/10', gutter: 'border-l-fluent-error/60', sym: '−', label: 'Removed' },
-  changed: { pill: 'text-fluent-warning border-fluent-warning/40 bg-fluent-warning/10', gutter: 'border-l-fluent-warning/60', sym: '~', label: 'Changed' },
+  changed: { pill: 'text-fluent-warning border-fluent-warning/40 bg-fluent-warning/10', gutter: 'border-l-fluent-warning/60', sym: '~', label: 'Modified' },
 };
