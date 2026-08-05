@@ -69,6 +69,21 @@ export default function MobileNav() {
               OIB Changelog
             </Link>
             <Link
+              href="/baselines/"
+              onClick={() => setOpen(false)}
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
+            >
+              MS Baselines
+            </Link>
+            <Link
+              href="/baselines/changelog/"
+              onClick={() => setOpen(false)}
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
+              prefetch={false}
+            >
+              MS Baselines Changelog
+            </Link>
+            <Link
               href="/ent-exclusive/"
               onClick={() => setOpen(false)}
               className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px] flex items-center gap-1"

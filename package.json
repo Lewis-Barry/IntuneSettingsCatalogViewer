@@ -11,6 +11,8 @@
     "fetch-settings": "tsx scripts/fetch-settings.ts",
     "fetch-oib": "tsx scripts/fetch-oib-data.ts",
     "check-oib-diff": "tsx scripts/oib-diff-check.ts",
+    "fetch-baselines": "tsx scripts/fetch-baselines.ts",
+    "check-baseline-diff": "tsx scripts/baseline-diff-check.ts",
     "generate-changelog": "tsx scripts/generate-changelog.ts",
     "generate-changelog-settings": "tsx scripts/generate-changelog-settings.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",

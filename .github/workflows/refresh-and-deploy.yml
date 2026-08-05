@@ -53,6 +53,15 @@ jobs:
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: npx tsx scripts/fetch-settings.ts
 
+      # ── Fetch Microsoft security baseline templates (after fetch-settings,
+      #    so setting names resolve against the fresh catalog) ──
+      - name: Fetch security baselines
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: npx tsx scripts/fetch-baselines.ts
+
       # ── Generate changelog by diffing against previous snapshot ──
       - name: Generate changelog
         run: npx tsx scripts/generate-changelog.ts
@@ -78,7 +87,8 @@ jobs:
             data/changelog.json \
             data/settings-previous.json \
             data/categories-previous.json \
-            public/search-index.json
+            public/search-index.json \
+            public/baselines
           git diff --cached --quiet || git commit -m "chore: update settings data $(date -I)"
           git push
 

@@ -20,6 +20,7 @@ import {
 } from '@/lib/oib-types';
 import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
+import ExportMenu, { downloadTextFile } from './ExportMenu';
 import { generateOIBBrowseCsv, generateOIBBrowseHtml, type BrowseExportEntry } from '@/lib/oib-browse-export';
 
 // ── (Value resolution removed — OIB selections are now shown in the expanded detail panel) ──
@@ -323,6 +324,7 @@ const OIBSidebarTree = memo(function OIBSidebarTree({
                 onClick={() => toggleFolder(folderNode.folder)}
                 role="treeitem"
                 aria-expanded={!isCollapsed}
+                aria-selected={false}
               >
                 <span
                   className="category-chevron w-4 h-4 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
@@ -528,16 +530,7 @@ export default function OIBBrowser() {
         format === 'csv'
           ? generateOIBBrowseCsv(exportEntries, defsMap)
           : generateOIBBrowseHtml(exportEntries, defsMap, title);
-      const mime = format === 'csv' ? 'text/csv;charset=utf-8' : 'text/html;charset=utf-8';
-      const blob = new Blob([content], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = `oib-baseline-${scope.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.${format}`;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(url);
+      downloadTextFile(`oib-baseline-${scope.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.${format}`, content, format);
     },
     [exportEntries, defsMap, selectedNode, selectedFolder, searchHits, deferredQuery],
   );
@@ -711,32 +704,11 @@ export default function OIBBrowser() {
           ))}
 
           {/* Export — click dropdown (native <details>), mirrors the changelog screen */}
-          <details className="relative group/export ml-auto">
-            <summary
-              className="fluent-btn-secondary text-fluent-sm cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden"
-              aria-label="Export the current view"
-            >
-              Export
-              <svg className="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <div className="absolute right-0 mt-1 z-50 min-w-[8rem] bg-fluent-bg border border-fluent-border rounded-md shadow-lg py-1">
-              {(['csv', 'html'] as const).map((fmt) => (
-                <button
-                  key={fmt}
-                  onClick={(e) => {
-                    downloadExport(fmt);
-                    e.currentTarget.closest('details')?.removeAttribute('open');
-                  }}
-                  disabled={isLoading || exportEntries.length === 0}
-                  className="block w-full text-left px-3 py-2 text-fluent-sm text-fluent-text hover:bg-fluent-bg-alt disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {fmt.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          </details>
+          <ExportMenu
+            className="relative group/export ml-auto"
+            disabled={isLoading || exportEntries.length === 0}
+            onExport={downloadExport}
+          />
         </div>
       </div>
 

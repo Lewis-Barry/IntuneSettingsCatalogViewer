@@ -13,7 +13,8 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 2. `scripts/build-search-index.ts` — reads settings.json → generates `public/search-index.json`, `data/category-tree.json`, `public/settings-by-category/{id}.json` shards, `data/catalog-stats.json`
 3. `scripts/fetch-oib-data.ts` — fetches OpenIntuneBaseline policies from GitHub → `public/oib-data.json` (current snapshot for `/baseline`) **and** per-release-tag shards `public/oib-versions/<tag>.json` + `index.json` (powers the version diff at `/baseline/changelog`)
 4. `scripts/generate-changelog.ts` — diffs current vs previous snapshot → `data/changelog.json`
-4. Next.js static generation reads from `data/` at build time; browser fetches from `public/` at runtime
+5. `scripts/fetch-baselines.ts` — fetches Microsoft's Intune security baseline templates from Graph beta (`templateFamily eq 'baseline'`, works with zero baselines configured; STIG audit-only templates excluded — not shown in the Intune portal), resolves setting/option/category names from `data/settings.json` → `public/baselines/index.json` (families by baseId) + one shard per version `public/baselines/{id}.json`
+6. Next.js static generation reads from `data/` at build time; browser fetches from `public/` at runtime
 
 ### Key Source Files
 
@@ -25,6 +26,8 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/app/changelog/` | Changelog viewer |
 | `src/app/baseline/` | OpenIntuneBaseline (OIB) policy browser |
 | `src/app/baseline/changelog/` | OIB Changelog — compare any two OIB versions (grouped under "OIB Lookup" hover menu in nav) |
+| `src/app/baselines/` | Microsoft Security Baselines browser — family + version pickers, search, CSV/HTML export (grouped under "MS Baselines" hover menu in nav) |
+| `src/app/baselines/changelog/` | Security Baseline Changelog — compare any two versions of one baseline family |
 | `src/components/SettingsCatalogBrowser.tsx` | Main container component |
 | `src/components/SettingsList.tsx` | Virtualized list (@tanstack/react-virtual) |
 | `src/components/SearchBar.tsx` | Delegates queries to Web Worker |
@@ -35,6 +38,11 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/data.ts` | Build-time JSON loaders with module-level caching |
 | `src/lib/types.ts` | Shared TypeScript types |
 | `src/lib/oib-types.ts` | OIB-specific types and helpers |
+| `src/components/BaselineBrowser.tsx` | MS Security Baselines browse UI — mirrors `OIBBrowser`: family/version dropdowns, `BrowserSidebar` category tree, cross-baseline search over active versions, `SettingRow` rows (baseline default highlighted), CSV/HTML export |
+| `src/components/BaselineChangelogViewer.tsx` | MS Security Baseline version compare — mirrors `OIBChangelogViewer`: base/compare selects + swap, stat-tile filters, category-grouped sections with sticky headers, `SettingRow` drilldowns, CSV/HTML export |
+| `src/lib/baseline-types.ts` | MS baseline types (index/shard/setting) + helpers, mirrors fetch-baselines.ts output |
+| `src/lib/baseline-diff.ts` | Baseline version diff — keyed on settingDefinitionId, recursive value compare (template-id noise already stripped at fetch); self-check in `scripts/baseline-diff-check.ts` |
+| `src/lib/baseline-export.ts` | CSV/HTML exports for both baseline pages, reuses OIB export plumbing |
 | `src/lib/oib-diff.ts` | Version diff engine — 3-tier policy matching (oibId → title → fuzzy) + setting compare; shared by browser & `scripts/oib-diff-check.ts` |
 | `src/lib/oib-changelog-types.ts` | Types for the version index, shards, and diff records (`VersionDiff`/`PolicyDiff`/`SettingChange`) |
 | `src/lib/oib-export-shared.ts` | Shared plain-text export helpers (`fmtValue`, `settingName`, `kindWord`, `policyDisplayName`) used by both exporters |
@@ -62,6 +70,8 @@ npm run build-search-index   # Regenerate search index + shards from data/settin
 npm run refresh              # Full data refresh (requires Azure credentials in env)
 npm run fetch-oib            # Refresh OIB data: current snapshot + per-version shards (run on new OIB release)
 npm run check-oib-diff       # Self-check for the OIB version diff engine (src/lib/oib-diff.ts)
+npm run fetch-baselines      # Refresh MS security baseline data (requires Azure credentials in env)
+npm run check-baseline-diff  # Self-check for the baseline diff engine (needs fetched baseline data)
 ```
 
 ## Env Vars

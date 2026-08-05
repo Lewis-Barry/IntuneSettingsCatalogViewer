@@ -1,0 +1,177 @@
+{
+  "generatedAt": "2026-07-31T08:20:20.291Z",
+  "families": [
+    {
+      "baseId": "9d0f07ef-5eef-4fd3-b95d-f9efbba07d23",
+      "displayName": "Advanced Security Baseline for HoloLens 2",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "9d0f07ef-5eef-4fd3-b95d-f9efbba07d23_1",
+          "displayVersion": "Version 1",
+          "lifecycleState": "active",
+          "settingCount": 51
+        }
+      ]
+    },
+    {
+      "baseId": "71e50109-7880-44df-bfc0-ebd3e36c4c85",
+      "displayName": "Local AI Agent Baseline - OpenClaw (Preview)",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "71e50109-7880-44df-bfc0-ebd3e36c4c85_1",
+          "displayVersion": "Version 1",
+          "lifecycleState": "active",
+          "settingCount": 3
+        }
+      ]
+    },
+    {
+      "baseId": "90316f12-246d-44c6-a767-f87692e86083",
+      "displayName": "Microsoft 365 Apps for Enterprise Security Baseline",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "90316f12-246d-44c6-a767-f87692e86083_3",
+          "displayVersion": "Version 2512",
+          "lifecycleState": "active",
+          "settingCount": 134
+        },
+        {
+          "id": "90316f12-246d-44c6-a767-f87692e86083_2",
+          "displayVersion": "Version 2306",
+          "lifecycleState": "superseded",
+          "settingCount": 128
+        },
+        {
+          "id": "90316f12-246d-44c6-a767-f87692e86083_1",
+          "displayVersion": "Version 2206",
+          "lifecycleState": "superseded",
+          "settingCount": 120
+        }
+      ]
+    },
+    {
+      "baseId": "49b8320f-e179-472e-8e2c-2fde00289ca2",
+      "displayName": "Microsoft Defender for Endpoint Security Baseline",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "49b8320f-e179-472e-8e2c-2fde00289ca2_1",
+          "displayVersion": "Version 24H1",
+          "lifecycleState": "active",
+          "settingCount": 65
+        },
+        {
+          "id": "49b8320f-e179-472e-8e2c-2fde00289ca2_3",
+          "displayVersion": "Version 6",
+          "lifecycleState": "superseded",
+          "settingCount": 38
+        }
+      ]
+    },
+    {
+      "baseId": "c66347b7-8325-4954-a235-3bf2233dfbfd",
+      "displayName": "Security Baseline for Microsoft Edge",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "c66347b7-8325-4954-a235-3bf2233dfbfd_4",
+          "displayVersion": "Version 139",
+          "lifecycleState": "active",
+          "settingCount": 19
+        },
+        {
+          "id": "c66347b7-8325-4954-a235-3bf2233dfbfd_3",
+          "displayVersion": "Version 128",
+          "lifecycleState": "superseded",
+          "settingCount": 19
+        },
+        {
+          "id": "c66347b7-8325-4954-a235-3bf2233dfbfd_2",
+          "displayVersion": "Version 117",
+          "lifecycleState": "superseded",
+          "settingCount": 19
+        },
+        {
+          "id": "c66347b7-8325-4954-a235-3bf2233dfbfd_1",
+          "displayVersion": "Version 112",
+          "lifecycleState": "superseded",
+          "settingCount": 19
+        }
+      ]
+    },
+    {
+      "baseId": "66df8dce-0166-4b82-92f7-1f74e3ca17a3",
+      "displayName": "Security Baseline for Windows 10 and later",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_5",
+          "displayVersion": "Version 25H2",
+          "lifecycleState": "active",
+          "settingCount": 328
+        },
+        {
+          "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_4",
+          "displayVersion": "Version 24H2",
+          "lifecycleState": "superseded",
+          "settingCount": 329
+        },
+        {
+          "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_1",
+          "displayVersion": "Version 23H2",
+          "lifecycleState": "superseded",
+          "settingCount": 306
+        },
+        {
+          "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_3",
+          "displayVersion": "November 2021",
+          "lifecycleState": "superseded",
+          "settingCount": 254
+        }
+      ]
+    },
+    {
+      "baseId": "5d030c29-ea8d-4751-ba0d-5e3de7a84cd3",
+      "displayName": "Standard Security Baseline for HoloLens 2",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "5d030c29-ea8d-4751-ba0d-5e3de7a84cd3_1",
+          "displayVersion": "Version 1",
+          "lifecycleState": "active",
+          "settingCount": 23
+        }
+      ]
+    },
+    {
+      "baseId": "b00e1a0f-19dd-41de-8243-e6733ca7b4ae",
+      "displayName": "Windows 365 Security Baseline",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "b00e1a0f-19dd-41de-8243-e6733ca7b4ae_1",
+          "displayVersion": "Version 24H1",
+          "lifecycleState": "active",
+          "settingCount": 282
+        },
+        {
+          "id": "b00e1a0f-19dd-41de-8243-e6733ca7b4ae_3",
+          "displayVersion": "November 2021",
+          "lifecycleState": "superseded",
+          "settingCount": 253
+        }
+      ]
+    }
+  ]
+}

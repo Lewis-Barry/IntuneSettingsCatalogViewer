@@ -1,5 +1,10 @@
 // Shared segmented-pill styling used by the platform filter and the baseline
 // diff version picker, so they stay visually identical.
+
+/** Select styling shared by the version/family pickers across all screens. */
+export const selectClass =
+  'bg-white dark:bg-[#2c2c2e] text-fluent-text border border-fluent-border dark:border-[#636366] rounded px-2 py-1.5 text-fluent-sm hover:bg-fluent-bg-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue cursor-pointer';
+
 export function pillClass(active: boolean): string {
   return `inline-flex items-center gap-1.5 px-3 py-1 rounded text-fluent-sm border transition-colors ${
     active
