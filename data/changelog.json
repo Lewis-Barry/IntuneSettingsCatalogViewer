@@ -1,5 +1,26 @@
 [
   {
+    "date": "2026-08-06",
+    "added": [],
+    "removed": [],
+    "changed": [
+      {
+        "id": "linux_platformupdatecontrols_version_fixedvalue",
+        "displayName": "Platform Update Fixed Version",
+        "categoryId": "20af2e37-4e39-4e47-ba5d-d1cadbfb4b0a",
+        "categoryName": "Platform Update",
+        "platform": "linux",
+        "fields": [
+          {
+            "field": "offsetUri",
+            "oldValue": "\"version\"",
+            "newValue": "\"fixedVersion\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-08-02",
     "added": [],
     "removed": [
