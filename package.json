@@ -16,6 +16,7 @@
     "generate-changelog": "tsx scripts/generate-changelog.ts",
     "generate-changelog-settings": "tsx scripts/generate-changelog-settings.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
+    "check-changelog-export": "tsx scripts/changelog-export-check.ts",
     "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index",
     "postinstall": "echo 'Run npm run refresh to fetch settings data'"
   },

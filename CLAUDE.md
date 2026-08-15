@@ -72,6 +72,7 @@ npm run fetch-oib            # Refresh OIB data: current snapshot + per-version 
 npm run check-oib-diff       # Self-check for the OIB version diff engine (src/lib/oib-diff.ts)
 npm run fetch-baselines      # Refresh MS security baseline data (requires Azure credentials in env)
 npm run check-baseline-diff  # Self-check for the baseline diff engine (needs fetched baseline data)
+npm run check-changelog-export  # Self-check for the changelog CSV/HTML exporters (src/lib/changelog-export.ts)
 ```
 
 ## Env Vars

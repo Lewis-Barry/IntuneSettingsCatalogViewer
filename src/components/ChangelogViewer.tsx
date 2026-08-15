@@ -6,6 +6,8 @@ import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
 import { basePath } from '@/lib/basePath';
 import SettingDetail from './SettingDetail';
+import ExportMenu, { downloadTextFile, type ExportFormat } from './ExportMenu';
+import { generateChangelogCsv, generateChangelogHtml } from '@/lib/changelog-export';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
@@ -46,7 +48,7 @@ type FilterType = 'all' | 'added' | 'removed' | 'changed';
 type ActionType = 'added' | 'removed' | 'changed';
 type EntityType = 'setting' | 'category';
 type FeedFilter = FilterType | 'categories';
-type DateFilter = 'latest' | 'all' | `date:${string}`;
+type DateFilter = 'latest' | 'all' | 'range' | `date:${string}`;
 
 interface ChangeFeedItem {
   key: string;
@@ -92,6 +94,8 @@ const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ val
 export default function ChangelogViewer({ entries, categories, settings }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
+  const [rangeFrom, setRangeFrom] = useState<string | null>(null);
+  const [rangeTo, setRangeTo] = useState<string | null>(null);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -238,16 +242,52 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
   }, [feedItems]);
 
   const latestDate = dateOptions[0] ?? null;
-  const activeDate = selectedDate === 'all'
+  const oldestDate = dateOptions[dateOptions.length - 1] ?? null;
+  // Effective range bounds — an empty picker means "unbounded" that direction.
+  const rangeStart = rangeFrom ?? oldestDate;
+  const rangeEnd = rangeTo ?? latestDate;
+  const activeDate = selectedDate === 'all' || selectedDate === 'range'
     ? null
     : selectedDate === 'latest'
       ? latestDate
       : selectedDate.replace(/^date:/, '');
 
   const dateScopedItems = useMemo(() => {
+    if (selectedDate === 'range') {
+      // ISO dates compare lexicographically; rangeFrom/rangeTo are clamped so
+      // from <= to. Either end may be left open (missing = unbounded).
+      return feedItems.filter((item) =>
+        (!rangeFrom || item.date >= rangeFrom) && (!rangeTo || item.date <= rangeTo));
+    }
     if (!activeDate) return feedItems;
     return feedItems.filter((item) => item.date === activeDate);
-  }, [activeDate, feedItems]);
+  }, [selectedDate, rangeFrom, rangeTo, activeDate, feedItems]);
+
+  // Filling either date input switches the dropdown to Custom range; clearing
+  // both reverts it to Latest update.
+  const handleRangeChange = (end: 'from' | 'to', raw: string) => {
+    const value = raw || null;
+    let from = end === 'from' ? value : rangeFrom;
+    let to = end === 'to' ? value : rangeTo;
+    // Keep from <= to by pulling the other end along.
+    if (from && to && from > to) {
+      if (end === 'from') to = from;
+      else from = to;
+    }
+    setRangeFrom(from);
+    setRangeTo(to);
+    if (from || to) {
+      if (selectedDate !== 'range') {
+        setSelectedDate('range');
+        setSelectedCategory(null);
+        setExpandedItems(new Set());
+      }
+    } else if (selectedDate === 'range') {
+      setSelectedDate('latest');
+      setSelectedCategory(null);
+      setExpandedItems(new Set());
+    }
+  };
 
   const stats = useMemo(() => {
     // Most recent entry with actual changes (version-only entries excluded via cleanedEntries)
@@ -345,6 +385,28 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
       return buildHaystack(item).includes(normalizedQuery);
     });
   }, [dateScopedItems, filter, query, selectedCategory, selectedPlatforms]);
+
+  const exportScopeLabel = useMemo(() => {
+    const opts = { month: 'short', day: 'numeric', year: 'numeric' } as const;
+    if (selectedDate === 'range') {
+      return rangeStart && rangeEnd
+        ? `${formatDate(rangeStart, opts)} – ${formatDate(rangeEnd, opts)}`
+        : 'All updates';
+    }
+    if (selectedDate === 'latest' && latestDate) return `Latest update (${formatDate(latestDate, opts)})`;
+    if (activeDate) return formatDate(activeDate, opts);
+    return 'All updates';
+  }, [selectedDate, rangeStart, rangeEnd, latestDate, activeDate]);
+
+  // Export the currently visible changes (all filters applied). Setting-group
+  // grouping is display-only, so individual filteredItems are exported.
+  const downloadExport = (format: ExportFormat) => {
+    if (filteredItems.length === 0) return;
+    const content = format === 'csv'
+      ? generateChangelogCsv({ items: filteredItems, scopeLabel: exportScopeLabel })
+      : generateChangelogHtml({ items: filteredItems, scopeLabel: exportScopeLabel });
+    downloadTextFile(`settings-catalog-changelog.${format}`, content, format);
+  };
 
   const scopedHotspots = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -452,7 +514,16 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
               <select
                 value={selectedDate}
                 onChange={(event) => {
-                  setSelectedDate(event.target.value as DateFilter);
+                  const value = event.target.value as DateFilter;
+                  setSelectedDate(value);
+                  if (value === 'range') {
+                    setRangeFrom((prev) => prev ?? oldestDate);
+                    setRangeTo((prev) => prev ?? latestDate);
+                  } else {
+                    // Picking a fixed date scope clears the range pickers.
+                    setRangeFrom(null);
+                    setRangeTo(null);
+                  }
                   setSelectedCategory(null);
                   setExpandedItems(new Set());
                 }}
@@ -464,6 +535,7 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
                   </option>
                 )}
                 <option value="all">All updates</option>
+                <option value="range">Custom range…</option>
                 {dateOptions.slice(1).map((date) => (
                   <option key={date} value={`date:${date}`}>
                     {formatDate(date, { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -519,12 +591,38 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
           {selectedCategory && (
             <button
               onClick={() => setSelectedCategory(null)}
-              className="ml-auto inline-flex items-center gap-1.5 rounded border border-fluent-border bg-fluent-bg-alt px-3 py-1 text-fluent-sm text-fluent-text hover:bg-fluent-border dark:hover:bg-[#3a3a3c]"
+              className="inline-flex items-center gap-1.5 rounded border border-fluent-border bg-fluent-bg-alt px-3 py-1 text-fluent-sm text-fluent-text hover:bg-fluent-border dark:hover:bg-[#3a3a3c]"
             >
               {selectedCategory}
               <span aria-hidden="true">×</span>
             </button>
           )}
+          {/* Always visible; filling either one switches the date dropdown to
+              Custom range (see handleRangeChange). */}
+          <div className="ml-auto flex items-center gap-2">
+            <label className="inline-flex items-center gap-1.5">
+              <span className="text-fluent-sm text-fluent-text-secondary">From</span>
+              <input
+                type="date"
+                value={rangeFrom ?? ''}
+                min={oldestDate ?? undefined}
+                max={latestDate ?? undefined}
+                onChange={(event) => handleRangeChange('from', event.target.value)}
+                className="h-[30px] rounded border border-fluent-border bg-white px-2 text-fluent-sm text-fluent-text outline-none transition-colors focus:border-fluent-blue dark:bg-[#2c2c2e] dark:border-[#636366] dark:[color-scheme:dark]"
+              />
+            </label>
+            <label className="inline-flex items-center gap-1.5">
+              <span className="text-fluent-sm text-fluent-text-secondary">To</span>
+              <input
+                type="date"
+                value={rangeTo ?? ''}
+                min={oldestDate ?? undefined}
+                max={latestDate ?? undefined}
+                onChange={(event) => handleRangeChange('to', event.target.value)}
+                className="h-[30px] rounded border border-fluent-border bg-white px-2 text-fluent-sm text-fluent-text outline-none transition-colors focus:border-fluent-blue dark:bg-[#2c2c2e] dark:border-[#636366] dark:[color-scheme:dark]"
+              />
+            </label>
+          </div>
         </div>
       </section>
 
@@ -533,9 +631,11 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
           <div>
             <h2 className="text-fluent-base font-semibold text-fluent-text">Hotspots</h2>
             <p className="mt-1 text-fluent-sm text-fluent-text-secondary">
-              {activeDate
-                ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
-                : `${feedItems.length.toLocaleString()} tracked changes`}
+              {selectedDate === 'range' && rangeStart && rangeEnd
+                ? `${dateScopedItems.length.toLocaleString()} changes between ${formatDate(rangeStart, { month: 'short', day: 'numeric', year: 'numeric' })} and ${formatDate(rangeEnd, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                : activeDate
+                  ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                  : `${feedItems.length.toLocaleString()} tracked changes`}
             </p>
           </div>
           <div className="space-y-2">
@@ -605,12 +705,19 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         <div>
           <div className="mb-3 flex items-center justify-between gap-3">
             <h2 className="text-fluent-base font-semibold text-fluent-text">Change feed</h2>
-            <span className="text-fluent-sm text-fluent-text-secondary">
-              {displayedItems.length.toLocaleString()} results
-              {displayedItems.length !== filteredItems.length && (
-                <> · {filteredItems.length.toLocaleString()} changes</>
-              )}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-fluent-sm text-fluent-text-secondary">
+                {displayedItems.length.toLocaleString()} results
+                {displayedItems.length !== filteredItems.length && (
+                  <> · {filteredItems.length.toLocaleString()} changes</>
+                )}
+              </span>
+              <ExportMenu
+                onExport={downloadExport}
+                disabled={filteredItems.length === 0}
+                ariaLabel="Export the filtered changes"
+              />
+            </div>
           </div>
 
           {displayedItems.length === 0 ? (
