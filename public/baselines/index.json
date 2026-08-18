@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T08:20:20.291Z",
+  "generatedAt": "2026-08-18T06:09:06.254Z",
   "families": [
     {
       "baseId": "9d0f07ef-5eef-4fd3-b95d-f9efbba07d23",
@@ -17,7 +17,7 @@
     },
     {
       "baseId": "71e50109-7880-44df-bfc0-ebd3e36c4c85",
-      "displayName": "Local AI Agent Baseline - OpenClaw (Preview)",
+      "displayName": "Local AI Agent Baseline - OpenClaw",
       "platforms": "windows10",
       "technologies": "mdm",
       "versions": [
