@@ -50,8 +50,6 @@ export default function HighlightText({
 
   const highlightClass = 'bg-yellow-100 dark:bg-yellow-800/50 text-inherit rounded-sm';
 
-  // ponytail: single wrapper span so a flex/gap parent treats the whole
-  // highlighted string as one item instead of spacing out every fragment
   return (
     <span>
       {parts.map((part, i) =>
