@@ -5,12 +5,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config, { dev, isServer }) => {
-    if (dev && isServer) {
-      config.output.chunkFilename = '[name].js';
-    }
-
-    return config;
+  // Without root, Turbopack walks up and finds a stray parent lockfile.
+  turbopack: {
+    root: __dirname,
   },
 };
 

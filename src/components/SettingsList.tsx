@@ -17,7 +17,7 @@ interface SettingsListProps {
   /** The raw search query to highlight matched characters */
   highlightQuery?: string;
   /** Ref to the scroll container (for virtualization in category view) */
-  scrollContainerRef?: React.RefObject<HTMLDivElement>;
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
   /** Ancestor breadcrumb path (root → parent). Only shown for search results with a parent category. */
   breadcrumb?: string[];
   /** Map of categoryId → displayName, used to disambiguate same-named settings from different sub-categories */
