@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 interface CategoryPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -15,8 +15,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const { id } = await params;
   const categories = loadCategories();
-  const category = categories.find((c) => c.id === decodeURIComponent(params.id));
+  const category = categories.find((c) => c.id === decodeURIComponent(id));
 
   if (!category) {
     return { title: 'Category Not Found' };
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   };
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const decodedId = decodeURIComponent(params.id);
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { id } = await params;
+  const decodedId = decodeURIComponent(id);
   const categories = loadCategories();
   const category = categories.find((c) => c.id === decodedId);
 

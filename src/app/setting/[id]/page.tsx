@@ -8,7 +8,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 interface SettingPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Generate all setting pages at build time
@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 
 // Dynamic metadata for SEO
 export async function generateMetadata({ params }: SettingPageProps): Promise<Metadata> {
-  const slug = decodeURIComponent(params.id);
+  const slug = decodeURIComponent((await params).id);
   const setting = getSettingBySlug(slug);
 
   if (!setting) {
@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: SettingPageProps): Promise<Me
   };
 }
 
-export default function SettingPage({ params }: SettingPageProps) {
-  const slug = decodeURIComponent(params.id);
+export default async function SettingPage({ params }: SettingPageProps) {
+  const slug = decodeURIComponent((await params).id);
   const setting = getSettingBySlug(slug);
 
   if (!setting) {

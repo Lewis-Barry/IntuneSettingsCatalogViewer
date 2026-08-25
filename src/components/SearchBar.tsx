@@ -18,7 +18,7 @@ export default function SearchBar({
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const searchSeqRef = useRef(0);
 
   useEffect(() => () => clearTimeout(debounceRef.current), []);
