@@ -66,6 +66,15 @@ jobs:
       - name: Generate changelog
         run: npx tsx scripts/generate-changelog.ts
 
+      # ── AI summaries for new changelog days (no-op when nothing new).
+      #    continue-on-error: summaries are garnish — never block a deploy if
+      #    the key is missing or the API is down; the card just hides. ──
+      - name: Generate AI summaries
+        continue-on-error: true
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: npx tsx scripts/generate-summaries.ts --all
+
       # ── Build search index and category tree ──
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
@@ -89,6 +98,8 @@ jobs:
             data/categories-previous.json \
             public/search-index.json \
             public/baselines
+          # Summaries file may not exist if the AI step was skipped/failed.
+          git add -f data/changelog-summaries.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: update settings data $(date -I)"
           git push
 

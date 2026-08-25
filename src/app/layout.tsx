@@ -41,6 +41,8 @@ export default function RootLayout({
         {/* Detect mobile UA before first paint so CSS can apply larger touch targets */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var m=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var p=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;var s=window.matchMedia&&window.matchMedia('(max-width:767px)').matches;if(m||(p&&s)){document.documentElement.classList.add('mobile-device')}}catch(e){}})()` }} />
         <script dangerouslySetInnerHTML={{ __html: `var _paq = window._paq = window._paq || [];_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);(function(){var u="//stats.conditionalaccess.uk/";_paq.push(['setTrackerUrl',u+'matomo.php']);_paq.push(['setSiteId','2']);var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];g.async=true;g.src=u+'matomo.js';s.parentNode.insertBefore(g,s);})();` }} />
+        {/* Font Awesome Free (icons, e.g. changelog AI summary sparkle) */}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
       </head>
       <body className="min-h-screen flex flex-col">
         {/* ── Header ── */}

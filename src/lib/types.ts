@@ -204,6 +204,13 @@ export interface ChangelogEntry {
   categoriesChanged?: ChangelogCategoryChange[];
 }
 
+/** AI-generated summary of a changelog entry; stored in changelog-summaries.json keyed by date. */
+export interface ChangelogSummary {
+  headline: string;
+  highlights: string[];
+  watchOut: string | null;
+}
+
 export interface ChangelogSettingRef {
   id: string;
   displayName: string;

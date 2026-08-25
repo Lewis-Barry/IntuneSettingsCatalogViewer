@@ -15,6 +15,7 @@
     "check-baseline-diff": "tsx scripts/baseline-diff-check.ts",
     "generate-changelog": "tsx scripts/generate-changelog.ts",
     "generate-changelog-settings": "tsx scripts/generate-changelog-settings.ts",
+    "generate-summaries": "tsx scripts/generate-summaries.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
     "check-changelog-export": "tsx scripts/changelog-export-check.ts",
     "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index",

@@ -43,3 +43,4 @@ public/changelog-settings/
 
 # local-only notes
 *.local.md
+ideas/

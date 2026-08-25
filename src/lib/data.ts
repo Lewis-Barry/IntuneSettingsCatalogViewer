@@ -6,7 +6,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary } from './types';
+import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary, ChangelogSummary } from './types';
 import { settingSlug } from './slug';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -85,6 +85,11 @@ export function loadChangelog(): ChangelogEntry[] {
   // import of all settings and makes the page very slow.
   const BASELINE_DATE = '2026-02-21';
   return raw.filter((e) => e.date !== BASELINE_DATE);
+}
+
+/** AI summaries keyed by changelog entry date (empty until generate-summaries runs). */
+export function loadChangelogSummaries(): Record<string, ChangelogSummary> {
+  return readJSON<Record<string, ChangelogSummary>>('changelog-summaries.json') ?? {};
 }
 
 /** Get the last updated timestamp — prefers the metadata file written by fetch-settings, falls back to changelog */

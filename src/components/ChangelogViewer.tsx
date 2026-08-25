@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, SettingCategory, SettingDefinition } from '@/lib/types';
+import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, ChangelogSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
 import { basePath } from '@/lib/basePath';
@@ -15,6 +15,8 @@ interface ChangelogViewerProps {
   /** Stripped-down settings (changelog-referenced only). Full setting is
    *  lazy-fetched per row from /changelog-settings/{slug}.json on expand. */
   settings: ChangelogSettingSummary[];
+  /** AI summaries keyed by date; shown in the Latest update card when present. */
+  summaries?: Record<string, ChangelogSummary>;
 }
 
 // Module-level cache so re-expanding (or expanding the same setting via two
@@ -91,7 +93,7 @@ const FILTERS: Array<{ value: FeedFilter; label: string }> = [
 
 const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
 
-export default function ChangelogViewer({ entries, categories, settings }: ChangelogViewerProps) {
+export default function ChangelogViewer({ entries, categories, settings, summaries = {} }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
   const [rangeFrom, setRangeFrom] = useState<string | null>(null);
@@ -100,6 +102,8 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  // Holds the date whose AI summary is expanded; switching dates collapses it.
+  const [expandedSummaryDate, setExpandedSummaryDate] = useState<string | null>(null);
 
   const toggleItem = (key: string) => {
     setExpandedItems((prev) => {
@@ -298,56 +302,45 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
         (e.categoriesRemoved?.length ?? 0) > 0 ||
         (e.categoriesChanged?.length ?? 0) > 0
     );
-    const lastChangeDate = lastEntry?.date ?? null;
 
-    // Platform breakdown for the latest update only. Each setting that targets
+    // Picking a specific date in the dropdown re-scopes the whole card (stats,
+    // platform impact, AI summary) to that day. 'all'/'range' keep the latest.
+    const pickedDate = selectedDate.startsWith('date:') ? selectedDate.slice(5) : null;
+    const pickedEntry = pickedDate ? cleanedEntries.find((e) => e.date === pickedDate) : undefined;
+    const shownEntry = pickedEntry ?? lastEntry;
+    const shownDate = shownEntry?.date ?? null;
+
+    // Platform breakdown for the shown update only. Each setting that targets
     // multiple platforms increments each platform's counter, so the sum of
     // counts represents total platform-mentions across changed settings.
     const platformCounts = new Map<string, number>();
     let platformTotal = 0;
-    if (lastEntry) {
+    if (shownEntry) {
       const trackPlatform = (platform?: string) => {
         getPlatformKeys(platform).forEach((p) => {
           platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1);
           platformTotal += 1;
         });
       };
-      lastEntry.added.forEach((s) => trackPlatform(s.platform));
-      lastEntry.removed.forEach((s) => trackPlatform(s.platform));
-      lastEntry.changed.forEach((s) => trackPlatform(s.platform));
+      shownEntry.added.forEach((s) => trackPlatform(s.platform));
+      shownEntry.removed.forEach((s) => trackPlatform(s.platform));
+      shownEntry.changed.forEach((s) => trackPlatform(s.platform));
     }
 
-    // Relative description of last change
-    let lastChangeLabel = 'No changes yet';
-    if (lastChangeDate) {
-      const diffMs = Date.now() - new Date(lastChangeDate + 'T00:00:00').getTime();
-      const diffDays = Math.floor(diffMs / 86_400_000);
-      if (diffDays === 0) lastChangeLabel = 'Today';
-      else if (diffDays === 1) lastChangeLabel = 'Yesterday';
-      else if (diffDays < 7) lastChangeLabel = `${diffDays} days ago`;
-      else if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        lastChangeLabel = weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
-      } else {
-        const months = Math.floor(diffDays / 30);
-        lastChangeLabel = months === 1 ? '1 month ago' : `${months} months ago`;
-      }
-    }
-
-    // Counts from the latest entry (delta since previous snapshot)
-    const latestAdded = lastEntry?.added.length ?? 0;
-    const latestRemoved = lastEntry?.removed.length ?? 0;
-    const latestChanged = lastEntry?.changed.length ?? 0;
+    // Counts from the shown entry (delta since its previous snapshot)
+    const latestAdded = shownEntry?.added.length ?? 0;
+    const latestRemoved = shownEntry?.removed.length ?? 0;
+    const latestChanged = shownEntry?.changed.length ?? 0;
     const latestSettingTotal = latestAdded + latestRemoved + latestChanged;
     const latestCatChanges =
-      (lastEntry?.categoriesAdded?.length ?? 0) +
-      (lastEntry?.categoriesRemoved?.length ?? 0) +
-      (lastEntry?.categoriesChanged?.length ?? 0);
+      (shownEntry?.categoriesAdded?.length ?? 0) +
+      (shownEntry?.categoriesRemoved?.length ?? 0) +
+      (shownEntry?.categoriesChanged?.length ?? 0);
 
-    // Settings newly marked deprecated in the latest update — detect by a
+    // Settings newly marked deprecated in the shown update — detect by a
     // displayName change where the new value contains "deprecated" but the old
     // one didn't.
-    const latestNewlyDeprecated = lastEntry?.changed.filter((c) =>
+    const latestNewlyDeprecated = shownEntry?.changed.filter((c) =>
       c.fields.some(
         (f) =>
           f.field === 'displayName' &&
@@ -357,8 +350,9 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
     ).length ?? 0;
 
     return {
-      lastChangeLabel,
-      lastChangeDate,
+      title: pickedEntry ? 'Selected update' : 'Latest update',
+      lastChangeLabel: relativeDayLabel(shownDate),
+      lastChangeDate: shownDate,
       latestAdded,
       latestChanged,
       latestSettingTotal,
@@ -367,7 +361,14 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
       platformCounts: Array.from(platformCounts.entries()).sort((a, b) => b[1] - a[1]),
       platformTotal,
     };
-  }, [cleanedEntries]);
+  }, [cleanedEntries, selectedDate]);
+
+  // AI summary for the day the card describes. Hidden for 'all'/'custom range'
+  // (no single day to describe), which keeps the plain stats layout.
+  const summaryDate =
+    selectedDate === 'latest' || selectedDate.startsWith('date:') ? stats.lastChangeDate : null;
+  const activeSummary = summaryDate ? summaries[summaryDate] : undefined;
+  const summaryExpanded = summaryDate != null && expandedSummaryDate === summaryDate;
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -457,24 +458,70 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
     <div className="space-y-6">
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
         <div className="fluent-card p-4 sm:p-5">
-          <div className="flex h-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="text-fluent-sm font-semibold text-fluent-text-secondary">Latest update</div>
-              <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
-                <div className="text-fluent-3xl font-semibold text-fluent-text">{stats.lastChangeLabel}</div>
-                {stats.lastChangeDate && (
-                  <div className="pb-1 text-fluent-sm text-fluent-text-secondary">
-                    {formatDate(stats.lastChangeDate, { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </div>
-                )}
+          <div className="flex h-full flex-col gap-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <div className="text-fluent-sm font-semibold text-fluent-text-secondary">{stats.title}</div>
+                <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
+                  <div className="text-fluent-3xl font-semibold text-fluent-text">{stats.lastChangeLabel}</div>
+                  {stats.lastChangeDate && (
+                    <div className="pb-1 text-fluent-sm text-fluent-text-secondary">
+                      {formatDate(stats.lastChangeDate, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className={`grid grid-cols-2 sm:grid-cols-4 ${activeSummary ? 'gap-2 md:min-w-[22rem]' : 'gap-3 md:min-w-[26rem]'}`}>
+                <StatCard compact={!!activeSummary} label="Setting additions" value={stats.latestAdded} color="text-fluent-success" />
+                <StatCard compact={!!activeSummary} label="Setting changes" value={stats.latestChanged} color="text-fluent-warning" />
+                <StatCard compact={!!activeSummary} label="Category changes" value={stats.latestCatChanges} color="text-fluent-blue" />
+                <StatCard compact={!!activeSummary} label="Deprecated" value={stats.latestNewlyDeprecated} color="text-fluent-text-secondary" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:min-w-[26rem]">
-              <StatCard label="Setting additions" value={stats.latestAdded} color="text-fluent-success" />
-              <StatCard label="Setting changes" value={stats.latestChanged} color="text-fluent-warning" />
-              <StatCard label="Category changes" value={stats.latestCatChanges} color="text-fluent-blue" />
-              <StatCard label="Deprecated" value={stats.latestNewlyDeprecated} color="text-fluent-text-secondary" />
-            </div>
+
+            {activeSummary && (
+              <div className="border-t border-fluent-border pt-3">
+                <button
+                  type="button"
+                  onClick={() => setExpandedSummaryDate(summaryExpanded ? null : summaryDate)}
+                  aria-expanded={summaryExpanded}
+                  aria-controls="ai-summary-detail"
+                  className="group flex w-full items-start justify-between gap-3 rounded text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fluent-blue"
+                >
+                  <p className="text-fluent-base font-medium text-fluent-text">{activeSummary.headline}</p>
+                  <svg
+                    aria-hidden="true"
+                    className={`mt-1 h-4 w-4 flex-shrink-0 text-fluent-text-secondary transition-transform group-hover:text-fluent-text ${summaryExpanded ? 'rotate-180' : ''}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {summaryExpanded && (
+                  <div id="ai-summary-detail">
+                    {activeSummary.highlights.length > 0 && (
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-fluent-sm text-fluent-text marker:text-fluent-blue">
+                        {activeSummary.highlights.map((h, i) => (
+                          <li key={i}>{h}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {activeSummary.watchOut && (
+                      <p className="mt-2 flex items-start gap-1.5 border-l-2 border-fluent-warning pl-2.5 text-fluent-sm text-fluent-text">
+                        <i className="fa-solid fa-triangle-exclamation mt-0.5 text-fluent-warning" aria-hidden="true" />
+                        <span>{activeSummary.watchOut}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className="mt-3 flex justify-end">
+                  <span className="inline-flex items-center gap-1 text-fluent-xs text-fluent-text-secondary">
+                    <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
+                    AI generated
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -751,14 +798,30 @@ export default function ChangelogViewer({ entries, categories, settings }: Chang
   );
 }
 
-function StatCard({ label, value, color }: {
+function relativeDayLabel(date: string | null): string {
+  if (!date) return 'No changes yet';
+  const diffDays = Math.floor((Date.now() - new Date(date + 'T00:00:00').getTime()) / 86_400_000);
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+  }
+  const months = Math.floor(diffDays / 30);
+  return months === 1 ? '1 month ago' : `${months} months ago`;
+}
+
+function StatCard({ label, value, color, compact }: {
   label: string;
   value?: number;
   color: string;
+  /** Tighter padding/typography for when the card also hosts the AI summary. */
+  compact?: boolean;
 }) {
   return (
-    <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#1c1c1e]">
-      <div className={`text-fluent-xl font-bold ${color}`}>
+    <div className={`rounded border border-fluent-border bg-fluent-bg-alt dark:bg-[#1c1c1e] ${compact ? 'px-2 py-1.5' : 'px-3 py-2'}`}>
+      <div className={`font-bold ${color} ${compact ? 'text-fluent-lg' : 'text-fluent-xl'}`}>
         {value?.toLocaleString() ?? '—'}
       </div>
       <div className="text-fluent-xs text-fluent-text-secondary">{label}</div>
