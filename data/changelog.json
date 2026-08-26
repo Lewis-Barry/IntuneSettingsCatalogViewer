@@ -1,5 +1,116 @@
 [
   {
+    "date": "2026-08-26",
+    "added": [
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_recommended_addressbarclipboardsuggestenabled_recommended",
+        "displayName": "Enable clipboard suggestions in the address bar (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_addressbarclipboardsuggestenabled",
+        "displayName": "Enable clipboard suggestions in the address bar",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_recommended_addressbarclipboardsuggestenabled_recommended",
+        "displayName": "Enable clipboard suggestions in the address bar",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_processisolationenabled",
+        "displayName": "Enable Process Isolation",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_processisolationenabled",
+        "displayName": "Enable Process Isolation (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_addressbarclipboardsuggestenabled",
+        "displayName": "Enable clipboard suggestions in the address bar (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_edgereadingmodeservicebasedextractionenabled",
+        "displayName": "Enable service-based extraction for Reading Mode in Microsoft Edge (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_edgereadingmodeservicebasedextractionenabled",
+        "displayName": "Enable service-based extraction for Reading Mode in Microsoft Edge",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "vendor_msft_defender_configuration_tamperprotection_options",
+        "displayName": "Configuration Protection (Device) (Preview)",
+        "categoryId": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
+        "categoryName": "Defender",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Controlled Configuration (Device)\"",
+            "newValue": "\"Configuration Protection (Device) (Preview)\""
+          },
+          {
+            "field": "options",
+            "oldValue": "3 options",
+            "newValue": "3 options"
+          }
+        ]
+      },
+      {
+        "id": "linux_mdatp_managed_advancedsettings_memoryscan",
+        "displayName": "Memory scan (preview) (Requires Behavior Monitoring for protection)",
+        "categoryId": "9d7352fe-a881-456d-a3cd-2b76fc6519f3",
+        "categoryName": "Advanced Settings",
+        "platform": "linux",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"1ae2f430-e0ca-4c68-ba28-aacbc6e33af3\"",
+            "newValue": "\"9d7352fe-a881-456d-a3cd-2b76fc6519f3\""
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "9d7352fe-a881-456d-a3cd-2b76fc6519f3",
+        "displayName": "Advanced Settings",
+        "parentCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577"
+      }
+    ],
+    "categoriesRemoved": [
+      {
+        "id": "1ae2f430-e0ca-4c68-ba28-aacbc6e33af3",
+        "displayName": "Advanced Protection",
+        "parentCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577"
+      }
+    ]
+  },
+  {
     "date": "2026-08-18",
     "added": [
       {

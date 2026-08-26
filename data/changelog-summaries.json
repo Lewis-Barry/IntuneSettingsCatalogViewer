@@ -1,4 +1,14 @@
 {
+  "2026-08-26": {
+    "headline": "Light day: Edge gets process isolation toggles, Defender renames a preview setting, and Linux renames a category to keep us on our toes.",
+    "highlights": [
+      "Windows: Microsoft Edge adds 6 new settings including 'Enable Process Isolation' with device and user variants, plus clipboard suggestions for the address bar; the isolation toggle looks like a smart security hardening option",
+      "Windows: Microsoft Edge default settings also pick up the clipboard suggestion toggle, so you can set a baseline users can override",
+      "Windows: Defender's 'Controlled Configuration' is now 'Configuration Protection (Preview)', a pure rename, no functional change expected",
+      "Linux: The 'Advanced Protection' category got renamed to 'Advanced Settings', pure picker reorganization with no impact on existing profiles"
+    ],
+    "watchOut": "Defender's Configuration Protection had its option list touched (still 3 options), so if you rely on it, double-check the available values didn't shift. Otherwise, no removals or breaking changes."
+  },
   "2026-08-18": {
     "headline": "Apple finally gets the web-filtering memo: new Web Content Filter and DNS Proxy settings for iOS/macOS, while Windows Update for Business discovers the concept of a calendar.",
     "highlights": [
