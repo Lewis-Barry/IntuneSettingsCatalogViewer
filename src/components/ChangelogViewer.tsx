@@ -456,87 +456,75 @@ export default function ChangelogViewer({ entries, categories, settings, summari
 
   return (
     <div className="space-y-6">
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
-        <div className="fluent-card p-4 sm:p-5">
-          <div className="flex h-full flex-col gap-4">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <div className="text-fluent-sm font-semibold text-fluent-text-secondary">{stats.title}</div>
-                <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
-                  <div className="text-fluent-3xl font-semibold text-fluent-text">{stats.lastChangeLabel}</div>
-                  {stats.lastChangeDate && (
-                    <div className="pb-1 text-fluent-sm text-fluent-text-secondary">
-                      {formatDate(stats.lastChangeDate, { month: 'short', day: 'numeric', year: 'numeric' })}
+      <section className="fluent-card p-4 sm:p-5">
+        <div className="flex h-full flex-col gap-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <div className="text-fluent-sm font-semibold text-fluent-text-secondary">{stats.title}</div>
+              <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-1">
+                <div className="text-fluent-3xl font-semibold text-fluent-text">{stats.lastChangeLabel}</div>
+                {stats.lastChangeDate && (
+                  <div className="pb-1 text-fluent-sm text-fluent-text-secondary">
+                    {formatDate(stats.lastChangeDate, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className={`grid grid-cols-2 sm:grid-cols-4 ${activeSummary ? 'gap-2 md:min-w-[22rem]' : 'gap-3 md:min-w-[26rem]'}`}>
+              <StatCard compact={!!activeSummary} label="Setting additions" value={stats.latestAdded} color="text-fluent-success" />
+              <StatCard compact={!!activeSummary} label="Setting changes" value={stats.latestChanged} color="text-fluent-warning" />
+              <StatCard compact={!!activeSummary} label="Category changes" value={stats.latestCatChanges} color="text-fluent-blue" />
+              <StatCard compact={!!activeSummary} label="Deprecated" value={stats.latestNewlyDeprecated} color="text-fluent-text-secondary" />
+            </div>
+          </div>
+
+          {activeSummary && (
+            <div className="border-t border-fluent-border pt-3">
+              <button
+                type="button"
+                onClick={() => setExpandedSummaryDate(summaryExpanded ? null : summaryDate)}
+                aria-expanded={summaryExpanded}
+                aria-controls="ai-summary-detail"
+                className="group flex w-full items-start justify-between gap-3 rounded text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fluent-blue"
+              >
+                <p className="text-fluent-base font-medium text-fluent-text">{activeSummary.headline}</p>
+                <svg
+                  aria-hidden="true"
+                  className={`mt-1 h-4 w-4 flex-shrink-0 text-fluent-text-secondary transition-transform group-hover:text-fluent-text ${summaryExpanded ? 'rotate-180' : ''}`}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {summaryExpanded && (
+                <div id="ai-summary-detail" className="mt-3 rounded-xl border border-fluent-border bg-fluent-bg-alt/40 px-3 py-3 sm:px-4">
+                  {activeSummary.highlights.length > 0 && (
+                    <ul className="list-disc space-y-2.5 pl-5 text-fluent-base leading-6 text-fluent-text marker:text-fluent-blue">
+                      {activeSummary.highlights.map((h, i) => (
+                        <li key={i} className="pl-1">
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {activeSummary.watchOut && (
+                    <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-fluent-border bg-fluent-bg-alt/80 px-3 py-2.5 text-fluent-base leading-6 text-fluent-text">
+                      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-fluent-blue/20 text-fluent-blue">
+                        <i className="fa-solid fa-info text-fluent-xs" aria-hidden="true" />
+                      </span>
+                      <span className="text-fluent-text">{activeSummary.watchOut}</span>
                     </div>
                   )}
                 </div>
-              </div>
-              <div className={`grid grid-cols-2 sm:grid-cols-4 ${activeSummary ? 'gap-2 md:min-w-[22rem]' : 'gap-3 md:min-w-[26rem]'}`}>
-                <StatCard compact={!!activeSummary} label="Setting additions" value={stats.latestAdded} color="text-fluent-success" />
-                <StatCard compact={!!activeSummary} label="Setting changes" value={stats.latestChanged} color="text-fluent-warning" />
-                <StatCard compact={!!activeSummary} label="Category changes" value={stats.latestCatChanges} color="text-fluent-blue" />
-                <StatCard compact={!!activeSummary} label="Deprecated" value={stats.latestNewlyDeprecated} color="text-fluent-text-secondary" />
+              )}
+              <div className="mt-3 flex justify-end">
+                <span className="inline-flex items-center gap-1 text-fluent-xs text-fluent-text-secondary">
+                  <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
+                  AI generated
+                </span>
               </div>
             </div>
-
-            {activeSummary && (
-              <div className="border-t border-fluent-border pt-3">
-                <button
-                  type="button"
-                  onClick={() => setExpandedSummaryDate(summaryExpanded ? null : summaryDate)}
-                  aria-expanded={summaryExpanded}
-                  aria-controls="ai-summary-detail"
-                  className="group flex w-full items-start justify-between gap-3 rounded text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fluent-blue"
-                >
-                  <p className="text-fluent-base font-medium text-fluent-text">{activeSummary.headline}</p>
-                  <svg
-                    aria-hidden="true"
-                    className={`mt-1 h-4 w-4 flex-shrink-0 text-fluent-text-secondary transition-transform group-hover:text-fluent-text ${summaryExpanded ? 'rotate-180' : ''}`}
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {summaryExpanded && (
-                  <div id="ai-summary-detail">
-                    {activeSummary.highlights.length > 0 && (
-                      <ul className="mt-2 list-disc space-y-1 pl-5 text-fluent-sm text-fluent-text marker:text-fluent-blue">
-                        {activeSummary.highlights.map((h, i) => (
-                          <li key={i}>{h}</li>
-                        ))}
-                      </ul>
-                    )}
-                    {activeSummary.watchOut && (
-                      <p className="mt-2 flex items-start gap-1.5 border-l-2 border-fluent-warning pl-2.5 text-fluent-sm text-fluent-text">
-                        <i className="fa-solid fa-triangle-exclamation mt-0.5 text-fluent-warning" aria-hidden="true" />
-                        <span>{activeSummary.watchOut}</span>
-                      </p>
-                    )}
-                  </div>
-                )}
-                <div className="mt-3 flex justify-end">
-                  <span className="inline-flex items-center gap-1 text-fluent-xs text-fluent-text-secondary">
-                    <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
-                    AI generated
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="fluent-card p-4 sm:p-5">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-fluent-base font-semibold text-fluent-text">Platform impact</h2>
-            <span className="text-fluent-xs text-fluent-text-secondary">
-              {stats.latestSettingTotal.toLocaleString()} settings
-            </span>
-          </div>
-          <div className="mt-4 space-y-3">
-            {stats.platformCounts.slice(0, 5).map(([platform, count]) => (
-              <ImpactBar key={platform} label={PLATFORM_LABELS[platform] ?? platform} value={count} total={stats.platformTotal} iconKey={platform} />
-            ))}
-          </div>
+          )}
         </div>
       </section>
 
@@ -674,78 +662,94 @@ export default function ChangelogViewer({ entries, categories, settings, summari
       </section>
 
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <aside className="space-y-3 lg:sticky lg:top-36 lg:self-start">
-          <div>
-            <h2 className="text-fluent-base font-semibold text-fluent-text">Hotspots</h2>
-            <p className="mt-1 text-fluent-sm text-fluent-text-secondary">
-              {selectedDate === 'range' && rangeStart && rangeEnd
-                ? `${dateScopedItems.length.toLocaleString()} changes between ${formatDate(rangeStart, { month: 'short', day: 'numeric', year: 'numeric' })} and ${formatDate(rangeEnd, { month: 'short', day: 'numeric', year: 'numeric' })}`
-                : activeDate
-                  ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
-                  : `${feedItems.length.toLocaleString()} tracked changes`}
-            </p>
-          </div>
-          <div className="space-y-2">
-            {scopedHotspots.top.length === 0 ? (
-              taxonomySummary.total > 0 ? (
-                <TaxonomySummaryPanel summary={taxonomySummary} />
+        <aside className="space-y-4 pt-8 lg:sticky lg:top-36 lg:self-start lg:pt-11">
+          <div className="fluent-card p-4">
+            <div>
+              <h2 className="text-fluent-base font-semibold text-fluent-text">Hotspots</h2>
+              <p className="mt-1 text-fluent-sm text-fluent-text-secondary">
+                {selectedDate === 'range' && rangeStart && rangeEnd
+                  ? `${dateScopedItems.length.toLocaleString()} changes between ${formatDate(rangeStart, { month: 'short', day: 'numeric', year: 'numeric' })} and ${formatDate(rangeEnd, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                  : activeDate
+                    ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                    : `${feedItems.length.toLocaleString()} tracked changes`}
+              </p>
+            </div>
+            <div className="mt-3 space-y-2">
+              {scopedHotspots.top.length === 0 ? (
+                taxonomySummary.total > 0 ? (
+                  <TaxonomySummaryPanel summary={taxonomySummary} />
+                ) : (
+                  <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-4 text-fluent-sm text-fluent-text-secondary dark:bg-[#2c2c2e]">
+                    No setting hotspots.
+                  </div>
+                )
               ) : (
-                <div className="rounded border border-fluent-border bg-fluent-bg-alt px-3 py-4 text-fluent-sm text-fluent-text-secondary dark:bg-[#2c2c2e]">
-                  No setting hotspots.
-                </div>
-              )
-            ) : (
-              <>
-                {scopedHotspots.top.map(([category, count]) => {
-                  const share = scopedHotspots.total > 0 ? (count / scopedHotspots.total) * 100 : 0;
-                  return (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
-                      className={`w-full rounded border px-3 py-2 text-left transition-colors ${
-                        selectedCategory === category
-                          ? 'border-fluent-blue bg-fluent-light-blue text-fluent-blue'
-                          : 'border-fluent-border bg-white text-fluent-text hover:bg-fluent-bg-alt dark:bg-[#2c2c2e]'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold">
-                        <span className="truncate">{category}</span>
-                        <span>
-                          {count}
-                          <span className="ml-1 font-normal text-fluent-text-secondary">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
-                        </span>
+                <>
+                  {scopedHotspots.top.map(([category, count]) => {
+                    const share = scopedHotspots.total > 0 ? (count / scopedHotspots.total) * 100 : 0;
+                    return (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
+                        className={`w-full rounded border px-3 py-2 text-left transition-colors ${
+                          selectedCategory === category
+                            ? 'border-fluent-blue bg-fluent-light-blue text-fluent-blue'
+                            : 'border-fluent-border bg-white text-fluent-text hover:bg-fluent-bg-alt dark:bg-[#2c2c2e]'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold">
+                          <span className="truncate">{category}</span>
+                          <span>
+                            {count}
+                            <span className="ml-1 font-normal text-fluent-text-secondary">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
+                          </span>
+                        </div>
+                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
+                          <div
+                            className="h-full rounded-full bg-fluent-blue"
+                            style={{ width: `${share}%` }}
+                          />
+                        </div>
+                      </button>
+                    );
+                  })}
+                  {scopedHotspots.otherCount > 0 && (() => {
+                    const share = scopedHotspots.total > 0 ? (scopedHotspots.otherCount / scopedHotspots.total) * 100 : 0;
+                    return (
+                      <div className="w-full rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#2c2c2e]">
+                        <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold text-fluent-text-secondary">
+                          <span className="truncate">Other categories</span>
+                          <span>
+                            {scopedHotspots.otherCount}
+                            <span className="ml-1 font-normal">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
+                          </span>
+                        </div>
+                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white dark:bg-[#1c1c1e]">
+                          <div
+                            className="h-full rounded-full bg-fluent-text-secondary/50"
+                            style={{ width: `${share}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-fluent-bg-alt dark:bg-[#1c1c1e]">
-                        <div
-                          className="h-full rounded-full bg-fluent-blue"
-                          style={{ width: `${share}%` }}
-                        />
-                      </div>
-                    </button>
-                  );
-                })}
-                {scopedHotspots.otherCount > 0 && (() => {
-                  const share = scopedHotspots.total > 0 ? (scopedHotspots.otherCount / scopedHotspots.total) * 100 : 0;
-                  return (
-                    <div className="w-full rounded border border-fluent-border bg-fluent-bg-alt px-3 py-2 dark:bg-[#2c2c2e]">
-                      <div className="flex items-center justify-between gap-3 text-fluent-sm font-semibold text-fluent-text-secondary">
-                        <span className="truncate">Other categories</span>
-                        <span>
-                          {scopedHotspots.otherCount}
-                          <span className="ml-1 font-normal">({share.toFixed(share < 1 ? 1 : 0)}%)</span>
-                        </span>
-                      </div>
-                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white dark:bg-[#1c1c1e]">
-                        <div
-                          className="h-full rounded-full bg-fluent-text-secondary/50"
-                          style={{ width: `${share}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })()}
-              </>
-            )}
+                    );
+                  })()}
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="fluent-card p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-fluent-base font-semibold text-fluent-text">Platform impact</h2>
+              <span className="text-fluent-xs text-fluent-text-secondary">
+                {stats.latestSettingTotal.toLocaleString()} settings
+              </span>
+            </div>
+            <div className="mt-4 space-y-3">
+              {stats.platformCounts.slice(0, 5).map(([platform, count]) => (
+                <ImpactBar key={platform} label={PLATFORM_LABELS[platform] ?? platform} value={count} total={stats.platformTotal} iconKey={platform} />
+              ))}
+            </div>
           </div>
         </aside>
 
