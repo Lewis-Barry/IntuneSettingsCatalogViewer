@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { Fragment, useEffect, useState, useMemo } from 'react';
 import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, ChangelogSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { settingSlug } from '@/lib/slug';
@@ -50,7 +50,7 @@ type FilterType = 'all' | 'added' | 'removed' | 'changed';
 type ActionType = 'added' | 'removed' | 'changed';
 type EntityType = 'setting' | 'category';
 type FeedFilter = FilterType | 'categories';
-type DateFilter = 'latest' | 'all' | 'range' | `date:${string}`;
+type DateFilter = 'latest' | 'all' | 'range' | `date:${string}` | `month:${string}`;
 
 interface ChangeFeedItem {
   key: string;
@@ -81,6 +81,12 @@ interface TaxonomySummary {
   settings: number;
   moveGroups: Array<{ label: string; count: number }>;
   addGroups: Array<{ label: string; count: number }>;
+}
+
+interface MonthOptionGroup {
+  key: string;
+  label: string;
+  dates: string[];
 }
 
 const FILTERS: Array<{ value: FeedFilter; label: string }> = [
@@ -247,10 +253,33 @@ export default function ChangelogViewer({ entries, categories, settings, summari
 
   const latestDate = dateOptions[0] ?? null;
   const oldestDate = dateOptions[dateOptions.length - 1] ?? null;
+  const monthOptionGroups = useMemo<MonthOptionGroup[]>(() => {
+    if (dateOptions.length === 0) return [];
+
+    const yearCount = new Set(dateOptions.map((date) => date.slice(0, 4))).size;
+    const includeYear = yearCount > 1;
+    const grouped = new Map<string, MonthOptionGroup>();
+
+    dateOptions.forEach((date) => {
+      const monthKey = date.slice(0, 7);
+      if (!grouped.has(monthKey)) {
+        const label = formatMonth(monthKey, { month: 'long', includeYear });
+        grouped.set(monthKey, {
+          key: monthKey,
+          label,
+          dates: [],
+        });
+      }
+      if (date !== latestDate) grouped.get(monthKey)!.dates.push(date);
+    });
+
+    return Array.from(grouped.values());
+  }, [dateOptions, latestDate]);
   // Effective range bounds — an empty picker means "unbounded" that direction.
   const rangeStart = rangeFrom ?? oldestDate;
   const rangeEnd = rangeTo ?? latestDate;
-  const activeDate = selectedDate === 'all' || selectedDate === 'range'
+  const monthScope = selectedDate.startsWith('month:') ? selectedDate.slice(6) : null;
+  const activeDate = selectedDate === 'all' || selectedDate === 'range' || monthScope
     ? null
     : selectedDate === 'latest'
       ? latestDate
@@ -263,9 +292,12 @@ export default function ChangelogViewer({ entries, categories, settings, summari
       return feedItems.filter((item) =>
         (!rangeFrom || item.date >= rangeFrom) && (!rangeTo || item.date <= rangeTo));
     }
+    if (monthScope) {
+      return feedItems.filter((item) => item.date.startsWith(`${monthScope}-`));
+    }
     if (!activeDate) return feedItems;
     return feedItems.filter((item) => item.date === activeDate);
-  }, [selectedDate, rangeFrom, rangeTo, activeDate, feedItems]);
+  }, [selectedDate, rangeFrom, rangeTo, monthScope, activeDate, feedItems]);
 
   // Filling either date input switches the dropdown to Custom range; clearing
   // both reverts it to Latest update.
@@ -303,55 +335,70 @@ export default function ChangelogViewer({ entries, categories, settings, summari
         (e.categoriesChanged?.length ?? 0) > 0
     );
 
-    // Picking a specific date in the dropdown re-scopes the whole card (stats,
-    // platform impact, AI summary) to that day. 'all'/'range' keep the latest.
+    // Picking a specific date/month in the dropdown re-scopes the whole card.
+    // 'all'/'range' keep the latest update card.
     const pickedDate = selectedDate.startsWith('date:') ? selectedDate.slice(5) : null;
-    const pickedEntry = pickedDate ? cleanedEntries.find((e) => e.date === pickedDate) : undefined;
-    const shownEntry = pickedEntry ?? lastEntry;
-    const shownDate = shownEntry?.date ?? null;
+    const pickedMonth = selectedDate.startsWith('month:') ? selectedDate.slice(6) : null;
+    const scopedEntries = pickedDate
+      ? cleanedEntries.filter((e) => e.date === pickedDate)
+      : pickedMonth
+        ? cleanedEntries.filter((e) => e.date.startsWith(`${pickedMonth}-`))
+        : [];
+    const shownEntries = scopedEntries.length > 0
+      ? scopedEntries
+      : lastEntry
+        ? [lastEntry]
+        : [];
+    const shownDate = pickedMonth ? null : (shownEntries[0]?.date ?? null);
 
-    // Platform breakdown for the shown update only. Each setting that targets
+    // Platform breakdown for the shown scope. Each setting that targets
     // multiple platforms increments each platform's counter, so the sum of
     // counts represents total platform-mentions across changed settings.
     const platformCounts = new Map<string, number>();
     let platformTotal = 0;
-    if (shownEntry) {
+    if (shownEntries.length > 0) {
       const trackPlatform = (platform?: string) => {
         getPlatformKeys(platform).forEach((p) => {
           platformCounts.set(p, (platformCounts.get(p) ?? 0) + 1);
           platformTotal += 1;
         });
       };
-      shownEntry.added.forEach((s) => trackPlatform(s.platform));
-      shownEntry.removed.forEach((s) => trackPlatform(s.platform));
-      shownEntry.changed.forEach((s) => trackPlatform(s.platform));
+      shownEntries.forEach((entry) => {
+        entry.added.forEach((s) => trackPlatform(s.platform));
+        entry.removed.forEach((s) => trackPlatform(s.platform));
+        entry.changed.forEach((s) => trackPlatform(s.platform));
+      });
     }
 
-    // Counts from the shown entry (delta since its previous snapshot)
-    const latestAdded = shownEntry?.added.length ?? 0;
-    const latestRemoved = shownEntry?.removed.length ?? 0;
-    const latestChanged = shownEntry?.changed.length ?? 0;
+    // Counts from the shown scope (single day, full month, or latest update).
+    const latestAdded = shownEntries.reduce((sum, entry) => sum + entry.added.length, 0);
+    const latestRemoved = shownEntries.reduce((sum, entry) => sum + entry.removed.length, 0);
+    const latestChanged = shownEntries.reduce((sum, entry) => sum + entry.changed.length, 0);
     const latestSettingTotal = latestAdded + latestRemoved + latestChanged;
-    const latestCatChanges =
-      (shownEntry?.categoriesAdded?.length ?? 0) +
-      (shownEntry?.categoriesRemoved?.length ?? 0) +
-      (shownEntry?.categoriesChanged?.length ?? 0);
+    const latestCatChanges = shownEntries.reduce((sum, entry) =>
+      sum +
+      (entry.categoriesAdded?.length ?? 0) +
+      (entry.categoriesRemoved?.length ?? 0) +
+      (entry.categoriesChanged?.length ?? 0), 0);
 
-    // Settings newly marked deprecated in the shown update — detect by a
+    // Settings newly marked deprecated in the shown scope — detect by a
     // displayName change where the new value contains "deprecated" but the old
     // one didn't.
-    const latestNewlyDeprecated = shownEntry?.changed.filter((c) =>
-      c.fields.some(
-        (f) =>
-          f.field === 'displayName' &&
-          f.newValue.toLowerCase().includes('deprecated') &&
-          !f.oldValue.toLowerCase().includes('deprecated'),
-      ),
-    ).length ?? 0;
+    const latestNewlyDeprecated = shownEntries.reduce((sum, entry) =>
+      sum + entry.changed.filter((c) =>
+        c.fields.some(
+          (f) =>
+            f.field === 'displayName' &&
+            f.newValue.toLowerCase().includes('deprecated') &&
+            !f.oldValue.toLowerCase().includes('deprecated'),
+        ),
+      ).length, 0);
 
     return {
-      title: pickedEntry ? 'Selected update' : 'Latest update',
-      lastChangeLabel: relativeDayLabel(shownDate),
+      title: pickedMonth ? 'Selected month' : pickedDate ? 'Selected update' : 'Latest update',
+      lastChangeLabel: pickedMonth
+        ? formatMonth(pickedMonth, { month: 'long', includeYear: true })
+        : relativeDayLabel(shownDate),
       lastChangeDate: shownDate,
       latestAdded,
       latestChanged,
@@ -389,6 +436,9 @@ export default function ChangelogViewer({ entries, categories, settings, summari
 
   const exportScopeLabel = useMemo(() => {
     const opts = { month: 'short', day: 'numeric', year: 'numeric' } as const;
+    if (monthScope) {
+      return `All ${formatMonth(monthScope, { month: 'long', includeYear: true })}`;
+    }
     if (selectedDate === 'range') {
       return rangeStart && rangeEnd
         ? `${formatDate(rangeStart, opts)} – ${formatDate(rangeEnd, opts)}`
@@ -397,7 +447,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
     if (selectedDate === 'latest' && latestDate) return `Latest update (${formatDate(latestDate, opts)})`;
     if (activeDate) return formatDate(activeDate, opts);
     return 'All updates';
-  }, [selectedDate, rangeStart, rangeEnd, latestDate, activeDate]);
+  }, [monthScope, selectedDate, rangeStart, rangeEnd, latestDate, activeDate]);
 
   // Export the currently visible changes (all filters applied). Setting-group
   // grouping is display-only, so individual filteredItems are exported.
@@ -571,10 +621,17 @@ export default function ChangelogViewer({ entries, categories, settings, summari
                 )}
                 <option value="all">All updates</option>
                 <option value="range">Custom range…</option>
-                {dateOptions.slice(1).map((date) => (
-                  <option key={date} value={`date:${date}`}>
-                    {formatDate(date, { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </option>
+                {monthOptionGroups.map((group) => (
+                  <Fragment key={`group:${group.key}`}>
+                    <option value={`month:${group.key}`} style={{ fontWeight: 700 }}>
+                      {group.label}
+                    </option>
+                    {group.dates.map((date) => (
+                      <option key={date} value={`date:${date}`}>
+                        {formatDate(date, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </option>
+                    ))}
+                  </Fragment>
                 ))}
               </select>
             </label>
@@ -669,6 +726,8 @@ export default function ChangelogViewer({ entries, categories, settings, summari
               <p className="mt-1 text-fluent-sm text-fluent-text-secondary">
                 {selectedDate === 'range' && rangeStart && rangeEnd
                   ? `${dateScopedItems.length.toLocaleString()} changes between ${formatDate(rangeStart, { month: 'short', day: 'numeric', year: 'numeric' })} and ${formatDate(rangeEnd, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                  : monthScope
+                    ? `${dateScopedItems.length.toLocaleString()} changes in ${formatMonth(monthScope, { month: 'long', includeYear: true })}`
                   : activeDate
                     ? `${dateScopedItems.length.toLocaleString()} changes on ${formatDate(activeDate, { month: 'short', day: 'numeric', year: 'numeric' })}`
                     : `${feedItems.length.toLocaleString()} tracked changes`}
@@ -1374,6 +1433,15 @@ function getPlatformKeys(platform?: string): string[] {
 
 function formatDate(date: string, options: Intl.DateTimeFormatOptions): string {
   return new Date(date + 'T00:00:00').toLocaleDateString('en-US', options);
+}
+
+function formatMonth(month: string, options?: { month?: 'short' | 'long'; includeYear?: boolean }): string {
+  const monthStyle = options?.month ?? 'long';
+  const includeYear = options?.includeYear ?? false;
+  return new Date(`${month}-01T00:00:00`).toLocaleDateString('en-US', {
+    month: monthStyle,
+    ...(includeYear ? { year: 'numeric' } : {}),
+  });
 }
 
 function buildCategoryRollupMap(categoriesById: Map<string, SettingCategory>): Map<string, string> {
