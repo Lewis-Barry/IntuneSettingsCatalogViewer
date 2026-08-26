@@ -20,7 +20,7 @@ export default function ChangelogPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h1 className="text-fluent-2xl font-semibold text-fluent-text">
             Settings Catalog Changelog
@@ -30,7 +30,7 @@ export default function ChangelogPage() {
           </p>
         </div>
         <span
-          className="flex-shrink-0 inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-fluent-xs bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-fluent-text-secondary"
+          className="inline-flex w-fit items-center gap-1.5 self-start rounded px-2.5 py-1 text-fluent-xs bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-fluent-text-secondary"
           title="Snapshots are compared periodically; version-only updates are hidden."
         >
           <svg className="w-3.5 h-3.5 text-fluent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
