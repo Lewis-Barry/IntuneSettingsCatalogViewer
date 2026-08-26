@@ -15,7 +15,7 @@ interface ChangelogViewerProps {
   /** Stripped-down settings (changelog-referenced only). Full setting is
    *  lazy-fetched per row from /changelog-settings/{slug}.json on expand. */
   settings: ChangelogSettingSummary[];
-  /** AI summaries keyed by date; shown in the Latest update card when present. */
+  /** AI summaries keyed by date (or month key); shown in the update card when present. */
   summaries?: Record<string, ChangelogSummary>;
 }
 
@@ -99,6 +99,14 @@ const FILTERS: Array<{ value: FeedFilter; label: string }> = [
 
 const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
 
+/** Monthly report section os → PlatformBadges platform string (apple shows mac + iOS pills). */
+const MONTHLY_OS_PLATFORMS: Record<string, string> = {
+  windows: 'windows10',
+  apple: 'macOS,iOS',
+  android: 'android',
+  linux: 'linux',
+};
+
 export default function ChangelogViewer({ entries, categories, settings, summaries = {} }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
@@ -108,7 +116,8 @@ export default function ChangelogViewer({ entries, categories, settings, summari
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-  // Holds the date whose AI summary is expanded; switching dates collapses it.
+  // Holds the date (or month key) whose AI summary is expanded; switching
+  // scopes collapses it.
   const [expandedSummaryDate, setExpandedSummaryDate] = useState<string | null>(null);
 
   const toggleItem = (key: string) => {
@@ -410,12 +419,22 @@ export default function ChangelogViewer({ entries, categories, settings, summari
     };
   }, [cleanedEntries, selectedDate]);
 
-  // AI summary for the day the card describes. Hidden for 'all'/'custom range'
-  // (no single day to describe), which keeps the plain stats layout.
-  const summaryDate =
-    selectedDate === 'latest' || selectedDate.startsWith('date:') ? stats.lastChangeDate : null;
-  const activeSummary = summaryDate ? summaries[summaryDate] : undefined;
-  const summaryExpanded = summaryDate != null && expandedSummaryDate === summaryDate;
+  // AI summary for the scope the card describes: a day (keyed YYYY-MM-DD) or
+  // a whole month (keyed YYYY-MM). Hidden for 'all'/'custom range' (no single
+  // scope to describe), which keeps the plain stats layout.
+  const summaryKey =
+    monthScope ??
+    (selectedDate === 'latest' || selectedDate.startsWith('date:') ? stats.lastChangeDate : null);
+  const activeSummary = summaryKey ? summaries[summaryKey] : undefined;
+  const summaryExpanded = summaryKey != null && expandedSummaryDate === summaryKey;
+
+  // The selected month is still in progress: its summary is only generated
+  // once the month closes (see generate-summaries.ts), so point at the 1st.
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const nextMonthName = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+    .toLocaleDateString('en-US', { month: 'long' });
+  const showPendingMonthNote = !activeSummary && monthScope === currentMonthKey;
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -532,7 +551,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
             <div className="border-t border-fluent-border pt-3">
               <button
                 type="button"
-                onClick={() => setExpandedSummaryDate(summaryExpanded ? null : summaryDate)}
+                onClick={() => setExpandedSummaryDate(summaryExpanded ? null : summaryKey)}
                 aria-expanded={summaryExpanded}
                 aria-controls="ai-summary-detail"
                 className="group flex w-full items-start justify-between gap-3 rounded text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fluent-blue"
@@ -548,14 +567,28 @@ export default function ChangelogViewer({ entries, categories, settings, summari
               </button>
               {summaryExpanded && (
                 <div id="ai-summary-detail" className="mt-3 rounded-xl border border-fluent-border bg-fluent-bg-alt/40 px-3 py-3 sm:px-4">
-                  {activeSummary.highlights.length > 0 && (
-                    <ul className="list-disc space-y-2.5 pl-5 text-fluent-base leading-6 text-fluent-text marker:text-fluent-blue">
-                      {activeSummary.highlights.map((h, i) => (
-                        <li key={i} className="pl-1">
-                          {h}
-                        </li>
+                  {activeSummary.sections && activeSummary.sections.length > 0 ? (
+                    <div className="space-y-4">
+                      {activeSummary.overview && (
+                        <p className="text-fluent-base leading-6 text-fluent-text">{activeSummary.overview}</p>
+                      )}
+                      {activeSummary.sections.map((s) => (
+                        <div key={s.os} className="space-y-1.5">
+                          <PlatformBadges platform={MONTHLY_OS_PLATFORMS[s.os] ?? s.os} />
+                          <p className="text-fluent-base leading-6 text-fluent-text">{s.body}</p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
+                  ) : (
+                    activeSummary.highlights.length > 0 && (
+                      <ul className="list-disc space-y-2.5 pl-5 text-fluent-base leading-6 text-fluent-text marker:text-fluent-blue">
+                        {activeSummary.highlights.map((h, i) => (
+                          <li key={i} className="pl-1">
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    )
                   )}
                   {activeSummary.watchOut && (
                     <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-fluent-border bg-fluent-bg-alt/80 px-3 py-2.5 text-fluent-base leading-6 text-fluent-text">
@@ -573,6 +606,13 @@ export default function ChangelogViewer({ entries, categories, settings, summari
                   AI generated
                 </span>
               </div>
+            </div>
+          )}
+          {showPendingMonthNote && (
+            <div className="border-t border-fluent-border pt-3">
+              <p className="text-fluent-sm text-fluent-text-secondary">
+                This month is still in progress; check back on {nextMonthName} 1st for the AI summary.
+              </p>
             </div>
           )}
         </div>

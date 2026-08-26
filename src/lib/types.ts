@@ -204,11 +204,18 @@ export interface ChangelogEntry {
   categoriesChanged?: ChangelogCategoryChange[];
 }
 
-/** AI-generated summary of a changelog entry; stored in changelog-summaries.json keyed by date. */
+/** AI-generated summary of a changelog entry; stored in changelog-summaries.json
+ * keyed by date (YYYY-MM-DD) or, for monthly recaps, by month (YYYY-MM).
+ * Monthly recaps are a report instead of bullets: they carry `overview` and
+ * per-OS `sections` (and leave `highlights` empty). */
 export interface ChangelogSummary {
   headline: string;
   highlights: string[];
   watchOut: string | null;
+  /** Monthly recap only: 2-4 sentence executive summary of the month. */
+  overview?: string;
+  /** Monthly recap only: one prose section per OS, in windows/apple/android/linux order. */
+  sections?: Array<{ os: 'windows' | 'apple' | 'android' | 'linux'; body: string }>;
 }
 
 export interface ChangelogSettingRef {

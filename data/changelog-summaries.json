@@ -88,6 +88,30 @@
     ],
     "watchOut": null
   },
+  "2026-07": {
+    "headline": "Windows takes center stage with per-app removal toggles for in-box Store apps and a WSL registry allowlist to keep containers from pulling surprises.",
+    "highlights": [],
+    "overview": "July came with five update days, and Windows soaked up most of the attention, finally offering admins the debloat controls they've been nagging about for years. Apple also got a privacy-permission boost in App Settings, while Linux picked up update scheduling and a memory scan preview. The rest was mostly picker gardening: nearly four thousand category renames, description reformatting, and a few applicability bumps that are worth a second glance if you've got assignments pinned to old OS versions.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "The headline act is 27 App Package Deployment settings that let you remove specific in-box Store apps (Teams, Photos, Xbox stuff, Office leftovers) plus a dynamic list for rolling debloat. WSL containers also got an allowlist for allowed registries, which is a smart security control if you don't want someone pulling an image from somewhere imaginative. OneDrive gained OIDC authentication against on-prem SharePoint and offline mode restrictions, Edge picked up CPU tier overrides and stricter MIME checks, and Defender added AI agent protection and network inspection. Don't overlook the new Writing Assistance blocklists or the Privilege Management elevation rules. The applicability for those Store app settings was bumped to support the 26200 build, so they'll behave on newer Windows insiders."
+      },
+      {
+        "os": "apple",
+        "body": "Apple scored a chunk of new App Settings covering privacy permissions (Location, Microphone, Camera, etc.) on both iOS and macOS, with analogous Safari Browser defaults for sites. macOS got a few Restrictions to force Wi-Fi and captive portal connections from the lock screen, and iOS/macOS picked up Siri and Intelligence toggles (like Force Reduce Sensitive Content and Allow Natural Language Editing). A few Privacy Preferences Policy Control entries got marked as deprecated, so clean up any profiles still referencing them."
+      },
+      {
+        "os": "android",
+        "body": "Android was quiet but practical: you can now remove all eSIMs during a device wipe, set a maximum number of days before the work profile turns off, and enforce a separate work lock. A couple of power settings (screen timeout, stay awake while plugged in) round out the month."
+      },
+      {
+        "os": "linux",
+        "body": "Linux got update scheduling via Platform Update settings, letting you define windows and fixed versions, which is a welcome relief for admins who like predictability. Defender also added a memory scan (preview) and gained an extra enforcement level to make that scan useful."
+      }
+    ],
+    "watchOut": "The applicability changes for the Store app removal settings now target 26200 as a max, but two UAC settings (Admin Approval Mode and elevation prompt) got their minimum bumped to 10.0.26100.7019; if you're on an older build they'll silently no-apply. Also, the Smart Card Removal Behavior picked up a new option, so verify your configured value didn't shift, and if you script against category IDs, the huge reorg this month will break those scripts."
+  },
   "2026-06-25": {
     "headline": "Edge picks up a few new Copilot dials (CPU tier, address bar suggestions) and you get Local Fonts controls; meanwhile, two Wallet features get the official 'Deprecated' tattoo.",
     "highlights": [
@@ -118,6 +142,26 @@
     ],
     "watchOut": "111 Edge policy descriptions got rewritten; mostly grammar and clarity, but if you have those policies, give them a quick glance to ensure the intended behavior matches the new wording. No functional removals or deprecations today, so you're safe."
   },
+  "2026-06": {
+    "headline": "June gave Android Enterprise a connectivity lockdown kit and Edge a pile of Copilot and dev-tools controls.",
+    "highlights": [],
+    "overview": "Three update days, and the highlights are Android security toggles and Edge AI governance. Android got blocks for 2G, SMS, and eSIM; Edge gained a dozen Copilot controls plus dev-tools URL allow/deny. The rest was housekeeping: 176 Edge descriptions rewritten for clarity, 41 Windows app removal settings bumped to a specific build, and a few Setup Assistant additions for Apple TV and Vision Pro.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Windows got one new User Right (Adjust Memory Quotas) and a lot of Edge settings alongside macOS: Copilot side pane automation, developer tools URL block/allow lists, local fonts permission controls, and a new tab page feed toggle. The 41 App Package Deployment settings (removal toggles for in-box apps) now carry a maximum supported OS version of 26100.8116, which is technically new information but probably means they still work exactly as before. No breaking changes here, just fresh levers to pull."
+      },
+      {
+        "os": "apple",
+        "body": "macOS shares the Edge expansion with Windows, so you get the Copilot and dev-tools controls on Macs too, plus a couple of local font permission settings. Over on Apple TV, Setup Assistant gained Screen Saver, TV Provider Sign In, TV Room, and Home Screen Sync toggles; visionOS picked up a Tips toggle; and iOS/tvOS both got Tap to Setup. Useful for zero-touch deployment flows, nothing that'll rock your world."
+      },
+      {
+        "os": "android",
+        "body": "Android Enterprise is where the action is: 11 new Connectivity settings let you block outgoing calls, SMS, 2G, airplane mode, network resets, VPN configuration, ultra wideband, and more. General adds eSIM, wallpaper, user icon, and printing blocks. Applications adds widget blocking and blocking apps from exposing functions. If you've got fully managed devices, this is the lockdown you've been waiting for. Just don't forget to actually enable them before someone finds the 2G fallback."
+      }
+    ],
+    "watchOut": "The Windows App Package Deployment settings now have a maximum supported OS version (10.0.26100.8116). If you assigned them without a version filter, devices on a later build won't get them, so recheck your assignments. Also, a few Edge wallet settings were renamed with '(Deprecated)' in the display name; update any automation or documentation that references them by name."
+  },
   "2026-05-27": {
     "headline": "Edge gets a Copilot control room (28 new settings) and macOS finally gets local account automation, so you can stop babysitting device setup.",
     "highlights": [
@@ -136,6 +180,26 @@
     ],
     "watchOut": null
   },
+  "2026-05": {
+    "headline": "Windows gains Agent Governance and a flood of Edge Copilot settings, while macOS adds local account creation and Apple deprecates a stack of Intelligence restrictions.",
+    "highlights": [],
+    "overview": "Two update days in May, and the month belongs to Windows: a brand new Agent Governance category for controlling AI agents, plus a wave of Edge settings around Copilot and New Tab Page feeds. Apple added macOS local account creation and Setup Assistant toggles, while marking a heap of Apple Intelligence restrictions as deprecated. Android got one Bluetooth sharing toggle and nothing else.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Windows gets a new Agent Governance category to control AI agent behavior: filesystem access rules, network access, execution toggles, and an agent user account option that gained a second choice. Edge picked up 28 settings for Copilot URL allowlists/blocklists, developer tools restrictions, and WebSocket connection limits, plus 12 New Tab Page settings to force the Work or Discover feed. A few user-level security settings (Block Insecure Protocols, OLE Graph, etc.) also landed, plus a new MAM enrollment toggle when Purview DLP is configured. But note that App Package Deployment lost its 'Specify additional package family names to remove' setting."
+      },
+      {
+        "os": "apple",
+        "body": "macOS gained Account settings for creating local admin and primary accounts during setup, with password rotation and user affinity options, plus Setup Assistant toggles for FileVault, Apple Watch unlock, and iCloud Storage. iOS picked up Setup Assistant toggles for Web Content Filtering and the Camera button. Both platforms saw a wave of Apple Intelligence restrictions marked '(Deprecated)', including Assistant, Dictation, Image Playground, and others, so those are on the way out. Also new is an SSO setting to enable first user creation during setup."
+      },
+      {
+        "os": "android",
+        "body": "Android Enterprise got exactly one setting: Block Bluetooth sharing. That's it, nothing else to see here."
+      }
+    ],
+    "watchOut": "Rework any profiles using 'Specify additional package family names to remove' from App Package Deployment, as that setting is gone. The Apple Intelligence restrictions now labeled '(Deprecated)' are likely to be removed in a future release, so start planning replacements."
+  },
   "2026-04-30": {
     "headline": "Edge gets a dump truck of new macOS and Windows policies, macOS especially with 67 new settings including scareware blocker, local network request controls, and TLS 1.3 Early Data toggles; Linux Defender also picks up scheduled scans and offline definition updates.",
     "highlights": [
@@ -145,6 +209,30 @@
       "Edge 'Enhance the security state' policies are now marked obsolete. Time to migrate to the security baseline, folks."
     ],
     "watchOut": "Cross Device Resume now requires Windows 10 build 26100.7705 or later, so existing policies will quietly stop applying to outdated devices; also, several Edge policies were renamed or marked obsolete, so check your configurations against the new names."
+  },
+  "2026-04": {
+    "headline": "April was the month of the browser: Edge got a truckload of new toggles (including Scareware blocker and local network access control) while Linux Defender remembered scheduling exists.",
+    "highlights": [],
+    "overview": "One update day, but it was busy if you live in Edge. Over 80 new Edge settings across Windows and macOS, plus the long-awaited Linux scan scheduling and some Windows device lock and OOBE controls. Rest was housekeeping: 162 description rewrites and a handful of renames.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Windows got a few real nuggets: Device Lock now offers the classic password age/complexity/history quartet, useful if you still enforce passwords. OOBE got 'hide change account options' and an update install toggle for the first-run experience. App Package Deployment gained a device-wide 'additional package family names to remove' option, giving debloaters another arrow. Edge on Windows picked up 14 new settings: InPrivate URL allow/block lists, guest mode enforcement, XSLT kill switch, and more. Also, Disable Cross Device Resume now requires build 26100.7705 or later, so check your ring if you have that policy."
+      },
+      {
+        "os": "apple",
+        "body": "macOS is where Edge exploded: 67 new settings, covering everything from TLS 1.3 Early Data control to a GenAI local model setting and a Scareware blocker that can share URLs with Defender SmartScreen. iOS got one Extensible SSO addition: Enable Registration During Setup, nice for zero-touch. Plenty of description rewrites in Edge, but nothing that changes behavior."
+      },
+      {
+        "os": "android",
+        "body": "One rename and one new option: the location toggle went from 'Block location' to 'Location' and grew from 2 to 3 options. Probably adding 'ask' or similar, but you'll have to look. Existing 'block' policies should still work, but recheck if you were relying on the old two-state."
+      },
+      {
+        "os": "linux",
+        "body": "Defender for Linux finally got scheduling: weekly or daily scans with 'run when idle' and 'randomize start time', plus offline definition update fallback to cloud and an update interval setting. If you've been pushing scans via cron, you can now do it through the catalog."
+      }
+    ],
+    "watchOut": "The Disable Cross Device Resume applicability bump to minimum 10.0.26100.7705 will silently stop applying on older builds, so bump your update rings if you still rely on that policy. Also, the Android location setting changed shape, so verify any existing policy didn't assume two options."
   },
   "2026-03-26": {
     "headline": "New Windows network protections, Apple Intelligence controls, and Mac recovery lock management land in the Settings Catalog, while a batch of Edge policies gets deprecation tags.",
@@ -184,6 +272,22 @@
     ],
     "watchOut": "No removals or setting changes, so nothing breaks; the 10 categories with metadata updates look like cosmetic renames. All additions are Windows-only, other platforms are untouched."
   },
+  "2026-03": {
+    "headline": "March adds Local Network Access controls to keep websites off your intranet, plus a wave of Apple Intelligence toggles worth a look.",
+    "highlights": [],
+    "overview": "Four update days and roughly 140 new settings, most of them noise. The real story is the new browser-level Local Network Access controls on Windows and a fresh set of Apple Intelligence and cryptography settings. Also, a bunch of Edge settings got officially deprecated, so if you rely on them, now is the time to plan.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "The big add is the Network settings category with 22 settings to control Local Network Access (LNA) from the browser. You can now block or allow sites to request local network endpoints and the local device, plus override IP address space mappings and handle LNA in subframes. That's a solid security win against drive-by scans of your internal network. Also new: cryptography compliance policies to prefer specific TLS ciphers and key exchange algorithms, plus a heap of Outlook and OneNote settings under 'When sending a message' and 'Custom'. And watch out: many Edge policies got the (Deprecated) tag in this month's display name refresh, so check if any of your assignments depend on them."
+      },
+      {
+        "os": "apple",
+        "body": "Apple got a new Intelligence Settings category (that's the Apple Intelligence controls) with options to force on-device dictation, allow or disallow Smart Replies, Image Playground, Genmoji, and more. Also new Keyboard and Siri settings, plus File Provider and Recovery Lock Password for macOS. The applicability changes are interesting: several enrollment settings (Intune authentication method, User affinity, Await final configuration) now also apply to macOS, not just iOS, and some macOS Defender settings now support microsoftSense, so they can be managed via Defender for Endpoint. Existing profiles might suddenly apply to more devices, so review your assignment filters."
+      }
+    ],
+    "watchOut": "Mass deprecation of Edge settings (dozens got the deprecated label) and some macOS applicability expansions could change which devices receive policies. Also, if you're using the old 'Compose' Edge policy, it's been renamed and the description changed, so re-verify your config."
+  },
   "2026-02-25": {
     "headline": "Apple renames Rapid Security Responses to Background Security Improvements, macOS gets offline antivirus mirrors, and a few settings finally get 'Deprecated' slapped on them.",
     "highlights": [
@@ -192,5 +296,21 @@
       "Deprecation party: Force Delayed Software Updates, Software Update Settings (iOS), and AirPlay Device ID all get the axe, so check your profiles."
     ],
     "watchOut": "If you're using the deprecated settings, start planning migration. Also, the RSR to Background Security Improvements shift might change what users see; verify your update policies still behave."
+  },
+  "2026-02": {
+    "headline": "macOS sneaks in offline antivirus update controls, while everything else is just housekeeping and deprecation flags.",
+    "highlights": [],
+    "overview": "One update day this month, and it was mostly quiet. The only real capability gain is macOS support for hosting security intelligence updates on an internal mirror, which is a gift for air-gapped fleets. Everything else is description rewrites, label cleanups, and some deprecation warnings, so don't clear your calendar.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Windows got no new toys this month. The Remote Remediation settings (still Windows Insiders only) had their descriptions rewritten to clarify dependency and ordering, and the embarrassing '[Pending fix]' labels were finally scrubbed. The one thing actually worth your attention: 'Enable Windows Restore' lost its 'Windows Insiders only' tag, which might mean it's about to go mainstream. If you've been holding off on deploying that, maybe start planning."
+      },
+      {
+        "os": "apple",
+        "body": "The headline here is macOS gaining two Antivirus engine settings that let you point devices at a local mirror for security intelligence updates, with optional signature verification. That's a nice win for environments that can't reach the internet on demand. Elsewhere, iOS and macOS both saw AirPlay gain a 'Device Name' setting while 'Device ID' got the deprecated hat, and the Software Update Settings descriptions swapped 'Rapid Security Responses' for 'Background Security Improvements', which reads like a brand refresh more than a functional change. Also, 'Force Delayed Software Updates' is now officially marked deprecated, so it's time to check if you're leaning on it."
+      }
+    ],
+    "watchOut": "The deprecation flags: 'Force Delayed Software Updates' and AirPlay 'Device ID' are both marked deprecated, so audit any policies that reference them. The Rapid Security Responses to Background Security Improvements wording is just a description update, but it might hint at a future rebrand, so keep your ears open."
   }
 }
