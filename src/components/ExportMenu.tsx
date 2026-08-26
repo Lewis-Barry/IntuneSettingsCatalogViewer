@@ -18,7 +18,8 @@ export function downloadTextFile(filename: string, content: string, format: Expo
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
+  // ponytail: deferred revoke — revoking synchronously can abort the download in Firefox.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 /** Export click-dropdown (native <details>) used by all browse/changelog screens. */

@@ -70,6 +70,8 @@ interface ChangeFeedItem {
   href?: string;
   setting?: ChangelogSettingSummary;
   fields?: Array<{ field: string; oldValue: string; newValue: string }>;
+  /** Lowercased search text, precomputed once in the feedItems memo. */
+  haystack?: string;
 }
 
 interface TaxonomySummary {
@@ -88,6 +90,10 @@ interface MonthOptionGroup {
   label: string;
   dates: string[];
 }
+
+// ponytail: hard row cap instead of virtualization — ceiling is one long page
+// after "Show all"; upgrade path is windowing if that ever gets sluggish.
+const ROW_CAP = 200;
 
 const FILTERS: Array<{ value: FeedFilter; label: string }> = [
   { value: 'all', label: 'All' },
@@ -119,6 +125,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
   // Holds the date (or month key) whose AI summary is expanded; switching
   // scopes collapses it.
   const [expandedSummaryDate, setExpandedSummaryDate] = useState<string | null>(null);
+  const [showAllRows, setShowAllRows] = useState(false);
 
   const toggleItem = (key: string) => {
     setExpandedItems((prev) => {
@@ -253,6 +260,9 @@ export default function ChangelogViewer({ entries, categories, settings, summari
       });
     }
 
+    // Precompute lowercase search text once per item — rebuilding it per
+    // keystroke for thousands of rows was the main search jank.
+    for (const item of items) item.haystack = buildHaystack(item);
     return items;
   }, [categoriesById, categoryRollups, cleanedEntries, settingsById]);
 
@@ -449,7 +459,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
       }
       if (!normalizedQuery) return true;
 
-      return buildHaystack(item).includes(normalizedQuery);
+      return (item.haystack ?? buildHaystack(item)).includes(normalizedQuery);
     });
   }, [dateScopedItems, filter, query, selectedCategory, selectedPlatforms]);
 
@@ -491,7 +501,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
         const platformKeys = getPlatformKeys(item.platform);
         if (!selectedPlatforms.some((p) => platformKeys.includes(p))) return;
       }
-      if (normalizedQuery && !buildHaystack(item).includes(normalizedQuery)) return;
+      if (normalizedQuery && !(item.haystack ?? buildHaystack(item)).includes(normalizedQuery)) return;
 
       counts.set(item.hotspotCategory, (counts.get(item.hotspotCategory) ?? 0) + 1);
       total += 1;
@@ -508,6 +518,15 @@ export default function ChangelogViewer({ entries, categories, settings, summari
     () => groupRelatedFeedItems(filteredItems, settingsById),
     [filteredItems, settingsById],
   );
+
+  // Any change to the filtered list re-caps the feed at ROW_CAP rows (state
+  // adjusted during render — setState-in-effect trips the react-hooks lint).
+  const [prevDisplayedItems, setPrevDisplayedItems] = useState(displayedItems);
+  if (prevDisplayedItems !== displayedItems) {
+    setPrevDisplayedItems(displayedItems);
+    setShowAllRows(false);
+  }
+  const visibleItems = showAllRows ? displayedItems : displayedItems.slice(0, ROW_CAP);
 
   if (entries.length === 0) {
     return (
@@ -876,7 +895,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
             </div>
           ) : (
             <div className="space-y-2">
-              {displayedItems.map((item) => item.children ? (
+              {visibleItems.map((item) => item.children ? (
                 <ChangeFeedGroupRow
                   key={item.key}
                   item={item}
@@ -893,6 +912,15 @@ export default function ChangelogViewer({ entries, categories, settings, summari
                   onToggle={() => toggleItem(item.key)}
                 />
               ))}
+              {!showAllRows && displayedItems.length > ROW_CAP && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllRows(true)}
+                  className="fluent-btn-secondary w-full text-fluent-sm"
+                >
+                  Show all {displayedItems.length.toLocaleString()} results
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -1085,12 +1113,22 @@ function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; exp
   const [fullSetting, setFullSetting] = useState<SettingDefinition | null>(() =>
     item.setting ? fullSettingCache.get(item.setting.id) ?? null : null,
   );
+  const [loadFailed, setLoadFailed] = useState(false);
+  // Re-expanding after a failure retries the fetch; reset the flag during
+  // render (setState-in-effect trips the react-hooks lint).
+  const [wasExpanded, setWasExpanded] = useState(expanded);
+  if (wasExpanded !== expanded) {
+    setWasExpanded(expanded);
+    if (expanded) setLoadFailed(false);
+  }
 
   useEffect(() => {
     if (!expanded || !showSettingDetail || fullSetting || !item.setting) return;
     let cancelled = false;
     fetchFullSetting(item.setting.id).then((data) => {
-      if (!cancelled && data) setFullSetting(data);
+      if (cancelled) return;
+      if (data) setFullSetting(data);
+      else setLoadFailed(true);
     });
     return () => {
       cancelled = true;
@@ -1145,6 +1183,10 @@ function ChangeFeedRow({ item, expanded, onToggle }: { item: ChangeFeedItem; exp
             <div className="rounded border border-fluent-border bg-fluent-bg dark:bg-[#1c1c1e]">
               {fullSetting ? (
                 <SettingDetail setting={fullSetting} />
+              ) : loadFailed ? (
+                <div className="px-4 md:px-6 py-6 text-fluent-sm text-fluent-text-secondary">
+                  Details failed to load. Collapse and re-expand to retry.
+                </div>
               ) : (
                 <div className="px-4 md:px-6 py-6 text-fluent-sm text-fluent-text-secondary flex items-center gap-2">
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
