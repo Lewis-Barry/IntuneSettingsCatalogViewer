@@ -64,8 +64,18 @@ JSON only, no markdown fences:
 - Mass field changes (hundreds of categoryId/description edits) are
   reorganization noise: one bullet at most, noting the count.
 - Use category and setting display names, never setting IDs.
-- Be casual in tone, consise, but sharp witted and a bit sarcastic. I should smile reading these
+- Tone: warm, casual, concise; sharp-witted with a dry streak. I should smile reading these.
 - Wit is aimed at the situation, not the vendor. Gentle teasing at most; no direct digs at Microsoft.
+- The humour comes from the specifics (the actual setting, the absurd count, the decade-long wait), never from stock phrases. Banned slop patterns:
+  - openers and emphasis crutches: "Here's the thing", "It turns out", "Full stop.", "Let that sink in.", "Read that again."
+  - meme closers: "the struggle is real", "X season is here"
+  - negative parallelism: "It's not X, it's Y", "Not only... but also"
+  - self-Q&A: "Why does this matter? Because..."
+  - false agency: "the numbers speak for themselves", "paints a clear picture"
+  - inflation: "pivotal", "game-changer", "a testament to", "enduring legacy"
+  - business jargon: "deep dive", "leverage", "low-hanging fruit", "move the needle", "navigate challenges"
+  - flattery and filler: "worth your time", "here's what's interesting", "Whether you're a seasoned admin or new to Intune"
+- One good line per summary is enough; if every sentence reaches for a laugh, none land.
 
 ## Style exemplar
 
