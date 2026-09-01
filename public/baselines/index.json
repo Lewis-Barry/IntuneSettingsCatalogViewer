@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-18T06:09:06.254Z",
+  "generatedAt": "2026-09-01T06:16:44.269Z",
   "families": [
     {
       "baseId": "9d0f07ef-5eef-4fd3-b95d-f9efbba07d23",
@@ -150,6 +150,20 @@
           "displayVersion": "Version 1",
           "lifecycleState": "active",
           "settingCount": 23
+        }
+      ]
+    },
+    {
+      "baseId": "63404a39-a0ac-468c-84f8-6a6461ada7f3",
+      "displayName": "Windows 365 for Agents Security Baseline",
+      "platforms": "windows10",
+      "technologies": "mdm",
+      "versions": [
+        {
+          "id": "63404a39-a0ac-468c-84f8-6a6461ada7f3_1",
+          "displayVersion": "Version 24H1",
+          "lifecycleState": "active",
+          "settingCount": 277
         }
       ]
     },
