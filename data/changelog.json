@@ -1,5 +1,133 @@
 [
   {
+    "date": "2026-09-03",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_experience_disableinlinecompose",
+        "displayName": "Disable Inline Compose",
+        "categoryId": "139974ad-f615-442b-b3dc-84a44e3ec663",
+        "categoryName": "Experience",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "device_vendor_msft_defender_configuration_aiagentnetworkinspection",
+        "displayName": "Ai Agent Network Inspection",
+        "categoryId": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
+        "categoryName": "Defender",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "baseUri",
+            "oldValue": "\"./Device/Vendor/MSFT/Defender\"",
+            "newValue": "\"./Vendor/MSFT/Defender\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm,microsoftSense\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_defender_configuration_aiagentprotection",
+        "displayName": "Ai Agent Protection",
+        "categoryId": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
+        "categoryName": "Defender",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "baseUri",
+            "oldValue": "\"./Device/Vendor/MSFT/Defender\"",
+            "newValue": "\"./Vendor/MSFT/Defender\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm,microsoftSense\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_defender_configuration_deploymentchannel",
+        "displayName": "Deployment Channel",
+        "categoryId": "e8400c82-34c8-4d6e-bbf9-85220f3205ea",
+        "categoryName": "Defender",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "baseUri",
+            "oldValue": "\"./Device/Vendor/MSFT/Defender\"",
+            "newValue": "\"./Vendor/MSFT/Defender\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm,microsoftSense\",\"configurationServiceProviderVersion\":\"1.3\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.14393\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_allowbrowsingwithcopilot_recommended",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge. (User)",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?linkid=2346300.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_allowbrowsingwithcopilot",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge.",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?linkid=2346300.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_allowbrowsingwithcopilot",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge. (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?linkid=2346300.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edgev148~policy~microsoft_edge_recommended_allowbrowsingwithcopilot_recommended",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge.",
+        "categoryId": "43593f1a-6e4d-44a9-b1d4-99b375a9baa6",
+        "categoryName": "Microsoft Edge - Default Settings (users can override)",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?linkid=2346300.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\r\\n\\r\\nBrowsing with Copilot is available only on domains specified in the 'BrowsingWithCopilotAllowList' (Browsing with Copilot Allowed URLs) policy and is blocked on domains specified in the 'BrowsingWithCopilotBlockList' (Browsing with Copilot Blocked URLs) policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\r\\n\\r\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\r\\n\\r\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\r\\n\\r\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\r\\n\\r\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\r\\n\\r\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-08-26",
     "added": [
       {
