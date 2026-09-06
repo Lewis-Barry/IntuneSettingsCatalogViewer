@@ -1,5 +1,6 @@
 'use client';
 
+import { loadBrowserJson, loadSettingDefinitions } from '@/lib/browser-data';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { pillClass, selectClass } from '@/lib/pill';
 import { basePath } from '@/lib/basePath';
@@ -143,13 +144,8 @@ export default function OIBChangelogViewer() {
       })
       .catch((e) => setError(String(e)));
 
-    fetch(`${basePath}/settings-browse.json`)
-      .then((r) => (r.ok ? (r.json() as Promise<SettingDefinition[]>) : []))
-      .then((defs) => {
-        const m = new Map<string, SettingDefinition>();
-        for (const d of defs) m.set(d.id, d);
-        setDefsMap(m);
-      })
+    loadSettingDefinitions('oib')
+      .then(setDefsMap)
       .catch(() => {/* names degrade to ids */});
   }, []);
 
@@ -177,12 +173,8 @@ export default function OIBChangelogViewer() {
   const ensureShard = useCallback(
     (tag: string | null) => {
       if (!tag || shards.has(tag)) return;
-      fetch(`${basePath}/oib-versions/${tag}.json`)
-        .then((r) => {
-          if (!r.ok) throw new Error(`${tag}.json: ${r.status}`);
-          return r.json() as Promise<OIBVersionShard>;
-        })
-        .then((s) => setShards((prev) => new Map(prev).set(tag, s)))
+      loadBrowserJson<OIBVersionShard>(`oib-versions/${tag}.json`)
+        .then((shard) => setShards((prev) => prev.has(tag) ? prev : new Map(prev).set(tag, shard)))
         .catch((e) => setError(String(e)));
     },
     [shards]

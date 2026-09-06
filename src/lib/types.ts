@@ -273,6 +273,22 @@ export interface SearchIndexEntry {
 
 export type MatchSource = 'title' | 'description' | 'csp' | 'keywords' | 'category';
 
+let cachedMatchQuery: string | undefined;
+let cachedMatchTokens: string[] = [];
+
+function getMatchTokens(query: string): string[] {
+  if (cachedMatchQuery === query) return cachedMatchTokens;
+  const terms = query.split(',').map((term) => term.trim()).filter(Boolean);
+  const tokens = new Set<string>();
+  for (const term of terms) {
+    tokens.add(term.toLowerCase());
+    for (const word of term.split(/\s+/).filter(Boolean)) tokens.add(word.toLowerCase());
+  }
+  cachedMatchQuery = query;
+  cachedMatchTokens = [...tokens];
+  return cachedMatchTokens;
+}
+
 /** Detect which fields of a setting match the given search query.
  *  Returns an array of match sources (e.g. ['title', 'description']). */
 export function detectMatchSources(
@@ -282,18 +298,8 @@ export function detectMatchSources(
   extraKeywords?: string[],
 ): MatchSource[] {
   if (!query || !query.trim()) return [];
-  const terms = query.split(',').map(t => t.trim()).filter(Boolean);
-  if (terms.length === 0) return [];
-
-  // Build a list of individual words + full phrases from the query
-  const searchTokens: string[] = [];
-  for (const term of terms) {
-    searchTokens.push(term.toLowerCase());
-    const words = term.split(/\s+/).filter(w => w.length > 0);
-    for (const w of words) searchTokens.push(w.toLowerCase());
-  }
-  // Deduplicate
-  const tokens = [...new Set(searchTokens)];
+  const tokens = getMatchTokens(query);
+  if (tokens.length === 0) return [];
 
   const matches = (text: string | undefined): boolean => {
     if (!text) return false;

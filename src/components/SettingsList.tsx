@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useRef, useState, useEffect } from 'react';
+import { memo, useMemo, useRef, useState, useEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import type { SettingDefinition, MatchSource } from '@/lib/types';
-import { detectMatchSources } from '@/lib/types';
-import { getAsrRuleInfo } from '@/lib/asr-rules';
+import type { SettingDefinition } from '@/lib/types';
+import { createMatchSourceMatcher } from '@/lib/setting-search';
 import { groupSettings } from '@/lib/settings-grouping';
 import SettingRow from './SettingRow';
 import HighlightText from './HighlightText';
@@ -22,11 +21,12 @@ interface SettingsListProps {
   breadcrumb?: string[];
   /** Map of categoryId → displayName, used to disambiguate same-named settings from different sub-categories */
   categoryMap?: Record<string, string>;
+  groupedSettings?: ReturnType<typeof groupSettings>;
 }
 
 const PAGE_SIZE = 500;
 
-export default function SettingsList({
+export default memo(function SettingsList({
   settings,
   categoryName,
   isSearchResult = false,
@@ -34,6 +34,7 @@ export default function SettingsList({
   scrollContainerRef,
   breadcrumb,
   categoryMap,
+  groupedSettings,
 }: SettingsListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -41,7 +42,7 @@ export default function SettingsList({
   // Group settings: root settings at top level, children nested under their root,
   // and collection items grouped under their SettingGroupCollectionDefinition header.
   // Uses shared utility so the same logic drives both rendering and result counts.
-  const { rootSettings, childMap } = useMemo(() => groupSettings(settings), [settings]);
+  const { rootSettings, childMap } = useMemo(() => groupedSettings ?? groupSettings(settings), [settings, groupedSettings]);
 
   // Build a disambiguation map: settingId → sub-category label for settings
   // that share the same displayName.  This lets the UI show which sub-category
@@ -93,18 +94,7 @@ export default function SettingsList({
 
   const visibleSettings = rootSettings.slice(0, visibleCount);
 
-  // Compute match sources for each setting when in search mode
-  const matchSourcesMap = useMemo(() => {
-    if (!highlightQuery) return new Map<string, MatchSource[]>();
-    const map = new Map<string, MatchSource[]>();
-    for (const s of rootSettings) {
-      map.set(s.id, detectMatchSources(s, highlightQuery, (() => {
-        const asrInfo = getAsrRuleInfo(s.id);
-        return asrInfo ? [asrInfo.guid] : undefined;
-      })()));
-    }
-    return map;
-  }, [highlightQuery, rootSettings]);
+  const getMatchSources = useMemo(() => createMatchSourceMatcher(highlightQuery), [highlightQuery]);
 
   // Virtualizer for the standard (non-search) category view
   const virtualizer = useVirtualizer({
@@ -177,7 +167,7 @@ export default function SettingsList({
                 setting={setting}
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
-                matchSources={matchSourcesMap.get(setting.id)}
+                matchSources={getMatchSources(setting)}
                 allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
@@ -250,7 +240,7 @@ export default function SettingsList({
                 setting={setting}
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
-                matchSources={matchSourcesMap.get(setting.id)}
+                matchSources={getMatchSources(setting)}
                 allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
@@ -282,4 +272,4 @@ export default function SettingsList({
       )}
     </div>
   );
-}
+});

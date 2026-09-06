@@ -1,5 +1,6 @@
 'use client';
 
+import { loadSettingDefinitions } from '@/lib/browser-data';
 import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue, memo } from 'react';
 import type { SettingDefinition, MatchSource } from '@/lib/types';
 import { detectMatchSources } from '@/lib/types';
@@ -417,14 +418,8 @@ export default function OIBBrowser() {
         setOibLoaded(true);
       });
 
-    const loadDefs = fetch(`${basePath}/settings-browse.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`settings-browse.json: ${r.status}`);
-        return r.json() as Promise<SettingDefinition[]>;
-      })
-      .then((defs) => {
-        const map = new Map<string, SettingDefinition>();
-        for (const d of defs) map.set(d.id, d);
+    const loadDefs = loadSettingDefinitions('oib')
+      .then((map) => {
         setDefsMap(map);
         setDefsLoaded(true);
       });

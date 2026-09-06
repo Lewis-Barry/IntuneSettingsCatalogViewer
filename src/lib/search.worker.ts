@@ -1,4 +1,6 @@
 import type { SearchIndexEntry } from './types';
+import { readSearchCache, writeSearchCache, type CachedSearchIndex } from './search-cache';
+import manifest from '../../data/search-index-manifest.json';
 
 type SearchWorkerRequest =
   | { id: number; type: 'ensureIndex'; basePath: string }
@@ -13,26 +15,25 @@ let index: any = null;
 let documents: SearchIndexEntry[] = [];
 let documentMap = new Map<string, SearchIndexEntry>();
 let loadPromise: Promise<void> | null = null;
+const CACHE_VERSION = `numeric-v1:${manifest.version}`;
 
 async function ensureIndex(basePath: string): Promise<void> {
   if (index) return;
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
-    const FlexSearchModule = await import('flexsearch');
+    const [FlexSearchModule, cached] = await Promise.all([
+      import('flexsearch'),
+      readSearchCache(basePath, CACHE_VERSION, manifest.documentCount).catch(() => null),
+    ]);
     const FlexSearch = FlexSearchModule.default ?? FlexSearchModule;
-
-    const res = await fetch(`${basePath}/search-index.json`);
-    if (!res.ok) throw new Error(`Failed to load search index: ${res.status}`);
-    documents = (await res.json()) as SearchIndexEntry[];
-    documentMap = new Map(documents.map((doc) => [doc.id, doc]));
 
     const DocumentCtor = FlexSearch.Document ?? FlexSearch;
     if (!DocumentCtor || typeof DocumentCtor !== 'function') {
       throw new Error('FlexSearch.Document constructor not found');
     }
 
-    index = new DocumentCtor({
+    const createIndex = () => new DocumentCtor({
       document: {
         id: 'id',
         index: [
@@ -46,8 +47,44 @@ async function ensureIndex(basePath: string): Promise<void> {
       cache: 100,
     });
 
-    for (const doc of documents) {
-      index.add(doc);
+    let preparedIndex = createIndex();
+    let restored = false;
+    if (cached) {
+      try {
+        const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
+        for (const [key, data] of cached.chunks) {
+          const parsed: unknown = JSON.parse(data);
+          const valid = key === 'reg'
+            ? isObject(parsed) && Object.keys(parsed).length === cached.documents.length && Object.keys(parsed).every((id, position) => Number(id) === position && parsed[id] === 1)
+            : key.endsWith('.cfg')
+              ? isObject(parsed) && parsed.opt === 1 && parsed.doc === 0
+              : Array.isArray(parsed) && parsed.every(isObject);
+          if (!valid) throw new Error(`Invalid cached search chunk: ${key}`);
+          await preparedIndex.import(key, parsed);
+        }
+        documents = cached.documents;
+        restored = true;
+      } catch {
+        preparedIndex = createIndex();
+      }
+    }
+    if (!restored) {
+      const res = await fetch(`${basePath}/search-index.json?v=${manifest.version}`);
+      if (!res.ok) throw new Error(`Failed to load search index: ${res.status}`);
+      documents = (await res.json()) as SearchIndexEntry[];
+      for (const [documentId, doc] of documents.entries()) preparedIndex.add({ ...doc, id: documentId });
+    }
+    documentMap = new Map(documents.map((doc) => [doc.id, doc]));
+    index = preparedIndex;
+    if (!restored) {
+      const indexedDocuments = documents;
+      void (async () => {
+        const chunks: CachedSearchIndex['chunks'] = [];
+        await preparedIndex.export((key, data) => {
+          if (typeof key === 'string' && typeof data === 'string') chunks.push([key, data]);
+        });
+        await writeSearchCache(basePath, { version: CACHE_VERSION, documents: indexedDocuments, chunks });
+      })().catch(() => {});
     }
   })().catch((err) => {
     loadPromise = null;
@@ -76,9 +113,11 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
     const results = index.search(term, { limit, enrich: false });
     for (const fieldResult of results) {
       const fieldScore = fieldPriority[fieldResult.field as string] ?? 1;
-      for (const id of fieldResult.result) {
-        const existing = fieldScores.get(id as string) ?? 0;
-        if (fieldScore > existing) fieldScores.set(id as string, fieldScore);
+      for (const documentId of fieldResult.result) {
+        const id = documents[documentId as number]?.id;
+        if (!id) continue;
+        const existing = fieldScores.get(id) ?? 0;
+        if (fieldScore > existing) fieldScores.set(id, fieldScore);
       }
     }
   }
@@ -89,11 +128,17 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
     if (doc) matched.push(doc);
   }
 
-  const lowerTerms = terms.map((term) => term.toLowerCase());
+  const lowerTerms = terms.map((term) => {
+    const lower = term.toLowerCase();
+    return { term: lower, words: lower.split(/\s+/).filter(Boolean) };
+  });
+  const nameScores = new Map<string, number>();
   const getNameScore = (name: string): number => {
+    const cached = nameScores.get(name);
+    if (cached !== undefined) return cached;
     const lower = name.toLowerCase();
     let best = 0;
-    for (const term of lowerTerms) {
+    for (const { term, words } of lowerTerms) {
       let score = 0;
       if (lower === term) score = 100;
       else if (lower.startsWith(term)) score = 80;
@@ -101,7 +146,6 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
       else if (lower.includes(term)) score = 40;
 
       if (score === 0) {
-        const words = term.split(/\s+/).filter(Boolean);
         if (words.length > 1) {
           for (const word of words) {
             let wordScore = 0;
@@ -116,6 +160,7 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
 
       if (score > best) best = score;
     }
+    nameScores.set(name, best);
     return best;
   };
 

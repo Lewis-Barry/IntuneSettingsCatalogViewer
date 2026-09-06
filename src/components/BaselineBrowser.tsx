@@ -1,5 +1,6 @@
 'use client';
 
+import { loadBrowserJson, loadSettingDefinitions } from '@/lib/browser-data';
 import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue, memo } from 'react';
 import { basePath } from '@/lib/basePath';
 import { selectClass } from '@/lib/pill';
@@ -379,14 +380,8 @@ export default function BaselineBrowser() {
         }
       });
 
-    const loadDefs = fetch(`${basePath}/settings-browse.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`settings-browse.json: ${r.status}`);
-        return r.json() as Promise<SettingDefinition[]>;
-      })
-      .then((defs) => {
-        const map = new Map<string, SettingDefinition>();
-        for (const d of defs) map.set(d.id, d);
+    const loadDefs = loadSettingDefinitions('baselines')
+      .then((map) => {
         setDefsMap(map);
         setDefsLoaded(true);
       });
@@ -404,12 +399,8 @@ export default function BaselineBrowser() {
   const ensureShard = useCallback(
     (id: string | null | undefined) => {
       if (!id || shards.has(id)) return;
-      fetch(`${basePath}/baselines/${id}.json`)
-        .then((r) => {
-          if (!r.ok) throw new Error(`${id}.json: ${r.status}`);
-          return r.json() as Promise<BaselineShard>;
-        })
-        .then((s) => setShards((prev) => new Map(prev).set(s.id, s)))
+      loadBrowserJson<BaselineShard>(`baselines/${id}.json`)
+        .then((shard) => setShards((prev) => prev.has(id) ? prev : new Map(prev).set(id, shard)))
         .catch((e) => setLoadError(String(e)));
     },
     [shards]

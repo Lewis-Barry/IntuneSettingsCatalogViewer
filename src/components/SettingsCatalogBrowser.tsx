@@ -1,18 +1,20 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CategoryTree from './CategoryTree';
 import SettingsList from './SettingsList';
 import SearchBar from './SearchBar';
 import PlatformFilter from './PlatformFilter';
 import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
-import { countVisibleRootSettings, countVisibleSettings, getCspPath } from '@/lib/settings-grouping';
+import { countVisibleSettings, getCspPath, groupSettings } from '@/lib/settings-grouping';
 import { matchesWindowsCompatibility, type WindowsCompatibility } from '@/lib/sku-labels';
 import { generateProExclusiveCsv, generateProExclusiveHtml } from '@/lib/pro-exclusive-export';
 import { useIsDesktop } from '@/lib/useMediaQuery';
 import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
+import { loadCategorySettings } from '@/lib/category-data';
+import { matchesCompatibilitySearch } from '@/lib/setting-search';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -29,6 +31,7 @@ interface CategorySettingsGroup {
   /** Ancestor path from root → parent (excludes this category itself). Empty for root categories. */
   breadcrumb: string[];
   settings: SettingDefinition[];
+  groupedSettings: ReturnType<typeof groupSettings>;
 }
 
 const ROOT_CATEGORY_ID = '00000000-0000-0000-0000-000000000000';
@@ -91,6 +94,7 @@ export default function SettingsCatalogBrowser({
   const [selectedCategoryName, setSelectedCategoryName] = useState<string>('');
   const [searchResults, setSearchResults] = useState<SearchIndexEntry[] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [deprecatedOnly, setDeprecatedOnly] = useState(false);
   const [windowsCompatibility, setWindowsCompatibility] = useState<WindowsCompatibility>('');
@@ -109,7 +113,6 @@ export default function SettingsCatalogBrowser({
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [loadingCategoryId, setLoadingCategoryId] = useState<string | null>(null);
   const loadedCategoryIdsRef = useRef<Set<string>>(new Set());
-  const categoryLoadPromisesRef = useRef<Map<string, Promise<{ categoryId: string; settings: SettingDefinition[] }>>>(new Map());
   const fullBrowsePromiseRef = useRef<Promise<void> | null>(null);
   const pendingCategoryIdRef = useRef<string | null>(null);
 
@@ -185,29 +188,8 @@ export default function SettingsCatalogBrowser({
 
     setSettingsLoading(true);
     try {
-      const loads = missingIds.map((categoryId) => {
-        const existing = categoryLoadPromisesRef.current.get(categoryId);
-        if (existing) return existing;
-
-        const promise = fetch(`${basePath}/settings-by-category/${encodeURIComponent(categoryId)}.json`)
-          .then((res) => {
-            if (res.status === 404) return [] as SettingDefinition[];
-            if (!res.ok) throw new Error(`Failed to load category ${categoryId}: ${res.status}`);
-            return res.json() as Promise<SettingDefinition[]>;
-          })
-          .then((settings) => ({ categoryId, settings }))
-          .finally(() => {
-            categoryLoadPromisesRef.current.delete(categoryId);
-          });
-
-        categoryLoadPromisesRef.current.set(categoryId, promise);
-        return promise;
-      });
-
-      const results = await Promise.all(loads);
-      const byCat: Record<string, SettingDefinition[]> = {};
-      for (const { categoryId, settings } of results) {
-        byCat[categoryId] = settings;
+      const byCat = await loadCategorySettings(categoryIds, loadedCategoryIdsRef.current);
+      for (const categoryId of Object.keys(byCat)) {
         loadedCategoryIdsRef.current.add(categoryId);
       }
       mergeSettingsByCategory(byCat);
@@ -314,6 +296,14 @@ export default function SettingsCatalogBrowser({
     }
   }, [deprecatedOnly, fullBrowseLoaded, loadFullBrowseSettings, selectedPlatforms.length, windowsCompatibility]);
 
+  const settingsById = useMemo(() => {
+    const byId = new Map<string, SettingDefinition>();
+    for (const settings of Object.values(settingsByCategory)) {
+      for (const setting of settings) byId.set(setting.id, setting);
+    }
+    return byId;
+  }, [settingsByCategory]);
+
   // Filter the category tree so only categories with settings matching the
   // selected platform(s) are shown.  When no platform filter is active the
   // full tree is returned unchanged.
@@ -321,17 +311,11 @@ export default function SettingsCatalogBrowser({
     if (selectedPlatforms.length === 0 && !deprecatedOnly && !windowsCompatibility) return categoryTree;
     if (!filterDataLoaded) return windowsCompatibility ? [] : categoryTree;
 
-    // Build a lookup map for CSP-path deduplication (same logic as SettingsList)
-    const settingById = new Map<string, SettingDefinition>();
-    for (const catSettings of Object.values(settingsByCategory)) {
-      for (const s of catSettings) settingById.set(s.id, s);
-    }
-
     function isVisibleSetting(s: SettingDefinition): boolean {
       const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
       if (isRoot) return true;
       // Child: only visible if CSP path differs from parent
-      const parent = settingById.get(s.rootDefinitionId!);
+      const parent = settingsById.get(s.rootDefinitionId!);
       return !parent || getCspPath(s) !== getCspPath(parent);
     }
 
@@ -370,7 +354,7 @@ export default function SettingsCatalogBrowser({
     return categoryTree
       .map(filterNode)
       .filter((c): c is CategoryTreeNode => c !== null);
-  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory, filterDataLoaded, windowsCompatibility]);
+  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory, settingsById, filterDataLoaded, windowsCompatibility]);
 
   // Clear selected category when it's removed by a platform filter change
   if (selectedCategoryId && (selectedPlatforms.length > 0 || deprecatedOnly || windowsCompatibility) && filterDataLoaded) {
@@ -404,16 +388,13 @@ export default function SettingsCatalogBrowser({
       settings = settings.filter((s) => matchesDeprecatedFilter(s.displayName, deprecatedOnly));
     }
 
-    if (windowsCompatibility && searchQuery.trim()) {
-      const terms = searchQuery.toLowerCase().split(',').map((term) => term.trim()).filter(Boolean);
-      settings = settings.filter((setting) => {
-        const fields = [setting.displayName, setting.name, setting.description, setting.helpText, getCspPath(setting), ...(setting.keywords || [])];
-        return terms.some((term) => fields.some((field) => field?.toLowerCase().includes(term)));
-      });
+    if (windowsCompatibility && deferredSearchQuery.trim()) {
+      const terms = deferredSearchQuery.toLowerCase().split(',').map((term) => term.trim()).filter(Boolean);
+      settings = settings.filter((setting) => matchesCompatibilitySearch(setting, terms));
     }
 
     return settings;
-  }, [selectedCategoryId, searchResults, settingsByCategory, selectedPlatforms, deprecatedOnly, filteredCategoryTree, windowsCompatibility, searchQuery]);
+  }, [selectedCategoryId, searchResults, settingsByCategory, selectedPlatforms, deprecatedOnly, filteredCategoryTree, windowsCompatibility, deferredSearchQuery]);
 
   // When searching: group matched settings by their source category,
   // preserving the relevance order from the search engine so that groups
@@ -425,18 +406,14 @@ export default function SettingsCatalogBrowser({
     const rankMap = new Map<string, number>();
     searchResults.forEach((r, i) => rankMap.set(r.id, i));
 
-    const resultIds = new Set(searchResults.map((r) => r.id));
-
     // Build a map of categoryId → matched SettingDefinition[]
     const groupMap = new Map<string, SettingDefinition[]>();
-    for (const catSettings of Object.values(settingsByCategory)) {
-      for (const s of catSettings) {
-        if (resultIds.has(s.id)) {
-          const list = groupMap.get(s.categoryId) || [];
-          list.push(s);
-          groupMap.set(s.categoryId, list);
-        }
-      }
+    for (const result of searchResults) {
+      const setting = settingsById.get(result.id);
+      if (!setting) continue;
+      const list = groupMap.get(setting.categoryId) || [];
+      list.push(setting);
+      groupMap.set(setting.categoryId, list);
     }
 
     // Apply platform + deprecated filters
@@ -452,13 +429,12 @@ export default function SettingsCatalogBrowser({
         filtered = filtered.filter((s) => matchesDeprecatedFilter(s.displayName, deprecatedOnly));
       }
       if (filtered.length > 0) {
-        // Sort settings within each group by search relevance rank
-        filtered.sort((a, b) => (rankMap.get(a.id) ?? Infinity) - (rankMap.get(b.id) ?? Infinity));
         groups.push({
           categoryId: catId,
           categoryName: categoryMap[catId] || 'Unknown Category',
           breadcrumb: buildBreadcrumb(catId, categoryMap, categoryParentMap),
           settings: filtered,
+          groupedSettings: groupSettings(filtered),
         });
       }
     }
@@ -466,21 +442,21 @@ export default function SettingsCatalogBrowser({
     // Sort groups by the best (lowest) search rank of any setting within the group,
     // so categories containing exact name matches appear first.
     groups.sort((a, b) => {
-      const aBest = Math.min(...a.settings.map((s) => rankMap.get(s.id) ?? Infinity));
-      const bBest = Math.min(...b.settings.map((s) => rankMap.get(s.id) ?? Infinity));
+      const aBest = rankMap.get(a.settings[0].id) ?? Infinity;
+      const bBest = rankMap.get(b.settings[0].id) ?? Infinity;
       if (aBest !== bBest) return aBest - bBest;
       // Tiebreak: alphabetical by category name
       return a.categoryName.localeCompare(b.categoryName);
     });
     return groups;
-  }, [searchResults, settingsByCategory, selectedPlatforms, deprecatedOnly, categoryMap, categoryParentMap, windowsCompatibility]);
+  }, [searchResults, settingsById, selectedPlatforms, deprecatedOnly, categoryMap, categoryParentMap, windowsCompatibility]);
 
   // Total matched settings count for display — uses the same grouping logic
   // as SettingsList so the banner count matches the actual visible rows.
   const searchResultCount = useMemo(() => {
     let count = 0;
     for (const group of searchGroups) {
-      count += countVisibleRootSettings(group.settings);
+      count += group.groupedSettings.rootSettings.length;
     }
     return count;
   }, [searchGroups]);
@@ -511,7 +487,7 @@ export default function SettingsCatalogBrowser({
     const options = {
       settings: categorySettings,
       categoryMap,
-      categoryLabel: [selectedCategoryName || compatibilityLabel, searchQuery.trim(), deprecatedOnly ? 'Deprecated' : ''].filter(Boolean).join(' - '),
+      categoryLabel: [selectedCategoryName || compatibilityLabel, deferredSearchQuery.trim(), deprecatedOnly ? 'Deprecated' : ''].filter(Boolean).join(' - '),
       reportTitle: windowsCompatibility === 'enterprise-only' ? 'Enterprise-only Settings (not in Windows Pro)' : 'Settings available on Windows AVD Multi-Session',
     };
     const content = format === 'csv' ? generateProExclusiveCsv(options) : generateProExclusiveHtml(options);
@@ -636,7 +612,7 @@ export default function SettingsCatalogBrowser({
         }
       >
         {/* Settings list */}
-        <div ref={settingsScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
+        <div ref={settingsScrollRef} aria-busy={searchQuery !== deferredSearchQuery} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {windowsCompatibility ? (
             compatibilityLoading ? (
               <div role="status" className="p-6 text-fluent-sm text-fluent-text-secondary">Loading compatibility settings...</div>
@@ -653,7 +629,7 @@ export default function SettingsCatalogBrowser({
                 settings={categorySettings}
                 categoryName={selectedCategoryName || compatibilityLabel}
                 scrollContainerRef={settingsScrollRef}
-                highlightQuery={searchQuery}
+                highlightQuery={deferredSearchQuery}
                 categoryMap={categoryMap}
               />
             )
@@ -673,8 +649,9 @@ export default function SettingsCatalogBrowser({
                   settings={group.settings}
                   categoryName={group.categoryName}
                   breadcrumb={group.breadcrumb}
+                  groupedSettings={group.groupedSettings}
                   isSearchResult
-                  highlightQuery={searchQuery}
+                  highlightQuery={deferredSearchQuery}
                   categoryMap={categoryMap}
                 />
               ))}

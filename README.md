@@ -34,6 +34,18 @@ No installation, no sign-in. Data is refreshed automatically every day.
 
 ---
 
+## Local Development
+
+After generating the catalog with `npm run build-search-index`, run `npm run dev` for local development or `npm run build` for a static export. Both commands first run `build-browser-data` to regenerate the performance assets and manifests from the existing catalog payloads without refreshing the catalog itself.
+
+Baseline views use content-versioned definition subsets covering current and historical policies, including parent definitions. Catalog categories spanning at least 16 populated shards have subtree bundles; small selections retain individual shards. Failed browser requests are evicted from the shared cache so they can be retried.
+
+Run `npm run check-browser-data` after generation to check definition coverage, category parity, content versions, caching, retries, and staggered shard loading.
+
+Search runs in a worker and caches a compact numeric-ID index with its documents in IndexedDB. The cache is replaced when catalog content or the installed FlexSearch version changes; missing, blocked, stale, or invalid caches fall back to rebuilding. Only catalog data is persisted, not search queries. Changes to the indexed fields or tokenization options must also bump the `CACHE_VERSION` format prefix in `src/lib/search.worker.ts`.
+
+Run `npm run check-search-worker` to check cold/warm result parity and cache recovery, and `npm run check-search-performance` to check compatibility filtering, lazy match-source calculations, and shared grouping.
+
 ## License
 
 [GPL-3.0](LICENSE)

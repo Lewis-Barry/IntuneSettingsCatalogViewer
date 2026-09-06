@@ -14,6 +14,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { createHash } from 'node:crypto';
 import type { SettingDefinition, SettingCategory, CategoryTreeNode, SearchIndexEntry } from '../src/lib/types';
 import { getAsrRuleInfo } from '../src/lib/asr-rules';
 
@@ -230,7 +231,97 @@ function slimSkuReportSetting(s: SettingDefinition, mergeMap: Record<string, str
   return JSON.parse(JSON.stringify(slim));
 }
 
+function buildDefinitionSubsets(settings: SettingDefinition[]) {
+  const outputDir = path.join(PUBLIC_DIR, 'setting-definitions');
+  fs.rmSync(outputDir, { recursive: true, force: true });
+  fs.mkdirSync(outputDir, { recursive: true });
+  const byId = new Map(settings.map((setting) => [setting.id, setting]));
+  const manifest: Record<string, string> = {};
+
+  function collectIds(value: unknown, ids: Set<string>) {
+    if (!value || typeof value !== 'object') return;
+    for (const [key, child] of Object.entries(value)) {
+      if ((key === 'definitionId' || key === 'settingDefinitionId') && typeof child === 'string') ids.add(child);
+      else collectIds(child, ids);
+    }
+  }
+
+  for (const scope of ['oib', 'baselines']) {
+    const sourceDir = path.join(PUBLIC_DIR, scope === 'oib' ? 'oib-versions' : 'baselines');
+    const files = fs.existsSync(sourceDir)
+      ? fs.readdirSync(sourceDir).filter((file) => file.endsWith('.json') && file !== 'index.json').map((file) => path.join(sourceDir, file))
+      : [];
+    const currentOib = path.join(PUBLIC_DIR, 'oib-data.json');
+    if (scope === 'oib' && fs.existsSync(currentOib)) files.push(currentOib);
+    const ids = new Set<string>();
+    for (const file of files) collectIds(JSON.parse(fs.readFileSync(file, 'utf-8')), ids);
+    for (const id of ids) {
+      const parentId = byId.get(id)?.rootDefinitionId;
+      if (parentId) ids.add(parentId);
+    }
+    const subset = settings.filter((setting) => ids.has(setting.id));
+    const json = JSON.stringify(subset);
+    const version = createHash('sha256').update(json).digest('hex').slice(0, 16);
+    const filename = `${scope}-${version}.json`;
+    fs.writeFileSync(path.join(outputDir, filename), json, 'utf-8');
+    manifest[scope] = `setting-definitions/${filename}`;
+    console.log(`${scope} definitions: ${subset.length} settings (${(Buffer.byteLength(json) / 1024 / 1024).toFixed(2)} MB)`);
+  }
+  fs.writeFileSync(path.join(DATA_DIR, 'setting-definitions-manifest.json'), JSON.stringify(manifest), 'utf-8');
+}
+
+function buildCategoryBundles(settings: SettingDefinition[], tree: CategoryTreeNode[]) {
+  const browseByCategory = new Map<string, SettingDefinition[]>();
+  for (const setting of settings) {
+    const list = browseByCategory.get(setting.categoryId) ?? [];
+    list.push(setting);
+    browseByCategory.set(setting.categoryId, list);
+  }
+  const categoryFiles: Record<string, string | null> = {};
+  for (const categoryId of browseByCategory.keys()) {
+    const json = fs.readFileSync(path.join(PUBLIC_DIR, 'settings-by-category', `${categoryId}.json`));
+    const version = createHash('sha256').update(json).digest('hex').slice(0, 16);
+    categoryFiles[categoryId] = `settings-by-category/${encodeURIComponent(categoryId)}.json?v=${version}`;
+  }
+  const bundleDir = path.join(PUBLIC_DIR, 'settings-bundles');
+  fs.rmSync(bundleDir, { recursive: true, force: true });
+  fs.mkdirSync(bundleDir, { recursive: true });
+  const bundles: Record<string, { file: string; categoryIds: string[] }> = {};
+  function buildBundles(node: CategoryTreeNode): string[] {
+    const categoryIds = [node.id, ...node.children.flatMap(buildBundles)];
+    if (!browseByCategory.has(node.id)) categoryFiles[node.id] = null;
+    const populatedIds = categoryIds.filter((id) => browseByCategory.has(id));
+    if (populatedIds.length >= 16) {
+      const json = JSON.stringify(populatedIds.flatMap((id) => browseByCategory.get(id)!));
+      const version = createHash('sha256').update(json).digest('hex').slice(0, 16);
+      const filename = `${node.id}-${version}.json`;
+      fs.writeFileSync(path.join(bundleDir, filename), json, 'utf-8');
+      bundles[node.id] = { file: `settings-bundles/${encodeURIComponent(filename)}`, categoryIds };
+    }
+    return categoryIds;
+  }
+  tree.forEach(buildBundles);
+  fs.writeFileSync(path.join(DATA_DIR, 'category-load-manifest.json'), JSON.stringify({ files: categoryFiles, bundles }), 'utf-8');
+  console.log(`Browse subtree bundles: ${Object.keys(bundles).length} files`);
+}
+
+function buildSearchManifest() {
+  const json = fs.readFileSync(SEARCH_INDEX_FILE);
+  const libraryVersion: string = JSON.parse(fs.readFileSync(require.resolve('flexsearch/package.json'), 'utf-8')).version;
+  const version = `${libraryVersion}-${createHash('sha256').update(json).digest('hex').slice(0, 16)}`;
+  const documentCount = JSON.parse(json.toString('utf-8')).length;
+  fs.writeFileSync(path.join(DATA_DIR, 'search-index-manifest.json'), JSON.stringify({ version, documentCount }), 'utf-8');
+}
+
 function main() {
+  if (process.argv.includes('--browser-data-only')) {
+    const settings: SettingDefinition[] = JSON.parse(fs.readFileSync(path.join(PUBLIC_DIR, 'settings-browse.json'), 'utf-8'));
+    const tree: CategoryTreeNode[] = JSON.parse(fs.readFileSync(CATEGORY_TREE_FILE, 'utf-8'));
+    buildDefinitionSubsets(settings);
+    buildCategoryBundles(settings, tree);
+    buildSearchManifest();
+    return;
+  }
   console.log('Search Index & Category Tree Builder');
   console.log('=====================================');
 
@@ -319,6 +410,7 @@ function main() {
   }
 
   fs.writeFileSync(SEARCH_INDEX_FILE, JSON.stringify(searchEntries), 'utf-8');
+  buildSearchManifest();
   const sizeMB = (fs.statSync(SEARCH_INDEX_FILE).size / 1024 / 1024).toFixed(2);
   console.log(`Search index: ${searchEntries.length} entries (${sizeMB} MB) → ${SEARCH_INDEX_FILE}`);
 
@@ -379,6 +471,7 @@ function main() {
   fs.writeFileSync(BROWSE_FILE, JSON.stringify(browseSettings), 'utf-8');
   const browseSizeMB = (fs.statSync(BROWSE_FILE).size / 1024 / 1024).toFixed(2);
   console.log(`Browse data: ${browseSettings.length} settings (${browseSizeMB} MB) → ${BROWSE_FILE}`);
+  buildDefinitionSubsets(browseSettings);
 
   // Also write per-category browse payloads so the main browser can fetch only
   // the selected category subtree instead of parsing the full catalog on first load.
@@ -400,6 +493,7 @@ function main() {
     );
   }
   console.log(`Browse category shards: ${browseByCategory.size} files → ${BROWSE_BY_CATEGORY_DIR}`);
+  buildCategoryBundles(browseSettings, tree);
 
   // ── Generate pro-exclusive.json ──
   // Settings that include windowsEnterprise in windowsSkus but NOT windowsProfessional.
