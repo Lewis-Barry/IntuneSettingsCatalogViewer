@@ -1,4 +1,13 @@
 {
+  "2026-09-03": {
+    "headline": "Windows adds a 'Disable Inline Compose' control, and three Defender AI settings gain Microsoft Sense support for broader management.",
+    "highlights": [
+      "Windows: one new 'Disable Inline Compose' setting under Experience, if you've ever wanted to turn off those compose prompts",
+      "Windows: Defender settings 'AI Agent Network Inspection', 'AI Agent Protection', and 'Deployment Channel' now work with Microsoft Sense via MDM, so you can also manage them from Defender for Endpoint",
+      "Microsoft Edge: a few Copilot browsing policy descriptions got polished, no behavior change you need to track"
+    ],
+    "watchOut": "The three Defender settings also changed their underlying URI from './Device/Vendor/MSFT/Defender' to './Vendor/MSFT/Defender', likely a path correction; existing profiles should handle it, but give them a quick look if you've customized those policies."
+  },
   "2026-08-26": {
     "headline": "Edge gets Process Isolation and clipboard suggestion toggles on Windows, while Defender's 'Controlled Configuration' is now 'Configuration Protection (Preview)' and Linux settings shuffle into a new category.",
     "highlights": [
