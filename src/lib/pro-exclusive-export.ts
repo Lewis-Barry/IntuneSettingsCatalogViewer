@@ -1,5 +1,6 @@
-// CSV + HTML export for the /ent-exclusive page ("I ♥ Windows Pro") — exports
-// the settings currently visible on screen (category + search filters applied).
+// CSV + HTML export for the SKU report pages (/ent-exclusive "I ♥ Windows Pro"
+// and /avd-multisession) — exports the settings currently visible on screen
+// (category + search filters applied).
 // Reuses the OIB changelog's STYLE/escapeHtml/csvCell so both reports look alike.
 
 import type { SettingDefinition } from './types';
@@ -13,6 +14,8 @@ interface ProExclusiveExportOptions {
   categoryMap: Record<string, string>;
   /** Heading shown in the HTML report (e.g. the current filter context). */
   categoryLabel: string;
+  /** Title/H1 of the HTML report, e.g. 'Enterprise-only Settings (not in Windows Pro)'. */
+  reportTitle: string;
   generatedAt?: Date;
 }
 
@@ -73,6 +76,7 @@ export function generateProExclusiveHtml({
   settings,
   categoryMap,
   categoryLabel,
+  reportTitle,
   generatedAt = new Date(),
 }: ProExclusiveExportOptions): string {
   const timestamp = `${generatedAt.toLocaleDateString()} ${generatedAt.toLocaleTimeString()}`;
@@ -133,11 +137,11 @@ export function generateProExclusiveHtml({
 <HTML>
 <HEAD>
 <meta charset="utf-8" />
-<title>Enterprise-only Settings - ${escapeHtml(categoryLabel)}</title>
+<title>${escapeHtml(reportTitle)} - ${escapeHtml(categoryLabel)}</title>
 ${STYLE}
 </HEAD>
 <BODY>
-<H1 class="header-level1">Enterprise-only Settings (not in Windows Pro)</H1>
+<H1 class="header-level1">${escapeHtml(reportTitle)}</H1>
 <div>Scope: ${escapeHtml(categoryLabel)}<br />Settings: ${settings.length}<br />Generated: ${escapeHtml(timestamp)}</div>
 <div class="summary">${toc}</div>
 ${sections || '<p>No settings.</p>'}

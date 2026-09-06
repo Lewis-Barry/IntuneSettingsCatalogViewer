@@ -86,9 +86,16 @@ export default function MobileNav() {
             <Link
               href="/ent-exclusive/"
               onClick={() => setOpen(false)}
-              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px] flex items-center gap-1"
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
             >
-              I{' '}<span className="text-red-400" aria-hidden="true">♥</span>{' '}Windows Pro
+              Compatibility: Enterprise vs Pro
+            </Link>
+            <Link
+              href="/avd-multisession/"
+              onClick={() => setOpen(false)}
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
+            >
+              Compatibility: AVD Multi-Session
             </Link>
             <Link
               href="/changelog/"
