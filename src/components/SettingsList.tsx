@@ -95,7 +95,7 @@ export default function SettingsList({
 
   // Compute match sources for each setting when in search mode
   const matchSourcesMap = useMemo(() => {
-    if (!isSearchResult || !highlightQuery) return new Map<string, MatchSource[]>();
+    if (!highlightQuery) return new Map<string, MatchSource[]>();
     const map = new Map<string, MatchSource[]>();
     for (const s of rootSettings) {
       map.set(s.id, detectMatchSources(s, highlightQuery, (() => {
@@ -104,7 +104,7 @@ export default function SettingsList({
       })()));
     }
     return map;
-  }, [isSearchResult, highlightQuery, rootSettings]);
+  }, [highlightQuery, rootSettings]);
 
   // Virtualizer for the standard (non-search) category view
   const virtualizer = useVirtualizer({
@@ -249,6 +249,8 @@ export default function SettingsList({
               <SettingRow
                 setting={setting}
                 childSettings={childMap.get(setting.id)}
+                highlightQuery={highlightQuery}
+                matchSources={matchSourcesMap.get(setting.id)}
                 allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
