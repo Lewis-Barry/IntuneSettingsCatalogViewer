@@ -21,3 +21,12 @@ export const SKU_LABELS: Record<string, string> = {
 export function skuLabel(sku: string): string {
   return SKU_LABELS[sku] ?? sku;
 }
+
+export type WindowsCompatibility = '' | 'enterprise-only' | 'avd-multisession';
+
+export function matchesWindowsCompatibility(skus: string[] = [], filter: WindowsCompatibility): boolean {
+  if (filter === 'enterprise-only') {
+    return skus.includes('windowsEnterprise') && !skus.includes('windowsProfessional');
+  }
+  return filter !== 'avd-multisession' || skus.includes('windowsMultiSession');
+}

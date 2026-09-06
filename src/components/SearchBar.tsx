@@ -8,24 +8,45 @@ interface SearchBarProps {
   onSearchResults?: (results: SearchIndexEntry[]) => void;
   onQueryChange?: (query: string) => void;
   placeholder?: string;
+  localSearch?: boolean;
 }
 
 export default function SearchBar({
   onSearchResults,
   onQueryChange,
   placeholder = 'Search for a setting',
+  localSearch = false,
 }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const searchSeqRef = useRef(0);
 
-  useEffect(() => () => clearTimeout(debounceRef.current), []);
+  useEffect(() => {
+    if (localSearch || !query.trim()) return;
+    const sequence = ++searchSeqRef.current;
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      setIsLoading(true);
+      try {
+        const results = await flexSearch(query, 200);
+        if (!cancelled && sequence === searchSeqRef.current) onSearchResults?.(results);
+      } catch (error) {
+        console.error('Search failed:', error);
+      } finally {
+        if (!cancelled && sequence === searchSeqRef.current) setIsLoading(false);
+      }
+    }, 200);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query, localSearch, onSearchResults]);
 
   const handleFocus = useCallback(() => {
+    if (localSearch) return;
     ensureIndex().catch(() => {});
-  }, []);
+  }, [localSearch]);
 
   // Debounced search — fires results to parent, no dropdown
   const handleChange = useCallback(
@@ -33,36 +54,20 @@ export default function SearchBar({
       const value = e.target.value;
       setQuery(value);
       onQueryChange?.(value);
-      const searchSeq = ++searchSeqRef.current;
+      ++searchSeqRef.current;
 
-      clearTimeout(debounceRef.current);
+      if (localSearch) {
+        setIsLoading(false);
+        return;
+      }
 
       if (!value.trim()) {
         setIsLoading(false);
         onSearchResults?.([]);
         return;
       }
-
-      debounceRef.current = setTimeout(async () => {
-        debounceRef.current = undefined;
-        if (searchSeq !== searchSeqRef.current) return;
-
-        setIsLoading(true);
-        try {
-          const res = await flexSearch(value, 200);
-          if (searchSeq === searchSeqRef.current) {
-            onSearchResults?.(res);
-          }
-        } catch (err) {
-          console.error('Search failed:', err);
-        } finally {
-          if (searchSeq === searchSeqRef.current) {
-            setIsLoading(false);
-          }
-        }
-      }, 200);
     },
-    [onSearchResults, onQueryChange]
+    [onSearchResults, onQueryChange, localSearch]
   );
 
   return (
@@ -75,7 +80,7 @@ export default function SearchBar({
       {/* Search input */}
       <div className="flex">
         <div className="relative flex-1">
-          {isLoading ? (
+          {isLoading && !localSearch ? (
             <span
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
               aria-hidden="true"
@@ -112,7 +117,6 @@ export default function SearchBar({
           {query && (
             <button
               onClick={() => {
-                clearTimeout(debounceRef.current);
                 setQuery('');
                 ++searchSeqRef.current;
                 setIsLoading(false);

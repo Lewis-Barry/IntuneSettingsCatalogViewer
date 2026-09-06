@@ -18,6 +18,7 @@
     "generate-summaries": "tsx scripts/generate-summaries.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
     "check-changelog-export": "tsx scripts/changelog-export-check.ts",
+    "check-windows-compatibility": "tsx scripts/windows-compatibility-check.ts",
     "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index",
     "postinstall": "echo 'Run npm run refresh to fetch settings data'"
   },

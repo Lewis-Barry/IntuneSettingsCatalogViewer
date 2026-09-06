@@ -27,7 +27,7 @@ No installation, no sign-in. Data is refreshed automatically every day.
 - Compare any two OIB versions in OIB Changelog to review adds, removals, renames, and value changes.
 - Browse Microsoft's Intune security baseline templates in MS Baselines, with every recommended default resolved.
 - Compare any two versions of a Microsoft security baseline to see which setting defaults were added, removed, or changed.
-- Explore the Windows Enterprise vs Pro view to find settings not available on Windows Professional.
+- Select Windows in the catalog to filter for Enterprise-only settings (not in Pro) or AVD multi-session compatibility. Search, browse categories, and export the filtered settings as CSV or HTML. Platform and compatibility selections are shareable through the page URL; the former report URLs forward to the catalog.
 - Use shareable deep links for categories and individual settings.
 - Navigate comfortably on desktop and mobile with keyboard-friendly UI patterns.
 - Benefit from a static, fast-loading site with no runtime API calls.

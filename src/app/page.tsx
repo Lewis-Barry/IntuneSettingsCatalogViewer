@@ -1,5 +1,6 @@
 import { loadCategoryTree, loadCategories, loadCatalogStats, getLastUpdated } from '@/lib/data';
 import SettingsCatalogBrowser from '@/components/SettingsCatalogBrowser';
+import { Suspense } from 'react';
 
 export default function HomePage() {
   // Load lightweight data at build time (server component).
@@ -20,13 +21,15 @@ export default function HomePage() {
 
   return (
     <div className="max-w-[1600px] mx-auto">
-      <SettingsCatalogBrowser
-        categoryTree={categoryTree}
-        categoryMap={categoryMap}
-        categoryParentMap={categoryParentMap}
-        totalSettings={catalogStats.totalSettings}
-        lastUpdated={lastUpdated}
-      />
+      <Suspense fallback={<div role="status" className="p-6 text-fluent-text-secondary">Loading catalog...</div>}>
+        <SettingsCatalogBrowser
+          categoryTree={categoryTree}
+          categoryMap={categoryMap}
+          categoryParentMap={categoryParentMap}
+          totalSettings={catalogStats.totalSettings}
+          lastUpdated={lastUpdated}
+        />
+      </Suspense>
     </div>
   );
 }

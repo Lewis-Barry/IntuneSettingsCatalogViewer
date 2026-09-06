@@ -39,11 +39,11 @@ const tools = [
     ),
   },
   {
-    href: '/ent-exclusive/',
-    title: 'I ♥ Windows Pro',
+    href: '/?platform=windows10&compatibility=enterprise-only',
+    title: 'Windows Compatibility',
     description:
-      'See which Settings Catalog policies are available on Windows Enterprise but not on Windows Professional. A quick way to discover what an Enterprise license actually unlocks.',
-    linkText: 'Compare editions',
+      'Filter the Settings Catalog for Enterprise-only policies or settings available on AVD multi-session, with category browsing, search, and CSV or HTML export.',
+    linkText: 'Browse Windows settings',
     icon: (
       <path
         strokeLinecap="round"

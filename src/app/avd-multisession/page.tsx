@@ -1,5 +1,5 @@
-import { loadCategoryTree, loadCategories } from '@/lib/data';
-import SkuReportBrowser from '@/components/SkuReportBrowser';
+import Link from 'next/link';
+import { basePath } from '@/lib/basePath';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -11,27 +11,11 @@ export const metadata: Metadata = {
 export const dynamic = 'force-static';
 
 export default function AvdMultiSessionPage() {
-  const categoryTree = loadCategoryTree();
-  const categories = loadCategories();
-
-  const categoryMap: Record<string, string> = {};
-  for (const c of categories) {
-    categoryMap[c.id] = c.displayName;
-  }
-
+  const href = '/?platform=windows10&compatibility=avd-multisession';
   return (
-    <div className="max-w-[1600px] mx-auto">
-      <SkuReportBrowser
-        categoryTree={categoryTree}
-        categoryMap={categoryMap}
-        dataFile="avd-multisession.json"
-        heading="AVD Multi-Session"
-        countLabel="available on Windows Enterprise multi-session (AVD)"
-        allLabel="All Multi-Session settings"
-        noun="Multi-Session settings"
-        exportName="avd-multisession-settings"
-        exportTitle="Settings available on Windows AVD Multi-Session"
-      />
-    </div>
+    <>
+      <meta httpEquiv="refresh" content={`0;url=${basePath}${href}`} />
+      <p className="p-6"><Link href={href} className="text-fluent-blue underline">AVD multi-session settings</Link></p>
+    </>
   );
 }

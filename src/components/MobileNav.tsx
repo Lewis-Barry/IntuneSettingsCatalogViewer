@@ -84,20 +84,6 @@ export default function MobileNav() {
               MS Baselines Changelog
             </Link>
             <Link
-              href="/ent-exclusive/"
-              onClick={() => setOpen(false)}
-              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
-            >
-              Compatibility: Enterprise vs Pro
-            </Link>
-            <Link
-              href="/avd-multisession/"
-              onClick={() => setOpen(false)}
-              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
-            >
-              Compatibility: AVD Multi-Session
-            </Link>
-            <Link
               href="/changelog/"
               onClick={() => setOpen(false)}
               className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"

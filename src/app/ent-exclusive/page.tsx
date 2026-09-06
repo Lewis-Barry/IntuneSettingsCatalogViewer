@@ -1,5 +1,5 @@
-import { loadCategoryTree, loadCategories } from '@/lib/data';
-import SkuReportBrowser from '@/components/SkuReportBrowser';
+import Link from 'next/link';
+import { basePath } from '@/lib/basePath';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -11,37 +11,11 @@ export const metadata: Metadata = {
 export const dynamic = 'force-static';
 
 export default function ProExclusivePage() {
-  const categoryTree = loadCategoryTree();
-  const categories = loadCategories();
-
-  const categoryMap: Record<string, string> = {};
-  for (const c of categories) {
-    categoryMap[c.id] = c.displayName;
-  }
-
+  const href = '/?platform=windows10&compatibility=enterprise-only';
   return (
-    <div className="max-w-[1600px] mx-auto">
-      <SkuReportBrowser
-        categoryTree={categoryTree}
-        categoryMap={categoryMap}
-        dataFile="pro-exclusive.json"
-        heading={
-          <>
-            I{' '}
-            <span className="text-red-500" aria-hidden="true">♥</span>
-            {' '}Windows Pro
-          </>
-        }
-        countLabel={
-          <>
-            available on Enterprise but <span className="font-semibold text-fluent-error">not</span> on Professional
-          </>
-        }
-        allLabel="All Enterprise-only settings"
-        noun="Enterprise-only settings"
-        exportName="enterprise-only-settings"
-        exportTitle="Enterprise-only Settings (not in Windows Pro)"
-      />
-    </div>
+    <>
+      <meta httpEquiv="refresh" content={`0;url=${basePath}${href}`} />
+      <p className="p-6"><Link href={href} className="text-fluent-blue underline">Enterprise-only settings</Link></p>
+    </>
   );
 }
