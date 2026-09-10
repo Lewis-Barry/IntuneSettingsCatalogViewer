@@ -73,7 +73,10 @@ jobs:
         continue-on-error: true
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: npx tsx scripts/generate-summaries.ts --all
+        run: |
+          npx tsx scripts/generate-summaries.ts --all
+          # Monthly roundup for newly completed months (no-op otherwise).
+          npx tsx scripts/generate-summaries.ts --all-months
 
       # ── Build search index and category tree ──
       - name: Build search index

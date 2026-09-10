@@ -52,6 +52,30 @@
     ],
     "watchOut": null
   },
+  "2026-08": {
+    "headline": "macOS gets 38 declarative Content Cache settings, and Windows finally gets real maintenance-window scheduling for updates.",
+    "highlights": [],
+    "overview": "Five update days, and two of them pulled weight. Windows added a full maintenance-window model for Windows Update for Business, so patch timing no longer has to be reverse-engineered from deadlines and active hours. Apple put Content Cache, DNS Proxy, and Web Content Filter into the declarative settings catalog, which moves caching and DNS enforcement into the same profile flow as everything else. Android had a small month of recategorization plus a couple of power settings, and the picker lost 273 legacy ADMX categories, which is housekeeping rather than anything that touches your deployments.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Windows Update for Business added 17 maintenance-window settings, and a separate Maintenance Windows category added 12 more that mirror them: start date and time, duration, repeat schedule, weekly day toggles, monthly week-of-month and day-of-month options, update action, and workload type. If you have been approximating patch windows with deadlines and hope, this is the one to build a profile around. Microsoft Edge picked up process isolation, clipboard suggestions in the address bar, and service-based extraction for Reading Mode, plus user-override variants of the clipboard and Reading Mode settings. On the security side, Security gained Enable Microsoft Entra ID Authentication Enforcement; worth testing on a pilot ring before you enforce it broadly, since it changes how authentication is handled on the device. The 273 removed categories are almost all classic GPO-era folders from the ADMX import, and no settings went with them, so this is picker tidying."
+      },
+      {
+        "os": "apple",
+        "body": "macOS got 38 Content Cache settings covering shared caching, cache limits, peer listen ranges and subnets, tethered caching, and client identity logging; caching decisions that used to live in a custom payload or a lot of guesswork now have a picker. Web Content Filter added 12 settings spanning both iOS and macOS, with plugin bundle ID, provider identifier, server address, visible name, and the sockets, packets, and browsers filters; the per-platform stragglers were a macOS packets and grade entry and an iOS browsers entry. DNS Proxy added four settings on iOS and macOS, which is the interesting one for anyone who wants supervised devices resolving through a controlled resolver rather than whatever the local network hands out. Setup Assistant gained a Liquid Glass toggle on iOS and macOS and an accessibility appearance option on iOS, so the new look can be pre-decided instead of discovered."
+      },
+      {
+        "os": "android",
+        "body": "A quiet month. A Power category appeared with screen timeout and keep-screen-on-while-plugged-in, both mildly useful for kiosk and shared-device fleets. Work profile password added Require separate work lock, which is the one worth considering enforcing rather than leaving to defaults if you have work profile data worth separating. The eSIM wipe and maximum-days-to-turn-off-work-profile settings show up on both the added and removed lists, and the screen timeout settings moved out of an uncategorized bucket, so this is reorganization rather than new or lost capability."
+      },
+      {
+        "os": "linux",
+        "body": "Two small edits, one of which matters if you already deploy it: Platform Update Fixed Version changed its underlying offset from version to fixedVersion. Memory scan moved between categories, which changes nothing for deployed profiles."
+      }
+    ],
+    "watchOut": "The Linux Platform Update Fixed Version offset rename and the Defender setting renamed to Configuration Protection (Device) (Preview) are the kind of changes that quietly break profiles built from an exported template or a script, so re-check those before the next change window. The 273 category removals are picker reorganization only; profiles reference settings, not categories, so nothing deployed stops working."
+  },
   "2026-07-30": {
     "headline": "iOS and macOS get per-app permission controls (Location, Camera, Microphone) in the Settings Catalog, plus a pile of Android and Linux scheduling knobs.",
     "highlights": [

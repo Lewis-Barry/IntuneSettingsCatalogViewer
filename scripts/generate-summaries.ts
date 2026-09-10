@@ -9,7 +9,7 @@
  * rebuilds changelog.json from scratch, so summaries must not live inside it.
  *
  * API key: create `.env.local` in the project root (gitignored) with one of
- *   DEEPSEEK_API_KEY=sk-...        (model: deepseek-v4-flash)
+ *   DEEPSEEK_API_KEY=sk-...        (model: deepseek-flash)
  *   ANTHROPIC_API_KEY=sk-ant-...
  *   OPENAI_API_KEY=sk-...
  * Preference order when several are set: Anthropic, DeepSeek, OpenAI.
@@ -173,7 +173,7 @@ function getProvider(): ProviderCfg | null {
     return { provider: 'anthropic', baseUrl: '', apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL ?? 'claude-haiku-4-5-20251001' };
   }
   if (process.env.DEEPSEEK_API_KEY) {
-    return { provider: 'openai-compatible', baseUrl: 'https://api.deepseek.com', apiKey: process.env.DEEPSEEK_API_KEY, model: process.env.DEEPSEEK_MODEL ?? 'deepseek-v4-flash', reasoningEffort: 'low' };
+    return { provider: 'openai-compatible', baseUrl: 'https://api.deepseek.com', apiKey: process.env.DEEPSEEK_API_KEY, model: process.env.DEEPSEEK_MODEL ?? 'deepseek-flash', reasoningEffort: 'low' };
   }
   if (process.env.OPENAI_API_KEY) {
     return { provider: 'openai-compatible', baseUrl: 'https://api.openai.com/v1', apiKey: process.env.OPENAI_API_KEY, model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini' };
