@@ -163,9 +163,21 @@ function main() {
     currHashMap.set(s.id, hashSetting(s));
   }
 
+  // The first snapshot that includes a new settingUsage (e.g. when compliance
+  // settings were added to the fetch) would otherwise report that entire
+  // catalog as "added". Baseline any usage absent from the previous snapshot
+  // for this run only — the next run has it in `previous` and diffs normally.
+  const usageOf = (settingUsage?: string) => settingUsage || 'configuration';
+  const newUsages = new Set(current.map((s) => usageOf(s.settingUsage)));
+  for (const s of previous) newUsages.delete(usageOf(s.settingUsage));
+  if (newUsages.size > 0) {
+    console.log(`New setting usage(s) in this snapshot — baselining, not logged as added: ${[...newUsages].join(', ')}`);
+  }
+
   // Detect additions
   const added: ChangelogSettingRef[] = [];
   for (const s of current) {
+    if (newUsages.has(usageOf(s.settingUsage))) continue;
     if (!prevMap.has(s.id)) {
       added.push({
         id: s.id,
@@ -234,7 +246,12 @@ function main() {
     const currCatHashMap = new Map<string, string>();
     for (const c of categories) currCatHashMap.set(c.id, hashCategory(c));
 
+    // Same one-run baseline as settings, for categories of a newly-added usage.
+    const newCatUsages = new Set(categories.map((c) => usageOf(c.settingUsage)));
+    for (const c of previousCategories) newCatUsages.delete(usageOf(c.settingUsage));
+
     for (const c of categories) {
+      if (newCatUsages.has(usageOf(c.settingUsage))) continue;
       if (!prevCatMap.has(c.id)) {
         categoriesAdded.push({ id: c.id, displayName: c.displayName, parentCategoryId: c.parentCategoryId });
       }

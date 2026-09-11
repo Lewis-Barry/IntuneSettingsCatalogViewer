@@ -24,8 +24,11 @@
     "check-search-performance": "tsx scripts/search-performance-check.tsx",
     "check-search-worker": "tsx scripts/search-worker-check.ts",
     "check-changelog-export": "tsx scripts/changelog-export-check.ts",
+    "check-usage-filter": "tsx scripts/usage-filter-check.ts",
+    "fetch-compliance-templates": "tsx scripts/fetch-compliance-templates.ts",
+    "check-compliance": "tsx scripts/compliance-check.ts",
     "check-windows-compatibility": "tsx scripts/windows-compatibility-check.ts",
-    "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index",
+    "refresh": "npm run fetch-settings && npm run generate-changelog && npm run generate-changelog-settings && npm run build-search-index && npm run fetch-compliance-templates",
     "postinstall": "echo 'Run npm run refresh to fetch settings data'"
   },
   "dependencies": {

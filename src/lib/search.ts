@@ -60,7 +60,7 @@ export async function ensureIndex(): Promise<void> {
 
 export async function search(
   query: string,
-  limit: number = 50
+  limit: number = 50,
 ): Promise<SearchIndexEntry[]> {
   if (!query.trim()) return [];
   return postWorkerRequest({ type: 'search', query, limit });

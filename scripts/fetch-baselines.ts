@@ -24,6 +24,13 @@ import type {
   BaselineShard,
 } from '../src/lib/baseline-types';
 
+// Pick up credentials from .env.local as well as the process environment.
+try {
+  process.loadEnvFile(path.resolve(__dirname, '..', '.env.local'));
+} catch {
+  // no .env.local; rely on the process environment
+}
+
 const TENANT_ID = process.env.AZURE_TENANT_ID!;
 const CLIENT_ID = process.env.AZURE_CLIENT_ID!;
 const CLIENT_SECRET = process.env.AZURE_CLIENT_SECRET!;

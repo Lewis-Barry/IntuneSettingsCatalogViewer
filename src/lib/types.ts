@@ -269,6 +269,20 @@ export interface SearchIndexEntry {
   settingType: string;
 }
 
+/** Catalogs the browser can show. */
+export type CatalogUsage = 'configuration' | 'compliance';
+
+/**
+ * `settingUsage` is a comma-separated flag set, not a single value — real
+ * values include "configuration", "compliance" and "configuration,compliance"
+ * (a setting usable in both catalogs, which should appear under both filters).
+ * A missing value means 'configuration'.
+ */
+export function hasUsage(settingUsage: string | undefined, usage: CatalogUsage): boolean {
+  if (!settingUsage) return usage === 'configuration';
+  return settingUsage.split(',').some((flag) => flag.trim() === usage);
+}
+
 // ─── Match Source (where a search query matched) ───
 
 export type MatchSource = 'title' | 'description' | 'csp' | 'keywords' | 'category';

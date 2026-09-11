@@ -2,7 +2,7 @@
  * fetch-settings.ts
  *
  * Authenticates with Microsoft Graph via client credentials and pulls
- * the full Intune Settings Catalog (configurationSettings + configurationCategories).
+ * the full Intune Settings Catalog (configuration + compliance).
  * Writes the results to data/settings.json and data/categories.json.
  *
  * Usage:
@@ -11,6 +11,15 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+
+// Pick up credentials from .env.local (gitignored) as well as the process
+// environment, so a local run doesn't need them exported by hand. Same idiom
+// as generate-summaries.ts.
+try {
+  process.loadEnvFile(path.resolve(__dirname, '..', '.env.local'));
+} catch {
+  // no .env.local; rely on the process environment
+}
 
 // ─── Config ───
 const TENANT_ID = process.env.AZURE_TENANT_ID!;
@@ -68,6 +77,16 @@ const CATEGORIES_SELECT = [
   'rootCategoryId',
   'childCategoryIds',
 ].join(',');
+
+// ─── Catalogs ───
+// Compliance and configuration are the same Graph resource types on sibling
+// endpoints, under the same permission scope — so one loop pulls both and every
+// downstream consumer (shards, search index, setting pages) works unchanged.
+// Each record already carries its own `settingUsage`, which the UI filters on.
+const CATALOGS = [
+  { usage: 'configuration', categories: 'configurationCategories', settings: 'configurationSettings' },
+  { usage: 'compliance', categories: 'complianceCategories', settings: 'complianceSettings' },
+] as const;
 
 // ─── Auth (client-credentials flow, plain fetch) ───
 
@@ -180,59 +199,77 @@ async function main() {
     existingCategories = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
   }
 
-  // 1. Fetch categories
-  console.log('Fetching configuration categories...');
-  const categoriesUrl = `/deviceManagement/configurationCategories?$select=${CATEGORIES_SELECT}`;
-  const categories = await fetchAllPages(categoriesUrl);
-  console.log(`  Retrieved ${categories.length} categories.`);
+  // 1. Fetch each catalog (configuration, compliance) into one combined set
+  const categories: Record<string, unknown>[] = [];
+  const settings: Record<string, unknown>[] = [];
 
-  fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(categories, null, 2), 'utf-8');
-  console.log(`  Saved to ${CATEGORIES_FILE}`);
+  for (const catalog of CATALOGS) {
+    console.log(`\nFetching ${catalog.usage} categories...`);
+    const catalogCategories = await fetchAllPages<Record<string, unknown>>(
+      `/deviceManagement/${catalog.categories}?$select=${CATEGORIES_SELECT}`
+    );
+    console.log(`  Retrieved ${catalogCategories.length} categories.`);
 
-  // 2. Fetch setting definitions
-  // Note: we omit $select because setting definitions are polymorphic —
-  // sub-types (choice, simple, group, etc.) have different properties and
-  // $select on the base type rejects sub-type-only fields like 'options'.
-  console.log('Fetching configuration settings...');
-  const settingsUrl = `/deviceManagement/configurationSettings`;
-  const settings = await fetchAllPages(settingsUrl);
-  console.log(`  Retrieved ${settings.length} settings.`);
+    // Note: we omit $select because setting definitions are polymorphic —
+    // sub-types (choice, simple, group, etc.) have different properties and
+    // $select on the base type rejects sub-type-only fields like 'options'.
+    console.log(`Fetching ${catalog.usage} settings...`);
+    const catalogSettings = await fetchAllPages<Record<string, unknown>>(`/deviceManagement/${catalog.settings}`);
+    console.log(`  Retrieved ${catalogSettings.length} settings.`);
 
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf-8');
-  console.log(`  Saved to ${SETTINGS_FILE}`);
+    // Graph stamps settingUsage itself; fall back to the endpoint we asked, so
+    // a missing value can never collapse a whole catalog into the wrong filter.
+    for (const setting of catalogSettings) setting.settingUsage ??= catalog.usage;
+    for (const category of catalogCategories) category.settingUsage ??= catalog.usage;
 
-  // 3. Fetch any orphan categories referenced by settings but not in the
-  //    bulk categories response.  The Graph configurationCategories endpoint
-  //    sometimes omits deeply-nested leaf categories that settings still
-  //    reference.  We fetch these individually by ID.
-  const knownCatIds = new Set(categories.map((c) => (c as Record<string, unknown>).id));
-  const settingCatIds = new Set(
-    (settings as Record<string, unknown>[]).map((s) => s.categoryId).filter(Boolean)
-  );
-  const orphanCatIds = [...settingCatIds].filter((id) => !knownCatIds.has(id));
+    // Fetch any orphan categories referenced by settings but not in the bulk
+    // categories response.  The bulk endpoints sometimes omit deeply-nested
+    // leaf categories that settings still reference.  Resolve them against the
+    // same catalog the settings came from.
+    const knownCatIds = new Set(catalogCategories.map((c) => c.id));
+    const settingCatIds = new Set(catalogSettings.map((s) => s.categoryId).filter(Boolean));
+    const orphanCatIds = [...settingCatIds].filter((id) => !knownCatIds.has(id));
 
-  if (orphanCatIds.length > 0) {
-    console.log(`\nFound ${orphanCatIds.length} category IDs referenced by settings but missing from bulk fetch.`);
-    console.log('Fetching orphan categories individually...');
-    let fetched = 0;
-    for (const catId of orphanCatIds) {
-      try {
-        const cat = await graphGet(`/deviceManagement/configurationCategories/${catId}?$select=${CATEGORIES_SELECT}`);
-        categories.push(cat);
-        fetched++;
-      } catch (err: unknown) {
-        // Category may genuinely not exist; log and skip.
-        console.warn(`  Could not fetch category ${catId} (${(err as Error).message}) — skipping`);
+    if (orphanCatIds.length > 0) {
+      console.log(`  ${orphanCatIds.length} category IDs referenced by settings but missing from bulk fetch — fetching individually...`);
+      let fetched = 0;
+      for (const catId of orphanCatIds) {
+        try {
+          const cat = await graphGet(`/deviceManagement/${catalog.categories}/${catId}?$select=${CATEGORIES_SELECT}`);
+          cat.settingUsage ??= catalog.usage;
+          catalogCategories.push(cat);
+          fetched++;
+        } catch (err: unknown) {
+          // Category may genuinely not exist; log and skip.
+          console.warn(`  Could not fetch category ${catId} (${(err as Error).message}) — skipping`);
+        }
       }
+      console.log(`  Fetched ${fetched}/${orphanCatIds.length} orphan categories.`);
     }
-    console.log(`  Fetched ${fetched}/${orphanCatIds.length} orphan categories.`);
 
-    // Re-write categories.json with the additions
-    fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(categories, null, 2), 'utf-8');
-    console.log(`  Updated ${CATEGORIES_FILE}`);
+    categories.push(...catalogCategories);
+    settings.push(...catalogSettings);
   }
 
-  // 4. Write last-updated timestamp only if data actually changed
+  // 2. Dedupe by id. The catalogs are separate trees, but an id shared across
+  //    them would otherwise produce two entries fighting over the same URL slug.
+  const dedupe = <T extends Record<string, unknown>>(items: T[], label: string): T[] => {
+    const byId = new Map<unknown, T>();
+    for (const item of items) byId.set(item.id, item);
+    if (byId.size !== items.length) {
+      console.warn(`\n  Dropped ${items.length - byId.size} duplicate ${label} sharing an id across catalogs.`);
+    }
+    return [...byId.values()];
+  };
+
+  const allCategories = dedupe(categories, 'categories');
+  const allSettings = dedupe(settings, 'settings');
+
+  console.log(`\nTotal: ${allSettings.length} settings across ${allCategories.length} categories.`);
+  fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(allCategories, null, 2), 'utf-8');
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(allSettings, null, 2), 'utf-8');
+
+  // 3. Write last-updated timestamp only if data actually changed
   const newSettings = fs.readFileSync(SETTINGS_FILE, 'utf-8');
   const newCategories = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
   const hasChanges = newSettings !== existingSettings || newCategories !== existingCategories;

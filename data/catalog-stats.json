@@ -1,3 +1,7 @@
 {
-  "totalSettings": 18328
+  "totalSettings": 18342,
+  "byUsage": {
+    "configuration": 18329,
+    "compliance": 21
+  }
 }

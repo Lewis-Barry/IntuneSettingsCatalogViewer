@@ -1,0 +1,3210 @@
+{
+  "templates": [
+    {
+      "type": "windows10CompliancePolicy",
+      "platform": "Windows 10/11",
+      "family": "windows10",
+      "properties": [
+        {
+          "name": "activeFirewallRequired",
+          "type": "Boolean",
+          "description": "Require active firewall on Windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "antiSpywareRequired",
+          "type": "Boolean",
+          "description": "Require any AntiSpyware solution registered with Windows Decurity Center to be on and monitoring (e.g. Symantec, Windows Defender).",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "antivirusRequired",
+          "type": "Boolean",
+          "description": "Require any Antivirus solution registered with Windows Decurity Center to be on and monitoring (e.g. Symantec, Windows Defender).",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "bitLockerEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported healthy by Windows Device Health Attestation - bit locker is enabled",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "codeIntegrityEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "configurationManagerComplianceRequired",
+          "type": "Boolean",
+          "description": "Require to consider SCCM Compliance state into consideration for Intune Compliance State.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "defenderEnabled",
+          "type": "Boolean",
+          "description": "Require Windows Defender Antimalware on Windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "defenderVersion",
+          "type": "String",
+          "description": "Require Windows Defender Antimalware minimum version on Windows devices.",
+          "kind": "simple"
+        },
+        {
+          "name": "deviceCompliancePolicyScript",
+          "type": "deviceCompliancePolicyScript",
+          "kind": "simple"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Device Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "earlyLaunchAntiMalwareDriverEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation - early launch antimalware driver is enabled.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "firmwareProtectionEnabled",
+          "type": "Boolean",
+          "description": "When TRUE, indicates that Firmware protection is required to be reported as healthy by Microsoft Azure Attestion. When FALSE, indicates that Firmware protection is not required to be reported as healthy. Devices that support either Dynamic Root of Trust for Measurement (DRTM) or Firmware Attack Surface Reduction (FASR) will report compliant for this setting. Default value is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "kernelDmaProtectionEnabled",
+          "type": "Boolean",
+          "description": "When TRUE, indicates that Kernel Direct Memory Access (DMA) protection is required to be reported as healthy by Microsoft Azure Attestion. When FALSE, indicates that Kernel DMA Protection is not required to be reported as healthy. Default value is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "memoryIntegrityEnabled",
+          "type": "Boolean",
+          "description": "When TRUE, indicates that Memory Integrity as known as Hypervisor-protected Code Integrity (HVCI) or Hypervisor Enforced Code Integrity protection is required to be reported as healthy by Microsoft Azure Attestion. When FALSE, indicates that Memory Integrity Protection is not required to be reported as healthy. Default value is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "mobileOsMaximumVersion",
+          "type": "String",
+          "description": "Maximum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "mobileOsMinimumVersion",
+          "type": "String",
+          "description": "Minimum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Windows 10 version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Windows 10 version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordBlockSimple",
+          "type": "Boolean",
+          "description": "Indicates whether or not to block simple password.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "The password expiration in days.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "The minimum password length.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "The number of previous passwords to prevent re-use of.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock Windows device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredToUnlockFromIdle",
+          "type": "Boolean",
+          "description": "Require a password to unlock an idle device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required password type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "requireHealthyDeviceReport",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "rtpEnabled",
+          "type": "Boolean",
+          "description": "Require Windows Defender Antimalware Real-Time Protection on Windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "secureBootEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation - secure boot is enabled.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "signatureOutOfDate",
+          "type": "Boolean",
+          "description": "Require Windows Defender Antimalware Signature to be up to date on Windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "tpmRequired",
+          "type": "Boolean",
+          "description": "Require Trusted Platform Module(TPM) to be present.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "validOperatingSystemBuildRanges",
+          "type": "[]operatingSystemVersionRange",
+          "description": "The valid operating system build ranges on Windows devices. This collection can contain a maximum of 10000 elements.",
+          "kind": "simple"
+        },
+        {
+          "name": "virtualizationBasedSecurityEnabled",
+          "type": "Boolean",
+          "description": "When TRUE, indicates that Virtualization-based Security is required to be reported as healthy by Microsoft Azure Attestion. When FALSE, indicates that Virtualization-based Security is not required to be reported as healthy. Default value is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "wslDistributions",
+          "type": "[]wslDistributionConfiguration",
+          "kind": "simple"
+        }
+      ]
+    },
+    {
+      "type": "windows10MobileCompliancePolicy",
+      "platform": "Windows 10 Mobile",
+      "family": "windows10",
+      "properties": [
+        {
+          "name": "activeFirewallRequired",
+          "type": "Boolean",
+          "description": "Require active firewall on Windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "bitLockerEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported healthy by Windows Device Health Attestation - bit locker is enabled",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "codeIntegrityEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "earlyLaunchAntiMalwareDriverEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation - early launch antimalware driver is enabled.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordBlockSimple",
+          "type": "Boolean",
+          "description": "Whether or not to block syncing the calendar.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before password expiration. Valid values 1 to 255",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum password length. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "The number of previous passwords to prevent re-use of.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock Windows Phone device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required password type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequireToUnlockFromIdle",
+          "type": "Boolean",
+          "description": "Require a password to unlock an idle device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "secureBootEnabled",
+          "type": "Boolean",
+          "description": "Require devices to be reported as healthy by Windows Device Health Attestation - secure boot is enabled.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on windows devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "validOperatingSystemBuildRanges",
+          "type": "[]operatingSystemVersionRange",
+          "description": "The valid operating system build ranges on Windows devices. This collection can contain a maximum of 10000 elements.",
+          "kind": "simple"
+        }
+      ]
+    },
+    {
+      "type": "windows81CompliancePolicy",
+      "platform": "Windows 8.1",
+      "family": "windows10",
+      "properties": [
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Windows 8.1 version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Windows 8.1 version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordBlockSimple",
+          "type": "Boolean",
+          "description": "Indicates whether or not to block simple password.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Password expiration in days.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "The minimum password length.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "The number of previous passwords to prevent re-use of. Valid values 0 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock Windows device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required password type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Indicates whether or not to require encryption on a windows 8.1 device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "windowsPhone81CompliancePolicy",
+      "platform": "Windows Phone 8.1",
+      "family": "windows10",
+      "properties": [
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Windows Phone version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordBlockSimple",
+          "type": "Boolean",
+          "description": "Whether or not to block syncing the calendar.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the password expires.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum length of passwords.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passwords to block. Valid values 0 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Whether or not to require a password.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required password type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on windows phone devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "macOSCompliancePolicy",
+      "platform": "macOS",
+      "family": "macOS",
+      "properties": [
+        {
+          "name": "advancedThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "MDATP Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceCompliancePolicyScript",
+          "type": "deviceCompliancePolicyScript",
+          "kind": "simple"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "firewallBlockAllIncoming",
+          "type": "Boolean",
+          "description": "Corresponds to the “Block all incoming connections” option.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "firewallEnabled",
+          "type": "Boolean",
+          "description": "Whether the firewall should be enabled or not.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "firewallEnableStealthMode",
+          "type": "Boolean",
+          "description": "Corresponds to “Enable stealth mode.”",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "gatekeeperAllowedAppSource",
+          "type": "macOSGatekeeperAppSources",
+          "description": "System and Privacy setting that determines which download locations apps can be run from on a macOS device. Possible values are: `notConfigured`, `macAppStore`, `macAppStoreAndIdentifiedDevelopers`, `anywhere`.",
+          "options": [
+            {
+              "value": "notConfigured",
+              "isDefault": true
+            },
+            {
+              "value": "macAppStore",
+              "isDefault": false
+            },
+            {
+              "value": "macAppStoreAndIdentifiedDevelopers",
+              "isDefault": false
+            },
+            {
+              "value": "anywhere",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "osMaximumBuildVersion",
+          "type": "String",
+          "description": "Maximum MacOS build version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum MacOS version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumBuildVersion",
+          "type": "String",
+          "description": "Minimum MacOS build version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum MacOS version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordBlockSimple",
+          "type": "Boolean",
+          "description": "Indicates whether or not to block simple passwords.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the password expires. Valid values 1 to 65535",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum length of password. Valid values 4 to 14",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passwords to block. Valid values 1 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Whether or not to require a password.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required password type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on Mac OS devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "systemIntegrityProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled system integrity protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "iosCompliancePolicy",
+      "platform": "iOS/iPadOS",
+      "family": "iOS",
+      "properties": [
+        {
+          "name": "advancedThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "MDATP Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection .",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "managedEmailProfileRequired",
+          "type": "Boolean",
+          "description": "Indicates whether or not to require a managed email profile.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "osMaximumBuildVersion",
+          "type": "String",
+          "description": "Maximum IOS build version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum IOS version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumBuildVersion",
+          "type": "String",
+          "description": "Minimum IOS build version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum IOS version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeBlockSimple",
+          "type": "Boolean",
+          "description": "Indicates whether or not to block simple passcodes.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passcodeExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the passcode expires. Starting January 2026 (Intune release version: 2601), the maximum expiration days will be limited to 730 days. Any setting above 730 days will be default to 730 days. Valid values 1 to 65535",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeMinimumCharacterSetCount",
+          "type": "Int32",
+          "description": "The number of character sets required in the password.",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeMinimumLength",
+          "type": "Int32",
+          "description": "Minimum length of passcode. Valid values 4 to 14",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a passcode is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeMinutesOfInactivityBeforeScreenTimeout",
+          "type": "Int32",
+          "description": "Minutes of inactivity before the screen times out.",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodePreviousPasscodeBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passcodes to block. Valid values 1 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passcodeRequired",
+          "type": "Boolean",
+          "description": "Indicates whether or not to require a passcode.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passcodeRequiredType",
+          "type": "requiredPasswordType",
+          "description": "The required passcode type. Possible values are: `deviceDefault`, `alphanumeric`, `numeric`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "restrictedApps",
+          "type": "[]appListItem",
+          "description": "Require the device to not have the specified apps installed. This collection can contain a maximum of 100 elements.",
+          "kind": "simple"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be jailbroken. When TRUE, if the device is detected as jailbroken it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device jailbroken state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "androidCompliancePolicy",
+      "platform": "Android device administrator",
+      "family": "android",
+      "properties": [
+        {
+          "name": "advancedThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "MDATP Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "conditionStatementId",
+          "type": "String",
+          "description": "Condition statement id.",
+          "kind": "simple"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "minAndroidSecurityPatchLevel",
+          "type": "String",
+          "description": "Minimum Android security patch level.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the password expires. Valid values 1 to 365",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum password length. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passwords to block. Valid values 1 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "androidRequiredPasswordType",
+          "description": "Type of characters in password. Possible values are: `deviceDefault`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `numeric`, `numericComplex`, `any`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "any",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordSignInFailureCountBeforeFactoryReset",
+          "type": "Int32",
+          "description": "Number of sign-in failures allowed before factory reset. Valid values 1 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "requiredPasswordComplexity",
+          "type": "androidRequiredPasswordComplexity",
+          "description": "Indicates the required password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 11+. Possible values are: `none`, `low`, `medium`, `high`.",
+          "options": [
+            {
+              "value": "none",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "restrictedApps",
+          "type": "[]appListItem",
+          "description": "Require the device to not have the specified apps installed. This collection can contain a maximum of 100 elements.",
+          "kind": "simple"
+        },
+        {
+          "name": "securityBlockDeviceAdministratorManagedDevices",
+          "type": "Boolean",
+          "description": "Block device administrator managed devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityDisableUsbDebugging",
+          "type": "Boolean",
+          "description": "Disable USB debugging on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityPreventInstallAppsFromUnknownSources",
+          "type": "Boolean",
+          "description": "Require that devices disallow installation of apps from unknown sources.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireCompanyPortalAppIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the Company Portal client app runtime integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireGooglePlayServices",
+          "type": "Boolean",
+          "description": "Require Google Play Services to be installed and enabled on the device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationBasicIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the SafetyNet basic integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationCertifiedDevice",
+          "type": "Boolean",
+          "description": "Require the device to pass the SafetyNet certified device check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireUpToDateSecurityProviders",
+          "type": "Boolean",
+          "description": "Require the device to have up to date security providers. The device will require Google Play Services to be enabled and up to date.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireVerifyApps",
+          "type": "Boolean",
+          "description": "Require the Android Verify apps feature is turned on.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "androidWorkProfileCompliancePolicy",
+      "platform": "Android Enterprise work profile",
+      "family": "android",
+      "properties": [
+        {
+          "name": "advancedThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "MDATP Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "minAndroidSecurityPatchLevel",
+          "type": "String",
+          "description": "Minimum Android security patch level.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the password expires. Valid values 1 to 365",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum password length. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passwords to block. Valid values 1 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "androidRequiredPasswordType",
+          "description": "Type of characters in password. Possible values are: `deviceDefault`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `numeric`, `numericComplex`, `any`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "any",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordSignInFailureCountBeforeFactoryReset",
+          "type": "Int32",
+          "description": "Number of sign-in failures allowed before factory reset. Valid values 1 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "requiredPasswordComplexity",
+          "type": "androidRequiredPasswordComplexity",
+          "description": "Indicates the required device password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android API 12+. Possible values are: `none`, `low`, `medium`, `high`.",
+          "options": [
+            {
+              "value": "none",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityDisableUsbDebugging",
+          "type": "Boolean",
+          "description": "Disable USB debugging on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityPreventInstallAppsFromUnknownSources",
+          "type": "Boolean",
+          "description": "Require that devices disallow installation of apps from unknown sources.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireCompanyPortalAppIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the Company Portal client app runtime integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequiredAndroidSafetyNetEvaluationType",
+          "type": "androidSafetyNetEvaluationType",
+          "description": "Require a specific SafetyNet evaluation type for compliance. Possible values are: `basic`, `hardwareBacked`.",
+          "options": [
+            {
+              "value": "basic",
+              "isDefault": false
+            },
+            {
+              "value": "hardwareBacked",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireGooglePlayServices",
+          "type": "Boolean",
+          "description": "Require Google Play Services to be installed and enabled on the device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationBasicIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the Play Integrity basic integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationCertifiedDevice",
+          "type": "Boolean",
+          "description": "Require the device to pass the Play Integrity device integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireUpToDateSecurityProviders",
+          "type": "Boolean",
+          "description": "Require the device to have up to date security providers. The device will require Google Play Services to be enabled and up to date.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireVerifyApps",
+          "type": "Boolean",
+          "description": "Require the Android Verify apps feature is turned on.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfileInactiveBeforeScreenLockInMinutes",
+          "type": "Int32",
+          "description": "Minutes of inactivity before the screen times out.",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordExpirationInDays",
+          "type": "Int32",
+          "description": "Number of days before the work profile password expires. Valid values 1 to 365",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum length of work profile password. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordRequiredType",
+          "type": "androidWorkProfileRequiredPasswordType",
+          "description": "Type of work profile password that is required. Possible values are: `deviceDefault`, `lowSecurityBiometric`, `required`, `atLeastNumeric`, `numericComplex`, `atLeastAlphabetic`, `atLeastAlphanumeric`, `alphanumericWithSymbols`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "required",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastNumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastAlphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastAlphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfilePreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous work profile passwords to block. Valid values 0 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfileRequiredPasswordComplexity",
+          "type": "androidRequiredPasswordComplexity",
+          "description": "Indicates the required work profile password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: `none`, `low`, `medium`, `high`.",
+          "options": [
+            {
+              "value": "none",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfileRequirePassword",
+          "type": "Boolean",
+          "description": "Password is required or not for work profile",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "androidForWorkCompliancePolicy",
+      "platform": "Android for Work",
+      "family": "android",
+      "properties": [
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Require that devices have enabled device threat protection.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Require Mobile Threat Protection minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "minAndroidSecurityPatchLevel",
+          "type": "String",
+          "description": "Minimum Android security patch level.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Number of days before the password expires. Valid values 1 to 365",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum password length. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous passwords to block. Valid values 1 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "androidRequiredPasswordType",
+          "description": "Type of characters in password. Possible values are: `deviceDefault`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `numeric`, `numericComplex`, `any`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "alphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "any",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordSignInFailureCountBeforeFactoryReset",
+          "type": "Int32",
+          "description": "Number of sign-in failures allowed before factory reset. Valid values 1 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "requiredPasswordComplexity",
+          "type": "androidRequiredPasswordComplexity",
+          "description": "Indicates the required device password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android API 12+. Possible values are: `none`, `low`, `medium`, `high`.",
+          "options": [
+            {
+              "value": "none",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityDisableUsbDebugging",
+          "type": "Boolean",
+          "description": "Disable USB debugging on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityPreventInstallAppsFromUnknownSources",
+          "type": "Boolean",
+          "description": "Require that devices disallow installation of apps from unknown sources.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireCompanyPortalAppIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the Company Portal client app runtime integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequiredAndroidSafetyNetEvaluationType",
+          "type": "androidSafetyNetEvaluationType",
+          "description": "Require a specific SafetyNet evaluation type for compliance. Possible values are: `basic`, `hardwareBacked`.",
+          "options": [
+            {
+              "value": "basic",
+              "isDefault": false
+            },
+            {
+              "value": "hardwareBacked",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireGooglePlayServices",
+          "type": "Boolean",
+          "description": "Require Google Play Services to be installed and enabled on the device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationBasicIntegrity",
+          "type": "Boolean",
+          "description": "Require the device to pass the Play Integrity basic integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationCertifiedDevice",
+          "type": "Boolean",
+          "description": "Require the device to pass the Play Integrity device integrity check.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireUpToDateSecurityProviders",
+          "type": "Boolean",
+          "description": "Require the device to have up to date security providers. The device will require Google Play Services to be enabled and up to date.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireVerifyApps",
+          "type": "Boolean",
+          "description": "Require the Android Verify apps feature is turned on.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfileInactiveBeforeScreenLockInMinutes",
+          "type": "Int32",
+          "description": "Minutes of inactivity before the screen times out.",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordExpirationInDays",
+          "type": "Int32",
+          "description": "Number of days before the work profile password expires. Valid values 1 to 365",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum length of work profile password. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfilePasswordRequiredType",
+          "type": "androidForWorkRequiredPasswordType",
+          "description": "Type of work profile password that is required. Possible values are: `deviceDefault`, `lowSecurityBiometric`, `required`, `atLeastNumeric`, `numericComplex`, `atLeastAlphabetic`, `atLeastAlphanumeric`, `alphanumericWithSymbols`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "required",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastNumeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastAlphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "atLeastAlphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfilePreviousPasswordBlockCount",
+          "type": "Int32",
+          "description": "Number of previous work profile passwords to block. Valid values 0 to 24",
+          "kind": "simple"
+        },
+        {
+          "name": "workProfileRequiredPasswordComplexity",
+          "type": "androidRequiredPasswordComplexity",
+          "description": "Indicates the required work profile password complexity on Android. One of: NONE, LOW, MEDIUM, HIGH. This is a new API targeted to Android 12+. Possible values are: `none`, `low`, `medium`, `high`.",
+          "options": [
+            {
+              "value": "none",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "workProfileRequirePassword",
+          "type": "Boolean",
+          "description": "Password is required or not for work profile",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "androidDeviceOwnerCompliancePolicy",
+      "platform": "Android Enterprise fully managed",
+      "family": "android",
+      "properties": [
+        {
+          "name": "advancedThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Indicates the Microsoft Defender for Endpoint (also referred to Microsoft Defender Advanced Threat Protection (MDATP)) minimum risk level to report noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionEnabled",
+          "type": "Boolean",
+          "description": "Indicates whether the policy requires devices have device threat protection enabled.  When TRUE, threat protection is enabled.  When FALSE, threat protection is not enabled.  Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "deviceThreatProtectionRequiredSecurityLevel",
+          "type": "deviceThreatProtectionLevel",
+          "description": "Indicates the minimum mobile threat protection risk level to that results in Intune reporting device noncompliance. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`. Possible values are: `unavailable`, `secured`, `low`, `medium`, `high`, `notSet`.",
+          "options": [
+            {
+              "value": "unavailable",
+              "isDefault": true
+            },
+            {
+              "value": "secured",
+              "isDefault": false
+            },
+            {
+              "value": "low",
+              "isDefault": false
+            },
+            {
+              "value": "medium",
+              "isDefault": false
+            },
+            {
+              "value": "high",
+              "isDefault": false
+            },
+            {
+              "value": "notSet",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "minAndroidSecurityPatchLevel",
+          "type": "String",
+          "description": "Indicates the minimum Android security patch level required to mark the device as compliant.  For example: \"February 1, 2025\"",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Indicates the maximum Android version required to mark the device as compliant.  For example: \"15\"",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Indicates the minimum Android version required to mark the device as compliant. For example: \"14\"",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordExpirationDays",
+          "type": "Int32",
+          "description": "Indicates the number of days before the password expires. Valid values 1 to 365.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Indicates the minimum password length required to mark the device as compliant. Valid values are 4 to 16, inclusive. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLetterCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of letter characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLowerCaseCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of lower case characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumNonLetterCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of non-letter characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumNumericCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of numeric characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumSymbolCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of symbol characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumUpperCaseCharacters",
+          "type": "Int32",
+          "description": "Indicates the minimum number of upper case letter characters required for device password for the device to be marked compliant. Valid values 1 to 16.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Indicates the number of minutes of inactivity before a password is required.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordPreviousPasswordCountToBlock",
+          "type": "Int32",
+          "description": "Indicates the number of previous passwords to block. Valid values 1 to 24.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Indicates whether a password is required to unlock the device. When TRUE, there must be a password set that unlocks the device for the device to be marked as compliant.  When FALSE, a device is marked as compliant whether or not a password is set as required to unlock the device.  Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "androidDeviceOwnerRequiredPasswordType",
+          "description": "Indicates the password complexity requirement for the device to be marked compliant. Possible values are: `deviceDefault`, `required`, `numeric`, `numericComplex`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `customPassword`. Possible values are: `deviceDefault`, `required`, `numeric`, `numericComplex`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `customPassword`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "required",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "alphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "customPassword",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "requireNoPendingSystemUpdates",
+          "type": "Boolean",
+          "description": "Indicates whether the device has pending security or OS updates and sets the compliance state accordingly.  When TRUE, checks if there are any pending system updates on each check in and if there are any pending security or OS version updates (System Updates), the device will be reported as non-compliant. If set to FALSE, then checks for any pending security or OS version updates (System Updates) are done without impact to device compliance state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequiredAndroidSafetyNetEvaluationType",
+          "type": "androidSafetyNetEvaluationType",
+          "description": "Indicates the types of measurements and reference data used to evaluate the device SafetyNet evaluation. Evaluation is completed on the device to assess device integrity based on checks defined by Android and built into the device hardware, for example, compromised OS version or root detection. Possible values are: `basic`, `hardwareBacked`, with default value of `basic`. Possible values are: `basic`, `hardwareBacked`.",
+          "options": [
+            {
+              "value": "basic",
+              "isDefault": false
+            },
+            {
+              "value": "hardwareBacked",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireIntuneAppIntegrity",
+          "type": "Boolean",
+          "description": "Indicates whether Intune application integrity is required to mark the device as compliant.  When TRUE, Intune checks that the Intune app installed on fully managed, dedicated, or corporate-owned work profile Android Enterprise enrolled devices, is the one provided by Microsoft from the Managed Google Play store. If the check fails, the device will be reported as non-compliant. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationBasicIntegrity",
+          "type": "Boolean",
+          "description": "Indicates whether the compliance check will validate the Google Play Integrity check. When TRUE, the Google Play integrity basic check must pass to consider the device compliant.  When FALSE, the Google Play integrity basic check can pass or fail and the device will be considered compliant.  Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityRequireSafetyNetAttestationCertifiedDevice",
+          "type": "Boolean",
+          "description": "Indicates whether the compliance check will validate the Google Play Integrity check. When TRUE, the Google Play integrity device check must pass to consider the device compliant.  When FALSE, the Google Play integrity device check can pass or fail and the device will be considered compliant.  Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Indicates whether encryption on Android devices is required to mark the device as compliant.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    },
+    {
+      "type": "aospDeviceOwnerCompliancePolicy",
+      "platform": "AOSP device owner",
+      "family": "android",
+      "properties": [
+        {
+          "name": "minAndroidSecurityPatchLevel",
+          "type": "String",
+          "description": "Minimum Android security patch level.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMaximumVersion",
+          "type": "String",
+          "description": "Maximum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "osMinimumVersion",
+          "type": "String",
+          "description": "Minimum Android version.",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinimumLength",
+          "type": "Int32",
+          "description": "Minimum password length. Valid values 4 to 16",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordMinutesOfInactivityBeforeLock",
+          "type": "Int32",
+          "description": "Minutes of inactivity before a password is required. Valid values 1 to 8640",
+          "kind": "simple"
+        },
+        {
+          "name": "passwordRequired",
+          "type": "Boolean",
+          "description": "Require a password to unlock device.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "passwordRequiredType",
+          "type": "androidDeviceOwnerRequiredPasswordType",
+          "description": "Type of characters in password. Possible values are: `deviceDefault`, `required`, `numeric`, `numericComplex`, `alphabetic`, `alphanumeric`, `alphanumericWithSymbols`, `lowSecurityBiometric`, `customPassword`.",
+          "options": [
+            {
+              "value": "deviceDefault",
+              "isDefault": true
+            },
+            {
+              "value": "required",
+              "isDefault": false
+            },
+            {
+              "value": "numeric",
+              "isDefault": false
+            },
+            {
+              "value": "numericComplex",
+              "isDefault": false
+            },
+            {
+              "value": "alphabetic",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumeric",
+              "isDefault": false
+            },
+            {
+              "value": "alphanumericWithSymbols",
+              "isDefault": false
+            },
+            {
+              "value": "lowSecurityBiometric",
+              "isDefault": false
+            },
+            {
+              "value": "customPassword",
+              "isDefault": false
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "securityBlockJailbrokenDevices",
+          "type": "Boolean",
+          "description": "Indicates the device should not be rooted. When TRUE, if the device is detected as rooted it will be reported non-compliant. When FALSE, the device is not reported as non-compliant regardless of device rooted state. Default is FALSE.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        },
+        {
+          "name": "storageRequireEncryption",
+          "type": "Boolean",
+          "description": "Require encryption on Android devices.",
+          "options": [
+            {
+              "value": "Require"
+            },
+            {
+              "value": "Not configured",
+              "isDefault": true
+            }
+          ],
+          "kind": "choice"
+        }
+      ]
+    }
+  ]
+}

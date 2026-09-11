@@ -108,6 +108,9 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
+                <Link href="/compliance/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
+                  Compliance
+                </Link>
                 <Link href="/changelog/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
                   Changelog
                 </Link>

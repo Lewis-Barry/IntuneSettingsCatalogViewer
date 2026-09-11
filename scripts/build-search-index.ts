@@ -15,7 +15,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { createHash } from 'node:crypto';
-import type { SettingDefinition, SettingCategory, CategoryTreeNode, SearchIndexEntry } from '../src/lib/types';
+import { hasUsage, type SettingDefinition, type SettingCategory, type CategoryTreeNode, type SearchIndexEntry } from '../src/lib/types';
 import { getAsrRuleInfo } from '../src/lib/asr-rules';
 
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
@@ -32,6 +32,16 @@ function getScope(baseUri?: string): 'device' | 'user' | 'unknown' {
   if (baseUri.toLowerCase().includes('/device/')) return 'device';
   if (baseUri.toLowerCase().includes('/user/')) return 'user';
   return 'unknown';
+}
+
+/**
+ * Emit settingUsage only when it isn't the default. 'configuration' is ~95% of
+ * the catalog, and spelling it out on every record would add ~600 KB to the
+ * browse payload and search index for no information. Readers treat a missing
+ *  value as 'configuration' (see `hasUsage` in src/lib/types.ts).
+ */
+function usageOrDefault(settingUsage: string | undefined): string | undefined {
+  return settingUsage && settingUsage !== 'configuration' ? settingUsage : undefined;
 }
 
 /** Get friendly setting type from OData type */
@@ -190,8 +200,13 @@ function buildCategoryTree(
   return { roots, mergeMap };
 }
 
-/** Raw windowsSkus array from a setting's applicability (untyped upstream). */
+/**
+ * Raw windowsSkus array from a setting's applicability (untyped upstream).
+ * The two Windows SKU reports below only make sense for the configuration
+ * catalog, so compliance-only settings never contribute rows.
+ */
 function windowsSkus(s: SettingDefinition): string[] {
+  if (!hasUsage(s.settingUsage, 'configuration')) return [];
   return ((s.applicability as Record<string, unknown> | undefined)?.windowsSkus as string[] | undefined) || [];
 }
 
@@ -361,20 +376,22 @@ function main() {
       : s.baseUri || s.offsetUri || '';
 
   const settingsCountMap = new Map<string, number>();
+  const countSetting = (s: SettingDefinition) => {
+    settingsCountMap.set(s.categoryId, (settingsCountMap.get(s.categoryId) || 0) + 1);
+  };
+
   for (const s of settings) {
     const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
     if (isRoot) {
       // Always count root settings (except synthetic group containers which
       // are promoted through their children — but these are rare enough to
       // keep in the count for simplicity).
-      const count = settingsCountMap.get(s.categoryId) || 0;
-      settingsCountMap.set(s.categoryId, count + 1);
+      countSetting(s);
     } else {
       // Child setting — only count if its CSP path differs from the parent's
       const parent = settingById.get(s.rootDefinitionId!);
       if (!parent || getCspPath(s) !== getCspPath(parent)) {
-        const count = settingsCountMap.get(s.categoryId) || 0;
-        settingsCountMap.set(s.categoryId, count + 1);
+        countSetting(s);
       }
     }
   }
@@ -425,8 +442,18 @@ function main() {
     console.log(`Merged ${mergeCount} duplicate categories`);
   }
 
-  fs.writeFileSync(CATALOG_STATS_FILE, JSON.stringify({ totalSettings: settings.length }, null, 2), 'utf-8');
-  console.log(`Catalog stats → ${CATALOG_STATS_FILE}`);
+  // Per-usage counts so the browser header can report the catalog it's showing.
+  // settingUsage is a flag set, so a dual-usage setting counts in both catalogs
+  // — exactly as it appears in both filters.
+  const byUsage: Record<string, number> = {};
+  for (const s of settings) {
+    for (const flag of (s.settingUsage || 'configuration').split(',')) {
+      const usage = flag.trim();
+      if (usage) byUsage[usage] = (byUsage[usage] || 0) + 1;
+    }
+  }
+  fs.writeFileSync(CATALOG_STATS_FILE, JSON.stringify({ totalSettings: settings.length, byUsage }, null, 2), 'utf-8');
+  console.log(`Catalog stats: ${Object.entries(byUsage).map(([usage, n]) => `${n} ${usage}`).join(', ')} → ${CATALOG_STATS_FILE}`);
 
   // ── Generate settings-browse.json ──
   // A slim version of settings.json containing only the fields needed for the
@@ -450,6 +477,7 @@ function main() {
       offsetUri: s.offsetUri || undefined,
       rootDefinitionId: s.rootDefinitionId || undefined,
       uxBehavior: s.uxBehavior || undefined,
+      settingUsage: usageOrDefault(s.settingUsage),
       infoUrls: s.infoUrls?.length ? s.infoUrls : undefined,
       applicability: s.applicability
         ? { platform: s.applicability.platform, technologies: s.applicability.technologies }

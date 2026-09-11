@@ -7,6 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary, ChangelogSummary } from './types';
+import type { ComplianceTemplate, ComplianceTemplatesFile } from './compliance-types';
 import { settingSlug } from './slug';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -77,6 +78,11 @@ export function loadCategoryTree(): CategoryTreeNode[] {
 
 export function loadCatalogStats(): { totalSettings: number } {
   return readJSON<{ totalSettings: number }>('catalog-stats.json') || { totalSettings: 0 };
+}
+
+/** Classic compliance catalog — small enough to pass as a build-time prop. */
+export function loadComplianceTemplates(): ComplianceTemplate[] {
+  return readJSON<ComplianceTemplatesFile>('compliance-templates.json')?.templates ?? [];
 }
 
 export function loadChangelog(): ChangelogEntry[] {

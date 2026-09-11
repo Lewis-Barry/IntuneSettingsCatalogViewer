@@ -4892,6 +4892,22 @@
     "settingCount": 2
   },
   {
+    "id": "f2c81665-b10b-4fa2-b177-7781b8650292",
+    "name": null,
+    "displayName": "Allowed Distributions",
+    "description": "Allowed Distributions",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "f2c81665-b10b-4fa2-b177-7781b8650292",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 4
+  },
+  {
     "id": "a7b1c291-6bec-499b-9018-6120950cd5a6",
     "name": null,
     "displayName": "App Control for Business",
@@ -5385,6 +5401,22 @@
     "settingCount": 2
   },
   {
+    "id": "9f52aad9-53cb-4f92-b21f-7f4a6721a623",
+    "name": null,
+    "displayName": "Custom Compliance",
+    "description": "Custom Compliance",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance,reusableSetting",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "9f52aad9-53cb-4f92-b21f-7f4a6721a623",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 3
+  },
+  {
     "id": "22f2b16b-e1af-45fa-8d2f-687854b72c02",
     "name": null,
     "displayName": "Data Protection",
@@ -5806,6 +5838,22 @@
     "childCategoryIds": [],
     "children": [],
     "settingCount": 4
+  },
+  {
+    "id": "2dafc535-d0f1-4c8c-9829-044338deebfa",
+    "name": null,
+    "displayName": "Device Encryption",
+    "description": "Device Encryption",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "2dafc535-d0f1-4c8c-9829-044338deebfa",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 1
   },
   {
     "id": "992a8a1e-428e-41cb-948e-4e5da86105fa",
@@ -16080,6 +16128,22 @@
       }
     ],
     "settingCount": 43
+  },
+  {
+    "id": "8ccafa97-9bbb-40e1-b668-3110bc449ac2",
+    "name": null,
+    "displayName": "Password Policy",
+    "description": "Password Policy",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "8ccafa97-9bbb-40e1-b668-3110bc449ac2",
+    "childCategoryIds": [],
+    "children": [],
+    "settingCount": 5
   },
   {
     "id": "1d5e7986-870c-444b-bf09-78bbf82a53fa",
