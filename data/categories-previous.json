@@ -15565,5 +15565,61 @@
     "parentCategoryId": "00000000-0000-0000-0000-000000000000",
     "rootCategoryId": "a93cb07c-fa96-42af-8987-40f78eae10bd",
     "childCategoryIds": []
+  },
+  {
+    "id": "2dafc535-d0f1-4c8c-9829-044338deebfa",
+    "name": null,
+    "displayName": "Device Encryption",
+    "description": "Device Encryption",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "2dafc535-d0f1-4c8c-9829-044338deebfa",
+    "childCategoryIds": []
+  },
+  {
+    "id": "8ccafa97-9bbb-40e1-b668-3110bc449ac2",
+    "name": null,
+    "displayName": "Password Policy",
+    "description": "Password Policy",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "8ccafa97-9bbb-40e1-b668-3110bc449ac2",
+    "childCategoryIds": []
+  },
+  {
+    "id": "f2c81665-b10b-4fa2-b177-7781b8650292",
+    "name": null,
+    "displayName": "Allowed Distributions",
+    "description": "Allowed Distributions",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "f2c81665-b10b-4fa2-b177-7781b8650292",
+    "childCategoryIds": []
+  },
+  {
+    "id": "9f52aad9-53cb-4f92-b21f-7f4a6721a623",
+    "name": null,
+    "displayName": "Custom Compliance",
+    "description": "Custom Compliance",
+    "categoryDescription": null,
+    "helpText": null,
+    "platforms": "linux",
+    "technologies": "linuxMdm",
+    "settingUsage": "compliance,reusableSetting",
+    "parentCategoryId": "00000000-0000-0000-0000-000000000000",
+    "rootCategoryId": "9f52aad9-53cb-4f92-b21f-7f4a6721a623",
+    "childCategoryIds": []
   }
 ]
