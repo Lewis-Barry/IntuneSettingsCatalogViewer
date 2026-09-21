@@ -34,10 +34,14 @@ function buildChildren(
 ): { children?: BaselineSetting[] } {
   const children: BaselineSetting[] = settings.map((setting) => {
     const id = setting.settingDefinitionId;
-    const options = lookup.baselines.get(id)?.options;
+    const definition = lookup.baselines.get(id);
     const baseline = lookup.settings.get(id);
+
+    // the followin code must conform to fetch-baselines.ts
     const translateOption = (value: string): string => {
-      const displayName = options?.find((option) => option.itemId === value)
+      const displayName = definition?.options?.find((option) =>
+        option.itemId === value
+      )
         ?.displayName;
       if (displayName) {
         return displayName;
@@ -45,10 +49,11 @@ function buildChildren(
       const prefix = `${id}_`;
       return value.startsWith(prefix) ? value.substring(prefix.length) : value;
     };
+    const description = definition?.description || definition?.helpText;
     const commonProps = {
       settingDefinitionId: id,
-      displayName: baseline?.displayName ?? id,
-      ...baseline?.description ? { description: baseline.description } : {},
+      displayName: (definition?.displayName || id).trim(),
+      ...description ? { description } : {},
       ...baseline?.category ? { category: baseline.category } : {},
     };
     switch (setting["@odata.type"]) {
