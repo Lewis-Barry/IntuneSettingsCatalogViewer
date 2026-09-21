@@ -16,6 +16,7 @@ import {
 import { diffBaselineVersions, type BaselineChangeKind, type BaselineSettingChange } from '@/lib/baseline-diff';
 import { valueText, generateBaselineChangelogCsv, generateBaselineChangelogHtml } from '@/lib/baseline-export';
 import type { SettingDefinition } from '@/lib/types';
+import { CUSTOM_BASELINE_PREFIX, CustomBaselineError, loadCustomBaseline } from '@/lib/export-helper';
 
 const KIND_ORDER: BaselineChangeKind[] = ['added', 'removed', 'changed'];
 
@@ -103,11 +104,21 @@ export default function BaselineChangelogViewer() {
   useEffect(() => {
     if (!family) return;
     const v = family.versions; // newest first
-    const compare = defaultVersion(family) ?? v[0];
-    const base = v.find((x) => x !== compare) ?? compare;
+    const getVersion = (id: string | null) => {
+      if (!id) {
+        return null;
+      }
+      if (!id.startsWith(CUSTOM_BASELINE_PREFIX)) {
+        return v.find(meta => meta.id === id);
+      }
+      const baseline = shards.get(id);
+      return baseline?.baseId === family.baseId ? baseline : null;
+    };
+    const compare = getVersion(compareVersionId) ?? (defaultVersion(family) ?? v[0]);
+    const base = getVersion(baseVersionId) ?? (v.find((x) => x !== compare) ?? compare);
     setCompareVersionId(compare?.id ?? null);
     setBaseVersionId(base?.id ?? null);
-  }, [family]);
+  }, [family, baseVersionId, compareVersionId, shards]);
 
   // Reset view state whenever the comparison changes.
   useEffect(() => {
@@ -120,6 +131,10 @@ export default function BaselineChangelogViewer() {
   const ensureShard = useCallback(
     (id: string | null) => {
       if (!id || shards.has(id)) return;
+      if (id.startsWith(CUSTOM_BASELINE_PREFIX)) {
+        setError(`Custom baseline '${id}' not loaded.`);
+        return;
+      }
       loadBrowserJson<BaselineShard>(`baselines/${id}.json`)
         .then((shard) => setShards((prev) => prev.has(id) ? prev : new Map(prev).set(id, shard)))
         .catch((e) => setError(String(e)));
@@ -134,6 +149,11 @@ export default function BaselineChangelogViewer() {
 
   const baseShard = baseVersionId ? shards.get(baseVersionId) : undefined;
   const compareShard = compareVersionId ? shards.get(compareVersionId) : undefined;
+
+  const customShards = useMemo(
+    () => [...shards.values()].filter(shard => shard.baseId === baseId && shard.id.startsWith(CUSTOM_BASELINE_PREFIX)),
+    [baseId, shards]
+  );
 
   const diff = useMemo(() => {
     if (!baseShard || !compareShard) return null;
@@ -212,6 +232,65 @@ export default function BaselineChangelogViewer() {
   const versionLabel = (id: string | null) =>
     family?.versions.find((v) => v.id === id)?.displayVersion ?? '';
 
+  const selectVersionId = (index: BaselineIndex, versionId: string, setter: (versionId: string) => void) => {
+    if (versionId !== CUSTOM_BASELINE_PREFIX) {
+      setter(versionId);
+      return;
+    }
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (e) => {
+      e.preventDefault();
+      const file = input.files?.item(0);
+      if (!file) {
+        return;
+      }
+      loadCustomBaseline(index, file)
+        .then(baseline => {
+          setShards((prev) => prev.has(baseline.id) ? prev : new Map(prev).set(baseline.id, baseline));
+          if (baseline.baseId === baseId) {
+            setter(baseline.id);
+          } else {
+            const family = index.families.find((family) => family.baseId === baseline.baseId)
+            if (!family) {
+              setError("Baseline of unknown family loaded.");
+            } else {
+              if (confirm(`Policy file is based on ${family.displayName}.\nDo you want to switch?`)) {
+                setBaseId(baseline.baseId);
+                setter(baseline.id);
+              }
+            }
+          }
+        })
+        .catch(reason => alert(reason instanceof CustomBaselineError ? reason.message : String(reason)));
+    }
+    input.click();
+  };
+
+  const versionOptions = (disabledId: string | null) => {
+    return (
+      <>
+        {family?.versions.map((v) => (
+          <option key={v.id} value={v.id} disabled={v.id === disabledId}>
+            {v.displayVersion}
+          </option>
+        ))}
+        {customShards.length === 0
+          ? <option value={CUSTOM_BASELINE_PREFIX}>Custom...</option>
+          : <optgroup label="Custom">
+            {customShards.map((v) => (
+              <option key={v.id} value={v.id} disabled={v.id === disabledId}>
+                {v.displayName} ({v.displayVersion})
+              </option>
+            ))}
+            <option value={CUSTOM_BASELINE_PREFIX}>Add...</option>
+          </optgroup>
+        }
+      </>
+    );
+  };
+
   const downloadExport = (format: 'html' | 'csv') => {
     if (!diff || !family) return;
     const opts = {
@@ -284,12 +363,8 @@ export default function BaselineChangelogViewer() {
                 </legend>
                 <div className="flex items-center gap-2 flex-wrap">
                   <label htmlFor="baseline-base" className="sr-only">Base version (changes from)</label>
-                  <select id="baseline-base" value={baseVersionId ?? ''} onChange={(e) => setBaseVersionId(e.target.value)} className={selectClass}>
-                    {family.versions.map((v) => (
-                      <option key={v.id} value={v.id} disabled={v.id === compareVersionId}>
-                        {v.displayVersion}
-                      </option>
-                    ))}
+                  <select id="baseline-base" value={baseVersionId ?? ''} onChange={(e) => selectVersionId(index, e.target.value, setBaseVersionId)} className={selectClass}>
+                    {versionOptions(compareVersionId)}
                   </select>
 
                   <button
@@ -304,12 +379,8 @@ export default function BaselineChangelogViewer() {
                   </button>
 
                   <label htmlFor="baseline-compare" className="sr-only">Compare version (changes to)</label>
-                  <select id="baseline-compare" value={compareVersionId ?? ''} onChange={(e) => setCompareVersionId(e.target.value)} className={selectClass}>
-                    {family.versions.map((v) => (
-                      <option key={v.id} value={v.id} disabled={v.id === baseVersionId}>
-                        {v.displayVersion}
-                      </option>
-                    ))}
+                  <select id="baseline-compare" value={compareVersionId ?? ''} onChange={(e) => selectVersionId(index, e.target.value, setCompareVersionId)} className={selectClass}>
+                    {versionOptions(baseVersionId)}
                   </select>
                 </div>
               </fieldset>
