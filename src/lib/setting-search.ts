@@ -12,7 +12,12 @@ export function matchesCompatibilitySearch(setting: SettingDefinition, terms: re
       .map((field) => field?.toLowerCase() || '');
     normalizedFields.set(setting, fields);
   }
-  return terms.some((term) => fields.some((field) => field.includes(term)));
+  // Every word of some comma-separated term must appear somewhere in the setting.
+  const hay = fields.join(' ');
+  return terms.some((term) => {
+    const words = term.split(/\s+/).filter(Boolean);
+    return words.length > 0 && words.every((w) => hay.includes(w));
+  });
 }
 
 export function createMatchSourceMatcher(query?: string) {

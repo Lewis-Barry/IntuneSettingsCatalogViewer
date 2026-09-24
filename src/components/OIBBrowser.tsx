@@ -41,12 +41,22 @@ function getOIBMatchSources(
   def: SettingDefinition | undefined,
   query: string,
 ): MatchSource[] {
+  const asrInfo = def ? getAsrRuleInfo(def.id) : undefined;
+  // Multi-word queries are AND: every word of some comma-separated term must
+  // appear somewhere in the setting ("password history" ≠ anything with "password").
+  const hay = [flat.definitionId, def?.displayName, def?.name, def?.description, def?.baseUri, def?.offsetUri, asrInfo?.guid, ...(def?.keywords ?? [])]
+    .join(' ')
+    .toLowerCase();
+  const hasAllWords = query.split(',').some((term) => {
+    const words = term.trim().split(/\s+/).filter(Boolean);
+    return words.length > 0 && words.every((w) => hay.includes(w));
+  });
+  if (!hasAllWords) return [];
   if (!def) {
     // No definition — fall back to simple ID match
     if (flat.definitionId.toLowerCase().includes(query)) return ['keywords'];
     return [];
   }
-  const asrInfo = getAsrRuleInfo(def.id);
   const extraKeywords = asrInfo ? [asrInfo.guid] : undefined;
   const sources = detectMatchSources(def, query, extraKeywords);
   // Also check the raw definitionId (may differ from setting.name)
