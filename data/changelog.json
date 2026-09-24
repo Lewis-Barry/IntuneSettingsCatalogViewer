@@ -1,5 +1,1149 @@
 [
   {
+    "date": "2026-09-22",
+    "added": [
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries",
+        "displayName": "Tool override entries",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_toolrunmode_containersettingsreference",
+        "displayName": "Container settings",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_argumentlist_argumentmatch",
+        "displayName": "Match",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolname",
+        "displayName": "Name",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc",
+        "displayName": "Set value name to the Application User Model ID or the executable file name. Set value to the target full 4-part version string (for example, 151.0.2178.0).",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc_value",
+        "displayName": "Value",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.workaccountsetupconfig",
+        "displayName": "Require users to authenticate with a Google Workspace account",
+        "categoryId": "aad0d3ef-88f5-4b22-831b-27093eafbc64",
+        "categoryName": "Users and Accounts",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "com.apple.loginwindow_forcecaptiveportalconnectionfromlockscreen",
+        "displayName": "Force Captive Portal Connection From Lock Screen",
+        "categoryId": "8f831e0a-feb7-4cbb-acc1-2e583f3f4de3",
+        "categoryName": "Login Window Behavior",
+        "platform": "macOS"
+      },
+      {
+        "id": "linux_safedeploymentplan_siuupdatewindow",
+        "displayName": "SIU Update Window",
+        "categoryId": "bdde6ae4-2d87-4ef0-976e-ae2a57dfbf6b",
+        "categoryName": "Defender Safe Deployment Plan",
+        "platform": "linux"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_disabledefaultodignorelist",
+        "displayName": "Disable the default ignored extension list",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.edgereadingmodeservicebasedextractionenabled",
+        "displayName": "Enable service-based extraction for Reading Mode in Microsoft Edge",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_defaulttoolpermission_defaulttoolrunmode",
+        "displayName": "Run tools in a container by default",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_defaulttoolpermission",
+        "displayName": "Allow agent(s) to use tools by default",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc",
+        "displayName": "Set value name to the Application User Model ID or the executable file name. Set value to the target full 4-part version string (for example, 151.0.2178.0). (User)",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_toolrunmode",
+        "displayName": "Run",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_copilotcoworktoolactionsenabled",
+        "displayName": "Allow Cowork to take actions on your behalf (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc_value",
+        "displayName": "Value",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc_key",
+        "displayName": "Name",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.apple.loginwindow_forcewificonfigurationonlockscreen",
+        "displayName": "Force Wifi Configuration On Lock Screen",
+        "categoryId": "8f831e0a-feb7-4cbb-acc1-2e583f3f4de3",
+        "categoryName": "Login Window Behavior",
+        "platform": "macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion",
+        "displayName": "Configure per-application WebView2 downgrade version (User)",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_enableodignorefolderlistfromgpo_enableodignorefolderlistfromgpolistbox",
+        "displayName": "Keywords:",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.keyguarddisabledfeatures",
+        "displayName": "Disabled lock screen features",
+        "categoryId": "f350f9a2-3a91-4d6d-90ed-7e3849b0d5f1",
+        "categoryName": "Device password",
+        "platform": "androidEnterprise"
+      },
+      {
+        "id": "accessibilitysettings_vision_allowliverecognition",
+        "displayName": "Allow Live Recognition",
+        "categoryId": "c3c7f584-8be0-4ef7-be2d-390f0226ef0b",
+        "categoryName": "Accessibility",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.restrictbackgroundfetchfromserviceworkerenabled",
+        "displayName": "Restrict Background Fetch API when called from a Service Worker",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_argumentlist",
+        "displayName": "Add arguments",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.volumeblockadjustmentaosp",
+        "displayName": "Block volume changes",
+        "categoryId": "b6733d23-eadc-486a-abfc-62b78698a16c",
+        "categoryName": "General",
+        "platform": "aosp"
+      },
+      {
+        "id": "ade_setupassistant_devicefeaturestour",
+        "displayName": "Device Features Tour",
+        "categoryId": "0d23daec-d948-4eee-8ee5-89ab1c59e440",
+        "categoryName": "Setup Assistant",
+        "platform": "iOS"
+      },
+      {
+        "id": "accessibilitysettings_accessibilitysettings",
+        "displayName": "com.apple.configuration.accessibility.settings",
+        "categoryId": "c3c7f584-8be0-4ef7-be2d-390f0226ef0b",
+        "categoryName": "Accessibility",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "linux_safedeploymentplan_channel",
+        "displayName": "SDP Channel Assignment",
+        "categoryId": "bdde6ae4-2d87-4ef0-976e-ae2a57dfbf6b",
+        "categoryName": "Defender Safe Deployment Plan",
+        "platform": "linux"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolsource",
+        "displayName": "Source",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_defaulttoolpermission_defaulttoolrunmode_defaultcontainersettingsreference",
+        "displayName": "Default container settings",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution",
+        "displayName": "Agent execution",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_policyscope_entraidentityprofile",
+        "displayName": "Entra identity profile",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_launchedgeonwindowsstartupenabled",
+        "displayName": "Launch Microsoft Edge on Windows startup (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_backforwardcacheforwebsocketsallowed",
+        "displayName": "Allow Back/Forward Cache for WebSockets",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion",
+        "displayName": "Configure per-application WebView2 downgrade version",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_enableodignorefolderlistfromgpo",
+        "displayName": "Exclude specific kinds of folders from being uploaded",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "accessibilitysettings_vision",
+        "displayName": "Vision",
+        "categoryId": "c3c7f584-8be0-4ef7-be2d-390f0226ef0b",
+        "categoryName": "Accessibility",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "com.apple.loginwindow_adminmaydisablemcx",
+        "displayName": "Admin May Disable MCX",
+        "categoryId": "8f831e0a-feb7-4cbb-acc1-2e583f3f4de3",
+        "categoryName": "Login Window Behavior",
+        "platform": "macOS"
+      },
+      {
+        "id": "intelligencesettings_allowvisualintelligence",
+        "displayName": "Allow Visual Intelligence",
+        "categoryId": "11d26400-1d13-4dd6-ab4b-cb323494b127",
+        "categoryName": "Intelligence Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.addressbarclipboardsuggestenabled_recommended",
+        "displayName": "Enable clipboard suggestions in the address bar (users can override)",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.strictmimetypecheckforworkerscriptsenabled",
+        "displayName": "Enable strict MIME type checking for worker scripts",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_policyscope_clientid",
+        "displayName": "Client ID",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_policyscope_targetedagent",
+        "displayName": "Targeted agent",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_policyscope_pfn",
+        "displayName": "Package family name",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_copilotcoworktoolactionsenabled",
+        "displayName": "Allow Cowork to take actions on your behalf",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge_webview2~policy~microsoft_edge_webview2~webview2loaderoverridesettings_downgradeversion_downgradeversiondesc_key",
+        "displayName": "Name",
+        "categoryId": "13cc3b63-a150-4cf2-8d76-309975603c8e",
+        "categoryName": "Loader Override Settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_update~policy~cat_edgeupdate~cat_applications~cat_microsoftcopilot_pol_targetchannelmicrosoftcopilot",
+        "displayName": "Target Channel override",
+        "categoryId": "a0f9fbed-c63f-4d8f-b7da-01b236b4981b",
+        "categoryName": "Microsoft Copilot",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission",
+        "displayName": "Permission",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_additionalargumentsmode",
+        "displayName": "Allow or block arguments",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_launchedgeonwindowsstartupenabled",
+        "displayName": "Launch Microsoft Edge on Windows startup",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge_backforwardcacheforwebsocketsallowed",
+        "displayName": "Allow Back/Forward Cache for WebSockets (User)",
+        "categoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17",
+        "categoryName": "Microsoft Edge",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.addressbarclipboardsuggestenabled",
+        "displayName": "Enable clipboard suggestions in the address bar",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "linux_safedeploymentplan_minsiupackageage",
+        "displayName": "Minimum SIU Package Age",
+        "categoryId": "bdde6ae4-2d87-4ef0-976e-ae2a57dfbf6b",
+        "categoryName": "Defender Safe Deployment Plan",
+        "platform": "linux"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_policyscope",
+        "displayName": "Policy scope",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_disablechangestoodignorelist",
+        "displayName": "Prevent users at your organization from changing the ignore list",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_update~policy~cat_edgeupdate~cat_applications~cat_microsoftcopilot_pol_targetchannelmicrosoftcopilot_part_targetchannel",
+        "displayName": "Target Channel",
+        "categoryId": "a0f9fbed-c63f-4d8f-b7da-01b236b4981b",
+        "categoryName": "Microsoft Copilot",
+        "platform": "windows10"
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.datetimeconfigurationblockedaosp",
+        "displayName": "Block date and time changes",
+        "categoryId": "b6733d23-eadc-486a-abfc-62b78698a16c",
+        "categoryName": "General",
+        "platform": "aosp"
+      },
+      {
+        "id": "com.apple.loginwindow_retriesuntilhint",
+        "displayName": "Retries Until Hint",
+        "categoryId": "8f831e0a-feb7-4cbb-acc1-2e583f3f4de3",
+        "categoryName": "Login Window Behavior",
+        "platform": "macOS"
+      },
+      {
+        "id": "user_vendor_msft_agentgovernance_agentexecution_tooloverrideentries_toolpermission_argumentlist_argument",
+        "displayName": "Argument",
+        "categoryId": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "categoryName": "Agent execution",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "safari_privacy_permissiondefaults_generickey",
+        "displayName": "Domain",
+        "categoryId": "e0ab6868-4b53-4310-b665-f7c979941db7",
+        "categoryName": "Safari Browser",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"ANY\"",
+            "newValue": "\"Domain\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.edgeentracopilotpagecontext",
+        "displayName": "Control Copilot access to Microsoft Edge page content and browsing history for Entra account user profiles when using Copilot in the Microsoft Edge sidepane",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Control Copilot access to Microsoft Edge page content for Entra account user profiles when using Copilot in the Microsoft Edge sidepane\"",
+            "newValue": "\"Control Copilot access to Microsoft Edge page content and browsing history for Entra account user profiles when using Copilot in the Microsoft Edge sidepane\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This policy controls whether Copilot in the Microsoft Edge side pane can access page content. This includes page summarization and other contextual queries.\\n\\nThis policy applies only to users who are signed in to Microsoft Edge with a Microsoft Entra account and are using Copilot in the side pane. It applies to Copilot experiences in the side pane, including Microsoft 365 Copilot Business Chat and Microsoft Copilot with enterprise data protection (EDP).\\n\\nIf you enable this policy, Copilot can access page content when users submit contextual queries in the side pane.\\n\\nIf you disable this policy, Copilot can't access page content. This also disables the M365LinksAutoOpenCopilotEnabled feature, because Copilot requires page content access to provide contextual insights for Microsoft 365 links.\\n\\nIf you don't configure this policy:\\n- Access is enabled by default in non-EU regions.\\n- Access is disabled by default in EU regions.\\n- Users can turn this setting on or off in Microsoft Edge settings.\\n\\nCopilot can't access page content on pages protected by data loss prevention (DLP) policies, even if this policy is enabled.\\n\\nFor more information about Copilot data usage and consent, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2288056\\\">https://go.microsoft.com/fwlink/?linkid=2288056</a>\"",
+            "newValue": "\"This policy controls whether Copilot in the Microsoft Edge side pane can access page content and browsing history. This includes page summarization and other contextual queries.\\n\\nThis policy applies only to users who are signed in to Microsoft Edge with a Microsoft Entra account and are using Copilot in the side pane. It applies to Copilot experiences in the side pane, including Microsoft 365 Copilot Business Chat and Microsoft Copilot with enterprise data protection (EDP).\\n\\nIf you enable this policy, Copilot can access page content and browsing history when users initiate contextual queries in the side pane or from Edge.\\n\\nIf you disable this policy, Copilot can't access page content or browsing history. This also disables the M365LinksAutoOpenCopilotEnabled feature, because Copilot requires page content access to provide contextual insights for Microsoft 365 links.\\n\\nIf you don't configure this policy:\\n- Access is enabled by default in non-EU regions.\\n- Access is disabled by default in EU regions.\\n- Users can turn this setting on or off in Microsoft Edge settings.\\n\\nCopilot can't access page content on pages protected by data loss prevention (DLP) policies, even if this policy is enabled.\\n\\nFor more information about Copilot data usage and consent, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2288056\\\">https://go.microsoft.com/fwlink/?linkid=2288056</a>\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.setntpdefaultfeedtab",
+        "displayName": "Set the default Copilot new tab page feed tab to Work or Discover",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Set the default New Tab Page feed tab to Work or Discover\"",
+            "newValue": "\"Set the default Copilot new tab page feed tab to Work or Discover\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This policy sets the default feed tab on the New Tab Page to Work or Discover.\\n\\nIf you set this policy to 'Work' (0) or don't configure this policy, Microsoft Edge sets the default feed tab to Work.\\n\\nIf you set this policy to 'Discover' (1), Microsoft Edge sets the default feed tab to Discover.\\n\\nThis policy only takes effect when \\\"ConfigureNTPFeedTabVisibility\\\" is set to 'EnableBothWorkDiscover' (0) or is not configured. If only one tab is visible, this policy has no effect.\\n\\nPolicy options mapping:\\n\\n* NTPDefaultFeedTabWork (0) = Work\\n\\n* NTPDefaultFeedTabDiscover (1) = Discover\\n\\nUse the preceding information when configuring this policy.\"",
+            "newValue": "\"This policy sets the default feed tab on the Copilot new tab page to Work or Discover.\\n\\nIf you set this policy to 'Work' (0) or don't configure this policy, Microsoft Edge sets the default feed tab to Work.\\n\\nIf you set this policy to 'Discover' (1), Microsoft Edge sets the default feed tab to Discover.\\n\\nThis policy only takes effect when \\\"ConfigureNTPFeedTabVisibility\\\" is set to 'EnableBothWorkDiscover' (0) or isn't configured. If only one feed tab is visible, this policy has no effect.\\n\\nPolicy options mapping:\\n\\n* NTPDefaultFeedTabWork (0) = Work\\n\\n* NTPDefaultFeedTabDiscover (1) = Discover\\n\\nUse the preceding information when configuring this policy.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages",
+        "displayName": "Remove Default Microsoft Store packages from the system.",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_addedfolderharddeleteonunmount",
+        "displayName": "Hard-delete the contents of a folder shortcut when unmounted",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Hard-delete the contents of an added folder when unmounted\"",
+            "newValue": "\"Hard-delete the contents of a folder shortcut when unmounted\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This setting determines the behavior of the Sync client when encounters a request to unmount an added folder.\\n\\nIf admins enable this setting (value 1), when an unmount of an Added Folder is received, the Sync client will hard-delete all the contents of the folder.\\n\\nIf admins disable (value 0) or do not configure this setting, Sync will by default move the contents of the unmounted folder to the recycle-bin.\\n      \"",
+            "newValue": "\"This setting determines the behavior of the Sync client when it encounters a request to unmount a folder shortcut (a folder added to OneDrive via \\\"Add shortcut to OneDrive\\\").\\n\\nIf you enable this setting, when an unmount of a folder shortcut is received, the Sync client will hard-delete all the contents of the folder.\\n\\nIf you disable or do not configure this setting, Sync will by default move the contents of the unmounted folder to the recycle bin.\\n      \""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.serviceworkerautopreloadenabled",
+        "displayName": "Allow ServiceWorker to dispatch navigation requests without waiting for its startup",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy controls whether Microsoft Edge enables the ServiceWorkerAutoPreload feature.\\n\\nIf you enable or don't configure this policy, Microsoft Edge can initiate the main resource network request concurrently with the Service Worker bootstrap process. This can improve performance in scenarios where the Service Worker isn't already running.\\n\\nIf you disable this policy, Microsoft Edge will wait to dispatch the navigation request until after the Service Worker starts.\\n\\nThis is a temporary policy and is removed in version 144 of Microsoft Edge.\\n\\nFor more information on the feature, see https://github.com/WICG/service-worker-auto-preload.\"",
+            "newValue": "\"This policy controls whether Microsoft Edge enables the ServiceWorkerAutoPreload feature.\\n\\nIf you enable or don't configure this policy, Microsoft Edge can initiate the main resource network request concurrently with the Service Worker bootstrap process. This can improve performance in scenarios where the Service Worker isn't already running.\\n\\nIf you disable this policy, Microsoft Edge will wait to dispatch the navigation request until after the Service Worker starts.\\n\\nThis is a temporary policy and is removed in version 154 of Microsoft Edge.\\n\\nFor more information on the feature, see https://github.com/WICG/service-worker-auto-preload.\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.urlblocklist",
+        "displayName": "Block access to a list of URLs",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Defines a list of sites, based on URL patterns, that are blocked (your users can't load them).\\n\\nFormat the URL pattern according to <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2095322\\\">https://go.microsoft.com/fwlink/?linkid=2095322</a>.\\n\\nYou can define exceptions in the \\\"URLAllowlist\\\" policy. These policies are limited to 1000 entries; subsequent entries are ignored.\\n\\nBlocking internal 'edge://*' URLs isn't recommended - this may lead to unexpected errors.\\n\\nThis policy doesn't prevent the page from updating dynamically through JavaScript. For example, if you block 'contoso.com/abc', users can visit 'contoso.com' and select on a link to visit 'contoso.com/abc', as long as the page doesn't refresh.\\n\\nIf you don't configure this policy, no URLs are blocked.\\n\\nThis policy doesn't work as expected with file://* wildcards.\"",
+            "newValue": "\"Defines a list of sites, based on URL patterns, that are blocked (your users can't load them).\\n\\nFormat the URL pattern according to <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2095322\\\">https://go.microsoft.com/fwlink/?linkid=2095322</a>.\\n\\nYou can define exceptions in the \\\"URLAllowlist\\\" policy. These policies are limited to 1000 entries; subsequent entries are ignored.\\n\\nBlocking internal 'edge://*' and 'chrome-untrusted://*' URLs isn't recommended - this may lead to unexpected errors.\\n\\nThis policy doesn't prevent the page from updating dynamically through JavaScript. For example, if you block 'contoso.com/abc', users can visit 'contoso.com' and select on a link to visit 'contoso.com/abc', as long as the page doesn't refresh.\\n\\nIf you don't configure this policy, no URLs are blocked.\\n\\nThis policy doesn't work as expected with file://* wildcards.\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.onbulkdataentryenterpriseconnector",
+        "displayName": "Configuration policy for bulk data entry for Microsoft Edge for Business Data Loss Prevention Connectors",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"List of Microsoft Edge for Business Data Loss Prevention Connectors services settings to be applied when data is entered in Microsoft Edge from the clipboard or by drag and dropping web content.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\n5. minimum_data_size\\nSpecifies the minimum size (in bytes) that the entered data must meet or exceed to be scanned.\\nDefault: 100 bytes if the field isn't set.\\n\\nThis policy requires further setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\"",
+            "newValue": "\"Specifies the list of Microsoft Edge for Business Data Loss Prevention Connector service settings that apply when users paste data from the clipboard or drag and drop web content into Microsoft Edge.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\n5. minimum_data_size\\nSpecifies the minimum size (in bytes) that the entered data must meet or exceed to be scanned.\\nDefault: 100 bytes if the field isn't set.\\n\\nThis policy requires further setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"macOS,windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsfeedbackhub",
+        "displayName": "Feedback Hub",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_outlookforwindows",
+        "displayName": "Outlook for Windows",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowscamera",
+        "displayName": "Windows Camera **",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.configurentpfeedtabvisibility",
+        "displayName": "Configure whether the Discover or Work feed tabs are shown on the Copilot new tab page.",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Configure whether the Discover or Work feed tabs are shown on the New Tab Page.\"",
+            "newValue": "\"Configure whether the Discover or Work feed tabs are shown on the Copilot new tab page.\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This policy configures whether the Discover or Work feed tabs are shown on the New Tab Page. By default, both Work and Discover tabs are enabled.\\n\\nIf you set this policy to 'EnableBothWorkDiscover' (0) or do not configure this policy, Microsoft Edge shows both the Work and Discover feed tabs on the new tab page.\\n\\nIf you set this policy to 'EnableOnlyWork' (1), Microsoft Edge shows only the Work feed tab on the new tab page.\\n\\nIf you set this policy to 'EnableOnlyDiscover' (2), Microsoft Edge shows only the Discover feed tab on the new tab page.\\n\\nThis policy works with the SetNTPDefaultFeedTab policy, which controls which feed tab is selected by default when both tabs are available.\\n\\nPolicy options mapping:\\n\\n* EnableBothWorkDiscover (0) = Enable both Work and Discover tabs\\n\\n* EnableOnlyWork (1) = Enable only Work tab\\n\\n* EnableOnlyDiscover (2) = Enable only Discover tab\\n\\nUse the preceding information when configuring this policy.\"",
+            "newValue": "\"This policy configures whether the Discover or Work feed tabs are shown on the Copilot new tab page. By default, both Work and Discover tabs are enabled.\\n\\nIf you set this policy to 'EnableBothWorkDiscover' (0) or don't configure this policy, Microsoft Edge shows both the Work and Discover feed tabs on the Copilot new tab page.\\n\\nIf you set this policy to 'EnableOnlyWork' (1), Microsoft Edge shows only the Work feed tab on the Copilot new tab page.\\n\\nIf you set this policy to 'EnableOnlyDiscover' (2), Microsoft Edge shows only the Discover feed tab on the Copilot new tab page.\\n\\nPolicy options mapping:\\n\\n* EnableBothWorkDiscover (0) = Enable both Work and Discover tabs\\n\\n* EnableOnlyWork (1) = Enable only Work tab\\n\\n* EnableOnlyDiscover (2) = Enable only Discover tab\\n\\nUse the preceding information when configuring this policy.\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.localnetworkaccessrestrictionstemporaryoptout",
+        "displayName": "Specifies whether to opt out of Local Network Access restrictions",
+        "categoryId": "3fbd3b29-bafd-4adf-89e4-3be612dee275",
+        "categoryName": "Network settings",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy allows for opting out of restrictions on requests to local network endpoints.\\n\\nIf you enable this policy, Local Network Access requests will only display warnings in Edge DevTools when Local Network Access checks fail.\\n\\nIf you disable or don't configure this policy, Local Network Access requests follow the default handling behavior.\\n\\nFor more information about Local Network Access restrictions, see Local Network Access.\\n\\nTo allow specific URL patterns that should automatically be granted Local Network Access permission, use the LocalNetworkAccessAllowedForUrls policy.\\n\\nNote: This opt-out policy is temporary and will be removed after Microsoft Edge version 152.\"",
+            "newValue": "\"This policy allows for opting out of restrictions on requests to local network endpoints.\\n\\nIf you enable this policy, Local Network Access requests will only display warnings in Edge DevTools when Local Network Access checks fail.\\n\\nIf you disable or don't configure this policy, Local Network Access requests follow the default handling behavior.\\n\\nFor more information about Local Network Access restrictions, see Local Network Access.\\n\\nTo allow specific URL patterns that should automatically be granted Local Network Access permission, use the LocalNetworkAccessAllowedForUrls policy.\\n\\nNote: This opt-out policy is temporary and will be removed after Microsoft Edge version 156.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_copilot",
+        "displayName": "Microsoft Copilot",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsnotepad",
+        "displayName": "Windows Notepad **",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftstickynotes",
+        "displayName": "Microsoft Sticky Notes",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftsolitairecollection",
+        "displayName": "Microsoft Solitaire Collection",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_mediaplayer",
+        "displayName": "Windows Media Player **",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_quickassist",
+        "displayName": "Quick Assist",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.onsecurityevententerpriseconnector",
+        "displayName": "Configuration policy for Microsoft Edge for Business Reporting Connectors",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Defines the Microsoft Edge for Business Reporting Connectors service settings that apply when a security event occurs in Microsoft Edge. These events include negative verdicts from Data Loss Prevention Connectors, password reuse, navigation to unsafe pages, and other security-sensitive actions.\\n\\nThe service_provider field specifies the reporting service provider. The enabled_event_names field lists the security events enabled for that provider.\\n\\nThis policy requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2325446\\\">https://go.microsoft.com/fwlink/?linkid=2325446</a>.\"",
+            "newValue": "\"Defines the Microsoft Edge for Business Reporting Connectors service settings that apply when a security event occurs in Microsoft Edge. These events include negative verdicts from Data Loss Prevention Connectors, password reuse, navigation to unsafe pages, and other security-sensitive actions.\\n\\nThe service_provider field specifies the reporting service provider. The enabled_event_names field lists the security events enabled for that provider.\\n\\nThis policy can only be configured through the Microsoft 365 Admin Center. It requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2325446\\\">https://go.microsoft.com/fwlink/?linkid=2325446</a>.\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.defaultsensorssetting",
+        "displayName": "Default sensors setting",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Set whether websites can access and use sensors such as motion and light sensors. You can completely block or allow websites to get access to sensors.\\n\\nSetting the policy to 1 lets websites access and use sensors. Setting the policy to 2 denies access to sensors.\\n\\nYou can override this policy for specific URL patterns by using the \\\"SensorsAllowedForUrls\\\" and \\\"SensorsBlockedForUrls\\\" policies.\\n\\nIf you don't configure this policy, websites can access and use sensors, and users can change this setting. This setting is the global default for \\\"SensorsAllowedForUrls\\\" and \\\"SensorsBlockedForUrls\\\".\\n\\nPolicy options mapping:\\n\\n* AllowSensors (1) = Allow sites to access sensors\\n\\n* BlockSensors (2) = Do not allow any site to access sensors\\n\\nUse the preceding information when configuring this policy.\"",
+            "newValue": "\"Set whether websites can access and use sensors such as motion and light sensors. You can completely block or allow websites to get access to sensors.\\n\\nSetting the policy to 1 lets websites access and use sensors. Setting the policy to 2 denies access to sensors. Setting the policy to 3 is intended to prompt the user when a site requests access to sensors, but this option isn't yet supported; if you select it, websites can still access and use sensors.\\n\\nYou can override this policy for specific URL patterns by using the \\\"SensorsAllowedForUrls\\\" and \\\"SensorsBlockedForUrls\\\" policies.\\n\\nIf you don't configure this policy, websites can access and use sensors, and users can change this setting. This setting is the global default for \\\"SensorsAllowedForUrls\\\" and \\\"SensorsBlockedForUrls\\\".\\n\\nPolicy options mapping:\\n\\n* AllowSensors (1) = Allow sites to access sensors\\n\\n* BlockSensors (2) = Do not allow any site to access sensors\\n\\n* AskSensors (3) = Ask whenever a site wants to access sensors (This policy is not yet supported)\\n\\nUse the preceding information when configuring this policy.\""
+          },
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "3 options"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowsterminal",
+        "displayName": "Windows Terminal",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxspeechtotextoverlay",
+        "displayName": "Xbox Speech To Text Overlay *",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_paint",
+        "displayName": "Paint",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_onedrivengsc~policy~onedrivengsc_addedfolderunmountonpermissionsloss",
+        "displayName": "Hard-delete the contents of a folder shortcut when user loses permissions to the folder",
+        "categoryId": "5ee629c1-94da-49b3-b7a1-a24b279f36d4",
+        "categoryName": "OneDrive",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Hard-delete the contents of an added folder when user loses permissions to the folder\"",
+            "newValue": "\"Hard-delete the contents of a folder shortcut when user loses permissions to the folder\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This setting determines the behavior of the Sync client when the user loses  permissions to an added folder.\\n\\nIf admins enable this setting (value 1), when the Sync client detects that the user lost permissions to an Added Folder, the Sync client will hard-delete all the contents of the folder and the folder itself.\\n\\nIf admins disable (value 0) or do not configure this setting, Sync will by default mark the folder in error and prompt the user to remove it. When the user confirms the removals, the contents of the folder are moved to the recycle-bin.\\n      \"",
+            "newValue": "\"This setting determines the behavior of the Sync client when the user loses permissions to a folder shortcut (a folder added to OneDrive via \\\"Add shortcut to OneDrive\\\").\\n\\nIf you enable this setting, when the Sync client detects that the user lost permissions to a folder shortcut, the Sync client will hard-delete all the contents of the folder and the folder itself.\\n\\nIf you disable or do not configure this setting, Sync will by default mark the folder in error and prompt the user to remove it. When the user confirms the removal, the contents of the folder are moved to the recycle bin.\\n      \""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.allowbrowsingwithcopilot",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge.",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\n\\nBrowsing with Copilot is available only on domains specified in the \\\"BrowsingWithCopilotAllowList\\\" policy and is blocked on domains specified in the \\\"BrowsingWithCopilotBlockList\\\" policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\n\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\n\\nFor more information about configuring browsing with Copilot, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2346300\\\">https://go.microsoft.com/fwlink/?linkid=2346300</a>.\\n\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\n\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\n\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\n\\nBrowsing with Copilot is available only on domains specified in the \\\"BrowsingWithCopilotAllowList\\\" policy and is blocked on domains specified in the \\\"BrowsingWithCopilotBlockList\\\" policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\n\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\n\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\n\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\n\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\n\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_photos",
+        "displayName": "Microsoft Photos **",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxtcui",
+        "displayName": "Xbox TCUI *",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_screensketch",
+        "displayName": "Snipping Tool",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.setntpdefaultfeedtab_recommended",
+        "displayName": "Set the default Copilot new tab page feed tab to Work or Discover (users can override)",
+        "categoryId": "00d7396c-cadc-4d29-86ba-fe4df2ecb110",
+        "categoryName": "Startup, home page and new tab page",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Set the default New Tab Page feed tab to Work or Discover (users can override)\"",
+            "newValue": "\"Set the default Copilot new tab page feed tab to Work or Discover (users can override)\""
+          },
+          {
+            "field": "description",
+            "oldValue": "\"This policy sets the default feed tab on the New Tab Page to Work or Discover.\\n\\nIf you set this policy to 'Work' (0) or don't configure this policy, Microsoft Edge sets the default feed tab to Work.\\n\\nIf you set this policy to 'Discover' (1), Microsoft Edge sets the default feed tab to Discover.\\n\\nThis policy only takes effect when \\\"ConfigureNTPFeedTabVisibility\\\" is set to 'EnableBothWorkDiscover' (0) or is not configured. If only one tab is visible, this policy has no effect.\\n\\nPolicy options mapping:\\n\\n* NTPDefaultFeedTabWork (0) = Work\\n\\n* NTPDefaultFeedTabDiscover (1) = Discover\\n\\nUse the preceding information when configuring this policy.\"",
+            "newValue": "\"This policy sets the default feed tab on the Copilot new tab page to Work or Discover.\\n\\nIf you set this policy to 'Work' (0) or don't configure this policy, Microsoft Edge sets the default feed tab to Work.\\n\\nIf you set this policy to 'Discover' (1), Microsoft Edge sets the default feed tab to Discover.\\n\\nThis policy only takes effect when \\\"ConfigureNTPFeedTabVisibility\\\" is set to 'EnableBothWorkDiscover' (0) or isn't configured. If only one feed tab is visible, this policy has no effect.\\n\\nPolicy options mapping:\\n\\n* NTPDefaultFeedTabWork (0) = Work\\n\\n* NTPDefaultFeedTabDiscover (1) = Discover\\n\\nUse the preceding information when configuring this policy.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_clipchamp",
+        "displayName": "Microsoft Clipchamp",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowssoundrecorder",
+        "displayName": "Windows Sound Recorder",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_todo",
+        "displayName": "Microsoft To Do",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.onprintenterpriseconnector",
+        "displayName": "Configuration policy for print for Microsoft Edge for Business Data Loss Prevention Connectors",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"List of Microsoft Edge for Business Data Loss Prevention Connectors services settings to be applied when a page or file is printed from Microsoft Edge.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\nThis policy requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\"",
+            "newValue": "\"Specifies the list of Microsoft Edge for Business Data Loss Prevention Connectors service settings that apply when users print a page or file from Microsoft Edge.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\nThis policy requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"macOS,windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.allowbrowsingwithcopilot_recommended",
+        "displayName": "Controls the availability of browsing with Copilot in Microsoft Edge. (users can override)",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\n\\nBrowsing with Copilot is available only on domains specified in the \\\"BrowsingWithCopilotAllowList\\\" policy and is blocked on domains specified in the \\\"BrowsingWithCopilotBlockList\\\" policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\n\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\n\\nFor more information about configuring browsing with Copilot, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2346300\\\">https://go.microsoft.com/fwlink/?linkid=2346300</a>.\\n\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\n\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\n\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\"",
+            "newValue": "\"When browsing with Copilot is enabled, users can explicitly invoke it for a query. It isn't invoked automatically.\\n\\nBrowsing with Copilot is available only on domains specified in the \\\"BrowsingWithCopilotAllowList\\\" policy and is blocked on domains specified in the \\\"BrowsingWithCopilotBlockList\\\" policy. If no domains are configured in the allow list, browsing with Copilot is effectively disabled.\\n\\nThis feature is available only to users with an active Microsoft 365 Copilot subscription.\\n\\nFor more information about configuring browsing with Copilot, see https://go.microsoft.com/fwlink/?LinkId=2341535.\\n\\nIf you enable this policy, browsing with Copilot is turned on for all users who receive the policy, and users can't turn it off.\\n\\nIf you disable this policy, browsing with Copilot is turned off for all users who receive the policy, and users can't turn it on.\\n\\nIf you don't configure this policy, browsing with Copilot is off by default, and users can turn it on.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_bingweather",
+        "displayName": "MSN Weather",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_bingnews",
+        "displayName": "Microsoft News",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_gamingapp",
+        "displayName": "Xbox Gaming App",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_windowscalculator",
+        "displayName": "Windows Calculator",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.precisegeolocationallowedforurls",
+        "displayName": "Allow precise geolocation on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy lets you specify a list of URL patterns for sites that are allowed to access the user's high-accuracy geolocation without prompting for permission.\\n\\nIf you leave this policy unset, DefaultGeolocationSetting applies to all sites (if configured). Otherwise, the user's personal setting is used.\\n\\nFor information about valid url patterns, see https://learn.microsoft.com/deployedge/edge-learnmmore-url-list-filter%20format. Wildcards (*) are supported.\"",
+            "newValue": "\"This policy lets you specify a list of URL patterns for sites that are allowed to access the user's high-accuracy geolocation without prompting for permission.\\n\\nIf you leave this policy unset, DefaultGeolocationSetting applies to all sites (if configured). Otherwise, the user's personal setting is used.\\n\\nFor information about valid url patterns, see https://learn.microsoft.com/deployedge/edge-learnmmore-url-list-filter-format. Wildcards (*) are supported.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_msteams",
+        "displayName": "Microsoft Teams",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.geolocationblockedforurls",
+        "displayName": "Block geolocation on these sites",
+        "categoryId": "92d69c43-75ac-49b1-a3ef-9350079eef86",
+        "categoryName": "Content settings",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"Use this policy to define a list of URL patterns for sites that are blocked from accessing the user's geolocation. These sites also can't prompt the user for location permissions.\\n\\nIf you enable this policy, the list you provide determines which sites are blocked from requesting or accessing geolocation.\\n\\nIf you disable or don't configure this policy, DefaultGeolocationSetting applies to all sites, if configured. If it's not configured, the user’s personal browser setting is used.\\n\\nFor detailed information on valid url patterns, see the documentation on pattern formats: https://learn.microsoft.com/deployedge/edge-learnmmore-url-list-filter%20format.\"",
+            "newValue": "\"Use this policy to define a list of URL patterns for sites that are blocked from accessing the user's geolocation. These sites also can't prompt the user for location permissions.\\n\\nIf you enable this policy, the list you provide determines which sites are blocked from requesting or accessing geolocation.\\n\\nIf you disable or don't configure this policy, DefaultGeolocationSetting applies to all sites, if configured. If it's not configured, the user’s personal browser setting is used.\\n\\nFor detailed information on valid url patterns, see the documentation on pattern formats: https://learn.microsoft.com/deployedge/edge-learnmmore-url-list-filter-format.\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.insecureprivatenetworkrequestsallowedforurls",
+        "displayName": "Allow the listed sites to make requests to more-private network endpoints from in an insecure manner (Obsolete)",
+        "categoryId": "43057320-7058-46d5-86f9-a56c80bbf8b9",
+        "categoryName": "Private Network Request Settings",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"List of URL patterns. Requests initiated from websites served by matching origins aren't subject to Private Network Access checks.\\n\\nIf this policy isn't set, this policy behaves as if set to the empty list.\\n\\nFor origins not covered by the patterns specified here, the global default value is used either from the \\\"InsecurePrivateNetworkRequestsAllowed\\\" policy, if it's set, or the user's personal configuration otherwise.\\n\\nFor detailed information on valid URL patterns, see [Filter format for URL list-based policies](/DeployEdge/edge-learnmmore-url-list-filter%20format).\\n\\nThis policy is obsolete. The previous blanket override has been replaced by the permission-based Local Network Access model, which blocks cross-space requests until users grant explicit consent.\"",
+            "newValue": "\"List of URL patterns. Requests initiated from websites served by matching origins aren't subject to Private Network Access checks.\\n\\nIf this policy isn't set, this policy behaves as if set to the empty list.\\n\\nFor origins not covered by the patterns specified here, the global default value is used either from the \\\"InsecurePrivateNetworkRequestsAllowed\\\" policy, if it's set, or the user's personal configuration otherwise.\\n\\nFor detailed information on valid URL patterns, see [Filter format for URL list-based policies](/DeployEdge/edge-learnmmore-url-list-filter-format).\\n\\nThis policy is obsolete. The previous blanket override has been replaced by the permission-based Local Network Access model, which blocks cross-space requests until users grant explicit consent.\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_xboxidentityprovider",
+        "displayName": "Xbox Identity Provider *",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.onfileattachedenterpriseconnector",
+        "displayName": "Configuration policy for files attached for Microsoft Edge for Business Data Loss Prevention Connectors",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"List of Microsoft Edge for Business Data Loss Prevention Connectors services settings to be applied when a file is attached to Microsoft Edge.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\nThis policy requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\"",
+            "newValue": "\"Specifies the list of Microsoft Edge for Business Data Loss Prevention Connectors service settings that apply when users attach files in Microsoft Edge.\\n\\nConnector Fields\\n\\n1. url_list,\\ntags,\\nenable,\\ndisable\\nThese fields determine whether the connector sends data for analysis when content is entered on a specific page, and which tags to include in the analysis request.\\nA tag associated with an enable pattern is included in the request if the page URL matches the pattern—unless a corresponding disable pattern also matches.\\nAnalysis is triggered if at least one tag is included in the request.\\n\\n2. service_provider\\nIdentifies the analysis service provider the configuration applies to.\\n\\n3. block_until_verdict\\nIf set to 1, Microsoft Edge waits for a response from the analysis service before giving the page access to the data.\\nAny other integer value allows the page to access the data immediately.\\n\\n4. default_action\\nIf set to block, Microsoft Edge denies page access to the data if an error occurs while contacting the analysis service.\\nAny other value permits the page to access the data.\\n\\nThis policy requires additional setup to take effect. For configuration guidance, see <a href=\\\"https://go.microsoft.com/fwlink/?linkid=2320413\\\">https://go.microsoft.com/fwlink/?linkid=2320413</a>.\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationApplicationSettingApplicability\",\"description\":null,\"platform\":\"macOS,windows10\",\"deviceMode\":\"none\",\"technologies\":\"mobileApplicationManagement\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_applicationmanagement_removedefaultmicrosoftstorepackages_microsoftofficehub",
+        "displayName": "Microsoft 365 Copilot",
+        "categoryId": "ffb6de77-8f2d-4b45-9cd4-00bb75cd496c",
+        "categoryName": "App Package Deployment",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "categoryId",
+            "oldValue": "\"b6d13875-fd8e-41a0-a712-3dab8b75b93f\"",
+            "newValue": "\"ffb6de77-8f2d-4b45-9cd4-00bb75cd496c\""
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "c3c7f584-8be0-4ef7-be2d-390f0226ef0b",
+        "displayName": "Accessibility",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      },
+      {
+        "id": "bdde6ae4-2d87-4ef0-976e-ae2a57dfbf6b",
+        "displayName": "Defender Safe Deployment Plan",
+        "parentCategoryId": "48b8705b-58a8-4504-ab7a-2704980f4577"
+      },
+      {
+        "id": "a0f9fbed-c63f-4d8f-b7da-01b236b4981b",
+        "displayName": "Microsoft Copilot",
+        "parentCategoryId": "2c7e8e8e-47fe-48ba-8cb4-55ce296edced"
+      },
+      {
+        "id": "143135a0-e155-4761-b7ad-d20df7b998cc",
+        "displayName": "Agent execution",
+        "parentCategoryId": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  {
     "date": "2026-09-03",
     "added": [
       {

@@ -1,4 +1,14 @@
 {
+  "2026-09-22": {
+    "headline": "Windows gets a new Agent execution category with 19 settings, letting you decide whether AI agents run their tools in a container by default and which Entra identity profile they use.",
+    "highlights": [
+      "Windows: 19 new Agent execution settings, headlined by 'Run tools in a container by default', 'Allow agent(s) to use tools by default', per-tool override entries, source and argument controls, and a default container image. If agents are coming to your fleet anyway, this is the guardrail bin.",
+      "Windows Edge: 'Allow Cowork to take actions on your behalf', 'Launch Microsoft Edge on Windows startup', strict MIME type checking for worker scripts, background fetch restrictions from service workers, and Back/Forward Cache for WebSockets. The last two are the ones a security reviewer will want switched on.",
+      "macOS: 4 Login Window Behavior settings, force captive portal connection and WiFi config from the lock screen, admin may disable MCX, retries until hint. Handy for shared and lab Macs that boot into a network nobody configured.",
+      "Android: AOSP gains block volume changes and block date and time changes; Android Enterprise adds Google Workspace account authentication for users. Linux picks up a Defender Safe Deployment Plan category (SIU update window, SDP channel assignment, minimum SIU package age)."
+    ],
+    "watchOut": "Three Edge data loss prevention connector policies (bulk data entry, print, file attachments) widened from Windows-only to Windows and macOS, so check platform targeting before they show up somewhere new; separately, 26 App Package Deployment settings moved to a new category id, which is picker housekeeping only, and the Edge Copilot descriptions were reworded from 'New Tab Page' to 'Copilot new tab page'."
+  },
   "2026-09-03": {
     "headline": "Windows adds a 'Disable Inline Compose' control, and three Defender AI settings gain Microsoft Sense support for broader management.",
     "highlights": [
