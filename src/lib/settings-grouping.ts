@@ -179,22 +179,9 @@ export function groupSettings(settings: SettingDefinition[]): {
 }
 
 /**
- * Count the number of visible top-level (root) settings that would be
- * rendered for the given flat settings array — applying the same grouping,
- * deduplication, and nesting logic as `groupSettings()`.
- *
- * This is useful for computing accurate result counts in search headers
- * without materialising the full grouping structure.
- */
-export function countVisibleRootSettings(settings: SettingDefinition[]): number {
-  return groupSettings(settings).rootSettings.length;
-}
-
-/**
  * Count every visible setting that would be rendered — root settings plus the
  * nested children that survive CSP-path deduplication. Matches the total shown
- * in the `SettingsList` category header (roots + visible children), unlike
- * `countVisibleRootSettings` which counts top-level rows only.
+ * in the `SettingsList` category header (roots + visible children).
  */
 export function countVisibleSettings(settings: SettingDefinition[]): number {
   const { rootSettings, childMap } = groupSettings(settings);

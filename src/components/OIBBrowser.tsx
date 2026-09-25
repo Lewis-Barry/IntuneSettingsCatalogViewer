@@ -16,11 +16,20 @@ import {
   groupByRoot,
   instanceName,
   FOLDER_LABELS,
-  type OIBFolderNode,
-  type OIBCategoryNode,
 } from '@/lib/oib-types';
 import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
+import {
+  BrowserHeader,
+  BrowserSearchBar,
+  SectionHeader,
+  FolderSidebarTree,
+  SidebarLoading,
+  PanelLoading,
+  NoResults,
+  LoadError,
+  EmptyState,
+} from './BrowserParts';
 import ExportMenu, { downloadTextFile } from './ExportMenu';
 import { generateOIBBrowseCsv, generateOIBBrowseHtml, type BrowseExportEntry } from '@/lib/oib-browse-export';
 
@@ -186,39 +195,18 @@ const PolicySection = memo(function PolicySection({
   return (
     <div className="border-b border-fluent-border">
       {/* Policy header bar */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center gap-2 w-full px-4 py-2.5 bg-fluent-bg-alt hover:bg-fluent-border transition-colors text-left"
-      >
-        <svg
-          className={`w-3.5 h-3.5 text-fluent-text-secondary transition-transform duration-150 flex-shrink-0 ${collapsed ? '' : 'rotate-90'}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-
-        <div className="flex items-center gap-1.5 min-w-0 flex-wrap flex-1">
-          {breadcrumb && (
-            <span className="flex items-center gap-1.5 flex-shrink-0">
-              <span className="text-fluent-sm text-fluent-text-secondary md:truncate md:max-w-[180px]">
-                {breadcrumb}
-              </span>
-              <svg className="w-2.5 h-2.5 text-fluent-text-tertiary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          )}
-          <span className="text-fluent-base font-semibold text-fluent-text truncate">
-            {parsed.policyLabel}
-          </span>
+      <SectionHeader
+        collapsed={collapsed}
+        onToggle={() => setCollapsed(!collapsed)}
+        title={parsed.policyLabel}
+        breadcrumb={breadcrumb}
+        breadcrumbMaxW="md:max-w-[180px]"
+        titleSuffix={
           <span className="text-fluent-xs text-fluent-text-secondary font-normal flex-shrink-0">
             v{parsed.version}
           </span>
-        </div>
-
+        }
+      >
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <ScopeBadge scope={parsed.scope} />
           <TierBadge tier={parsed.tier} />
@@ -239,7 +227,7 @@ const PolicySection = memo(function PolicySection({
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
           </svg>
         </a>
-      </button>
+      </SectionHeader>
 
       {/* Settings rows */}
       {!collapsed && (
@@ -292,110 +280,6 @@ const PolicySection = memo(function PolicySection({
   );
 });
 
-// ── OIB Sidebar ──────────────────────────────────────────────────────────────
-
-interface OIBSidebarTreeProps {
-  tree: OIBFolderNode[];
-  selectedNode: { folder: string; category: string } | null;
-  onSelect: (node: { folder: string; category: string }) => void;
-}
-
-const OIBSidebarTree = memo(function OIBSidebarTree({
-  tree,
-  selectedNode,
-  onSelect,
-}: OIBSidebarTreeProps) {
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
-
-  const toggleFolder = useCallback((folder: string) => {
-    setCollapsed((prev) => {
-      const next = new Set(prev);
-      next.has(folder) ? next.delete(folder) : next.add(folder);
-      return next;
-    });
-  }, []);
-
-  return (
-    <div className="fluent-scroll overflow-y-auto">
-      <h3 className="px-2 py-2 text-fluent-sm font-semibold text-fluent-text-secondary uppercase tracking-wide">
-        Browse by category
-      </h3>
-      <div className="space-y-0.5">
-        {tree.map((folderNode) => {
-          const isCollapsed = collapsed.has(folderNode.folder);
-          const totalPolicies = folderNode.categories.reduce((sum, c) => sum + c.policyCount, 0);
-
-          return (
-            <div key={folderNode.folder}>
-              {/* Folder header */}
-              <button
-                type="button"
-                className="category-item"
-                style={{ paddingLeft: '8px' }}
-                onClick={() => toggleFolder(folderNode.folder)}
-                role="treeitem"
-                aria-expanded={!isCollapsed}
-                aria-selected={false}
-              >
-                <span
-                  className="category-chevron w-4 h-4 flex items-center justify-center flex-shrink-0 text-fluent-text-secondary hover:text-fluent-text"
-                  aria-hidden="true"
-                >
-                  <svg
-                    className={`w-3 h-3 transition-transform duration-150 ${!isCollapsed ? 'rotate-90' : ''}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
-                <span className="flex-1 truncate text-fluent-base font-semibold">
-                  {folderNode.label}
-                </span>
-                <span className="text-fluent-xs text-fluent-text-secondary ml-1 flex-shrink-0">
-                  {totalPolicies}
-                </span>
-              </button>
-
-              {/* Categories under folder */}
-              {!isCollapsed && (
-                <div role="group">
-                  {folderNode.categories.map((cat) => {
-                    const isSelected =
-                      selectedNode?.folder === cat.folder &&
-                      selectedNode?.category === cat.category;
-                    return (
-                      <button
-                        key={`${cat.folder}/${cat.category}`}
-                        type="button"
-                        className={`category-item ${isSelected ? 'category-item-active' : ''}`}
-                        style={{ paddingLeft: `${8 + 14}px` }}
-                        onClick={() => onSelect({ folder: cat.folder, category: cat.category })}
-                        role="treeitem"
-                        aria-selected={isSelected}
-                      >
-                        <span className="category-chevron-spacer w-4 h-4 flex-shrink-0" />
-                        <span className="flex-1 truncate text-fluent-base">
-                          {cat.category}
-                        </span>
-                        <span className="text-fluent-xs text-fluent-text-secondary ml-1 flex-shrink-0">
-                          {cat.policyCount}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-});
-
 // ── Main Component ───────────────────────────────────────────────────────────
 
 export default function OIBBrowser() {
@@ -410,7 +294,6 @@ export default function OIBBrowser() {
   const [searchQuery, setSearchQuery] = useState('');
   const deferredQuery = useDeferredValue(searchQuery);
   const isSearchPending = searchQuery !== deferredQuery;
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const isDesktop = useIsDesktop();
   const mainScrollRef = useRef<HTMLDivElement>(null);
@@ -444,18 +327,16 @@ export default function OIBBrowser() {
 
   const isLoading = !oibLoaded || !defsLoaded;
 
-  const clearSearch = useCallback(() => {
-    setSearchQuery('');
-    searchInputRef.current?.focus();
-  }, []);
-
   // ── Sidebar tree ──
   const sidebarTree = useMemo(() => {
     if (!oibData) return [];
     const policies = selectedFolder
       ? oibData.policies.filter((p) => p.oibFolder === selectedFolder)
       : oibData.policies;
-    return buildSidebarTree(policies);
+    return buildSidebarTree(policies).map((f) => ({
+      ...f,
+      categories: f.categories.map((c) => ({ category: c.category, count: c.policyCount })),
+    }));
   }, [oibData, selectedFolder]);
 
   // ── Category policies ──
@@ -542,8 +423,8 @@ export default function OIBBrowser() {
 
   // ── Handlers ──
   const handleSelectCategory = useCallback(
-    (node: { folder: string; category: string }) => {
-      setSelectedNode(node);
+    (folder: string, category: string) => {
+      setSelectedNode({ folder, category });
       setSearchQuery('');
       mainScrollRef.current?.scrollTo({ top: 0 });
       if (!isDesktop) setSidebarOpen(false);
@@ -559,14 +440,6 @@ export default function OIBBrowser() {
     });
     mainScrollRef.current?.scrollTo({ top: 0 });
   }, []);
-
-  // Clear selected node when folder filter removes it
-  useEffect(() => {
-    if (!selectedFolder || !selectedNode) return;
-    if (selectedNode.folder !== selectedFolder) {
-      setSelectedNode(null);
-    }
-  }, [selectedFolder, selectedNode]);
 
   // ── Display metadata ──
   const fetchedDate = oibData
@@ -587,99 +460,48 @@ export default function OIBBrowser() {
   return (
     <div className="flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100dvh-96px)]">
       {/* ── Header ── */}
-      <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-fluent-border bg-white dark:bg-[#1c1c1e]">
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div>
-            <h1 className="text-fluent-2xl font-semibold text-fluent-text">
-              OpenIntuneBaseline
-            </h1>
-            <p className="text-fluent-sm text-fluent-text-secondary mt-0.5">
-              The Open Intune Baseline is a popular starting point for Intune admins.{' '}
-              <a
-                href="https://github.com/SkipToTheEndpoint/OpenIntuneBaseline"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-fluent-blue hover:underline"
-              >
-                View on GitHub →
-              </a>
-            </p>
-            <p className="text-fluent-sm text-fluent-text-secondary mt-1">
-              {isLoading ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
-                  Loading…
-                </span>
-              ) : (
-                <>
-                  {totalPolicies} policies
-                  {fetchedDate && (
-                    <>
-                      {' · '}commit{' '}
-                      <a
-                        href={`https://github.com/SkipToTheEndpoint/OpenIntuneBaseline/commit/${oibData?.oibCommitSha}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-fluent-blue hover:underline font-mono"
-                      >
-                        {commitSha}
-                      </a>
-                      {' · '}fetched {fetchedDate}
-                    </>
-                  )}
-                </>
-              )}
-            </p>
-          </div>
-        </div>
-
-        {/* Search bar */}
-        <div>
-          <p className="text-fluent-sm text-fluent-text-secondary mb-2">
-            Search baseline settings by name, description, keywords, or CSP path
-          </p>
-          <div className="flex">
-            <div className="relative flex-1">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-fluent-text-secondary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for a setting"
-                className="w-full pl-10 pr-8 py-2 text-fluent-base bg-white dark:bg-[#2c2c2e] border border-fluent-border-strong rounded
-                           focus:outline-none focus:border-fluent-blue focus:ring-1 focus:ring-fluent-blue
-                           placeholder:text-fluent-text-disabled"
-                aria-label="Search baseline settings"
-              />
-              {searchQuery && (
-                <button
-                  onClick={clearSearch}
-                  className="search-clear-btn absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center
-                             text-fluent-text-secondary hover:text-fluent-text rounded-full"
-                  aria-label="Clear search"
+      <BrowserHeader
+        title="OpenIntuneBaseline"
+        intro={
+          <>
+            The Open Intune Baseline is a popular starting point for Intune admins.{' '}
+            <a
+              href="https://github.com/SkipToTheEndpoint/OpenIntuneBaseline"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-fluent-blue hover:underline"
+            >
+              View on GitHub →
+            </a>
+          </>
+        }
+        isLoading={isLoading}
+        stats={
+          <>
+            {totalPolicies} policies
+            {fetchedDate && (
+              <>
+                {' · '}commit{' '}
+                <a
+                  href={`https://github.com/SkipToTheEndpoint/OpenIntuneBaseline/commit/${oibData?.oibCommitSha}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-fluent-blue hover:underline font-mono"
                 >
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-              {isSearchPending && (
-                <div className="absolute right-8 top-1/2 -translate-y-1/2">
-                  <div className="w-4 h-4 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+                  {commitSha}
+                </a>
+                {' · '}fetched {fetchedDate}
+              </>
+            )}
+          </>
+        }
+      >
+        <BrowserSearchBar
+          hint="Search baseline settings by name, description, keywords, or CSP path"
+          value={searchQuery}
+          onChange={setSearchQuery}
+          pending={isSearchPending}
+        />
 
         {/* Platform filters */}
         <div className="mt-3 flex items-center gap-2 flex-wrap">
@@ -715,7 +537,7 @@ export default function OIBBrowser() {
             onExport={downloadExport}
           />
         </div>
-      </div>
+      </BrowserHeader>
 
       <BrowserSidebar
         isDesktop={isDesktop}
@@ -726,14 +548,12 @@ export default function OIBBrowser() {
         handleResizeStart={handleResizeStart}
         sidebarBody={
           isLoading ? (
-            <div className="flex flex-col items-center justify-center py-8 text-fluent-text-secondary">
-              <div className="w-6 h-6 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin mb-3" />
-              <p className="text-fluent-sm">Loading…</p>
-            </div>
+            <SidebarLoading />
           ) : (
-            <OIBSidebarTree
+            <FolderSidebarTree
               tree={sidebarTree}
-              selectedNode={selectedNode}
+              selectedFolder={selectedNode?.folder}
+              selectedCategory={selectedNode?.category}
               onSelect={handleSelectCategory}
             />
           )
@@ -743,13 +563,7 @@ export default function OIBBrowser() {
         <div ref={mainScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {hasSearchResults ? (
             searchHits!.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
-                <svg className="w-12 h-12 mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <p className="text-fluent-lg font-medium mb-1">No results for &ldquo;{deferredQuery}&rdquo;</p>
-                <p className="text-fluent-base">Try a different search term.</p>
-              </div>
+              <NoResults query={deferredQuery} />
             ) : (
               <div>
                 <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-white dark:bg-[#1c1c1e] sticky top-0 z-10">
@@ -798,28 +612,16 @@ export default function OIBBrowser() {
               ))}
             </div>
           ) : isLoading ? (
-            <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
-              <div className="w-8 h-8 border-3 border-fluent-blue border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-fluent-base">Loading baseline data…</p>
-            </div>
+            <PanelLoading />
           ) : loadError ? (
-            <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary px-4">
-              <p className="text-fluent-lg font-medium text-fluent-text mb-1">Failed to load OIB data</p>
-              <p className="text-fluent-base">{loadError}</p>
-              <p className="text-fluent-sm mt-2">
-                Run <code className="font-mono bg-fluent-bg-alt px-1 rounded">npm run fetch-oib</code> to generate the data file.
-              </p>
-            </div>
+            <LoadError
+              title="Failed to load OIB data"
+              error={loadError}
+              command="npm run fetch-oib"
+              output="data file"
+            />
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-fluent-text-secondary">
-              <svg className="w-16 h-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              <p className="text-fluent-lg font-medium mb-1">Select a category to view policies</p>
-              <p className="text-fluent-base">
-                Or use the search bar above to find specific settings
-              </p>
-            </div>
+            <EmptyState title="Select a category to view policies" />
           )}
         </div>
       </BrowserSidebar>

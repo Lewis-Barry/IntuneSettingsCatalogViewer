@@ -57,14 +57,8 @@ function titleTokens(p: OIBPolicy): Set<string> {
 /** Non-instance leaf settings keyed by definitionId. (Leaves inside a
  *  groupCollection instance carry an instanceId and are diffed separately.) */
 function settingMap(leaves: FlatSetting[]): Map<string, OIBValue[]> {
-  const map = new Map<string, OIBValue[]>();
-  for (const f of leaves) {
-    if (f.instanceId) continue;
-    const arr = map.get(f.definitionId) ?? [];
-    arr.push(f.value);
-    map.set(f.definitionId, arr);
-  }
-  return map;
+  const groups = Map.groupBy(leaves.filter((f) => !f.instanceId), (f) => f.definitionId);
+  return new Map([...groups].map(([id, fs]) => [id, fs.map((f) => f.value)]));
 }
 
 // ── Collection instances (e.g. firewall rules) ──
@@ -78,17 +72,10 @@ interface Instance {
 /** Group a policy's groupCollection leaves into instances, keyed by collection
  *  definitionId. Each instance keeps its own leaves (one `_name`, `_action`, …). */
 function instancesByCollection(leaves: FlatSetting[]): Map<string, Instance[]> {
-  const byInstance = new Map<string, FlatSetting[]>();
-  const order: string[] = [];
-  for (const f of leaves) {
-    if (!f.instanceId) continue;
-    let arr = byInstance.get(f.instanceId);
-    if (!arr) { arr = []; byInstance.set(f.instanceId, arr); order.push(f.instanceId); }
-    arr.push(f);
-  }
+  // Map.groupBy keeps first-seen order, so instances stay in policy order.
+  const byInstance = Map.groupBy(leaves.filter((f) => f.instanceId), (f) => f.instanceId!);
   const byCollection = new Map<string, Instance[]>();
-  for (const instanceId of order) {
-    const instLeaves = byInstance.get(instanceId)!;
+  for (const [instanceId, instLeaves] of byInstance) {
     const collectionId = instanceId.slice(0, instanceId.lastIndexOf('#'));
     const nameLeaf = instLeaves.find((l) => l.definitionId === `${collectionId}_name`);
     const name =

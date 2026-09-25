@@ -407,14 +407,8 @@ export default function SettingsCatalogBrowser({
     searchResults.forEach((r, i) => rankMap.set(r.id, i));
 
     // Build a map of categoryId → matched SettingDefinition[]
-    const groupMap = new Map<string, SettingDefinition[]>();
-    for (const result of searchResults) {
-      const setting = settingsById.get(result.id);
-      if (!setting) continue;
-      const list = groupMap.get(setting.categoryId) || [];
-      list.push(setting);
-      groupMap.set(setting.categoryId, list);
-    }
+    const matched = searchResults.flatMap((result) => settingsById.get(result.id) ?? []);
+    const groupMap = Map.groupBy(matched, (setting) => setting.categoryId);
 
     // Apply platform + deprecated filters
     const groups: CategorySettingsGroup[] = [];

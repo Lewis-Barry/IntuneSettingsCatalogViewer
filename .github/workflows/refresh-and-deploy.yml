@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -44,6 +44,12 @@ jobs:
           key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'next.config.*') }}
           restore-keys: |
             nextjs-${{ hashFiles('package-lock.json') }}-
+
+      # ── The committed snapshot is the baseline for today's changelog diff ──
+      - name: Snapshot previous data
+        run: |
+          cp data/settings.json data/settings-previous.json
+          cp data/categories.json data/categories-previous.json
 
       # ── Fetch fresh data from Microsoft Graph ──
       - name: Fetch settings from Intune

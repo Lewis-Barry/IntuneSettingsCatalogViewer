@@ -49,3 +49,6 @@ data/search-index-manifest.json
 # local-only notes
 *.local.md
 ideas/
+
+# Claude Code worktrees
+.claude/worktrees/
