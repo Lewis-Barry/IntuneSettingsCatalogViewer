@@ -1,6 +1,7 @@
 // Self-check: `npm run check` (needs network — reads real data from GitHub raw).
 import assert from 'node:assert/strict';
 import { createSource } from './source.ts';
+import * as data from './data.ts';
 
 async function checkSource() {
   let calls = 0; let t = 0; let mode: 'ok' | '304' | 'down' = 'ok';
@@ -26,4 +27,13 @@ async function checkSource() {
   console.log('✓ source');
 }
 
+async function checkData() {
+  const { all, byId } = await data.settingIndex();
+  assert.ok(all.length > 15000, `settings count ${all.length}`);
+  assert.ok(byId.get(all[0].id));
+  assert.ok((await data.baselineIndex()).families.length > 5);
+  console.log('✓ data');
+}
+
 await checkSource();
+await checkData();
