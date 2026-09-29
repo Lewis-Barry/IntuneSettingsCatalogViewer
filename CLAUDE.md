@@ -58,6 +58,20 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/basePath.ts` | Next.js `basePath` constant (build-time inlined) — prefix for all runtime fetches of `public/` assets |
 | `src/lib/slug.ts` | URL slug generation |
 
+### MCP server (`mcp/`)
+
+Standalone stdio MCP server (own `package.json`; excluded from the Next build via root `tsconfig.json`/`eslint.config.mjs`). Reads this repo's committed data files from GitHub raw (`INTUNE_MCP_REPO`/`INTUNE_MCP_REF`, default `Lewis-Barry/IntuneSettingsCatalogViewer@main`), in memory only, ETag-revalidated after 6 h. Install/client config: `mcp/README.md`.
+
+| File | Role |
+|------|------|
+| `mcp/source.ts` | GitHub raw fetch + in-memory memo + ETag revalidation + stale fallback |
+| `mcp/data.ts` | Typed loaders + memoised indexes for every dataset (the MCP's counterpart of `src/lib/data.ts`) |
+| `mcp/format.ts` | Shared output helpers: footer, limits, platform filter, labels |
+| `mcp/tools/*.ts` | 11 read-only tools (settings, changelog, baselines, oib, extras); each exports `register` + `selfCheck` |
+| `mcp/check.ts` | Self-check (`cd mcp && npm run check`, needs network) |
+
+Reuses `src/lib` read-only (types, `baseline-diff`, `oib-diff`, `compliance-types`, `sku-labels`, `slug`, `settings-grouping`) — keep those files free of browser/React imports. Never write to stdout in server code (it's the MCP channel).
+
 ### Performance
 - Web Worker search (Flexsearch off main thread)
 - Virtual scrolling for large lists
@@ -81,6 +95,7 @@ npm run check-changelog-export  # Self-check for the changelog CSV/HTML exporter
 npm run check-usage-filter   # Self-check for the configuration/compliance catalog filter (settingUsage flag parsing)
 npm run fetch-compliance-templates  # Rebuild the classic compliance catalog (no credentials needed)
 npm run check-compliance     # Self-check for the classic compliance catalog (parsing, enum values, no tenant data)
+cd mcp && npm install && npm run check   # MCP server self-check (reads live data from GitHub raw)
 ```
 
 ## Env Vars
