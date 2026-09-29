@@ -1,0 +1,17 @@
+{
+  "name": "intune-settings-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server for the Intune Settings Catalog Viewer data",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "tsx server.ts",
+    "check": "tsx check.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "tsx": "^4.23.12",
+    "zod": "^4.0.0"
+  }
+}
