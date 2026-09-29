@@ -100,6 +100,14 @@ export default function MobileNav() {
               Changelog
             </Link>
             <Link
+              href="/mcp/"
+              onClick={() => setOpen(false)}
+              className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"
+              prefetch={false}
+            >
+              MCP
+            </Link>
+            <Link
               href="/about/"
               onClick={() => setOpen(false)}
               className="px-3 py-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[15px]"

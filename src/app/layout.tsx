@@ -114,6 +114,9 @@ export default function RootLayout({
                 <Link href="/changelog/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
                   Changelog
                 </Link>
+                <Link href="/mcp/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
+                  MCP
+                </Link>
                 <Link href="/about/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors">
                   About
                 </Link>
