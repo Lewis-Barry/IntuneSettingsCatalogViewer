@@ -2,6 +2,11 @@
 import assert from 'node:assert/strict';
 import { createSource } from './source.ts';
 import * as data from './data.ts';
+import * as settingsTools from './tools/settings.ts';
+import * as changelogTools from './tools/changelog.ts';
+import * as baselineTools from './tools/baselines.ts';
+import * as oibTools from './tools/oib.ts';
+import * as extrasTools from './tools/extras.ts';
 
 async function checkSource() {
   let calls = 0; let t = 0; let mode: 'ok' | '304' | 'down' = 'ok';
@@ -37,3 +42,7 @@ async function checkData() {
 
 await checkSource();
 await checkData();
+for (const [name, m] of Object.entries({ settingsTools, changelogTools, baselineTools, oibTools, extrasTools })) {
+  await m.selfCheck();
+  console.log(`✓ ${name}`);
+}
