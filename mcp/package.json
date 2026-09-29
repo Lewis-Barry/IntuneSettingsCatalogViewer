@@ -4,13 +4,25 @@
   "private": true,
   "description": "MCP server for the Intune Settings Catalog Viewer data",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "bin": {
+    "intune-settings-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "tsx server.ts",
-    "check": "tsx check.ts"
+    "check": "tsx check.ts",
+    "build": "esbuild server.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist/server.js --banner:js=\"#!/usr/bin/env node\nimport { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
+    "prepublishOnly": "npm run build"
   },
-  "dependencies": {
+  "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.31.0",
+    "esbuild": "^0.28.2",
     "tsx": "^4.23.12",
     "zod": "^4.0.0"
   }
