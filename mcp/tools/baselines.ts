@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { baselineIndex, baselineShard } from '../data.ts';
-import { reply, errorReply, capped, moreNote } from '../format.ts';
+import { reply, errorReply, capped, moreNote, readOnly } from '../format.ts';
 import { defaultVersion, type BaselineFamily, type BaselineSetting, type BaselineVersionMeta } from '../../src/lib/baseline-types.ts';
 import { diffBaselineVersions, type BaselineSettingChange } from '../../src/lib/baseline-diff.ts';
 
@@ -98,7 +98,7 @@ export async function compareBaselineVersions(args: { family: string; from: stri
 // ── registration ──
 
 export function register(server: McpServer): void {
-  const annotations = { readOnlyHint: true, openWorldHint: true };
+  const annotations = readOnly;
   const out = (r: Resolved<string>) => (r.ok ? reply(r.value) : errorReply(r.error));
   const family = z.string().min(1).describe('Baseline family: baseId (GUID) or part of its name, e.g. "Windows 10", "Edge"');
 

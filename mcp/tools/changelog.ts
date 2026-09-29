@@ -4,11 +4,10 @@ import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { changelog, changelogSummaries } from '../data.ts';
 import type { ChangelogSettingRef, ChangelogChange } from '../../src/lib/types.ts';
-import { reply, errorReply, capped, moreNote, matchesPlatform } from '../format.ts';
+import { reply, errorReply, capped, moreNote, matchesPlatform, limitArg, readOnly, oneLine } from '../format.ts';
 
 const KINDS = ['added', 'removed', 'changed'] as const;
 type Kind = (typeof KINDS)[number];
-const short = (v: string, n = 80) => (v.length > n ? `${v.slice(0, n)}…` : v);
 
 // ── list_changes ──
 
@@ -34,7 +33,7 @@ export async function listChanges(args: { since?: string; until?: string; kind?:
       for (const r of (e[kind] as Array<ChangelogSettingRef & Partial<ChangelogChange>>).filter(wanted)) {
         totals[kind]++;
         const where = `${r.platform ?? '?'} · ${r.categoryName ?? r.categoryId}`;
-        const fields = r.fields ? r.fields.map((f) => `\n  - ${f.field}: ${short(f.oldValue)} → ${short(f.newValue)}`).join('') : '';
+        const fields = r.fields ? r.fields.map((f) => `\n  - ${f.field}: ${oneLine(f.oldValue, 80)} → ${oneLine(f.newValue, 80)}`).join('') : '';
         rows.push({ date: e.date, kind, text: `- **${r.displayName}** — ${where}\n  \`${r.id}\`${fields}` });
       }
     }
@@ -82,7 +81,7 @@ export async function changelogSummary(args: { date?: string; month?: string }):
 // ── registration ──
 
 export function register(server: McpServer): void {
-  const ro = { readOnlyHint: true, openWorldHint: true };
+  const ro = readOnly;
   server.registerTool('list_changes', {
     title: 'List Settings Catalog changes',
     description: 'Use for "what was added/removed/changed in Intune Settings Catalog" over a period, e.g. "what was released last week": convert to ISO since/until (inclusive). No dates = latest entry only. Filters: kind, platform, query (setting/category name or id).',
@@ -92,7 +91,7 @@ export function register(server: McpServer): void {
       kind: z.enum(KINDS).optional(),
       platform: z.string().optional().describe('e.g. windows10, macOS, iOS, android, linux (substring match)'),
       query: z.string().optional().describe('Substring of setting name, category name or id'),
-      limit: z.number().int().min(1).max(100).optional().describe('Max rows (default 20)'),
+      limit: limitArg,
     },
     annotations: ro,
   }, async (args) => reply(await listChanges(args)));

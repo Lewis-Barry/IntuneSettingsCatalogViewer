@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { settingIndex, oibCurrent, oibVersionIndex, oibVersion } from '../data.ts';
-import { reply, errorReply, capped, moreNote } from '../format.ts';
+import { reply, errorReply, capped, moreNote, readOnly, label } from '../format.ts';
 import { parsePolicy, flattenOIBSettings, type OIBPolicy } from '../../src/lib/oib-types.ts';
 import { diffVersions } from '../../src/lib/oib-diff.ts';
 import { fmtValue, kindWord } from '../../src/lib/oib-export-shared.ts';
@@ -31,7 +31,7 @@ const rowLabel = (p: OIBPolicy) => {
 async function listPolicies(policies: OIBPolicy[], title: string, args: Args) {
   const { byId } = await settingIndex();
   const q = args.query?.toLowerCase();
-  const nameOf = (id: string) => byId.get(id)?.displayName || byId.get(id)?.name || id;
+  const nameOf = (id: string) => label(byId.get(id), id);
   const rows = policies.map((p) => {
     const flat = flattenOIBSettings(p.settings).map((f) => ({ f, name: nameOf(f.definitionId) }));
     const hits = q ? flat.filter((x) => `${x.name} ${x.f.definitionId}`.toLowerCase().includes(q)) : flat;
@@ -64,7 +64,7 @@ async function compare(args: Args) {
   const body = shown.map((p) => {
     const lines = p.settingChanges.slice(0, perPolicy).map((s) => {
       const def = byId.get(s.definitionId);
-      const name = def?.displayName || def?.name || s.definitionId;
+      const name = label(def, s.definitionId);
       const v = s.kind === 'changed' ? `${fmtValue(s.baseValue, def)} → ${fmtValue(s.compareValue, def)}` : fmtValue(s.kind === 'added' ? s.compareValue : s.baseValue, def);
       return `  - ${kindWord(s.kind)}: ${name}${s.instanceId ? ` [${s.instanceId.split('#')[0].split('_').pop()}]` : ''}${v ? ` — ${v}` : ''}`;
     });
@@ -95,12 +95,12 @@ export function register(server: McpServer): void {
     description: 'Browse OpenIntuneBaseline (OIB) policies and the setting values they configure, or compare two OIB versions. Use it to answer "what does OIB configure for X", "what does OIB recommend", or "what changed between OIB v3.7 and v3.8". Without version it reads the current snapshot; query matches policy names or setting names. Set version (tag like windows-v3.8, or bare 3.8 plus platform) to read an older release, and add compareTo (same platform) to get the diff.',
     inputSchema: {
       query: z.string().optional().describe('Text to match in policy or setting names, e.g. "bitlocker"'),
-      platform: z.enum(['windows', 'macos', 'win365']).optional().describe('Filter current-snapshot policies; with a bare version it selects the release folder'),
+      platform: z.string().optional().describe('windows, macos or win365 (case-insensitive). ' + 'Filter current-snapshot policies; with a bare version it selects the release folder'),
       version: z.string().optional().describe('OIB tag ("windows-v3.8") or bare version ("3.8", needs platform); base of a comparison'),
       compareTo: z.string().optional().describe('Version to compare against version (same platform)'),
       limit: z.number().int().min(1).max(100).optional().describe('Max policies (default 20)'),
     },
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: readOnly,
   }, oibLookup);
 }
 

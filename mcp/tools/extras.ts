@@ -3,14 +3,12 @@ import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { complianceTemplates, settingIndex } from '../data.ts';
-import { reply, errorReply, capped, moreNote, matchesPlatform } from '../format.ts';
+import { reply, errorReply, capped, moreNote, matchesPlatform, limitArg, readOnly, oneLine, label } from '../format.ts';
 import { allRows, matchesQuery, humanise } from '../../src/lib/compliance-types.ts';
 import { skuLabel, matchesWindowsCompatibility } from '../../src/lib/sku-labels.ts';
 import { searchSettings } from './settings.ts';
 import type { SettingDefinition } from '../../src/lib/types.ts';
 
-const limit = z.number().int().min(1).max(100).optional().describe('Max results (default 20)');
-const oneLine = (t = '', n = 140) => { const s = t.replace(/\s+/g, ' ').trim(); return s.length > n ? `${s.slice(0, n)}…` : s; };
 
 // ── compliance_settings ──
 
@@ -34,24 +32,23 @@ export async function skuAvailability(args: { id?: string; query?: string; limit
   let targets: SettingDefinition[];
   if (args.id) {
     const s = (await settingIndex()).byId.get(args.id);
-    targets = s ? [s] : [];
+    targets = s && s.applicability?.platform?.toLowerCase().includes('windows') ? [s] : [];
   } else {
-    targets = (await searchSettings({ query: args.query!, platform: 'windows', limit: 100 })).items
-      .filter((s) => s.applicability?.platform?.toLowerCase().includes('windows'));
+    targets = (await searchSettings({ query: args.query!, platform: 'windows', limit: 100 })).items;
   }
   if (!targets.length) return undefined;
   const { shown, more } = capped(targets, args.limit);
   const yn = (b: boolean) => (b ? 'yes' : 'no');
   return shown.map((s) => {
     const skus = (s.applicability as { windowsSkus?: string[] } | undefined)?.windowsSkus ?? [];
-    return `- **${s.displayName || s.name || s.id}** (\`${s.id}\`)\n  ` + (skus.length
+    return `- **${label(s)}** (\`${s.id}\`)\n  ` + (skus.length
       ? `SKUs: ${skus.map(skuLabel).join(', ')}\n  Enterprise-only (not on Pro): ${yn(matchesWindowsCompatibility(skus, 'enterprise-only'))} · AVD multi-session: ${yn(matchesWindowsCompatibility(skus, 'avd-multisession'))}`
       : 'No SKU restriction listed');
   }).join('\n') + moreNote(more);
 }
 
 export function register(server: McpServer): void {
-  const annotations = { readOnlyHint: true, openWorldHint: true };
+  const annotations = readOnly;
 
   server.registerTool('compliance_settings', {
     title: 'Classic compliance policy settings',
@@ -59,7 +56,7 @@ export function register(server: McpServer): void {
     inputSchema: {
       query: z.string().optional().describe('Comma-separated terms (any may match), e.g. "firewall, tpm"'),
       platform: z.string().optional().describe('Platform filter, e.g. windows, android, iOS, macOS'),
-      limit,
+      limit: limitArg,
     },
     annotations,
   }, async (args) => {
@@ -73,7 +70,7 @@ export function register(server: McpServer): void {
     inputSchema: {
       id: z.string().optional().describe('Setting definition id (from search_settings)'),
       query: z.string().optional().describe('Keywords, if the id is unknown'),
-      limit,
+      limit: limitArg,
     },
     annotations,
   }, async (args) => {

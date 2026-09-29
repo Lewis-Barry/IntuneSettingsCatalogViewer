@@ -1,4 +1,5 @@
 // Shared output helpers for every tool: footer, filters, limits, links.
+import { z } from 'zod';
 import { REPO, REF, source } from './source.ts';
 import { lastUpdated } from './data.ts';
 import { settingSlug } from '../src/lib/slug.ts';
@@ -6,6 +7,18 @@ import type { SettingDefinition } from '../src/lib/types.ts';
 
 export const DEFAULT_LIMIT = 20;
 export const MAX_LIMIT = 100;
+export const limitArg = z.number().int().min(1).max(MAX_LIMIT).optional().describe(`Max results (default ${DEFAULT_LIMIT})`);
+export const readOnly = { readOnlyHint: true, openWorldHint: true };
+
+/** Collapse whitespace (some names/descriptions are multi-line) and truncate. */
+export const oneLine = (text = '', n = 140) => {
+  const t = text.replace(/\s+/g, ' ').trim();
+  return t.length > n ? `${t.slice(0, n)}…` : t;
+};
+
+/** Some catalog records have a null displayName — fall back to name / id. */
+export const label = (s: Pick<SettingDefinition, 'displayName' | 'name' | 'id'> | undefined, fallback = '') =>
+  oneLine(s?.displayName || s?.name || s?.id || fallback, 200);
 
 /** Case-insensitive "contains" platform filter, shared by all tools. */
 export function matchesPlatform(value: string | undefined, filter?: string): boolean {

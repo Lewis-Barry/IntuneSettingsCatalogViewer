@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { settingIndex, categoryById, categoryTree, allBaselineShards, baselineIndex, oibCurrent } from '../data.ts';
-import { reply, errorReply, capped, moreNote, matchesPlatform, siteUrl, fmtDefault } from '../format.ts';
+import { reply, errorReply, capped, moreNote, matchesPlatform, siteUrl, fmtDefault, limitArg, readOnly, oneLine, label } from '../format.ts';
 import { getSettingScope, type SettingDefinition, type CategoryTreeNode } from '../../src/lib/types.ts';
 import { getCspPath } from '../../src/lib/settings-grouping.ts';
 import { skuLabel, matchesWindowsCompatibility } from '../../src/lib/sku-labels.ts';
@@ -11,15 +11,8 @@ import { flattenOIBSettings } from '../../src/lib/oib-types.ts';
 import { fmtValue } from '../../src/lib/oib-export-shared.ts';
 import type { BaselineSetting } from '../../src/lib/baseline-types.ts';
 
-const limit = z.number().int().min(1).max(100).optional().describe('Max results (default 20)');
-// Some catalog records have a null displayName — fall back to name / id.
-const label = (s: SettingDefinition) => s.displayName || s.name || s.id;
 // getCspPath joins baseUri + '/' + offsetUri, and offsetUri already starts with '/'.
 const cspPath = (s: SettingDefinition) => getCspPath(s).replace(/(?<!^\.)\/{2,}/g, '/');
-const oneLine = (text = '', n = 140) => {
-  const t = text.replace(/\s+/g, ' ').trim();
-  return t.length > n ? `${t.slice(0, n)}…` : t;
-};
 
 // ── search_settings ──
 
@@ -102,7 +95,8 @@ export async function getSettingDetail(args: { id?: string; name?: string }): Pr
 
   out.push('', '## Default', fmtDefault(s) ?? 'No default defined in the catalog.');
   if (s.options?.length) {
-    out.push('', '## Options', ...s.options.map((o) => `- ${o.displayName}${o.itemId === s.defaultOptionId ? ' ✓ default' : ''} — \`${o.itemId}\``));
+    const { shown, more } = capped(s.options, 50);
+    out.push('', `## Options (${s.options.length})`, ...shown.map((o) => `- ${oneLine(o.displayName, 200)}${o.itemId === s.defaultOptionId ? ' ✓ default' : ''} — \`${o.itemId}\``), moreNote(more));
   }
   const constraints = [
     vd.minimumValue !== undefined && `min value ${vd.minimumValue}`,
@@ -159,16 +153,16 @@ export async function listCategories(args: { parentId?: string; platform?: strin
 // ── registration ──
 
 export function register(server: McpServer): void {
-  const annotations = { readOnlyHint: true, openWorldHint: true };
+  const annotations = readOnly;
 
   server.registerTool('search_settings', {
     title: 'Search Intune settings',
     description: 'Search the Microsoft Intune Settings Catalog (all ~18k configuration and compliance settings, every platform) by keyword. Matches display name, name, keywords, CSP path and description; every word must match. Use this to find a setting id, then call get_setting for its default value, options and recommendations.',
     inputSchema: {
-      query: z.string().min(1).describe('Keywords, e.g. "bitlocker startup pin"'),
+      query: z.string().trim().min(1).describe('Keywords, e.g. "bitlocker startup pin"'),
       platform: z.string().optional().describe('Platform filter, e.g. windows10, macOS, iOS, android, linux'),
       scope: z.enum(['device', 'user']).optional(),
-      limit,
+      limit: limitArg,
     },
     annotations,
   }, async (args) => {
@@ -187,7 +181,8 @@ export function register(server: McpServer): void {
     annotations,
   }, async (args) => {
     if (!args.id && !args.name) return errorReply('Provide either id or name.');
-    return reply((await getSettingDetail(args)).markdown);
+    const d = await getSettingDetail(args);
+    return d.kind === 'notFound' ? errorReply(d.markdown) : reply(d.markdown);
   });
 
   server.registerTool('list_categories', {
@@ -201,7 +196,7 @@ export function register(server: McpServer): void {
   }, async (args) => {
     const nodes = await listCategories(args);
     if (!nodes.length) return reply('No categories found.');
-    return reply(nodes.map((n) => `- **${n.displayName}** (\`${n.id}\`) — ${n.settingCount} settings, ${n.children.length} subcategories`).join('\n'));
+    return reply(nodes.map((n) => `- ${n.displayName} — \`${n.id}\` · ${n.settingCount} settings${n.children.length ? `, ${n.children.length} sub` : ''}`).join('\n'));
   });
 }
 

@@ -52,8 +52,10 @@ export const oibCurrent = () => source.json<OIBOutput>('public/oib-data.json');
 export const oibVersionIndex = () => source.json<OIBVersionIndex>('public/oib-versions/index.json');
 export const oibVersion = (tag: string) => source.json<OIBVersionShard>(`public/oib-versions/${tag}.json`);
 
-/** Every baseline shard (all families, all versions). Deliberately eager — get_setting's cross-reference needs them all. */
+/** Every baseline shard (all families, all versions). Deliberately eager — get_setting's
+ *  cross-reference needs them all. A shard that fails to load is skipped, not fatal. */
 export async function allBaselineShards(): Promise<BaselineShard[]> {
   const idx = await baselineIndex();
-  return Promise.all(idx.families.flatMap((f) => f.versions.map((v) => baselineShard(v.id))));
+  const results = await Promise.allSettled(idx.families.flatMap((f) => f.versions.map((v) => baselineShard(v.id))));
+  return results.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : []));
 }
