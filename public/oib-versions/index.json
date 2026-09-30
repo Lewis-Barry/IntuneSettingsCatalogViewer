@@ -1,11 +1,17 @@
 {
-  "generatedAt": "2026-06-22T17:51:19.366Z",
-  "oibCommitSha": "4844247055305c9eb8dfe4b12c895ec8422dee67",
+  "generatedAt": "2026-09-30T18:52:17.366Z",
+  "oibCommitSha": "1cc71a92abdb9d708c9a3358f323f7894ae81163",
   "platforms": [
     {
       "folder": "WINDOWS",
       "label": "Windows",
       "versions": [
+        {
+          "tag": "windows-v4.0",
+          "version": "4.0",
+          "date": "2026-09-30",
+          "policyCount": 61
+        },
         {
           "tag": "windows-v3.8",
           "version": "3.8",
