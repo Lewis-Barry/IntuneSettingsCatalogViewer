@@ -8,6 +8,8 @@ interface PlatformFilterProps {
   onPlatformsChange: (platforms: string[]) => void;
   deprecatedOnly?: boolean;
   onDeprecatedChange?: (value: boolean) => void;
+  /** Limit the buttons to these platforms (default: all). */
+  platforms?: ReadonlySet<string>;
 }
 
 const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
@@ -17,6 +19,7 @@ export default function PlatformFilter({
   onPlatformsChange,
   deprecatedOnly = false,
   onDeprecatedChange,
+  platforms,
 }: PlatformFilterProps) {
   const togglePlatform = (platform: string) => {
     if (selectedPlatforms.includes(platform)) {
@@ -40,7 +43,7 @@ export default function PlatformFilter({
         All
       </button>
 
-      {PLATFORMS.map((p) => {
+      {PLATFORMS.filter((p) => !platforms || platforms.has(p.value)).map((p) => {
         const isActive = selectedPlatforms.includes(p.value);
         const Icon = PLATFORM_ICONS[p.value];
         return (

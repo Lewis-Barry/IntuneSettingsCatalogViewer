@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useMemo, useRef } from 'react';
-import { pillClass } from '@/lib/pill';
-import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
+import { PLATFORM_ICONS } from './PlatformIcons';
+import PlatformFilter from './PlatformFilter';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { useIsDesktop } from '@/lib/useMediaQuery';
 import HighlightText from './HighlightText';
@@ -15,8 +15,6 @@ import {
   type ComplianceRow,
   type ComplianceTemplate,
 } from '@/lib/compliance-types';
-
-const PLATFORMS = Object.entries(PLATFORM_LABELS).map(([value, label]) => ({ value, label }));
 
 interface ComplianceBrowserProps {
   templates: ComplianceTemplate[];
@@ -69,12 +67,6 @@ export default function ComplianceBrowser({ templates }: ComplianceBrowserProps)
   );
   const totalShown = shownGroups.reduce((n, g) => n + g.rows.length, 0);
   const totalAvailable = visibleTemplates.reduce((n, t) => n + t.properties.length, 0);
-
-  const toggleFamily = (family: string) => {
-    setSelectedFamilies((current) =>
-      current.includes(family) ? current.filter((f) => f !== family) : [...current, family],
-    );
-  };
 
   if (templates.length === 0) {
     return (
@@ -141,28 +133,7 @@ export default function ComplianceBrowser({ templates }: ComplianceBrowserProps)
 
         {/* Platform filters */}
         <div className="mt-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-fluent-sm text-fluent-text-secondary font-medium">Platform:</span>
-            <button
-              onClick={() => setSelectedFamilies([])}
-              className={`platform-filter-btn ${pillClass(selectedFamilies.length === 0)}`}
-            >
-              All
-            </button>
-            {PLATFORMS.filter((p) => availableFamilies.has(p.value)).map((p) => {
-              const Icon = PLATFORM_ICONS[p.value];
-              return (
-                <button
-                  key={p.value}
-                  onClick={() => toggleFamily(p.value)}
-                  className={`platform-filter-btn ${pillClass(selectedFamilies.includes(p.value))}`}
-                >
-                  {Icon && <Icon className="w-4 h-4" />}
-                  {p.label}
-                </button>
-              );
-            })}
-          </div>
+          <PlatformFilter selectedPlatforms={selectedFamilies} onPlatformsChange={setSelectedFamilies} platforms={availableFamilies} />
         </div>
       </div>
 

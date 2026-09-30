@@ -23,8 +23,8 @@ interface ChangelogExportOptions {
   generatedAt?: Date;
 }
 
-/** Strip surrounding JSON quotes so values read cleanly (same as the viewer). */
-function cleanValue(s: string): string {
+/** Strip surrounding JSON quotes so values read cleanly (also used by ChangelogViewer). */
+export function cleanValue(s: string): string {
   return s.replace(/^"|"$/g, '');
 }
 
@@ -63,12 +63,7 @@ export function generateChangelogHtml({
   const timestamp = `${generatedAt.toLocaleDateString()} ${generatedAt.toLocaleTimeString()}`;
 
   // Group by date, newest first.
-  const byDate = new Map<string, ChangelogExportItem[]>();
-  for (const item of items) {
-    const arr = byDate.get(item.date) ?? [];
-    arr.push(item);
-    byDate.set(item.date, arr);
-  }
+  const byDate = Map.groupBy(items, (item) => item.date);
   const dates = [...byDate.keys()].sort((a, b) => b.localeCompare(a));
 
   const toc = dates

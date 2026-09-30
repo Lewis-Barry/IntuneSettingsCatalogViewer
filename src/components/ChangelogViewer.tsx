@@ -3,11 +3,12 @@
 import { Fragment, useEffect, useState, useMemo } from 'react';
 import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, ChangelogSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
+import { pillClass } from '@/lib/pill';
 import { settingSlug } from '@/lib/slug';
 import { basePath } from '@/lib/basePath';
 import SettingDetail from './SettingDetail';
 import ExportMenu, { downloadTextFile, type ExportFormat } from './ExportMenu';
-import { generateChangelogCsv, generateChangelogHtml } from '@/lib/changelog-export';
+import { cleanValue, generateChangelogCsv, generateChangelogHtml } from '@/lib/changelog-export';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
@@ -713,11 +714,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-fluent-border pt-3">
           <button
             onClick={() => setSelectedPlatforms([])}
-            className={`inline-flex items-center gap-1.5 rounded border px-3 py-1 text-fluent-sm transition-colors ${
-              selectedPlatforms.length === 0
-                ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
-                : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
-            }`}
+            className={pillClass(selectedPlatforms.length === 0)}
           >
             All platforms
           </button>
@@ -728,11 +725,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
               <button
                 key={platform.value}
                 onClick={() => togglePlatform(platform.value)}
-                className={`inline-flex items-center gap-1.5 rounded border px-3 py-1 text-fluent-sm transition-colors ${
-                  isActive
-                    ? 'bg-fluent-blue text-white dark:text-[#1c1c1e] border-fluent-blue'
-                    : 'bg-white dark:bg-[#2c2c2e] text-fluent-text border-fluent-border dark:border-[#636366] hover:bg-fluent-bg-alt'
-                }`}
+                className={pillClass(isActive)}
               >
                 {Icon && <Icon className="h-4 w-4" />}
                 {platform.label}
@@ -1480,11 +1473,6 @@ function mergePlatformLists(a?: string, b?: string): string | undefined {
   return Array.from(byKey.entries())
     .map(([key, label]) => PLATFORM_LABELS[key] ? key : label)
     .join(',');
-}
-
-/** Strip surrounding JSON quotes so values display cleanly */
-function cleanValue(s: string): string {
-  return s.replace(/^"|"$/g, '');
 }
 
 /** Normalize a raw platform string to its canonical icon key */

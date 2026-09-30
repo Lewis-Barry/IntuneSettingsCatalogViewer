@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { selectClass } from '@/lib/pill';
 import { basePath } from '@/lib/basePath';
 import SettingRow from './SettingRow';
-import ExportMenu, { downloadTextFile, Chevron, KindIcon, KIND, SETTING_KIND } from './ExportMenu';
+import { downloadTextFile, SETTING_KIND } from './ExportMenu';
+import VersionDiffView, { useDiffView, LoadStatus, ChangeBadge, CategorySection, ChangeCard } from './VersionDiffView';
 import {
   defaultVersion,
   type BaselineIndex,
@@ -13,7 +14,7 @@ import {
   type BaselineSetting,
   type BaselineShard,
 } from '@/lib/baseline-types';
-import { diffBaselineVersions, type BaselineChangeKind, type BaselineSettingChange } from '@/lib/baseline-diff';
+import { diffBaselineVersions, type BaselineChangeKind } from '@/lib/baseline-diff';
 import { valueText, generateBaselineChangelogCsv, generateBaselineChangelogHtml } from '@/lib/baseline-export';
 import type { SettingDefinition } from '@/lib/types';
 
@@ -28,38 +29,6 @@ function activeFrom(s?: BaselineSetting): { activeOptionIds?: string[]; activeSi
   return {};
 }
 
-/** Change indicator for SettingRow's 10rem badge slot: pill on top, value below. */
-function changeBadge(c: BaselineSettingChange): React.ReactNode {
-  const k = SETTING_KIND[c.kind];
-  return (
-    <div className="flex flex-col items-end gap-1 text-right">
-      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-fluent-xs font-semibold border ${k.pill}`}>
-        <span aria-hidden className="font-mono">{k.sym}</span>
-        {k.label}
-      </span>
-      <span className="text-fluent-xs text-fluent-text-secondary break-words leading-snug">
-        {c.kind === 'changed' ? (
-          <><span className="line-through">{valueText(c.base)}</span> → <span className="text-fluent-text">{valueText(c.compare)}</span></>
-        ) : c.kind === 'removed' ? (
-          valueText(c.base)
-        ) : (
-          valueText(c.compare)
-        )}
-      </span>
-    </div>
-  );
-}
-
-function KindBadge({ kind }: { kind: BaselineChangeKind }) {
-  const k = KIND[kind];
-  return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-fluent-xs font-semibold border ${k.tint} ${k.text}`}>
-      <KindIcon kind={kind} className="w-3 h-3" />
-      {k.label}
-    </span>
-  );
-}
-
 // ── Component ──
 
 export default function BaselineChangelogViewer() {
@@ -70,9 +39,8 @@ export default function BaselineChangelogViewer() {
   const [baseVersionId, setBaseVersionId] = useState<string | null>(null);
   const [compareVersionId, setCompareVersionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
-  const [kindFilter, setKindFilter] = useState<Set<BaselineChangeKind>>(new Set());
-  const [query, setQuery] = useState('');
+  const view = useDiffView<BaselineChangeKind>(`${baseId}|${baseVersionId}|${compareVersionId}`);
+  const { expanded, kindFilter, query } = view;
 
   // Load index + setting definitions.
   useEffect(() => {
@@ -109,12 +77,6 @@ export default function BaselineChangelogViewer() {
     setBaseVersionId(base?.id ?? null);
   }, [family]);
 
-  // Reset view state whenever the comparison changes.
-  useEffect(() => {
-    setExpanded(new Set());
-    setKindFilter(new Set());
-    setQuery('');
-  }, [baseId, baseVersionId, compareVersionId]);
 
   // Lazily fetch the two selected shards.
   const ensureShard = useCallback(
@@ -156,57 +118,28 @@ export default function BaselineChangelogViewer() {
 
   // Group visible changes by settings-catalog category (kinds first within
   // each category) — same section shape as the OIB changelog.
-  const grouped = useMemo(() => {
-    const order: Record<BaselineChangeKind, number> = { added: 0, removed: 1, changed: 2 };
-    const byCat = new Map<string, BaselineSettingChange[]>();
-    for (const c of visibleChanges) {
-      const cat = c.category ?? 'Other';
-      const arr = byCat.get(cat) ?? [];
-      arr.push(c);
-      byCat.set(cat, arr);
-    }
-    return [...byCat.entries()]
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([category, changes]) => {
-        const sorted = changes.slice().sort((a, b) => order[a.kind] - order[b.kind]);
-        const kindCounts = {} as Record<BaselineChangeKind, number>;
-        for (const c of sorted) kindCounts[c.kind] = (kindCounts[c.kind] ?? 0) + 1;
-        return { category, changes: sorted, kindCounts };
-      });
-  }, [visibleChanges]);
+  const grouped = useMemo(
+    () =>
+      [...Map.groupBy(visibleChanges, (c) => c.category ?? 'Other')]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([category, changes]) => ({
+          category,
+          changes: changes.sort((a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind)),
+        })),
+    [visibleChanges]
+  );
 
-  const toggle = (key: string) =>
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-
-  const toggleKind = (kind: BaselineChangeKind) =>
-    setKindFilter((prev) => {
-      const next = new Set(prev);
-      next.has(kind) ? next.delete(kind) : next.add(kind);
-      return next;
-    });
-
-  const setAllExpanded = (open: boolean) =>
-    setExpanded(() => {
-      if (!open) return new Set();
-      const next = new Set<string>();
-      for (const { category, changes } of grouped) {
-        for (const c of changes) {
-          const s = c.compare ?? c.base;
-          if (defsMap.has(c.settingDefinitionId) || s?.description) {
-            next.add(`${category}|${c.settingDefinitionId}|${c.kind}`);
-          }
+  const expandAll = () => {
+    const next = new Set<string>();
+    for (const { category, changes } of grouped) {
+      for (const c of changes) {
+        const s = c.compare ?? c.base;
+        if (defsMap.has(c.settingDefinitionId) || s?.description) {
+          next.add(`${category}|${c.settingDefinitionId}|${c.kind}`);
         }
       }
-      return next;
-    });
-
-  const swap = () => {
-    setBaseVersionId(compareVersionId);
-    setCompareVersionId(baseVersionId);
+    }
+    view.setExpanded(next);
   };
 
   const versionLabel = (id: string | null) =>
@@ -227,335 +160,110 @@ export default function BaselineChangelogViewer() {
     downloadTextFile(`ms-baseline-changelog-${safe}.${format}`, content, format);
   };
 
-  if (error) {
-    return <p className="text-fluent-error text-fluent-base p-4">Failed to load baseline data: {error}</p>;
-  }
-  if (!index) {
-    return (
-      <div className="p-4 md:p-6" role="status" aria-live="polite">
-        <p className="text-fluent-text-secondary text-fluent-base">Loading…</p>
-      </div>
-    );
-  }
-
-  const canCompare = family != null && family.versions.length >= 2;
-  const filtering = kindFilter.size > 0 || query.trim() !== '';
+  if (error || !index) return <LoadStatus error={error} />;
 
   return (
-    <div className="p-4 md:p-6">
-      {/* ── Header ── */}
-      <h1 className="text-fluent-2xl font-semibold text-fluent-text mb-1">Security Baseline Changelog</h1>
-      <p className="text-fluent-base text-fluent-text-secondary mb-5">
-        Compare any two versions of a Microsoft security baseline — see which setting defaults were
-        added, removed, or changed.
-      </p>
-
-      {/* ── Controls: one card, two zones (baseline · versions+export) ── */}
-      <div className="fluent-card p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-          {/* Baseline picker */}
-          <fieldset className="min-w-0">
-            <legend className="text-fluent-xs font-semibold uppercase tracking-wide text-fluent-text-secondary mb-1.5">
-              Baseline
-            </legend>
-            <label htmlFor="baseline-changelog-family" className="sr-only">Baseline family</label>
-            <select
-              id="baseline-changelog-family"
-              value={baseId ?? ''}
-              onChange={(e) => setBaseId(e.target.value)}
-              className={selectClass}
-            >
-              {index.families.map((f) => (
-                <option key={f.baseId} value={f.baseId}>
-                  {f.displayName} ({f.versions.length})
-                </option>
-              ))}
-            </select>
-          </fieldset>
-
-          {canCompare && (
-            <>
-              <div className="hidden sm:block w-px self-stretch bg-fluent-border" aria-hidden />
-
-              {/* Version pair — reads left → right as a timeline */}
-              <fieldset className="min-w-0">
-                <legend className="text-fluent-xs font-semibold uppercase tracking-wide text-fluent-text-secondary mb-1.5">
-                  Versions
-                </legend>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <label htmlFor="baseline-base" className="sr-only">Base version (changes from)</label>
-                  <select id="baseline-base" value={baseVersionId ?? ''} onChange={(e) => setBaseVersionId(e.target.value)} className={selectClass}>
-                    {family.versions.map((v) => (
-                      <option key={v.id} value={v.id} disabled={v.id === compareVersionId}>
-                        {v.displayVersion}
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    onClick={swap}
-                    className="p-1.5 rounded border border-fluent-border dark:border-[#636366] text-fluent-text-secondary hover:bg-fluent-bg-alt transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue"
-                    title="Swap base and compare versions"
-                    aria-label="Swap base and compare versions"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                    </svg>
-                  </button>
-
-                  <label htmlFor="baseline-compare" className="sr-only">Compare version (changes to)</label>
-                  <select id="baseline-compare" value={compareVersionId ?? ''} onChange={(e) => setCompareVersionId(e.target.value)} className={selectClass}>
-                    {family.versions.map((v) => (
-                      <option key={v.id} value={v.id} disabled={v.id === baseVersionId}>
-                        {v.displayVersion}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </fieldset>
-
-              {/* Export — pushed to the far right (visual closure of the row) */}
-              <div className="sm:ml-auto self-end">
-                <ExportMenu ariaLabel="Export the current comparison" disabled={!diff} onExport={downloadExport} />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* ── Results ── */}
-      {!canCompare ? (
-        <p className="text-fluent-base text-fluent-text-secondary mt-6">
-          Only one version of {family?.displayName} is published — nothing to compare yet.
-        </p>
-      ) : !diff ? (
-        <p className="text-fluent-text-secondary text-fluent-base mt-6" role="status">Loading versions…</p>
-      ) : (
-        <div>
-          {/* ── Summary: headline comparison + clickable stat tiles (also filters) ── */}
-          <div className="mb-2 flex items-baseline gap-2 flex-wrap">
-            <h2 className="text-fluent-lg font-semibold text-fluent-text">
-              {versionLabel(baseVersionId)} → {versionLabel(compareVersionId)}
-            </h2>
-            <span className="text-fluent-sm text-fluent-text-secondary">
-              {family.displayName} · {diff.changes.length} changed {diff.changes.length === 1 ? 'setting' : 'settings'}
-            </span>
-          </div>
-          <p className="text-fluent-xs text-fluent-text-secondary mb-3">
-            Select a tile to filter the list below.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6" role="group" aria-label="Filter by change type">
-            {KIND_ORDER.map((kind) => {
-              const k = KIND[kind];
-              const count = diff.counts[kind];
-              const active = kindFilter.has(kind);
-              return (
-                <button
-                  key={kind}
-                  onClick={() => toggleKind(kind)}
-                  aria-pressed={active}
-                  className={`text-left rounded-lg border p-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue ${
-                    active
-                      ? `${k.tint} border-current`
-                      : 'bg-white dark:bg-[#2c2c2e] border-fluent-border hover:bg-fluent-bg-alt'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className={`inline-flex items-center justify-center w-7 h-7 rounded-md ${k.iconBg}`}>
-                      <KindIcon kind={kind} />
-                    </span>
-                    <span className={`text-fluent-2xl font-semibold tabular-nums ${active ? k.text : 'text-fluent-text'}`}>
-                      {count}
-                    </span>
-                  </div>
-                  <div className={`mt-1.5 text-fluent-xs font-semibold ${active ? k.text : 'text-fluent-text-secondary'}`}>
-                    {k.label} {count === 1 ? 'setting' : 'settings'}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {diff.changes.length === 0 ? (
-            <p className="text-fluent-text-secondary text-fluent-base">No differences between these versions.</p>
-          ) : (
-            <>
-              {/* ── Filter / view toolbar ── */}
-              <div className="flex items-center gap-3 flex-wrap mb-4">
-                <div className="relative flex-1 min-w-[200px] max-w-sm">
-                  <svg
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-fluent-text-secondary pointer-events-none"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Filter by setting name…"
-                    aria-label="Filter settings by name"
-                    className="w-full bg-white dark:bg-[#2c2c2e] text-fluent-text border border-fluent-border dark:border-[#636366] rounded pl-8 pr-3 py-1.5 text-fluent-sm placeholder:text-fluent-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue"
-                  />
-                </div>
-
-                <span className="text-fluent-sm text-fluent-text-secondary" role="status">
-                  {filtering
-                    ? `${visibleChanges.length} of ${diff.changes.length} settings · ${grouped.length} ${grouped.length === 1 ? 'category' : 'categories'}`
-                    : `${grouped.length} ${grouped.length === 1 ? 'category' : 'categories'}`}
-                </span>
-
-                {filtering && (
-                  <button
-                    onClick={() => { setKindFilter(new Set()); setQuery(''); }}
-                    className="text-fluent-sm text-fluent-blue hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
-                  >
-                    Clear filters
-                  </button>
+    <VersionDiffView
+      title="Security Baseline Changelog"
+      intro="Compare any two versions of a Microsoft security baseline — see which setting defaults were added, removed, or changed."
+      pickerLabel="Baseline"
+      picker={
+        <>
+          <label htmlFor="baseline-changelog-family" className="sr-only">Baseline family</label>
+          <select
+            id="baseline-changelog-family"
+            value={baseId ?? ''}
+            onChange={(e) => setBaseId(e.target.value)}
+            className={selectClass}
+          >
+            {index.families.map((f) => (
+              <option key={f.baseId} value={f.baseId}>
+                {f.displayName} ({f.versions.length})
+              </option>
+            ))}
+          </select>
+        </>
+      }
+      idPrefix="baseline"
+      versions={family?.versions.map((v) => ({ id: v.id, label: v.displayVersion })) ?? []}
+      baseId={baseVersionId}
+      compareId={compareVersionId}
+      onBaseChange={setBaseVersionId}
+      onCompareChange={setCompareVersionId}
+      onExport={downloadExport}
+      subject={family?.displayName}
+      summary={
+        diff && family && {
+          heading: `${versionLabel(baseVersionId)} → ${versionLabel(compareVersionId)}`,
+          detail: `${family.displayName} · ${diff.changes.length} changed ${diff.changes.length === 1 ? 'setting' : 'settings'}`,
+          counts: diff.counts,
+          total: diff.changes.length,
+        }
+      }
+      kinds={KIND_ORDER}
+      noun={['setting', 'settings']}
+      view={view}
+      visibleCount={visibleChanges.length}
+      categoryCount={grouped.length}
+      onExpandAll={expandAll}
+    >
+      {grouped.map(({ category, changes }) => (
+        <CategorySection key={category} category={category} kinds={KIND_ORDER} items={changes} noun={['setting', 'settings']}>
+          {changes.map((c) => {
+            const key = `${category}|${c.settingDefinitionId}|${c.kind}`;
+            const def = defsMap.get(c.settingDefinitionId);
+            const s = (c.compare ?? c.base)!;
+            const src = c.kind === 'removed' ? c.base : c.compare;
+            const srcVersion = c.kind === 'removed' ? versionLabel(baseVersionId) : versionLabel(compareVersionId);
+            return (
+              <ChangeCard
+                key={key}
+                kind={c.kind}
+                expandable={!!def || !!s.description}
+                open={expanded.has(key)}
+                onToggle={() => view.toggle(key)}
+                title={s.displayName}
+                body={() =>
+                  def ? (
+                    <div className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+                      <SettingRow
+                        setting={def}
+                        valueBadge={<ChangeBadge kind={c.kind} base={valueText(c.base)} compare={valueText(c.compare)} />}
+                        {...activeFrom(src)}
+                        activeLabel={`Baseline ${srcVersion}`}
+                        disambiguationLabel={c.parent}
+                        hideScope
+                      />
+                    </div>
+                  ) : (
+                    <div className="px-4 py-3 pl-12">
+                      {s.description && (
+                        <p className="text-fluent-sm text-fluent-text-secondary whitespace-pre-line mb-2">{s.description}</p>
+                      )}
+                      <p className="font-mono text-[12px] text-fluent-text-secondary break-all">{c.settingDefinitionId}</p>
+                    </div>
+                  )
+                }
+              >
+                {c.parent && (
+                  <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
+                    {c.parent}
+                  </span>
                 )}
-
-                <div className="ml-auto flex items-center gap-2">
-                  <button
-                    onClick={() => setAllExpanded(true)}
-                    className="text-fluent-sm text-fluent-text-secondary hover:text-fluent-text hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
-                  >
-                    Expand all
-                  </button>
-                  <span className="text-fluent-text-disabled" aria-hidden>·</span>
-                  <button
-                    onClick={() => setAllExpanded(false)}
-                    className="text-fluent-sm text-fluent-text-secondary hover:text-fluent-text hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
-                  >
-                    Collapse all
-                  </button>
-                </div>
-              </div>
-
-              {visibleChanges.length === 0 ? (
-                <div className="fluent-card p-8 text-center">
-                  <p className="text-fluent-base text-fluent-text mb-1">No settings match the current filters.</p>
-                  <p className="text-fluent-sm text-fluent-text-secondary mb-4">
-                    Try a different search term or change type.
-                  </p>
-                  <button
-                    onClick={() => { setKindFilter(new Set()); setQuery(''); }}
-                    className="fluent-btn-secondary text-fluent-sm"
-                  >
-                    Clear filters
-                  </button>
-                </div>
-              ) : (
-                grouped.map(({ category, changes, kindCounts }) => (
-                  <section key={category} className="mb-8" aria-labelledby={`cat-${category}`}>
-                    {/* Category header — sticky so context persists while scanning long lists */}
-                    <div className="sticky top-0 z-10 -mx-1 px-1 py-2 bg-[var(--fluent-page-bg)]">
-                      <div className="flex items-center gap-3 flex-wrap border-b border-fluent-border pb-2">
-                        <h2 id={`cat-${category}`} className="text-fluent-lg font-semibold text-fluent-text">
-                          {category}
-                        </h2>
-                        <span
-                          className="flex items-center gap-2 text-fluent-xs font-medium"
-                          aria-label={KIND_ORDER.filter((k) => kindCounts[k]).map((k) => `${kindCounts[k]} ${KIND[k].label.toLowerCase()}`).join(', ')}
-                        >
-                          {KIND_ORDER.filter((k) => kindCounts[k]).map((k) => (
-                            <span key={k} className={`inline-flex items-center gap-1 tabular-nums ${KIND[k].text}`} aria-hidden>
-                              <KindIcon kind={k} className="w-3 h-3" />
-                              {kindCounts[k]}
-                            </span>
-                          ))}
-                        </span>
-                        <span className="text-fluent-xs text-fluent-text-secondary ml-auto tabular-nums">
-                          {changes.length} {changes.length === 1 ? 'setting' : 'settings'}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 space-y-2">
-                      {changes.map((c) => {
-                        const key = `${category}|${c.settingDefinitionId}|${c.kind}`;
-                        const def = defsMap.get(c.settingDefinitionId);
-                        const s = (c.compare ?? c.base)!;
-                        const expandable = !!def || !!s.description;
-                        const isOpen = expanded.has(key);
-                        const k = KIND[c.kind];
-                        const src = c.kind === 'removed' ? c.base : c.compare;
-                        const srcVersion = c.kind === 'removed' ? versionLabel(baseVersionId) : versionLabel(compareVersionId);
-                        const { activeOptionIds, activeSimpleValue } = activeFrom(src);
-                        return (
-                          <div
-                            key={key}
-                            className={`bg-white dark:bg-[#2c2c2e] border border-fluent-border border-l-4 ${k.gutter} rounded-md overflow-hidden`}
-                          >
-                            <button
-                              onClick={() => expandable && toggle(key)}
-                              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fluent-blue ${
-                                expandable ? 'hover:bg-fluent-bg-alt cursor-pointer' : 'cursor-default'
-                              }`}
-                              aria-expanded={expandable ? isOpen : undefined}
-                            >
-                              {expandable ? (
-                                <span className="w-4 flex items-center justify-center text-fluent-text-secondary shrink-0">
-                                  <Chevron open={isOpen} />
-                                </span>
-                              ) : (
-                                <span className="w-4 shrink-0" aria-hidden />
-                              )}
-                              <KindBadge kind={c.kind} />
-                              <span className="flex-1 min-w-0 text-fluent-base font-medium text-fluent-text truncate">
-                                {s.displayName}
-                              </span>
-                              {c.parent && (
-                                <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
-                                  {c.parent}
-                                </span>
-                              )}
-                              <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
-                                {c.kind === 'changed' ? (
-                                  <><span className="line-through">{valueText(c.base)}</span> → {valueText(c.compare)}</>
-                                ) : c.kind === 'removed' ? (
-                                  valueText(c.base)
-                                ) : (
-                                  valueText(c.compare)
-                                )}
-                              </span>
-                            </button>
-
-                            {isOpen && expandable && (
-                              <div className="border-t border-fluent-border bg-fluent-bg">
-                                {def ? (
-                                  <div className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
-                                    <SettingRow
-                                      setting={def}
-                                      valueBadge={changeBadge(c)}
-                                      activeOptionIds={activeOptionIds}
-                                      activeSimpleValue={activeSimpleValue}
-                                      activeLabel={`Baseline ${srcVersion}`}
-                                      disambiguationLabel={c.parent}
-                                      hideScope
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="px-4 py-3 pl-12">
-                                    {s.description && (
-                                      <p className="text-fluent-sm text-fluent-text-secondary whitespace-pre-line mb-2">{s.description}</p>
-                                    )}
-                                    <p className="font-mono text-[12px] text-fluent-text-secondary break-all">{c.settingDefinitionId}</p>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </section>
-                ))
-              )}
-            </>
-          )}
-        </div>
-      )}
-    </div>
+                <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
+                  {c.kind === 'changed' ? (
+                    <><span className="line-through">{valueText(c.base)}</span> → {valueText(c.compare)}</>
+                  ) : c.kind === 'removed' ? (
+                    valueText(c.base)
+                  ) : (
+                    valueText(c.compare)
+                  )}
+                </span>
+              </ChangeCard>
+            );
+          })}
+        </CategorySection>
+      ))}
+    </VersionDiffView>
   );
 }
