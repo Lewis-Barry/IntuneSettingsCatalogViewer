@@ -95,6 +95,14 @@ To use your working copy in a client, point it at the source instead of the npm 
 The package bundles `../src/lib` (types and diff logic shared with the site) into
 `dist/server.js`, which is why it is built with esbuild before publishing.
 
+## Releases
+
+Automatic. `.github/workflows/publish-mcp.yml` runs when `mcp/` or `src/lib/` changes on
+`main`: it rebuilds the currently published version, compares the bundles byte for byte, and
+only on a real code change publishes the next patch version. npm is the source of truth for
+the version number. Data updates never need a release. Requires the repository secret
+`NPM_TOKEN`.
+
 Tool code lives in `tools/*.ts`; each module exports `register(server)` and `selfCheck()`.
 Types and diff logic are imported read-only from `../src/lib`. Never write to stdout in
 server code — it is the MCP channel.

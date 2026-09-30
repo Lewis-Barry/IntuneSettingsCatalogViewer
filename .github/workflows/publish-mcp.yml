@@ -1,0 +1,82 @@
+name: Publish MCP to npm
+
+# Publishes the MCP server (mcp/) to npm as intune-settings-catalog-viewer-mcp whenever its
+# code changes. Data updates never trigger this: the server reads data from this repo at
+# runtime. Users run `npx -y intune-settings-catalog-viewer-mcp`, so they pick up a new
+# version on their next client restart.
+#
+# Requires the repository secret NPM_TOKEN (an npm granular access token with read/write
+# access to the package). Without it the job skips publishing instead of failing.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mcp/**'
+      - 'src/lib/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-mcp
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'Lewis-Barry/IntuneSettingsCatalogViewer'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp
+    env:
+      PKG: intune-settings-catalog-viewer-mcp
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Self-check
+        run: npm run check
+
+      # npm is the source of truth for the version: rebuild the current release and compare
+      # bundles byte for byte. Only a real code change produces a new patch version.
+      - name: Detect changes against the published version
+        id: diff
+        run: |
+          LATEST=$(npm view "$PKG" version)
+          npm version "$LATEST" --no-git-tag-version --allow-same-version
+          npm run build
+          npm pack "$PKG@$LATEST" --pack-destination "$RUNNER_TEMP" --silent
+          tar -xzf "$RUNNER_TEMP/$PKG-$LATEST.tgz" -C "$RUNNER_TEMP"
+          if cmp -s dist/server.js "$RUNNER_TEMP/package/dist/server.js"; then
+            echo "No code changes since $LATEST — nothing to publish."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            npm version patch --no-git-tag-version
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::warning::NPM_TOKEN secret is not set — skipping publish."
+            exit 0
+          fi
+          npm publish
+          echo "Published $PKG@$(node -p "require('./package.json').version")"
