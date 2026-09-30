@@ -184,7 +184,7 @@ export default function McpInstallGuide() {
       <div className="space-y-6 min-w-0">
         <Panel step={1} title="Install Node.js (once)">
           <p className="text-fluent-base text-fluent-text-secondary">
-            The MCP server runs with Node.js 20 or newer. Download the <b>LTS</b> installer from{' '}
+            The MCP server runs with Node.js 22 or newer. Download the <b>LTS</b> installer from{' '}
             <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" className="text-fluent-blue hover:underline">nodejs.org</a>{' '}
             and click through it. Already installed? Check with:
           </p>

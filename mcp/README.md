@@ -14,7 +14,7 @@ keeps them in memory for the session. No credentials, no tenant access, nothing 
 
 ## Install
 
-Requires **Node.js 20+**. Step-by-step instructions with copy buttons are on
+Requires **Node.js 22+**. Step-by-step instructions with copy buttons are on
 [intunesettings.app/mcp](https://intunesettings.app/mcp/).
 
 **Claude Code**

@@ -26,12 +26,12 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "start": "tsx server.ts",
     "check": "tsx check.ts",
-    "build": "esbuild server.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist/server.js --banner:js=\"#!/usr/bin/env node\nimport { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
+    "build": "esbuild server.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/server.js --banner:js=\"#!/usr/bin/env node\nimport { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
