@@ -4,10 +4,8 @@ import { useState, type ReactNode } from 'react';
 import CopyCspButton from './CopyCspButton';
 import { pillClass } from '@/lib/pill';
 
-// ponytail: the command/config is written out per client on purpose — each block is
-// exactly what the user pastes, so it must read as-is rather than be assembled.
-const NAME = 'intune-settings';
-const PACKAGE = 'intune-settings-mcp';
+const NAME = 'intune-settings-catalog-viewer';
+const PACKAGE = 'intune-settings-catalog-viewer-mcp';
 const SERVER = { command: 'npx', args: ['-y', PACKAGE] };
 
 const claudeDesktopJson = JSON.stringify({ mcpServers: { [NAME]: SERVER } }, null, 2);
@@ -29,7 +27,7 @@ const EXAMPLES = [
 const code = 'px-1 py-0.5 rounded bg-fluent-bg-alt dark:bg-[#2c2c2e] font-mono text-fluent-sm text-fluent-text';
 const kbd = 'px-1.5 py-0.5 rounded border border-fluent-border dark:border-[#636366] bg-fluent-bg-alt dark:bg-[#2c2c2e] font-mono text-fluent-xs text-fluent-text';
 
-/** Bordered panel with a grey header row — same chrome as the browser/changelog sections. */
+/** Bordered panel with a grey header row, matching the browser/changelog sections. */
 function Panel({ step, title, children }: { step?: number; title: string; children: ReactNode }) {
   return (
     <section className="rounded border border-fluent-border bg-white dark:bg-[#1c1c1e] overflow-hidden">
@@ -108,7 +106,7 @@ const CLIENTS: Array<{ id: string; label: string; body: ReactNode }> = [
           Fully quit (<span className={kbd}>⌘Q</span> on Mac, or right-click the tray icon → Quit on Windows) and open it again.
         </Step>
         <Step n={4} title="Done — ask a question">
-          Click the <b>tools</b> icon in the chat box: <b>{NAME}</b> is listed. Try one of the example questions.
+          Click the <b>tools</b> icon in the chat box: <b>Intune Settings Catalog Viewer</b> is listed. Try one of the example questions.
         </Step>
       </Steps>
     ),
@@ -183,7 +181,6 @@ export default function McpInstallGuide() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] items-start">
-      {/* ── Main column: the install steps ── */}
       <div className="space-y-6 min-w-0">
         <Panel step={1} title="Install Node.js (once)">
           <p className="text-fluent-base text-fluent-text-secondary">
@@ -239,8 +236,12 @@ export default function McpInstallGuide() {
         </details>
       </div>
 
-      {/* ── Side column: try it, help, scope ── */}
       <aside className="space-y-6 min-w-0">
+        <Panel title="What can it answer?">
+          <p className="text-fluent-sm text-fluent-text-secondary">
+            Setting details and defaults, CSP paths, Windows edition support, the daily changelog and its summaries, Microsoft security baselines and version comparisons, OpenIntuneBaseline policies, and classic compliance settings. Refreshed daily, like this site.
+          </p>
+        </Panel>
         <Panel step={3} title="Try asking">
           <p className="text-fluent-sm text-fluent-text-secondary">
             The first question in a session takes a few seconds while the data loads. After that, answers are instant.
@@ -263,11 +264,6 @@ export default function McpInstallGuide() {
           </ul>
         </Panel>
 
-        <Panel title="What can it answer?">
-          <p className="text-fluent-sm text-fluent-text-secondary">
-            Setting details and defaults, CSP paths, Windows edition support, the daily changelog and its summaries, Microsoft security baselines and version comparisons, OpenIntuneBaseline policies, and classic compliance settings. Refreshed daily, like this site.
-          </p>
-        </Panel>
       </aside>
     </div>
   );
