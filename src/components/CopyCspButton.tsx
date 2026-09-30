@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 // Icons: Font Awesome Free 6.7.2 (solid/copy, solid/check) — CC BY 4.0
-export default function CopyCspButton({ text }: { text: string }) {
+export default function CopyCspButton({ text, label = 'CSP path' }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -26,8 +26,8 @@ export default function CopyCspButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={copy}
-      aria-label={copied ? 'CSP path copied' : 'Copy CSP path'}
-      title="Copy CSP path"
+      aria-label={copied ? `${label} copied` : `Copy ${label}`}
+      title={`Copy ${label}`}
       className="inline-flex items-center justify-center p-0.5 rounded text-fluent-text-secondary hover:text-fluent-text hover:bg-fluent-bg-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue"
     >
       {copied ? (

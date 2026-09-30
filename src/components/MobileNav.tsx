@@ -14,6 +14,7 @@ const LINKS: Array<{ href: string; label: string; prefetch?: false }> = [
   { href: '/baselines/changelog/', label: 'MS Baselines Changelog', prefetch: false },
   { href: '/compliance/', label: 'Compliance', prefetch: false },
   { href: '/changelog/', label: 'Changelog', prefetch: false },
+  { href: '/mcp/', label: 'MCP', prefetch: false },
   { href: '/about/', label: 'About' },
 ];
 

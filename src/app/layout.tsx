@@ -96,6 +96,9 @@ export default function RootLayout({
                 <Link href="/changelog/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
                   Changelog
                 </Link>
+                <Link href="/mcp/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors" prefetch={false}>
+                  MCP
+                </Link>
                 <Link href="/about/" className="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-colors">
                   About
                 </Link>
@@ -133,6 +136,10 @@ export default function RootLayout({
               Data sourced from Microsoft Graph API. Not affiliated with Microsoft. By{' '}
               <a href="https://conditionalaccess.uk" className="text-fluent-blue hover:underline">
                 Lewis Barry
+              </a>
+              {' | Enhanced by '}
+              <a href="https://rksolutions.nl" className="text-fluent-blue hover:underline">
+                Roy Klooster
               </a>
               .
             </p>
