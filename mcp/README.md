@@ -1,4 +1,4 @@
-# Intune Settings MCP server
+# Intune Settings Catalog Viewer — MCP server
 
 An [MCP](https://modelcontextprotocol.io) server that lets an AI assistant (Claude Code,
 Claude Desktop, VS Code, Codex, Cursor, …) answer questions about the data behind
@@ -14,29 +14,21 @@ keeps them in memory for the session. No credentials, no tenant access, nothing 
 
 ## Install
 
-Requires **Node.js 20+**.
-
-```bash
-git clone https://github.com/Lewis-Barry/IntuneSettingsCatalogViewer.git
-cd IntuneSettingsCatalogViewer/mcp
-npm install
-```
-
-Then register it with your client. In every snippet, replace `/path/to` with the folder you
-cloned into (`pwd` shows it).
+Requires **Node.js 20+**. Step-by-step instructions with copy buttons are on
+[intunesettings.app/mcp](https://intunesettings.app/mcp/).
 
 **Claude Code**
 ```bash
-claude mcp add intune-settings -- npx tsx /path/to/IntuneSettingsCatalogViewer/mcp/server.ts
+claude mcp add intune-settings-catalog-viewer -- npx -y intune-settings-catalog-viewer-mcp
 ```
 
-**Claude Desktop** — Settings → Developer → Edit Config, add to `claude_desktop_config.json`, restart Claude Desktop:
+**Claude Desktop** — Settings → Developer → Edit Config, add to `claude_desktop_config.json`, then fully quit and reopen Claude Desktop:
 ```json
 {
   "mcpServers": {
-    "intune-settings": {
+    "intune-settings-catalog-viewer": {
       "command": "npx",
-      "args": ["tsx", "/path/to/IntuneSettingsCatalogViewer/mcp/server.ts"]
+      "args": ["-y", "intune-settings-catalog-viewer-mcp"]
     }
   }
 }
@@ -46,19 +38,17 @@ claude mcp add intune-settings -- npx tsx /path/to/IntuneSettingsCatalogViewer/m
 ```json
 {
   "servers": {
-    "intune-settings": {
+    "intune-settings-catalog-viewer": {
       "command": "npx",
-      "args": ["tsx", "/path/to/IntuneSettingsCatalogViewer/mcp/server.ts"]
+      "args": ["-y", "intune-settings-catalog-viewer-mcp"]
     }
   }
 }
 ```
 
-**Codex** — add to `~/.codex/config.toml`:
-```toml
-[mcp_servers.intune-settings]
-command = "npx"
-args = ["tsx", "/path/to/IntuneSettingsCatalogViewer/mcp/server.ts"]
+**Codex**
+```bash
+codex mcp add intune-settings-catalog-viewer -- npx -y intune-settings-catalog-viewer-mcp
 ```
 
 **Cursor / other clients** — use the Claude Desktop JSON above (`mcpServers` block).
@@ -92,9 +82,18 @@ seconds; after that answers are instant.
 ## Development
 
 ```bash
+cd mcp
+npm install
 npm run check   # self-check against real data (needs network)
-npm start       # run the server on stdio
+npm start       # run the server from source on stdio
+npm run build   # bundle to dist/server.js (what the npm package ships)
 ```
+
+To use your working copy in a client, point it at the source instead of the npm package, e.g.
+`claude mcp add intune-settings-catalog-viewer -- npx tsx /path/to/IntuneSettingsCatalogViewer/mcp/server.ts`.
+
+The package bundles `../src/lib` (types and diff logic shared with the site) into
+`dist/server.js`, which is why it is built with esbuild before publishing.
 
 Tool code lives in `tools/*.ts`; each module exports `register(server)` and `selfCheck()`.
 Types and diff logic are imported read-only from `../src/lib`. Never write to stdout in
