@@ -1,4 +1,3 @@
-// Microsoft Security Baseline tools: list_baselines, get_baseline, compare_baseline_versions.
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -8,8 +7,6 @@ import { defaultVersion, type BaselineFamily, type BaselineSetting, type Baselin
 import { diffBaselineVersions, type BaselineSettingChange } from '../../src/lib/baseline-diff.ts';
 
 type Resolved<T> = { ok: true; value: T } | { ok: false; error: string };
-
-// ── resolution ──
 
 /** baseId exactly, else case-insensitive substring of displayName. */
 export async function resolveFamily(q: string): Promise<Resolved<BaselineFamily>> {
@@ -32,16 +29,12 @@ export function resolveVersion(f: BaselineFamily, v?: string): Resolved<Baseline
     : { ok: false, error: `Version "${v}" not found for ${f.displayName}. Available: ${f.versions.map((x) => x.displayVersion).join(', ')}` };
 }
 
-// ── list_baselines ──
-
 export async function listBaselines(): Promise<string> {
   const { families } = await baselineIndex();
   return families
     .map((f) => `## ${f.displayName}\n\`${f.baseId}\` · ${f.platforms}\n${f.versions.map((v) => `- ${v.displayVersion} — ${v.lifecycleState}, ${v.settingCount} settings`).join('\n')}`)
     .join('\n\n');
 }
-
-// ── get_baseline ──
 
 const MAX_DEPTH = 3;
 const hay = (s: BaselineSetting) => `${s.displayName} ${s.description ?? ''} ${s.settingDefinitionId}`.toLowerCase();
@@ -68,8 +61,6 @@ export async function getBaseline(args: { family: string; version?: string; quer
   return { ok: true, value: `# ${shard.displayName} — ${shard.displayVersion} (${shard.lifecycleState})\n${hits.length} of ${shard.settings.length} top-level settings${q ? ` match "${args.query}"` : ''}\n\n${body}${moreNote(more)}` };
 }
 
-// ── compare_baseline_versions ──
-
 const changeLine = (c: BaselineSettingChange) => {
   const s = c.compare ?? c.base!;
   const name = `${c.parent ? `${c.parent} › ` : ''}**${s.displayName}**`;
@@ -94,8 +85,6 @@ export async function compareBaselineVersions(args: { family: string; from: stri
   }
   return { ok: true, value: out.join('\n') };
 }
-
-// ── registration ──
 
 export function register(server: McpServer): void {
   const annotations = readOnly;

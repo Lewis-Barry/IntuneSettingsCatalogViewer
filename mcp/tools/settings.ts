@@ -1,4 +1,3 @@
-// Settings Catalog tools: search_settings, get_setting, list_categories.
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -13,8 +12,6 @@ import type { BaselineSetting } from '../../src/lib/baseline-types.ts';
 
 // getCspPath joins baseUri + '/' + offsetUri, and offsetUri already starts with '/'.
 const cspPath = (s: SettingDefinition) => getCspPath(s).replace(/(?<!^\.)\/{2,}/g, '/');
-
-// ── search_settings ──
 
 export async function searchSettings(args: { query: string; platform?: string; scope?: 'device' | 'user'; limit?: number }) {
   const { all } = await settingIndex();
@@ -41,8 +38,6 @@ async function searchMarkdown(items: SettingDefinition[]) {
     .map((s) => `- **${label(s)}** — ${s.applicability?.platform ?? '?'} · ${getSettingScope(s.baseUri)} · ${cats.get(s.categoryId)?.displayName ?? s.categoryId}\n  \`${s.id}\`${s.description ? ` — ${oneLine(s.description)}` : ''}`)
     .join('\n');
 }
-
-// ── get_setting ──
 
 function findInBaseline(list: BaselineSetting[] | undefined, id: string): BaselineSetting | undefined {
   for (const b of list ?? []) {
@@ -135,8 +130,6 @@ export async function getSettingDetail(args: { id?: string; name?: string }): Pr
   return { kind: 'found', markdown: out.join('\n') };
 }
 
-// ── list_categories ──
-
 export async function listCategories(args: { parentId?: string; platform?: string }): Promise<CategoryTreeNode[]> {
   const tree = await categoryTree();
   let nodes = tree;
@@ -149,8 +142,6 @@ export async function listCategories(args: { parentId?: string; platform?: strin
   }
   return nodes.filter((n) => matchesPlatform(n.platforms, args.platform));
 }
-
-// ── registration ──
 
 export function register(server: McpServer): void {
   const annotations = readOnly;

@@ -1,4 +1,3 @@
-// Changelog tools: list_changes, changelog_summary.
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -8,8 +7,6 @@ import { reply, errorReply, capped, moreNote, matchesPlatform, limitArg, readOnl
 
 const KINDS = ['added', 'removed', 'changed'] as const;
 type Kind = (typeof KINDS)[number];
-
-// ── list_changes ──
 
 export async function listChanges(args: { since?: string; until?: string; kind?: Kind; platform?: string; query?: string; limit?: number }) {
   const entries = [...(await changelog())].sort((a, b) => b.date.localeCompare(a.date));
@@ -59,8 +56,6 @@ export async function listChanges(args: { since?: string; until?: string; kind?:
   return out.join('\n') + moreNote(more);
 }
 
-// ── changelog_summary ──
-
 export async function changelogSummary(args: { date?: string; month?: string }): Promise<{ ok: boolean; markdown: string }> {
   const all = await changelogSummaries();
   const keys = Object.keys(all).sort().reverse();
@@ -77,8 +72,6 @@ export async function changelogSummary(args: { date?: string; month?: string }):
   if (s.watchOut) out.push('', '## Watch out', s.watchOut);
   return { ok: true, markdown: out.join('\n') };
 }
-
-// ── registration ──
 
 export function register(server: McpServer): void {
   const ro = readOnly;

@@ -1,4 +1,3 @@
-// Extra tools: compliance_settings (classic compliance policies), windows_sku_availability.
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -9,8 +8,6 @@ import { skuLabel, matchesWindowsCompatibility } from '../../src/lib/sku-labels.
 import { searchSettings } from './settings.ts';
 import type { SettingDefinition } from '../../src/lib/types.ts';
 
-
-// ── compliance_settings ──
 
 export async function complianceSettings(args: { query?: string; platform?: string; limit?: number }) {
   const terms = (args.query ?? '').split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
@@ -25,8 +22,6 @@ export async function complianceSettings(args: { query?: string; platform?: stri
     }).join('\n') + moreNote(more),
   };
 }
-
-// ── windows_sku_availability ──
 
 export async function skuAvailability(args: { id?: string; query?: string; limit?: number }): Promise<string | undefined> {
   let targets: SettingDefinition[];

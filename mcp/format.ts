@@ -1,4 +1,3 @@
-// Shared output helpers for every tool: footer, filters, limits, links.
 import { z } from 'zod';
 import { REPO, REF, source } from './source.ts';
 import { lastUpdated } from './data.ts';
@@ -20,7 +19,7 @@ export const oneLine = (text = '', n = 140) => {
 export const label = (s: Pick<SettingDefinition, 'displayName' | 'name' | 'id'> | undefined, fallback = '') =>
   oneLine(s?.displayName || s?.name || s?.id || fallback, 200);
 
-/** Case-insensitive "contains" platform filter, shared by all tools. */
+/** Case-insensitive "contains" platform filter. */
 export function matchesPlatform(value: string | undefined, filter?: string): boolean {
   return !filter || (value ?? '').toLowerCase().includes(filter.toLowerCase());
 }

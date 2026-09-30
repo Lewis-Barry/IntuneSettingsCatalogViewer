@@ -16,8 +16,7 @@ function memoOn<T>(obj: object, key: string, build: () => T): T {
   return m.get(key) as T;
 }
 
-// ponytail: no field slimming — the droppable fields are small and `delete` pushes V8
-// objects into dictionary mode. Add a CI-built slim bundle if memory ever matters.
+// ponytail: full settings.json kept in memory (a few hundred MB); a CI-built slim bundle is the upgrade path.
 export const settings = () => source.json<SettingDefinition[]>('data/settings.json');
 
 export async function settingIndex() {
