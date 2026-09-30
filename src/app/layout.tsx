@@ -155,6 +155,10 @@ export default function RootLayout({
               <a href="https://conditionalaccess.uk" className="text-fluent-blue hover:underline">
                 Lewis Barry
               </a>
+              {' & '}
+              <a href="https://rksolutions.nl" className="text-fluent-blue hover:underline">
+                Roy Klooster
+              </a>
               .
             </p>
             <p>
