@@ -3,6 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "description": "Intune Settings Catalog Viewer MCP server: ask an AI assistant about Intune settings, the changelog, security baselines and OpenIntuneBaseline",
+  "license": "GPL-3.0-only",
+  "homepage": "https://intunesettings.app/mcp/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lewis-Barry/IntuneSettingsCatalogViewer.git",
+    "directory": "mcp"
+  },
+  "keywords": [
+    "mcp",
+    "intune",
+    "microsoft-intune",
+    "settings-catalog",
+    "modelcontextprotocol"
+  ],
   "type": "module",
   "bin": {
     "intune-settings-catalog-viewer-mcp": "dist/server.js"
