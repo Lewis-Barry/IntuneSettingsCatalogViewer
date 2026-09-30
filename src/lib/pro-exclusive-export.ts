@@ -6,6 +6,7 @@
 import type { SettingDefinition } from './types';
 import { getSettingScope, getSettingTypeLabel } from './types';
 import { csvCell } from './oib-export-shared';
+import { getCspPath } from './settings-grouping';
 import { STYLE, escapeHtml, formatDefinitionId } from './oib-html-export';
 
 interface ProExclusiveExportOptions {
@@ -19,28 +20,13 @@ interface ProExclusiveExportOptions {
   generatedAt?: Date;
 }
 
-function cspPath(s: SettingDefinition): string {
-  if (s.baseUri && s.offsetUri) return `${s.baseUri}/${s.offsetUri}`;
-  return s.baseUri || s.offsetUri || '';
-}
-
-function categoryName(s: SettingDefinition, categoryMap: Record<string, string>): string {
-  return categoryMap[s.categoryId] ?? '';
-}
 
 /** Group by category display name (alphabetical), settings by display name. */
 function groupByCategory(
   settings: SettingDefinition[],
   categoryMap: Record<string, string>,
 ): { category: string; settings: SettingDefinition[] }[] {
-  const byCat = new Map<string, SettingDefinition[]>();
-  for (const s of settings) {
-    const cat = categoryName(s, categoryMap);
-    const arr = byCat.get(cat) ?? [];
-    arr.push(s);
-    byCat.set(cat, arr);
-  }
-  return [...byCat.entries()]
+  return [...Map.groupBy(settings, (s) => categoryMap[s.categoryId] ?? '')]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([category, list]) => ({
       category,
@@ -61,7 +47,7 @@ export function generateProExclusiveCsv({
       s.displayName || s.name,
       getSettingTypeLabel(s['@odata.type']),
       getSettingScope(s.baseUri),
-      cspPath(s),
+      getCspPath(s),
       s.description || '',
       s.id,
       (s.infoUrls ?? []).join('; '),
@@ -102,7 +88,7 @@ export function generateProExclusiveHtml({
   <td>${escapeHtml(s.displayName || s.name)}<br /><span class="meta mono">${formatDefinitionId(s.id)}</span></td>
   <td>${escapeHtml(getSettingTypeLabel(s['@odata.type']))}</td>
   <td>${escapeHtml(scope === 'unknown' ? '' : scope)}</td>
-  <td class="mono">${escapeHtml(cspPath(s))}</td>
+  <td class="mono">${escapeHtml(getCspPath(s))}</td>
   <td>${escapeHtml(s.description || '')}</td>
   <td>${learnLinks}</td>
 </tr>`;

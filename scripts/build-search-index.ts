@@ -121,12 +121,7 @@ function buildCategoryTree(
 
   function deduplicateSiblings(siblings: CategoryTreeNode[]) {
     // Group by displayName
-    const byName = new Map<string, CategoryTreeNode[]>();
-    for (const node of siblings) {
-      const list = byName.get(node.displayName) || [];
-      list.push(node);
-      byName.set(node.displayName, list);
-    }
+    const byName = Map.groupBy(siblings, (node) => node.displayName);
 
     const toRemove = new Set<string>();
     for (const [, group] of byName) {
@@ -505,13 +500,7 @@ function main() {
   // the selected category subtree instead of parsing the full catalog on first load.
   fs.rmSync(BROWSE_BY_CATEGORY_DIR, { recursive: true, force: true });
   fs.mkdirSync(BROWSE_BY_CATEGORY_DIR, { recursive: true });
-  const browseByCategory = new Map<string, Record<string, unknown>[]>();
-  for (const s of browseSettings) {
-    const categoryId = s.categoryId as string;
-    const list = browseByCategory.get(categoryId) || [];
-    list.push(s);
-    browseByCategory.set(categoryId, list);
-  }
+  const browseByCategory = Map.groupBy(browseSettings, (s) => s.categoryId as string);
 
   for (const [categoryId, categorySettings] of browseByCategory) {
     fs.writeFileSync(

@@ -285,12 +285,7 @@ export async function buildFromRaw(
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const byBase = new Map<string, RawTemplate[]>();
-  for (const t of templates) {
-    const arr = byBase.get(t.baseId) ?? [];
-    arr.push(t);
-    byBase.set(t.baseId, arr);
-  }
+  const byBase = Map.groupBy(templates, (t) => t.baseId);
 
   const versionNum = (t: RawTemplate) => parseInt(t.id.slice(t.baseId.length + 1), 10) || 0;
   const families: BaselineFamily[] = [];

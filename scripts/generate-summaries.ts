@@ -10,10 +10,9 @@
  *
  * API key: create `.env.local` in the project root (gitignored) with one of
  *   DEEPSEEK_API_KEY=sk-...        (model: deepseek-flash)
- *   ANTHROPIC_API_KEY=sk-ant-...
  *   OPENAI_API_KEY=sk-...
- * Preference order when several are set: Anthropic, DeepSeek, OpenAI.
- * Override the model with ANTHROPIC_MODEL / DEEPSEEK_MODEL / OPENAI_MODEL
+ * DeepSeek wins when both are set.
+ * Override the model with DEEPSEEK_MODEL / OPENAI_MODEL
  * if the defaults go stale.
  *
  * Usage:
@@ -161,51 +160,40 @@ function loadEnv() {
 }
 
 interface ProviderCfg {
-  provider: 'anthropic' | 'openai-compatible';
+  name: string;
   apiKey: string;
   model: string;
-  baseUrl: string; // OpenAI-compatible base URL; unused for anthropic
+  baseUrl: string; // OpenAI-compatible base URL
   reasoningEffort?: 'low'; // DeepSeek only: thinking defaults to 'high' and can eat the whole token budget
 }
 
 function getProvider(): ProviderCfg | null {
-  if (process.env.ANTHROPIC_API_KEY) {
-    return { provider: 'anthropic', baseUrl: '', apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL ?? 'claude-haiku-4-5-20251001' };
-  }
   if (process.env.DEEPSEEK_API_KEY) {
-    return { provider: 'openai-compatible', baseUrl: 'https://api.deepseek.com', apiKey: process.env.DEEPSEEK_API_KEY, model: process.env.DEEPSEEK_MODEL ?? 'deepseek-flash', reasoningEffort: 'low' };
+    return { name: 'deepseek', baseUrl: 'https://api.deepseek.com', apiKey: process.env.DEEPSEEK_API_KEY, model: process.env.DEEPSEEK_MODEL ?? 'deepseek-flash', reasoningEffort: 'low' };
   }
   if (process.env.OPENAI_API_KEY) {
-    return { provider: 'openai-compatible', baseUrl: 'https://api.openai.com/v1', apiKey: process.env.OPENAI_API_KEY, model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini' };
+    return { name: 'openai', baseUrl: 'https://api.openai.com/v1', apiKey: process.env.OPENAI_API_KEY, model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini' };
   }
   return null;
 }
 
-async function callModel(system: string, user: string, cfg: NonNullable<ReturnType<typeof getProvider>>, maxTokens: number): Promise<string> {
-  const res =
-    cfg.provider === 'anthropic'
-      ? await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'x-api-key': cfg.apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-          body: JSON.stringify({ model: cfg.model, max_tokens: maxTokens, system, messages: [{ role: 'user', content: user }] }),
-        })
-      : await fetch(`${cfg.baseUrl}/chat/completions`, {
-          method: 'POST',
-          headers: { authorization: `Bearer ${cfg.apiKey}`, 'content-type': 'application/json' },
-          body: JSON.stringify({
-            model: cfg.model,
-            max_tokens: maxTokens, // generous: reasoning models burn tokens on thinking before answering
-            response_format: { type: 'json_object' },
-            ...(cfg.reasoningEffort && { reasoning_effort: cfg.reasoningEffort }),
-            messages: [
-              { role: 'system', content: system },
-              { role: 'user', content: user },
-            ],
-          }),
-        });
-  if (!res.ok) throw new Error(`${cfg.provider} API ${res.status}: ${(await res.text()).slice(0, 300)}`);
+async function callModel(system: string, user: string, cfg: ProviderCfg, maxTokens: number): Promise<string> {
+  const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${cfg.apiKey}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: cfg.model,
+      max_tokens: maxTokens, // generous: reasoning models burn tokens on thinking before answering
+      response_format: { type: 'json_object' },
+      ...(cfg.reasoningEffort && { reasoning_effort: cfg.reasoningEffort }),
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error(`${cfg.name} API ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const body = await res.json();
-  if (cfg.provider === 'anthropic') return body.content[0].text;
 
   const choice = body.choices?.[0];
   const text = choice?.message?.content ?? '';
@@ -329,7 +317,7 @@ async function main() {
   if (!cfg && !dryRun) {
     console.error(
       'No API key found. Create .env.local in the project root (already gitignored) with:\n' +
-        '  DEEPSEEK_API_KEY=sk-...   (or ANTHROPIC_API_KEY / OPENAI_API_KEY)\n' +
+        '  DEEPSEEK_API_KEY=sk-...   (or OPENAI_API_KEY)\n' +
         'For CI, add it as a GitHub Actions secret and pass it as an env var.',
     );
     process.exit(1);
@@ -345,7 +333,7 @@ async function main() {
       ? `Here is the compacted diff for the whole month of ${target.key}, aggregated across ${target.entries.length} update day(s). Write the monthly roundup report (executive overview plus per-OS sections), not day-by-day bullets:\n\n${compacted}`
       : `Here is the compacted diff for ${target.key}:\n\n${compacted}`;
     if (dryRun) {
-      console.log(`── ${target.key} (${cfg?.provider ?? 'no provider'}, ${cfg?.model ?? '-'}), ~${Math.ceil(user.length / 4)} tokens in ──`);
+      console.log(`── ${target.key} (${cfg?.name ?? 'no provider'}, ${cfg?.model ?? '-'}), ~${Math.ceil(user.length / 4)} tokens in ──`);
       console.log(user.slice(0, 1500));
       console.log(user.length > 1500 ? '…\n' : '\n');
       continue;
