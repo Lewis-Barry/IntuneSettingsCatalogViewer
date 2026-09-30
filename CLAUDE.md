@@ -60,7 +60,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 
 ### MCP server (`mcp/`)
 
-Standalone stdio MCP server (own `package.json`; excluded from the Next build via root `tsconfig.json`/`eslint.config.mjs`). Reads this repo's committed data files from GitHub raw (`INTUNE_MCP_REPO`/`INTUNE_MCP_REF`, default `Lewis-Barry/IntuneSettingsCatalogViewer@main`), in memory only, ETag-revalidated after 6 h. Install/client config: `mcp/README.md`.
+Standalone stdio MCP server (own `package.json`; excluded from the Next build via root `tsconfig.json`/`eslint.config.mjs`). Reads this repo's committed data files from GitHub raw (`INTUNE_MCP_REPO`/`INTUNE_MCP_REF`, default `Lewis-Barry/IntuneSettingsCatalogViewer@main`), in memory only, ETag-revalidated after 6 h. Published to npm as `intune-settings-catalog-viewer-mcp` (esbuild bundle `mcp/dist/server.js`, because it bundles `../src/lib`); install instructions for users live on the `/mcp/` page and in `mcp/README.md` — keep the two in sync.
 
 | File | Role |
 |------|------|
@@ -69,6 +69,7 @@ Standalone stdio MCP server (own `package.json`; excluded from the Next build vi
 | `mcp/format.ts` | Shared output helpers: footer, limits, platform filter, labels |
 | `mcp/tools/*.ts` | 11 read-only tools (settings, changelog, baselines, oib, extras); each exports `register` + `selfCheck` |
 | `mcp/check.ts` | Self-check (`cd mcp && npm run check`, needs network) |
+| `src/app/mcp/` + `src/components/McpInstallGuide.tsx` | "MCP" nav page: per-client install steps (Claude Desktop, Claude Code, VS Code/Cursor one-click links, Codex), copy buttons, example questions |
 
 Reuses `src/lib` read-only (types, `baseline-diff`, `oib-diff`, `compliance-types`, `sku-labels`, `slug`, `settings-grouping`) — keep those files free of browser/React imports. Never write to stdout in server code (it's the MCP channel).
 
