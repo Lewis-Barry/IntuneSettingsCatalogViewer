@@ -100,8 +100,8 @@ The package bundles `../src/lib` (types and diff logic shared with the site) int
 Automatic. `.github/workflows/publish-mcp.yml` runs when `mcp/` or `src/lib/` changes on
 `main`: it rebuilds the currently published version, compares the bundles byte for byte, and
 only on a real code change publishes the next patch version. npm is the source of truth for
-the version number. Data updates never need a release. Requires the repository secret
-`NPM_TOKEN`.
+the version number. Data updates never need a release. Publishing uses npm trusted
+publishing (the npm package trusts this workflow), so no token or secret is involved.
 
 Tool code lives in `tools/*.ts`; each module exports `register(server)` and `selfCheck()`.
 Types and diff logic are imported read-only from `../src/lib`. Never write to stdout in

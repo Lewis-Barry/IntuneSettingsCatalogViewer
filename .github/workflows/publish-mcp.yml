@@ -5,8 +5,8 @@ name: Publish MCP to npm
 # runtime. Users run `npx -y intune-settings-catalog-viewer-mcp`, so they pick up a new
 # version on their next client restart.
 #
-# Requires the repository secret NPM_TOKEN (an npm granular access token with read/write
-# access to the package). Without it the job skips publishing instead of failing.
+# Authenticates with npm trusted publishing (OIDC): the package's npm settings trust this
+# workflow file in this repository, so no npm token or secret is stored anywhere.
 
 on:
   push:
@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # npm trusted publishing (OIDC)
 
 concurrency:
   group: publish-mcp
@@ -45,6 +46,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: mcp/package-lock.json
 
+      # Trusted publishing needs npm >= 11.5.1; Node 22 ships npm 10.
+      - name: Update npm
+        run: npm install -g npm@11 --ignore-scripts
+
       - name: Install dependencies
         run: npm ci
 
@@ -71,12 +76,6 @@ jobs:
 
       - name: Publish
         if: steps.diff.outputs.changed == 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "::warning::NPM_TOKEN secret is not set — skipping publish."
-            exit 0
-          fi
           npm publish
           echo "Published $PKG@$(node -p "require('./package.json').version")"
