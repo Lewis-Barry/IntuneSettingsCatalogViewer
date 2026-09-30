@@ -45,7 +45,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f public/oib-data.json
+          git add -f public/oib-data.json public/oib-versions
           git diff --cached --quiet || git commit -m "chore: refresh OIB data $(date -I)"
           git push
 
