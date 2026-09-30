@@ -83,7 +83,7 @@ export function register(server: McpServer): void {
       until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('ISO date YYYY-MM-DD, inclusive'),
       kind: z.enum(KINDS).optional(),
       platform: z.string().optional().describe('e.g. windows10, macOS, iOS, android, linux (substring match)'),
-      query: z.string().optional().describe('Substring of setting name, category name or id'),
+      query: z.string().trim().optional().describe('Substring of setting name, category name or id'),
       limit: limitArg,
     },
     annotations: ro,

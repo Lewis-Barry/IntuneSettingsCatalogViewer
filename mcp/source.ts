@@ -4,6 +4,8 @@
 export const REPO = process.env.INTUNE_MCP_REPO ?? 'Lewis-Barry/IntuneSettingsCatalogViewer';
 export const REF = process.env.INTUNE_MCP_REF ?? 'main';
 const MAX_AGE_MS = 6 * 3600e3;
+// Generous: settings.json is ~5 MB gzip; this only guards against a stalled connection.
+const TIMEOUT_MS = 120_000;
 
 interface Entry { data: unknown; etag: string | null; checkedAt: number }
 
@@ -17,7 +19,10 @@ export function createSource(fetchFn: typeof fetch = fetch, now: () => number = 
     const hit = memo.get(path);
     if (hit && now() - hit.checkedAt < MAX_AGE_MS) return hit.data;
     try {
-      const res = await fetchFn(url(path), { headers: hit?.etag ? { 'If-None-Match': hit.etag } : {} });
+      const res = await fetchFn(url(path), {
+        headers: hit?.etag ? { 'If-None-Match': hit.etag } : {},
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
       if (res.status === 304 && hit) {
         hit.checkedAt = now();
         stalePaths.delete(path);

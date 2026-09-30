@@ -194,15 +194,12 @@ export default function McpInstallGuide() {
         <Panel step={2} title="Add it to your AI assistant">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-fluent-sm text-fluent-text-secondary font-medium">App:</span>
-            <div role="tablist" aria-label="AI assistant" className="flex items-center gap-2 flex-wrap">
+            <div role="group" aria-label="AI assistant" className="flex items-center gap-2 flex-wrap">
               {CLIENTS.map((c) => (
                 <button
                   key={c.id}
                   type="button"
-                  role="tab"
-                  id={`tab-${c.id}`}
-                  aria-selected={c.id === active}
-                  aria-controls={`panel-${c.id}`}
+                  aria-pressed={c.id === active}
                   onClick={() => setActive(c.id)}
                   className={`platform-filter-btn ${pillClass(c.id === active)}`}
                 >
@@ -211,7 +208,7 @@ export default function McpInstallGuide() {
               ))}
             </div>
           </div>
-          <div role="tabpanel" id={`panel-${client.id}`} aria-labelledby={`tab-${client.id}`} className="mt-4 pt-4 border-t border-fluent-border">
+          <div aria-live="polite" className="mt-4 pt-4 border-t border-fluent-border">
             {client.body}
           </div>
         </Panel>
@@ -239,7 +236,7 @@ export default function McpInstallGuide() {
       <aside className="space-y-6 min-w-0">
         <Panel title="What can it answer?">
           <p className="text-fluent-sm text-fluent-text-secondary">
-            Setting details and defaults, CSP paths, Windows edition support, the daily changelog and its summaries, Microsoft security baselines and version comparisons, OpenIntuneBaseline policies, and classic compliance settings. Refreshed daily, like this site.
+            Setting details and defaults, CSP paths, Windows edition support, the daily changelog and its summaries, Microsoft security baselines and version comparisons, OpenIntuneBaseline policies, and classic compliance settings. Settings, changelog and baselines are refreshed daily.
           </p>
         </Panel>
         <Panel step={3} title="Try asking">

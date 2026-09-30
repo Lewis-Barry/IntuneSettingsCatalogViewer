@@ -9,7 +9,7 @@ Claude Desktop, VS Code, Codex, Cursor, …) answer questions about the data beh
 - *"What changed between Windows security baseline 24H2 and 25H2?"*
 - *"Is this setting Enterprise-only? Does it work on AVD multi-session?"*
 
-It reads the data files straight from this repo on GitHub (refreshed daily at 06:00 UTC) and
+It reads the data files straight from this repo on GitHub (settings, changelog and baselines refresh daily at 06:00 UTC; OIB and compliance data when the site updates them) and
 keeps them in memory for the session. No credentials, no tenant access, nothing written to disk.
 
 ## Install

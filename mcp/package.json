@@ -1,6 +1,6 @@
 {
   "name": "intune-settings-catalog-viewer-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Intune Settings Catalog Viewer MCP server: ask an AI assistant about Intune settings, the changelog, security baselines and OpenIntuneBaseline",
   "license": "GPL-3.0-only",
   "homepage": "https://intunesettings.app/mcp/",

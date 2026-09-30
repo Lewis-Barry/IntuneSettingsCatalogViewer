@@ -93,7 +93,7 @@ export function register(server: McpServer): void {
     title: 'OpenIntuneBaseline lookup',
     description: 'Browse OpenIntuneBaseline (OIB) policies and the setting values they configure, or compare two OIB versions. Use it to answer "what does OIB configure for X", "what does OIB recommend", or "what changed between OIB v3.7 and v3.8". Without version it reads the current snapshot; query matches policy names or setting names. Set version (tag like windows-v3.8, or bare 3.8 plus platform) to read an older release, and add compareTo (same platform) to get the diff.',
     inputSchema: {
-      query: z.string().optional().describe('Text to match in policy or setting names, e.g. "bitlocker"'),
+      query: z.string().trim().optional().describe('Text to match in policy or setting names, e.g. "bitlocker"'),
       platform: z.string().optional().describe('windows, macos or win365 (case-insensitive). ' + 'Filter current-snapshot policies; with a bare version it selects the release folder'),
       version: z.string().optional().describe('OIB tag ("windows-v3.8") or bare version ("3.8", needs platform); base of a comparison'),
       compareTo: z.string().optional().describe('Version to compare against version (same platform)'),

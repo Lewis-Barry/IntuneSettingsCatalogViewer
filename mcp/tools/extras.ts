@@ -49,7 +49,7 @@ export function register(server: McpServer): void {
     title: 'Classic compliance policy settings',
     description: 'Search the classic (non-Settings-Catalog) Intune device compliance policy properties per platform, with allowed values, defaults and Microsoft descriptions. Use it for "what can I require in a compliance policy" questions. Query is comma-separated terms, OR\'ed (e.g. "firewall, encryption"); case-insensitive.',
     inputSchema: {
-      query: z.string().optional().describe('Comma-separated terms (any may match), e.g. "firewall, tpm"'),
+      query: z.string().trim().optional().describe('Comma-separated terms (any may match), e.g. "firewall, tpm"'),
       platform: z.string().optional().describe('Platform filter, e.g. windows, android, iOS, macOS'),
       limit: limitArg,
     },
@@ -63,8 +63,8 @@ export function register(server: McpServer): void {
     title: 'Windows SKU availability',
     description: 'Show which Windows editions (Pro, Enterprise, Education, AVD multi-session, IoT…) support a Settings Catalog setting, and flag Enterprise-only settings that will not apply on Pro. Use it for licensing/edition questions like "does this work on Windows Pro". Pass a setting id, or a query to check the best matches.',
     inputSchema: {
-      id: z.string().optional().describe('Setting definition id (from search_settings)'),
-      query: z.string().optional().describe('Keywords, if the id is unknown'),
+      id: z.string().trim().optional().describe('Setting definition id (from search_settings)'),
+      query: z.string().trim().optional().describe('Keywords, if the id is unknown'),
       limit: limitArg,
     },
     annotations,

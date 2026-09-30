@@ -6,7 +6,8 @@ import * as changelog from './tools/changelog.ts';
 import * as baselines from './tools/baselines.ts';
 import * as oib from './tools/oib.ts';
 import * as extras from './tools/extras.ts';
+import pkg from './package.json' with { type: 'json' };
 
-const server = new McpServer({ name: 'intune-settings-catalog-viewer', title: 'Intune Settings Catalog Viewer', version: '0.1.0' });
+const server = new McpServer({ name: 'intune-settings-catalog-viewer', title: 'Intune Settings Catalog Viewer', version: pkg.version });
 for (const m of [settings, changelog, baselines, oib, extras]) m.register(server);
 await server.connect(new StdioServerTransport());

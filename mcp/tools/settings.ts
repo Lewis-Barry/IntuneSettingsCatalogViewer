@@ -24,7 +24,7 @@ export async function searchSettings(args: { query: string; platform?: string; s
     const mid = `${s.name ?? ''} ${(s.keywords ?? []).join(' ')} ${cspPath(s)} ${s.id}`.toLowerCase();
     const desc = (s.description ?? '').toLowerCase();
     if (!terms.every((t) => display.includes(t) || mid.includes(t) || desc.includes(t))) continue;
-    const score = terms.every((t) => display.includes(t)) ? 3 : terms.every((t) => display.includes(t) || mid.includes(t)) ? 2 : 1;
+    const score = display === terms.join(' ') ? 4 : terms.every((t) => display.includes(t)) ? 3 : terms.every((t) => display.includes(t) || mid.includes(t)) ? 2 : 1;
     scored.push({ s, score });
   }
   scored.sort((a, b) => b.score - a.score || label(a.s).localeCompare(label(b.s)));
@@ -166,8 +166,8 @@ export function register(server: McpServer): void {
     title: 'Get Intune setting details',
     description: 'Full details for one Intune Settings Catalog setting: description, default value/option, all options, value constraints, CSP/OMA-URI path, platform, Windows SKUs, OS versions, parent/child settings, and which Microsoft security baselines and OpenIntuneBaseline (OIB) policies configure it and to what value. Pass the setting id (from search_settings) or its exact display name.',
     inputSchema: {
-      id: z.string().optional().describe('Setting definition id'),
-      name: z.string().optional().describe('Exact display name, if the id is unknown'),
+      id: z.string().trim().optional().describe('Setting definition id'),
+      name: z.string().trim().optional().describe('Exact display name, if the id is unknown'),
     },
     annotations,
   }, async (args) => {

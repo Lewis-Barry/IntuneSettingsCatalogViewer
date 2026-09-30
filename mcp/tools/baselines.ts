@@ -89,7 +89,7 @@ export async function compareBaselineVersions(args: { family: string; from: stri
 export function register(server: McpServer): void {
   const annotations = readOnly;
   const out = (r: Resolved<string>) => (r.ok ? reply(r.value) : errorReply(r.error));
-  const family = z.string().min(1).describe('Baseline family: baseId (GUID) or part of its name, e.g. "Windows 10", "Edge"');
+  const family = z.string().trim().min(1).describe('Baseline family: baseId (GUID) or part of its name, e.g. "Windows 10", "Edge"');
 
   server.registerTool('list_baselines', {
     title: 'List Microsoft security baselines',
@@ -104,7 +104,7 @@ export function register(server: McpServer): void {
     inputSchema: {
       family,
       version: z.string().optional().describe('Version, e.g. "24H2" or "Version 24H2" (default: newest active)'),
-      query: z.string().optional().describe('Filter settings by keyword'),
+      query: z.string().trim().optional().describe('Filter settings by keyword'),
       limit: z.number().int().min(1).max(100).optional().describe('Max top-level settings (default 20)'),
     },
     annotations,
