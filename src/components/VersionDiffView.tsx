@@ -70,7 +70,7 @@ function KindBadge({ kind }: { kind: ChangeKind }) {
 }
 
 /** Change indicator for SettingRow's 10rem badge slot: pill on top, value below. */
-export function ChangeBadge({ kind, base, compare }: { kind: keyof typeof SETTING_KIND; base: string; compare: string }) {
+export function ChangeBadge({ kind, base, compare, note }: { kind: keyof typeof SETTING_KIND; base: string; compare: string; note?: ReactNode }) {
   const k = SETTING_KIND[kind];
   return (
     <div className="flex flex-col items-end gap-1 text-right">
@@ -78,6 +78,7 @@ export function ChangeBadge({ kind, base, compare }: { kind: keyof typeof SETTIN
         <span aria-hidden className="font-mono">{k.sym}</span>
         {k.label}
       </span>
+      {note && <span className="text-fluent-xs text-fluent-info break-words leading-snug">{note}</span>}
       <span className="text-fluent-xs text-fluent-text-secondary break-words leading-snug">
         {kind === 'changed' ? (
           <><span className="line-through">{base}</span> → <span className="text-fluent-text">{compare}</span></>
@@ -138,8 +139,11 @@ export function CategorySection<K extends ChangeKind>({
   );
 }
 
-/** Collapsible change card with the coloured kind gutter. `children` sit right of the title. */
+/** Collapsible change card with the coloured kind gutter. `children` sit right of the title;
+ *  `note` is a line under the header, outside the toggle button, so it may hold links. */
 export function ChangeCard({
+  id,
+  note,
   kind,
   expandable,
   open,
@@ -148,6 +152,8 @@ export function ChangeCard({
   body,
   children,
 }: {
+  id?: string;
+  note?: ReactNode;
   kind: ChangeKind;
   expandable: boolean;
   open: boolean;
@@ -157,7 +163,7 @@ export function ChangeCard({
   children?: ReactNode;
 }) {
   return (
-    <div className={`bg-white dark:bg-[#2c2c2e] border border-fluent-border border-l-4 ${KIND[kind].gutter} rounded-md overflow-hidden`}>
+    <div id={id} className={`scroll-mt-16 bg-white dark:bg-[#2c2c2e] border border-fluent-border border-l-4 ${KIND[kind].gutter} rounded-md overflow-hidden`}>
       <button
         onClick={() => expandable && onToggle()}
         className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fluent-blue ${
@@ -173,9 +179,10 @@ export function ChangeCard({
           <span className="w-4 shrink-0" aria-hidden />
         )}
         <KindBadge kind={kind} />
-        <span className="flex-1 min-w-0 text-fluent-base font-medium text-fluent-text truncate">{title}</span>
+        <span className="flex-1 min-w-0 text-fluent-base font-medium text-fluent-text break-words">{title}</span>
         {children}
       </button>
+      {note && <div className="pl-11 pr-4 pb-3 -mt-1 text-fluent-sm text-fluent-text-secondary">{note}</div>}
 
       {open && expandable && <div className="border-t border-fluent-border bg-fluent-bg">{body()}</div>}
     </div>

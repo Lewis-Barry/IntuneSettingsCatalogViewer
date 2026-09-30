@@ -50,7 +50,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/baseline-types.ts` | MS baseline types (index/shard/setting) + helpers, mirrors fetch-baselines.ts output |
 | `src/lib/baseline-diff.ts` | Baseline version diff — keyed on settingDefinitionId, recursive value compare (template-id noise already stripped at fetch); self-check in `scripts/baseline-diff-check.ts` |
 | `src/lib/baseline-export.ts` | CSV/HTML exports for both baseline pages, reuses OIB export plumbing |
-| `src/lib/oib-diff.ts` | Version diff engine — 3-tier policy matching (oibId → title → fuzzy) + setting compare; shared by browser & `scripts/oib-diff-check.ts` |
+| `src/lib/oib-diff.ts` | Version diff engine — 3-tier policy matching (oibId → title → fuzzy) + setting compare, then tags cross-policy moves (`movedTo`/`movedFrom` on settings, `mergedInto` on a removed policy whose settings mostly live on in one other policy). Names are whitespace-collapsed so stray double spaces are not renames; shared by browser & `scripts/oib-diff-check.ts` |
 | `src/lib/oib-changelog-types.ts` | Types for the version index, shards, and diff records (`VersionDiff`/`PolicyDiff`/`SettingChange`) |
 | `src/lib/oib-export-shared.ts` | Shared plain-text export helpers (`fmtValue`, `settingName`, `kindWord`, `policyDisplayName`) used by both exporters |
 | `src/lib/oib-html-export.ts` | Renders a comparison as a self-contained styled HTML report |

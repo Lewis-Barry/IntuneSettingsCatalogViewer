@@ -27,14 +27,17 @@ const STOP_TOKENS = new Set([
 
 // ── Identity keys ──
 
+/** Collapse whitespace runs — OIB names sometimes carry stray double spaces. */
+const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
+
 /** Version-stripped identity used by the title tier. */
 function titleKey(p: OIBPolicy): string {
   const parsed = parsePolicy(p);
   if (parsed.version) {
-    return `${p.oibFolder}|${parsed.tier ?? ''}|${parsed.category}|${parsed.scope}|${parsed.policyLabel}`.toLowerCase();
+    return squash(`${p.oibFolder}|${parsed.tier ?? ''}|${parsed.category}|${parsed.scope}|${parsed.policyLabel}`).toLowerCase();
   }
   // Fallback: strip a trailing " - vX.Y" suffix from the raw name.
-  return `${p.oibFolder}|${p.name.replace(/\s*-\s*v[\d.]+$/i, '')}`.toLowerCase();
+  return squash(`${p.oibFolder}|${p.name.replace(/\s*-\s*v[\d.]+$/i, '')}`).toLowerCase();
 }
 
 function displayLabel(p: OIBPolicy): { label: string; category: string } {
@@ -257,6 +260,43 @@ function allSettingsAs(p: OIBPolicy, kind: 'added' | 'removed'): SettingChange[]
   return out;
 }
 
+// ── Cross-policy moves ──
+
+/** definitionId → labels of the policies that configure it. */
+function whereConfigured(policies: OIBPolicy[]): Map<string, Set<string>> {
+  const m = new Map<string, Set<string>>();
+  for (const p of policies) {
+    const { label } = displayLabel(p);
+    for (const f of flattenOIBSettings(p.settings)) {
+      if (f.instanceId) continue;
+      m.set(f.definitionId, (m.get(f.definitionId) ?? new Set()).add(label));
+    }
+  }
+  return m;
+}
+
+/** Tag removed/added settings that still exist in another policy, and removed
+ *  policies whose settings mostly landed in one other policy (a merge). */
+function tagMoves(policies: PolicyDiff[], base: OIBPolicy[], compare: OIBPolicy[]): void {
+  const inCompare = whereConfigured(compare);
+  const inBase = whereConfigured(base);
+  const other = (labels: Set<string> | undefined, self: string) =>
+    [...(labels ?? [])].find((l) => l !== self);
+
+  for (const p of policies) {
+    for (const c of p.settingChanges) {
+      if (c.instanceId) continue;
+      if (c.kind === 'removed') c.movedTo = other(inCompare.get(c.definitionId), p.label);
+      if (c.kind === 'added') c.movedFrom = other(inBase.get(c.definitionId), p.label);
+    }
+    if (p.kind === 'removed' && p.settingChanges.length > 0) {
+      const targets = Map.groupBy(p.settingChanges.filter((c) => c.movedTo), (c) => c.movedTo!);
+      const [top] = [...targets].sort((a, b) => b[1].length - a[1].length);
+      if (top && top[1].length * 2 >= p.settingChanges.length) p.mergedInto = top[0];
+    }
+  }
+}
+
 // ── Main diff ──
 
 export function diffVersions(
@@ -315,7 +355,7 @@ export function diffVersions(
 
   for (const { base, compare, matchedBy, similarity } of pairs) {
     const changes = diffSettings(base, compare);
-    const renamed = base.name !== compare.name && titleKey(base) !== titleKey(compare);
+    const renamed = squash(base.name) !== squash(compare.name) && titleKey(base) !== titleKey(compare);
     if (changes.length === 0 && !renamed) continue; // unchanged — omit
     const { label, category } = displayLabel(compare);
     policies.push({
@@ -344,6 +384,8 @@ export function diffVersions(
     const changes = allSettingsAs(b, 'removed');
     policies.push({ kind: 'removed', label, category, baseName: b.name, githubUrl: b.githubUrl, settingChanges: changes, addedCount: 0, removedCount: changes.length, changedCount: 0 });
   }
+
+  tagMoves(policies, basePolicies, comparePolicies);
 
   return {
     baseTag,

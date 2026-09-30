@@ -156,10 +156,11 @@ export const KIND: Record<
 
 /** Per-setting change pill/gutter styling (added/removed/changed rows). */
 export const SETTING_KIND: Record<
-  'added' | 'removed' | 'changed',
+  'added' | 'removed' | 'changed' | 'moved',
   { pill: string; gutter: string; sym: string; label: string }
 > = {
   added: { pill: 'text-fluent-success border-fluent-success/40 bg-fluent-success/10', gutter: 'border-l-fluent-success/60', sym: '+', label: 'Added' },
   removed: { pill: 'text-fluent-error border-fluent-error/40 bg-fluent-error/10', gutter: 'border-l-fluent-error/60', sym: '−', label: 'Removed' },
   changed: { pill: 'text-fluent-warning border-fluent-warning/40 bg-fluent-warning/10', gutter: 'border-l-fluent-warning/60', sym: '~', label: 'Modified' },
+  moved: { pill: 'text-fluent-info border-fluent-info/40 bg-fluent-info/10', gutter: 'border-l-fluent-info/60', sym: '⇄', label: 'Moved' },
 };

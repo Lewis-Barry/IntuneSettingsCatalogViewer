@@ -22,12 +22,12 @@ module.exports = {
           'text': 'var(--fluent-text)',
           'text-secondary': 'var(--fluent-text-secondary)',
           'text-disabled': 'var(--fluent-text-disabled)',
-          // success/error/warning use the rgb() + <alpha-value> format so that
+          // success/error/warning/info use the rgb() + <alpha-value> format so that
           // opacity modifiers (e.g. bg-fluent-success/10) work correctly.
           'success': 'rgb(var(--fluent-success-rgb) / <alpha-value>)',
           'warning': 'rgb(var(--fluent-warning-rgb) / <alpha-value>)',
           'error': 'rgb(var(--fluent-error-rgb) / <alpha-value>)',
-          'info': 'var(--fluent-info)',
+          'info': 'rgb(var(--fluent-info-rgb) / <alpha-value>)',
         },
       },
       fontFamily: {

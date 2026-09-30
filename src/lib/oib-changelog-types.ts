@@ -45,6 +45,10 @@ export interface SettingChange {
    *  instance's identity — its rule name. Lets the viewer group changes per rule
    *  and label the group, even when the name itself didn't change. */
   instanceId?: string;
+  /** Removed here but still configured in this (compare-version) policy label. */
+  movedTo?: string;
+  /** Added here, previously configured in this (base-version) policy label. */
+  movedFrom?: string;
 }
 
 export interface PolicyDiff {
@@ -61,6 +65,8 @@ export interface PolicyDiff {
   matchedBy?: 'oibId' | 'title' | 'fuzzy';
   /** Jaccard similarity over setting ids, present for fuzzy matches. */
   similarity?: number;
+  /** Removed policy whose settings (mostly) now live in this policy label. */
+  mergedInto?: string;
   settingChanges: SettingChange[];
   addedCount: number;
   removedCount: number;

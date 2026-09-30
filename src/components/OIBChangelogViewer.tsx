@@ -52,6 +52,49 @@ function activeFrom(value?: OIBValue): { activeOptionIds?: string[]; activeSimpl
   }
 }
 
+/** Settings in one policy that share a display name (e.g. client vs server
+ *  "Min Smb2 Dialect") → the CSP node that tells them apart ("LanmanServer"). */
+function disambiguate(changes: SettingChange[], defs: Map<string, SettingDefinition>): Map<string, string> {
+  const out = new Map<string, string>();
+  const byName = Map.groupBy(changes, (c) => defs.get(c.definitionId)?.displayName ?? c.definitionId);
+  for (const group of byName.values()) {
+    if (new Set(group.map((c) => c.definitionId)).size < 2) continue;
+    for (const c of group) {
+      const node = defs.get(c.definitionId)?.offsetUri?.split('/').filter(Boolean).at(-2);
+      if (node) out.set(c.definitionId, node);
+    }
+  }
+  return out;
+}
+
+/** Old → new policy name on two lines, with the " - " segments that changed highlighted. */
+function RenameTitle({ from, to }: { from: string; to: string }) {
+  const strip = (n: string) => n.replace(/\s+/g, ' ').replace(/\s*-\s*v[\d.]+$/i, '').split(' - ');
+  const a = strip(from);
+  const b = strip(to);
+  const line = (segs: string[], other: string[], cls: string) =>
+    segs.map((seg, i) => (
+      <span key={i}>
+        {i > 0 && ' - '}
+        <span className={other.includes(seg) ? undefined : cls}>{seg}</span>
+      </span>
+    ));
+  return (
+    <span className="block">
+      <span className="block text-fluent-sm font-normal text-fluent-text-secondary">
+        <span className="text-fluent-xs uppercase tracking-wide mr-2">Was</span>
+        {line(a, b, 'line-through decoration-fluent-error/70')}
+      </span>
+      <span className="block">
+        <span className="text-fluent-xs font-normal uppercase tracking-wide text-fluent-text-secondary mr-2">Now</span>
+        {line(b, a, 'rounded px-0.5 bg-fluent-info/15 text-fluent-info')}
+      </span>
+    </span>
+  );
+}
+
+const cardId = (key: string) => `p-${key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
 /** Group policies by category (alphabetical), kinds first within each category. */
 function groupByCategory(policies: PolicyDiff[]): { category: string; policies: PolicyDiff[] }[] {
   return [...Map.groupBy(policies, (p) => p.category)]
@@ -190,24 +233,34 @@ export default function OIBChangelogViewer() {
   if (error || !index) return <LoadStatus error={error} />;
 
   // Render a single setting change row (reused for grouped + ungrouped).
-  const renderChange = (c: SettingChange) => {
+  const renderChange = (c: SettingChange, hint?: string) => {
     const def = defsMap.get(c.definitionId);
     const src = c.kind === 'removed' ? c.baseValue : c.compareValue;
+    // A removed/added setting that lives on in another policy reads as a move.
+    const moved = c.movedTo ?? c.movedFrom;
+    const shown = moved ? 'moved' : c.kind;
+    const value = fmt(src, def);
+    const badge = moved ? (
+      <ChangeBadge kind="moved" base={value} compare={value} note={c.movedTo ? `Now in ${c.movedTo}` : `Was in ${c.movedFrom}`} />
+    ) : (
+      <ChangeBadge kind={c.kind} base={fmt(c.baseValue, def)} compare={fmt(c.compareValue, def)} />
+    );
     if (!def) {
       return (
-        <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+        <div key={c.definitionId + c.kind} className={`flex items-center gap-3 px-4 py-2.5 border-b border-fluent-border border-l-2 ${SETTING_KIND[shown].gutter}`}>
           <span className="flex-1 font-mono text-[12px] text-fluent-text-secondary truncate">{c.definitionId}</span>
-          <ChangeBadge kind={c.kind} base={fmt(c.baseValue, def)} compare={fmt(c.compareValue, def)} />
+          {badge}
         </div>
       );
     }
     const { activeOptionIds, activeSimpleValue } = activeFrom(src);
     const srcVersion = c.kind === 'removed' ? versionLabel(baseTag) : versionLabel(compareTag);
     return (
-      <div key={c.definitionId + c.kind} className={`border-l-2 ${SETTING_KIND[c.kind].gutter}`}>
+      <div key={c.definitionId + c.kind} className={`border-l-2 ${SETTING_KIND[shown].gutter}`}>
         <SettingRow
           setting={def}
-          valueBadge={<ChangeBadge kind={c.kind} base={fmt(c.baseValue, def)} compare={fmt(c.compareValue, def)} />}
+          disambiguationLabel={hint}
+          valueBadge={badge}
           activeOptionIds={activeOptionIds}
           activeSimpleValue={activeSimpleValue}
           activeLabel={`OIB ${srcVersion}`}
@@ -270,19 +323,49 @@ export default function OIBChangelogViewer() {
         <CategorySection key={category} category={category} kinds={KIND_ORDER} items={policies} noun={['policy', 'policies']}>
           {policies.map((p) => {
             const key = `${category}|${p.compareName ?? p.baseName}`;
+            const movedIn = p.settingChanges.filter((c) => c.movedFrom).length;
+            const movedOut = p.settingChanges.filter((c) => c.movedTo).length;
+            const added = p.addedCount - movedIn;
+            const removed = p.removedCount - movedOut;
+            const merged = p.mergedInto && diff?.policies.find((t) => t.kind !== 'removed' && t.label === p.mergedInto);
             return (
               <ChangeCard
                 key={key}
+                id={cardId(key)}
+                note={
+                  p.mergedInto && (
+                    <span className="text-fluent-info">
+                      ↳ Merged into{' '}
+                      {merged ? (
+                        <a
+                          href={`#${cardId(`${merged.category}|${merged.compareName}`)}`}
+                          className="font-semibold hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-fluent-blue rounded"
+                        >
+                          {p.mergedInto}
+                        </a>
+                      ) : (
+                        <span className="font-semibold">{p.mergedInto}</span>
+                      )}
+                      <span className="text-fluent-text-secondary"> · {movedOut} of {p.settingChanges.length} settings still configured there</span>
+                    </span>
+                  )
+                }
                 kind={p.kind}
                 expandable={p.settingChanges.length > 0}
                 open={expanded.has(key)}
                 onToggle={() => toggle(key)}
-                title={(p.compareName ?? p.baseName ?? '').replace(/\s*-\s*v[\d.]+$/i, '')}
-                body={() =>
+                title={
+                  p.kind === 'renamed' && p.baseName && p.compareName
+                    ? <RenameTitle from={p.baseName} to={p.compareName} />
+                    : (p.compareName ?? p.baseName ?? '').replace(/\s*-\s*v[\d.]+$/i, '')
+                }
+                body={() => {
                   // Expandable ⇒ settingChanges is non-empty.
-                  groupByRoot(p.settingChanges, defsMap).map((g) => {
+                  const hints = disambiguate(p.settingChanges, defsMap);
+                  const row = (c: SettingChange) => renderChange(c, hints.get(c.definitionId));
+                  return groupByRoot(p.settingChanges, defsMap).map((g) => {
                     // Singletons (and groups with no known root) render flat.
-                    if (!g.label) return g.members.map(renderChange);
+                    if (!g.label) return g.members.map(row);
                     const gkey = `${key}::${g.key}`;
                     const gOpen = expanded.has(gkey);
                     // Prefer the instance's rule name (carried on the change
@@ -311,25 +394,28 @@ export default function OIBChangelogViewer() {
                             +{added} −{removed} ~{changed}
                           </span>
                         </button>
-                        {gOpen && <div className="pl-3">{g.members.map(renderChange)}</div>}
+                        {gOpen && <div className="pl-3">{g.members.map(row)}</div>}
                       </div>
                     );
-                  })
-                }
+                  });
+                }}
               >
-                {p.kind === 'renamed' && (
-                  <span className="hidden md:inline text-fluent-xs text-fluent-text-secondary truncate max-w-[40%]">
-                    {p.baseName} → {p.compareName}
-                    {p.matchedBy === 'fuzzy' && p.similarity != null && (
-                      <span className="ml-1 opacity-70">({Math.round(p.similarity * 100)}% match)</span>
-                    )}
+                {p.kind === 'renamed' && p.matchedBy === 'fuzzy' && p.similarity != null && (
+                  <span className="text-fluent-xs text-fluent-text-secondary shrink-0">
+                    {Math.round(p.similarity * 100)}% match
                   </span>
                 )}
                 {(p.kind === 'modified' || p.kind === 'renamed') && p.settingChanges.length > 0 && (
-                  <span className="text-fluent-xs shrink-0 tabular-nums flex items-center gap-2" aria-label={`${p.addedCount} settings added, ${p.removedCount} removed, ${p.changedCount} changed`}>
-                    {p.addedCount > 0 && <span className="text-fluent-success" aria-hidden>+{p.addedCount}</span>}
-                    {p.removedCount > 0 && <span className="text-fluent-error" aria-hidden>−{p.removedCount}</span>}
+                  <span
+                    className="text-fluent-xs shrink-0 tabular-nums flex items-center gap-2"
+                    aria-label={`${added} settings added, ${removed} removed, ${p.changedCount} changed, ${movedIn + movedOut} moved`}
+                  >
+                    {added > 0 && <span className="text-fluent-success" aria-hidden>+{added}</span>}
+                    {removed > 0 && <span className="text-fluent-error" aria-hidden>−{removed}</span>}
                     {p.changedCount > 0 && <span className="text-fluent-warning" aria-hidden>~{p.changedCount}</span>}
+                    {movedIn + movedOut > 0 && (
+                      <span className="text-fluent-info" aria-hidden title="Moved between policies">⇄{movedIn + movedOut}</span>
+                    )}
                   </span>
                 )}
                 {(p.kind === 'added' || p.kind === 'removed') && p.settingChanges.length > 0 && (

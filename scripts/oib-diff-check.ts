@@ -139,4 +139,28 @@ const N = (cat: string, label: string, v: string) => `Win - OIB - ES - ${cat} - 
   assert.ok(added.every((c) => c.kind === 'added'));
 }
 
+// ── whitespace-only name difference is not a rename ──
+{
+  const d = diffVersions(
+    'v1', [pol('Win - OIB - SC - Device Security - D - Package Manager  - v3.5', { a: 'a_on' }, 'id1')],
+    'v2', [pol('Win - OIB - SC - Device Security - D - Package Manager - v3.5', { a: 'a_on' }, 'id1')]
+  );
+  assert.equal(d.policies.length, 0, 'double space → unchanged, not renamed');
+}
+
+// ── settings moved between policies / policy merged into another ──
+{
+  const base = [
+    pol(N('LAPS', 'Config', '3.6'), { a: 'a_on' }),
+    pol(N('LAPS', 'Config (24H2+)', '3.6'), { a: 'a_on', b: 'b_on', c: 'c_on' }),
+  ];
+  const compare = [pol(N('LAPS', 'Config', '4.0'), { a: 'a_on', b: 'b_on', c: 'c_on' })];
+  const d = diffVersions('v3.6', base, 'v4.0', compare);
+  const gone = d.policies.find((p) => p.kind === 'removed')!;
+  assert.equal(gone.mergedInto, 'Config', 'removed policy merged into Config');
+  assert.ok(gone.settingChanges.every((c) => c.movedTo === 'Config'), 'every removed setting still in Config');
+  const mod = d.policies.find((p) => p.kind === 'modified')!;
+  assert.ok(mod.settingChanges.every((c) => c.kind === 'added' && c.movedFrom === 'Config (24H2+)'), 'added ones moved in');
+}
+
 console.log('✓ oib-diff self-check passed');
