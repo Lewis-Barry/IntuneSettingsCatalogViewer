@@ -34,7 +34,12 @@ export const siteUrl = (id: string) => `https://intunesettings.app/setting/${set
 
 /** Human default: option display name for choice settings, raw value for simple ones. */
 export function fmtDefault(s: SettingDefinition): string | undefined {
-  if (s.defaultOptionId) return s.options?.find((o) => o.itemId === s.defaultOptionId)?.displayName ?? s.defaultOptionId;
+  if (s.defaultOptionId) {
+    const name = s.options?.find((o) => o.itemId === s.defaultOptionId)?.displayName ?? s.defaultOptionId;
+    // Option ids end in the raw value ("..._65535"); show it when numeric, it is what CSP docs quote.
+    const raw = s.defaultOptionId.slice(s.id.length + 1);
+    return /^\d+$/.test(raw) ? `${name} (${raw})` : name;
+  }
   const dv = s.defaultValue as { value?: unknown } | null | undefined;
   if (dv && dv.value !== undefined && dv.value !== null && dv.value !== '') return String(dv.value);
   return undefined;

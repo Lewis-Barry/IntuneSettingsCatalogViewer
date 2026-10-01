@@ -1,5 +1,6 @@
 import type { SearchIndexEntry } from './types';
 import { readSearchCache, writeSearchCache, type CachedSearchIndex } from './search-cache';
+import { compact, idQuery } from './id-query';
 import manifest from '../../data/search-index-manifest.json';
 
 type SearchWorkerRequest =
@@ -14,6 +15,7 @@ type SearchWorkerResponse =
 let index: any = null;
 let documents: SearchIndexEntry[] = [];
 let documentMap = new Map<string, SearchIndexEntry>();
+let compactIds: string[] | null = null;
 let loadPromise: Promise<void> | null = null;
 const CACHE_VERSION = `numeric-v1:${manifest.version}`;
 
@@ -120,6 +122,16 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
         if (fieldScore > existing) fieldScores.set(id, fieldScore);
       }
     }
+  }
+
+  // CSP path / property name / setting id pasted from docs: match against the compacted id.
+  for (const term of terms) {
+    const q = idQuery(term);
+    if (!q) continue;
+    compactIds ??= documents.map((d) => compact(d.id));
+    compactIds.forEach((cid, i) => {
+      if (cid.includes(q)) fieldScores.set(documents[i].id, 5);
+    });
   }
 
   const matched: SearchIndexEntry[] = [];

@@ -8,6 +8,7 @@ import { getCspPath } from '../../src/lib/settings-grouping.ts';
 import { skuLabel, matchesWindowsCompatibility } from '../../src/lib/sku-labels.ts';
 import { flattenOIBSettings } from '../../src/lib/oib-types.ts';
 import { fmtValue } from '../../src/lib/oib-export-shared.ts';
+import { compact, idQuery } from '../../src/lib/id-query.ts';
 import type { BaselineSetting } from '../../src/lib/baseline-types.ts';
 
 // getCspPath joins baseUri + '/' + offsetUri, and offsetUri already starts with '/'.
@@ -15,7 +16,8 @@ const cspPath = (s: SettingDefinition) => getCspPath(s).replace(/(?<!^\.)\/{2,}/
 
 export async function searchSettings(args: { query: string; platform?: string; scope?: 'device' | 'user'; limit?: number }) {
   const { all } = await settingIndex();
-  const terms = args.query.toLowerCase().split(/\s+/).filter(Boolean);
+  // Collapse repeated slashes like cspPath does, so pasted OMA-URIs ("Policy//Config", "///x/") still match.
+  const terms = args.query.toLowerCase().replace(/(?<!^\.)\/{2,}/g, '/').split(/\s+/).filter(Boolean);
   const scored: Array<{ s: SettingDefinition; score: number }> = [];
   for (const s of all) {
     if (!matchesPlatform(s.applicability?.platform, args.platform)) continue;
@@ -23,7 +25,8 @@ export async function searchSettings(args: { query: string; platform?: string; s
     const display = label(s).toLowerCase();
     const mid = `${s.name ?? ''} ${(s.keywords ?? []).join(' ')} ${cspPath(s)} ${s.id}`.toLowerCase();
     const desc = (s.description ?? '').toLowerCase();
-    if (!terms.every((t) => display.includes(t) || mid.includes(t) || desc.includes(t))) continue;
+    const cid = compact(s.id);
+    if (!terms.every((t) => display.includes(t) || mid.includes(t) || desc.includes(t) || (idQuery(t) !== null && cid.includes(idQuery(t)!)))) continue;
     const score = display === terms.join(' ') ? 4 : terms.every((t) => display.includes(t)) ? 3 : terms.every((t) => display.includes(t) || mid.includes(t)) ? 2 : 1;
     scored.push({ s, score });
   }
@@ -35,7 +38,10 @@ export async function searchSettings(args: { query: string; platform?: string; s
 async function searchMarkdown(items: SettingDefinition[]) {
   const cats = await categoryById();
   return items
-    .map((s) => `- **${label(s)}** — ${s.applicability?.platform ?? '?'} · ${getSettingScope(s.baseUri)} · ${cats.get(s.categoryId)?.displayName ?? s.categoryId}\n  \`${s.id}\`${s.description ? ` — ${oneLine(s.description)}` : ''}`)
+    .map((s) => {
+      const def = fmtDefault(s);
+      return `- **${label(s)}** — ${s.applicability?.platform ?? '?'} · ${getSettingScope(s.baseUri)} · ${cats.get(s.categoryId)?.displayName ?? s.categoryId}\n  \`${s.id}\`${s.description ? ` — ${oneLine(s.description)}` : ''}${def ? `\n  Default: ${oneLine(def, 120)}` : ''}`;
+    })
     .join('\n');
 }
 
@@ -200,6 +206,18 @@ export async function selfCheck(): Promise<void> {
   assert.match(d.markdown, /## Default\n\S/);
   assert.match(d.markdown, /MS baseline \*\*Security Baseline for Windows/);
   assert.match(d.markdown, /`\.\/Device\/Vendor\/MSFT\/Policy\/Config\/DeviceLock\/PreventEnablingLockScreenCamera`/);
+  const sloppy = await searchSettings({ query: './Device/Vendor/MSFT/Policy//Config/DeviceLock/PreventEnablingLockScreenCamera' });
+  assert.ok(sloppy.items.some((s) => s.id === id), 'search tolerates double slashes in a pasted path');
+  for (const [q, want] of [
+    ['./Device/Vendor/MSFT/Policy//Config/Maps/EnableOfflineMapsAutoUpdate', 'device_vendor_msft_policy_config_maps_enableofflinemapsautoupdate'],
+    ['EnableOfflineMapsAutoUpdate', 'device_vendor_msft_policy_config_maps_enableofflinemapsautoupdate'],
+    ['/com.android.deviceRestrictionPolicy///networkEscapeHatchAllowed/', 'com.android.devicerestrictionpolicy.networkescapehatchallowed'],
+    ['config/maps/enableoffline', 'device_vendor_msft_policy_config_maps_enableofflinemapsautoupdate'],
+  ] as const) {
+    assert.ok((await searchSettings({ query: q })).items.some((s) => s.id === want), `search finds ${want} from "${q}"`);
+  }
+  const maps = await searchSettings({ query: 'EnableOfflineMapsAutoUpdate' });
+  assert.match(await searchMarkdown(maps.items), /Default: Not configured\. User's choice\. \(65535\)/, 'search lists the numeric default');
   assert.equal((await getSettingDetail({ name: 'Value' })).kind, 'ambiguous');
   assert.ok((await listCategories({})).length > 5);
 }

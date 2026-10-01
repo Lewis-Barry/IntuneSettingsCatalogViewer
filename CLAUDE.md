@@ -39,7 +39,7 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/components/CategoryTree.tsx` | Hierarchical sidebar |
 | `src/components/OIBBrowser.tsx` | OIB policy browser — fetches `public/oib-data.json` at runtime, cross-references settings catalog; Export dropdown (CSV/HTML) via `oib-browse-export.ts` |
 | `src/components/OIBChangelogViewer.tsx` | OIB Changelog UI — version pickers, fetches two shards, diffs client-side via `oib-diff.ts`; reuses `SettingRow` for drilldowns; Export dropdown (CSV/HTML) |
-| `src/lib/search.ts` + `search.worker.ts` | Flexsearch index loaded/queried in Web Worker |
+| `src/lib/search.ts` + `search.worker.ts` | Flexsearch index loaded/queried in Web Worker; a whitespace-free query (8+ chars, or 3+ if it contains `/` `.` `_`) is also matched against setting ids via `id-query.ts` (slashes/dots/case ignored), so pasted CSP/OMA-URI paths and property names find the setting. Shared with the MCP `search_settings` |
 | `src/lib/data.ts` | Build-time JSON loaders with module-level caching |
 | `src/lib/types.ts` | Shared TypeScript types + `hasUsage()` — `settingUsage` is a comma-separated **flag set** (`configuration`, `compliance`, `configuration,compliance`, `configuration,reusableSetting`), so catalog membership is a flag test, never an equality check. Used at build time only, to keep the Windows SKU reports configuration-only. Self-check: `npm run check-usage-filter` |
 | `src/lib/oib-types.ts` | OIB-specific types and helpers |
