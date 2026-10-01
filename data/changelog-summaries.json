@@ -18,6 +18,30 @@
     ],
     "watchOut": "The three Defender settings also changed their underlying URI from './Device/Vendor/MSFT/Defender' to './Vendor/MSFT/Defender', likely a path correction; existing profiles should handle it, but give them a quick look if you've customized those policies."
   },
+  "2026-09": {
+    "headline": "Windows added 19 Agent execution settings that put AI agent tool use in a container by default and let you allow or block individual arguments, while Linux picked up its first Defender update channel controls.",
+    "highlights": [],
+    "overview": "Two update days this month, and the substance sits on Windows: a new Agent execution category with 19 settings for governing AI agents, covering container-by-default tool execution, per-tool overrides, an Entra identity profile, and explicit allow or block lists for arguments. If anyone in your org is handing an agent real permissions, that is the control surface to review now rather than later. The rest of the month was quieter: macOS gained pre-login network controls, Android gained a couple of device restriction toggles, and Linux now has Defender Safe Deployment Plan settings for staggering security intelligence updates.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "Agent execution is the marquee addition: 19 settings that decide whether agents run tools inside a container by default, which tools they may use, what arguments are permitted or blocked, and which Entra identity profile they run under. Worth enforcing a default here rather than leaving it open, since an agent with unrestricted tool access is effectively a script with your credentials. Loader Override Settings adds per-application WebView2 downgrade version pinning, and Edge picked up toggles for launching at Windows startup, Back/Forward Cache for WebSockets, strict MIME type checking for worker scripts, restricting Background Fetch from service workers, and clipboard suggestions in the address bar. OneDrive gained ignore-list and folder-exclusion controls, plus an option to stop users editing that list. The 26 categoryId moves in App Package Deployment are picker housekeeping, nothing deployed changes."
+      },
+      {
+        "os": "apple",
+        "body": "macOS Login Window Behavior gained four settings, the useful ones being Force Captive Portal Connection From Lock Screen and Force Wifi Configuration On Lock Screen, which matter for machines that need network before anyone signs in. Accessibility is now available as a declarative configuration on both iOS and macOS, with Allow Live Recognition and visual settings alongside it, and Allow Visual Intelligence covers both platforms. iOS also gained a Setup Assistant toggle for the Device Features Tour. Minor: a Safari Browser setting renamed its display name from ANY to Domain."
+      },
+      {
+        "os": "android",
+        "body": "Two device restriction toggles arrived for AOSP-managed devices, blocking volume changes and date and time changes, which is handy for kiosk and shared hardware. Android Enterprise added a Users and Accounts setting requiring authentication with a Google Workspace account, and a device password setting for disabled lock screen features."
+      },
+      {
+        "os": "linux",
+        "body": "Linux gained a Defender Safe Deployment Plan category with three settings: SDP Channel Assignment, SIU Update Window, and Minimum SIU Package Age. Small, but it means you can now stagger security intelligence updates on Linux endpoints instead of taking whatever lands."
+      }
+    ],
+    "watchOut": "Three Windows Defender settings (Ai Agent Network Inspection, Ai Agent Protection, Deployment Channel) now require the microsoftSense technology and moved their baseUri, so recheck assignments filtered by applicability. The Edge DLP connector settings for clipboard, print, and file attach expanded to macOS, so profiles that previously targeted Windows only may now apply further than you intended."
+  },
   "2026-08-26": {
     "headline": "Edge gets Process Isolation and clipboard suggestion toggles on Windows, while Defender's 'Controlled Configuration' is now 'Configuration Protection (Preview)' and Linux settings shuffle into a new category.",
     "highlights": [
