@@ -124,7 +124,7 @@ function runSearch(query: string, limit: number): SearchIndexEntry[] {
     }
   }
 
-  // CSP path / property name / setting id pasted from docs: match against the compacted id.
+  // Pasted CSP path / property name / id: match against the compacted id.
   for (const term of terms) {
     const q = idQuery(term);
     if (!q) continue;

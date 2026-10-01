@@ -16,7 +16,7 @@ const cspPath = (s: SettingDefinition) => getCspPath(s).replace(/(?<!^\.)\/{2,}/
 
 export async function searchSettings(args: { query: string; platform?: string; scope?: 'device' | 'user'; limit?: number }) {
   const { all } = await settingIndex();
-  // Collapse repeated slashes like cspPath does, so pasted OMA-URIs ("Policy//Config", "///x/") still match.
+  // Collapse repeated slashes like cspPath does, so pasted OMA-URIs still match.
   const terms = args.query.toLowerCase().replace(/(?<!^\.)\/{2,}/g, '/').split(/\s+/).filter(Boolean);
   const scored: Array<{ s: SettingDefinition; score: number }> = [];
   for (const s of all) {
