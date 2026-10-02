@@ -1,4 +1,14 @@
 {
+  "2026-10-02": {
+    "headline": "Windows gains per-app control over who can read on-screen 'foreground text', a SmartScreen gate for MSIX packages, and a licence check for ESU; plus a swarm of category reshuffling that is mostly furniture moving.",
+    "highlights": [
+      "Windows Privacy: 4 new Foreground Text settings (allow, user-in-control, force allow, force deny). This is the screen-reading surface underpinning Recall-style features; if you have opinions about which apps can scrape what is on screen, force deny is the setting to consider.",
+      "Windows Microsoft App Store: MSIX SmartScreen check and MSIX allowed zones arrive; worth enforcing the SmartScreen check before sideloading habits set in.",
+      "Windows Device Lock: Clear Text Password and Relax Minimum Password Length Limits land side by side. One tightens, the other loosens; read the label before enabling.",
+      "Windows odds and ends: ESU Subscription Check (Licensing), Set Max Pause Days and Ignore Windows Update Group Policies (WUfB), Ready Print driver ranking, and audio on the lock screen."
+    ],
+    "watchOut": "Two things to eyeball: TLS Cipher Suites description now says comma delimited rather than semicolon, so verify existing profiles before trusting the old format; and Allow OOBE Updates documentation flipped to devices are not allowed to update by default, which may change behaviour on new builds. The 3,871 categoryId moves and 269/258 category swaps are picker reorganisation only, deployed profiles are unaffected."
+  },
   "2026-09-22": {
     "headline": "Windows gets a new Agent execution category with 19 settings, letting you decide whether AI agents run their tools in a container by default and which Entra identity profile they use.",
     "highlights": [
