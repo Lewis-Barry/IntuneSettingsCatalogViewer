@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T06:16:26.824Z",
+  "generatedAt": "2026-10-05T06:23:24.306Z",
   "families": [
     {
       "baseId": "9d0f07ef-5eef-4fd3-b95d-f9efbba07d23",
@@ -114,9 +114,15 @@
       "technologies": "mdm",
       "versions": [
         {
+          "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_6",
+          "displayVersion": "Version 26H2",
+          "lifecycleState": "active",
+          "settingCount": 329
+        },
+        {
           "id": "66df8dce-0166-4b82-92f7-1f74e3ca17a3_5",
           "displayVersion": "Version 25H2",
-          "lifecycleState": "active",
+          "lifecycleState": "superseded",
           "settingCount": 328
         },
         {
