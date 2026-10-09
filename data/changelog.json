@@ -1,5 +1,45 @@
 [
   {
+    "date": "2026-10-09",
+    "added": [],
+    "removed": [],
+    "changed": [
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_elevationaction",
+        "displayName": "Elevation type",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Elevation action\"",
+            "newValue": "\"Elevation type\""
+          },
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "2 options"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_privilegemanagement_systemsettingrules_{systemsettingrulename}_settingtype",
+        "displayName": "Allow standard users to change network settings",
+        "categoryId": "4f3a6fca-a74c-448d-95b1-9d6d7a5d4449",
+        "categoryName": "Privilege Management",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Setting type\"",
+            "newValue": "\"Allow standard users to change network settings\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-02",
     "added": [
       {

@@ -1,4 +1,13 @@
 {
+  "2026-10-09": {
+    "headline": "Quiet Friday: Windows Privilege Management got two setting renames and a reshuffle inside one option list, nothing new to deploy.",
+    "highlights": [
+      "Windows: 'Setting type' is now 'Allow standard users to change network settings', which at least says what it does",
+      "Windows: 'Elevation action' is now 'Elevation type'; the option list for it changed contents but not its count, so review the dropdown before assuming your baseline still lines up",
+      "No settings added or removed, and no categories touched; this is a naming day"
+    ],
+    "watchOut": "Renamed settings and an in-place option list edit can make existing profiles look unfamiliar in the UI and can change which dropdown item your intent maps to; spot-check any Privilege Management elevation policy that uses these."
+  },
   "2026-10-02": {
     "headline": "Windows gains per-app control over who can read on-screen 'foreground text', a SmartScreen gate for MSIX packages, and a licence check for ESU; plus a swarm of category reshuffling that is mostly furniture moving.",
     "highlights": [
