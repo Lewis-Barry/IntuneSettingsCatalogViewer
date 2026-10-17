@@ -1,4 +1,14 @@
 {
+  "2026-10-17": {
+    "headline": "A quiet Saturday: Windows picks up HTTP header injection rules and PAC route-probe addresses, and Edge lets you block AutoFill per site, mostly plumbing for proxy and browser hardening.",
+    "highlights": [
+      "Windows: 4 new Network settings for HTTP Header Injection scoped to specific URL patterns, useful if you need to force headers onto particular destinations without a proxy rewrite",
+      "Windows: 8 new Proxy server settings for IPv4 and IPv6 route-probe addresses used by PAC scripts, split device and user scope; handy when PAC resolution misbehaves on multihomed or dual-stack clients",
+      "Windows: Edge 'Block AutoFill data types for specific sites' arrives, so you can deny saved addresses or payment data on chosen sites instead of killing AutoFill everywhere",
+      "Everything else is 4 description edits, including WebView2 downgrade doc examples now pointing at ms-teams.exe instead of teams.exe"
+    ],
+    "watchOut": "The Edge 'Launch Microsoft Edge on Windows startup' description now says unconfigured means Edge will not launch automatically, where the old text said users get a choice; worth re-reading if you rely on the default, though no setting was actually removed."
+  },
   "2026-10-09": {
     "headline": "Quiet Friday: Windows Privilege Management got two setting renames and a reshuffle inside one option list, nothing new to deploy.",
     "highlights": [
