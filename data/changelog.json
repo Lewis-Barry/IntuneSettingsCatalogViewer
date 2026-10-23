@@ -1,5 +1,47 @@
 [
   {
+    "date": "2026-10-23",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~remix_remixavailability",
+        "displayName": "Control Remix availability",
+        "categoryId": "d18eaf40-9d60-4c92-902b-5586a6331f2b",
+        "categoryName": "Remix settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~remix_remixavailability",
+        "displayName": "Control Remix availability (User)",
+        "categoryId": "d18eaf40-9d60-4c92-902b-5586a6331f2b",
+        "categoryName": "Remix settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~remix_remixavailability_remixavailability",
+        "displayName": "Control Remix availability (User)",
+        "categoryId": "d18eaf40-9d60-4c92-902b-5586a6331f2b",
+        "categoryName": "Remix settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_microsoft_edge~policy~microsoft_edge~remix_remixavailability_remixavailability",
+        "displayName": "Control Remix availability",
+        "categoryId": "d18eaf40-9d60-4c92-902b-5586a6331f2b",
+        "categoryName": "Remix settings",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [],
+    "categoriesAdded": [
+      {
+        "id": "d18eaf40-9d60-4c92-902b-5586a6331f2b",
+        "displayName": "Remix settings",
+        "parentCategoryId": "a25a7a02-4bac-411b-9d02-10cb3297cb17"
+      }
+    ]
+  },
+  {
     "date": "2026-10-17",
     "added": [
       {

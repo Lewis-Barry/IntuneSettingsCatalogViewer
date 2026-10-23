@@ -1,4 +1,12 @@
 {
+  "2026-10-23": {
+    "headline": "A quiet day: Windows gets a new Remix settings category, and its entire contents are four name tags on a single availability toggle.",
+    "highlights": [
+      "Windows: one new capability, 'Control Remix availability', exposed as device and user variants; nothing else in the category",
+      "No settings removed and no field-level edits, so existing profiles are untouched"
+    ],
+    "watchOut": null
+  },
   "2026-10-17": {
     "headline": "A quiet Saturday: Windows picks up HTTP header injection rules and PAC route-probe addresses, and Edge lets you block AutoFill per site, mostly plumbing for proxy and browser hardening.",
     "highlights": [
