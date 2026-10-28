@@ -1,4 +1,14 @@
 {
+  "2026-10-28": {
+    "headline": "Chrome policy lands in bulk today: Local Network Access restrictions, Gemini integration controls, and a fresh iOS/macOS DNS settings category, so browser and network guardrails now have real knobs.",
+    "highlights": [
+      "Windows: 24 new Local Network Access settings for Chrome; allow or block site requests to local network endpoints and the local device, with an opt-out toggle. Worth defaulting to block before something on a web page starts poking at your printers.",
+      "Windows: 36 new Generative AI settings; allow/block lists for Gemini app integrations acting on specified sites, content sharing with Google AI Mode and Lens, and Talk to type. If you have a view on AI in the browser, now is the time to set it.",
+      "iOS/macOS: new DNS Settings category with 10 settings (DNS Protocol, Server Addresses and URL, Supplemental Match Domains, Allow Failover, Prohibit Disablement). Expect the older DNS Settings entries, now tagged deprecated, to give way to these.",
+      "Windows: 60 Chrome settings including HTTPS-Only Mode user override, DevTools URL allow/block lists, HTTP header injection patterns, encrypted HTTP cache on disk, and WebRTC diagnostic logging per origin; plus 5 Win RE point-in-time restore settings (frequency, retention, disk usage)."
+    ],
+    "watchOut": "15 Windows applicability edits on deprecated Remote Remediation and File Protection settings swapped minimumSupportedVersion from 10.0.25272 to a placeholder-looking 88.8.88888; check anything scoped to those before trusting the targeting, and note 87 displayName edits mostly just added '(deprecated)' to macOS Content Caching, Parental Controls, and DNS entries."
+  },
   "2026-10-23": {
     "headline": "A quiet day: Windows gets a new Remix settings category, and its entire contents are four name tags on a single availability toggle.",
     "highlights": [

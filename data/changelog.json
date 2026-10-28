@@ -1,5 +1,2879 @@
 [
   {
+    "date": "2026-10-28",
+    "added": [
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforurls",
+        "displayName": "Force foreground priority for specific URLs",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_restrictpdfsavetogoogledriveaccountstopattern",
+        "displayName": "Restrict eligible Google accounts for saving PDF files to Google Drive from the Google Chrome PDF Viewer (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityallowlist_developertoolsavailabilityallowlistdesc",
+        "displayName": "List of URL patterns for which Chrome DevTools are allowed to be opened",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_recommended_httpsonlymode_recommended",
+        "displayName": "Allow HTTPS-Only Mode to be enabled",
+        "categoryId": "c3857f91-3df8-472f-9b5a-b10778c715c0",
+        "categoryName": "Google Chrome - Default Settings users can override",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_precisegeolocationallowedforurls_precisegeolocationallowedforurlsdesc",
+        "displayName": "Allow precise geolocation on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_backforwardcacheforwebsocketsallowed",
+        "displayName": "Allow Back/Forward Cache for WebSockets",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_geolocationblockedforurls",
+        "displayName": "Block geolocation on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_searchcontentsharingsettings",
+        "displayName": "Enable content sharing with Google AI Mode and Lens integrations",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_searchcontentsharingsettings_searchcontentsharingsettings",
+        "displayName": "Enable content sharing with Google AI Mode and Lens integrations",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkallowedforurls",
+        "displayName": "Allow sites to make network requests to local network endpoints.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_cpuperformancetieroverride_cpuperformancetieroverride",
+        "displayName": "Override for the CPU performance tier:",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_restrictyoutubecookiesdeletion",
+        "displayName": "Restrict YouTube cookies deletion",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~proxy_enableproxyoverriderulesforallusers",
+        "displayName": "Controls which managed users can set the ProxyOverrideRules policy.",
+        "categoryId": "d33197ca-f674-4e3d-9afa-0ff7ef7b4dc7",
+        "categoryName": "Proxy server",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_cacheencryptionenabled",
+        "displayName": "This policy allows administrators to encrypt http cache on disk.",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityallowlist_developertoolsavailabilityallowlistdesc",
+        "displayName": "List of URL patterns for which Chrome DevTools are allowed to be opened (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_dnssettings_dnsprotocol",
+        "displayName": "DNS Protocol",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "dnssettings_dnssettings_serveraddresses",
+        "displayName": "Server Addresses",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessipaddressspaceoverrides",
+        "displayName": "Override IP address space mappings",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_searchcontentsharingsettings",
+        "displayName": "Enable content sharing with Google AI Mode and Lens integrations (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~webrtc_webrtcdiagnosticlogcollectionallowedfororigins",
+        "displayName": "Enable WebRTC diagnostic log collection for specific origins",
+        "categoryId": "b811c4fe-7ff0-4bd1-a454-0918d4e2f896",
+        "categoryName": "Web Rtc settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlblocklist",
+        "displayName": "Block access to a list of URLs in Incognito mode. (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_voicetypingsettings_voicetypingsettings",
+        "displayName": "Settings for Talk to type",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~removedpolicies_extensionforceinstallwithnonmalwareviolationsenabled",
+        "displayName": "Enable Force-installed Extensions With Non-Malware Violations",
+        "categoryId": "3634c01b-1a85-4f50-9f52-63bc10bf0e39",
+        "categoryName": "Removed policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonweballowedforurls",
+        "displayName": "Allow Gemini app integrations to directly act on specified sites",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebblockedforurls",
+        "displayName": "Block Gemini app integrations to directly act on specified sites",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonweballowedforurls_geminiactonweballowedforurlsdesc",
+        "displayName": "Allow Gemini app integrations to directly act on specified sites",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_pointintimerestore_allowusertoinitiatepointintimerestore",
+        "displayName": "Allow user to initiate point-in-time restore",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkallowedforurls",
+        "displayName": "Allow sites to make network requests to local network endpoints. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_thirdpartyaichatsettings_thirdpartyaichatsettings",
+        "displayName": "Settings for 3rd party AI Mode integrations in the address bar and New Tab page search box. (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_voicetypingsettings_voicetypingsettings",
+        "displayName": "Settings for Talk to type (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforalltabs",
+        "displayName": "Force foreground priority for all tabs (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminisparksettings",
+        "displayName": "Allows Gemini Spark to connect to and use Google Chrome auto browse",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionblockedforurls",
+        "displayName": "Block idle detection on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityblocklist_developertoolsavailabilityblocklistdesc",
+        "displayName": "List of URL patterns for which Chrome DevTools are blocked (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_thirdpartyaichatsettings",
+        "displayName": "Settings for 3rd party AI Mode integrations in the address bar and New Tab page search box. (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_notifications_disableaccountnotifications",
+        "displayName": "Disable Account Notifications (User)",
+        "categoryId": "cb1e177e-8f06-4a69-8215-ec1e91c19e30",
+        "categoryName": "Notifications",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_dnssettings_servername",
+        "displayName": "Server Name",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultidledetectionsetting_defaultidledetectionsetting",
+        "displayName": "Idle detection (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityblocklist_developertoolsavailabilityblocklistdesc",
+        "displayName": "List of URL patterns for which Chrome DevTools are blocked",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionallowedforurls_idledetectionallowedforurlsdesc",
+        "displayName": "Allowed sites for idle detection (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkallowedforurls",
+        "displayName": "Allow sites to make network requests to the local device.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~network_httpheaderinjection",
+        "displayName": "Configure HTTP Header Injection for specific URL patterns",
+        "categoryId": "fa2722a8-dcfd-4e14-a429-2b0041642c77",
+        "categoryName": "Network settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_recommended_httpsonlymode_recommended_httpsonlymode",
+        "displayName": "Allow HTTPS-Only Mode to be enabled",
+        "categoryId": "c3857f91-3df8-472f-9b5a-b10778c715c0",
+        "categoryName": "Google Chrome - Default Settings users can override",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_geolocationblockedforurls_geolocationblockedforurlsdesc",
+        "displayName": "Block geolocation on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~network_httpheaderinjection",
+        "displayName": "Configure HTTP Header Injection for specific URL patterns (User)",
+        "categoryId": "fa2722a8-dcfd-4e14-a429-2b0041642c77",
+        "categoryName": "Network settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforalltabs",
+        "displayName": "Force foreground priority for all tabs",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebblockedforurls_geminiactonwebblockedforurlsdesc",
+        "displayName": "Block Gemini app integrations to directly act on specified sites (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionallowedforurls",
+        "displayName": "Allow idle detection on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforurls_forceforegroundpriorityforurlsdesc",
+        "displayName": "Force foreground priority for specific URLs",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_visiblename",
+        "displayName": "Visible Name",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "dnssettings_dnssettings_supplementalmatchdomains",
+        "displayName": "Supplemental Match Domains",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_precisegeolocationallowedforurls",
+        "displayName": "Allow precise geolocation on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_staticstoragequotaenabled",
+        "displayName": "Control whether storage quota APIs will return static values (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_backforwardcacheforwebsocketsallowed",
+        "displayName": "Allow Back/Forward Cache for WebSockets (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityblocklist",
+        "displayName": "List of URL patterns for which Chrome DevTools are blocked (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_staticstoragequotaenabled",
+        "displayName": "Control whether storage quota APIs will return static values",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultidledetectionsetting",
+        "displayName": "Default idle detection setting",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonweballowedforurls",
+        "displayName": "Allow Gemini app integrations to directly act on specified sites (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultautomaticdownloadssetting",
+        "displayName": "Default automatic downloads setting (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebsettings",
+        "displayName": "Allows Gemini app integrations to directly act on web pages",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_voicetypingsettings",
+        "displayName": "Settings for Talk to type (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlblocklist_incognitomodeurlblocklistdesc",
+        "displayName": "Block access to a list of URLs in Incognito mode. (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsblockedforurls_automaticdownloadsblockedforurlsdesc",
+        "displayName": "Block automatic downloads on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessipaddressspaceoverrides_localnetworkaccessipaddressspaceoverridesdesc",
+        "displayName": "Override IP address space mappings (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_devtoolsgoogledeveloperprogramprofileavailability_devtoolsgoogledeveloperprogramprofileavailability",
+        "displayName": "Enable Google Developer Program Profiles in Chrome DevTools (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsallowedforurls_automaticdownloadsallowedforurlsdesc",
+        "displayName": "Allow automatic downloads on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_pointintimerestore_allowpointintimerestore",
+        "displayName": "Allow point-in-time restore",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~webrtc_webrtcdiagnosticlogcollectionallowedfororigins",
+        "displayName": "Enable WebRTC diagnostic log collection for specific origins (User)",
+        "categoryId": "b811c4fe-7ff0-4bd1-a454-0918d4e2f896",
+        "categoryName": "Web Rtc settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforurls",
+        "displayName": "Force foreground priority for specific URLs (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkblockedforurls",
+        "displayName": "Block sites from making network requests to the local device.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_chromesuggestionssettings",
+        "displayName": "Settings for ChromeSuggestions (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlallowlist",
+        "displayName": "Allow access to a list of URLs in Incognito mode. (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminisparksettings",
+        "displayName": "Allows Gemini Spark to connect to and use Google Chrome auto browse (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_dataurlinwebworkeropaqueoriginenabled",
+        "displayName": "Enable opaque origins for data URLs in Web Workers (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityallowlist",
+        "displayName": "List of URL patterns for which Chrome DevTools are allowed to be opened",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityblocklist",
+        "displayName": "List of URL patterns for which Chrome DevTools are blocked",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminisparksettings_geminisparksettings",
+        "displayName": "Allows Gemini Spark to connect to and use Google Chrome auto browse",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlblocklist_incognitomodeurlblocklistdesc",
+        "displayName": "Block access to a list of URLs in Incognito mode.",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_devtoolsgoogledeveloperprogramprofileavailability",
+        "displayName": "Enable Google Developer Program Profiles in Chrome DevTools (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowkexalgorithms",
+        "displayName": "Prefer specific key exchange algorithms for TLS",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_voicetypingsettings",
+        "displayName": "Settings for Talk to type",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_processisolationenabled",
+        "displayName": "Enable Process Isolation",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_dnssettings",
+        "displayName": "DNS Settings",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsblockedforurls",
+        "displayName": "Block automatic downloads on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionblockedforurls_idledetectionblockedforurlsdesc",
+        "displayName": "Blocked sites for idle detection",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_searchcontentsharingsettings_searchcontentsharingsettings",
+        "displayName": "Enable content sharing with Google AI Mode and Lens integrations (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlallowlist_incognitomodeurlallowlistdesc",
+        "displayName": "Allow access to a list of URLs in Incognito mode. (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_forceforegroundpriorityforurls_forceforegroundpriorityforurlsdesc",
+        "displayName": "Force foreground priority for specific URLs (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkblockedforurls_loopbacknetworkblockedforurlsdesc",
+        "displayName": "Block sites from making network requests to the local device.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~webrtc_webrtcdiagnosticlogcollectionallowedfororigins_webrtcdiagnosticlogcollectionallowedfororiginsdesc",
+        "displayName": "Enable WebRTC diagnostic log collection for specific origins",
+        "categoryId": "b811c4fe-7ff0-4bd1-a454-0918d4e2f896",
+        "categoryName": "Web Rtc settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_pointintimerestore_restorepointretention",
+        "displayName": "Restore point retention",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_maxconnectionsperproxyforwebsocket_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximal number of concurrent connections per proxy server for WebSocket requests:",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionallowedforurls_idledetectionallowedforurlsdesc",
+        "displayName": "Allowed sites for idle detection",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_developertoolsavailabilityallowlist",
+        "displayName": "List of URL patterns for which Chrome DevTools are allowed to be opened (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_restrictbackgroundfetchfromserviceworkerenabled",
+        "displayName": "Restrict Background Fetch API when called from a Service Worker (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_smarttabsharingsettings",
+        "displayName": "Smart tab sharing settings",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_pointintimerestore_restorepointfrequency",
+        "displayName": "Restore point frequency",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_dnssettings_allowfailover",
+        "displayName": "Allow Failover",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_restrictbackgroundfetchfromserviceworkerenabled",
+        "displayName": "Restrict Background Fetch API when called from a Service Worker",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_thirdpartyaichatsettings_thirdpartyaichatsettings",
+        "displayName": "Settings for 3rd party AI Mode integrations in the address bar and New Tab page search box.",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_cacheencryptionenabled",
+        "displayName": "This policy allows administrators to encrypt http cache on disk. (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkblockedforurls_localnetworkblockedforurlsdesc",
+        "displayName": "Block sites from making network requests to local network endpoints. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_smarttabsharingsettings",
+        "displayName": "Smart tab sharing settings (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~removedpolicies_extensionforceinstallwithnonmalwareviolationsenabled",
+        "displayName": "Enable Force-installed Extensions With Non-Malware Violations (User)",
+        "categoryId": "3634c01b-1a85-4f50-9f52-63bc10bf0e39",
+        "categoryName": "Removed policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximal number of concurrent connections per proxy server for WebSocket requests",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowciphers_preferslowciphers",
+        "displayName": "Prefer specific encryption cipher algorithms for TLS",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessrestrictionstemporaryoptout",
+        "displayName": "Specifies whether to (temporarily) opt out of Local Network Access restrictions",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_cpuperformancetieroverride",
+        "displayName": "Override for the CPU performance tier",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximal number of concurrent connections per proxy server for WebSocket requests (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_webappinstallbyuserenabled",
+        "displayName": "Enable User Web App Install From Browser (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_restrictpdfsavetogoogledriveaccountstopattern",
+        "displayName": "Restrict eligible Google accounts for saving PDF files to Google Drive from the Google Chrome PDF Viewer",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsblockedforurls_automaticdownloadsblockedforurlsdesc",
+        "displayName": "Block automatic downloads on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkallowedforurls_loopbacknetworkallowedforurlsdesc",
+        "displayName": "Allow sites to make network requests to the local device.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowciphers",
+        "displayName": "Prefer specific encryption cipher algorithms for TLS",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~network_httpheaderinjection_httpheaderinjection",
+        "displayName": "Configure HTTP Header Injection for specific URL patterns",
+        "categoryId": "fa2722a8-dcfd-4e14-a429-2b0041642c77",
+        "categoryName": "Network settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsallowedforurls",
+        "displayName": "Allow automatic downloads on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_precisegeolocationallowedforurls",
+        "displayName": "Allow precise geolocation on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebsettings_geminiactonwebsettings",
+        "displayName": "Allows Gemini app integrations to directly act on web pages (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionblockedforurls_idledetectionblockedforurlsdesc",
+        "displayName": "Blocked sites for idle detection (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminisparksettings_geminisparksettings",
+        "displayName": "Allows Gemini Spark to connect to and use Google Chrome auto browse (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebblockedforurls",
+        "displayName": "Block Gemini app integrations to directly act on specified sites (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultautomaticdownloadssetting_defaultautomaticdownloadssetting",
+        "displayName": "Default automatic downloads setting",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowkexalgorithms_preferslowkexalgorithms",
+        "displayName": "Prefer specific key exchange algorithms for TLS (User)",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_geolocationblockedforurls",
+        "displayName": "Block geolocation on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlallowlist",
+        "displayName": "Allow access to a list of URLs in Incognito mode.",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlblocklist",
+        "displayName": "Block access to a list of URLs in Incognito mode.",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkallowedforurls",
+        "displayName": "Allow sites to make network requests to the local device. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultautomaticdownloadssetting_defaultautomaticdownloadssetting",
+        "displayName": "Default automatic downloads setting (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowciphers_preferslowciphers",
+        "displayName": "Prefer specific encryption cipher algorithms for TLS (User)",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_thirdpartyaichatsettings",
+        "displayName": "Settings for 3rd party AI Mode integrations in the address bar and New Tab page search box.",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_devtoolsgoogledeveloperprogramprofileavailability",
+        "displayName": "Enable Google Developer Program Profiles in Chrome DevTools",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessrestrictionstemporaryoptout",
+        "displayName": "Specifies whether to (temporarily) opt out of Local Network Access restrictions (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_sharedworkerextendedlifetimeenabled",
+        "displayName": "Enable extended lifetime for SharedWorkers",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccesspermissionspolicydefaultenabled",
+        "displayName": "Allow Local Network Access (LNA) requests in subframes without explicit delegation",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~webrtc_webrtcdiagnosticlogcollectionallowedfororigins_webrtcdiagnosticlogcollectionallowedfororiginsdesc",
+        "displayName": "Enable WebRTC diagnostic log collection for specific origins (User)",
+        "categoryId": "b811c4fe-7ff0-4bd1-a454-0918d4e2f896",
+        "categoryName": "Web Rtc settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~proxy_enableproxyoverriderulesforallusers",
+        "displayName": "Controls which managed users can set the ProxyOverrideRules policy. (User)",
+        "categoryId": "d33197ca-f674-4e3d-9afa-0ff7ef7b4dc7",
+        "categoryName": "Proxy server",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_processisolationenabled",
+        "displayName": "Enable Process Isolation (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_recommended_httpsonlymode_recommended_httpsonlymode",
+        "displayName": "Allow HTTPS-Only Mode to be enabled (User)",
+        "categoryId": "c3857f91-3df8-472f-9b5a-b10778c715c0",
+        "categoryName": "Google Chrome - Default Settings users can override",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_toplevel",
+        "displayName": "com.apple.configuration.network.dns-settings",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.copilotcoworktoolactionsenabled",
+        "displayName": "Allow Cowork to take actions on your behalf",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "com.microsoft.edge.mamedgeappconfigsettings.backforwardcacheforwebsocketsallowed",
+        "displayName": "Allow Back/Forward Cache for WebSockets",
+        "categoryId": "ce3ba7d1-c101-4ab6-bf2a-0c683e921bf8",
+        "categoryName": "Uncategorized",
+        "platform": "macOS,windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkallowedforurls_localnetworkallowedforurlsdesc",
+        "displayName": "Allow sites to make network requests to local network endpoints.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionallowedforurls",
+        "displayName": "Allow idle detection on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_idledetectionblockedforurls",
+        "displayName": "Block idle detection on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_cpuperformancetieroverride_cpuperformancetieroverride",
+        "displayName": "Override for the CPU performance tier: (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_dataurlinwebworkeropaqueoriginenabled",
+        "displayName": "Enable opaque origins for data URLs in Web Workers",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_devtoolsgoogledeveloperprogramprofileavailability_devtoolsgoogledeveloperprogramprofileavailability",
+        "displayName": "Enable Google Developer Program Profiles in Chrome DevTools",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowkexalgorithms",
+        "displayName": "Prefer specific key exchange algorithms for TLS (User)",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_chromesuggestionssettings_chromesuggestionssettings",
+        "displayName": "Settings for ChromeSuggestions: (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsallowedforurls_automaticdownloadsallowedforurlsdesc",
+        "displayName": "Allow automatic downloads on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebsettings",
+        "displayName": "Allows Gemini app integrations to directly act on web pages (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessipaddressspaceoverrides",
+        "displayName": "Override IP address space mappings (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_webappinstallbyuserenabled",
+        "displayName": "Enable User Web App Install From Browser",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_sharedworkerextendedlifetimeenabled",
+        "displayName": "Enable extended lifetime for SharedWorkers (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_allowsocketpoolsizerandomizationforproxies",
+        "displayName": "Allow socket pool size randomization for proxies",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~proxy_enableproxyoverriderulesforallusers_enableproxyoverriderulesforallusers",
+        "displayName": "Controls which managed users can set the ProxyOverrideRules policy.: (User)",
+        "categoryId": "d33197ca-f674-4e3d-9afa-0ff7ef7b4dc7",
+        "categoryName": "Proxy server",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkblockedforurls",
+        "displayName": "Block sites from making network requests to the local device. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebsettings_geminiactonwebsettings",
+        "displayName": "Allows Gemini app integrations to directly act on web pages",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonwebblockedforurls_geminiactonwebblockedforurlsdesc",
+        "displayName": "Block Gemini app integrations to directly act on specified sites",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_winre_pointintimerestore_restorepointdiskusage",
+        "displayName": "Restore point disk usage",
+        "categoryId": "cba65aaf-9580-4729-89b3-a814b74d2193",
+        "categoryName": "Win RE",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_silentprintingenabled",
+        "displayName": "Enable Silent Printing",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_geolocationblockedforurls_geolocationblockedforurlsdesc",
+        "displayName": "Block geolocation on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkallowedforurls_localnetworkallowedforurlsdesc",
+        "displayName": "Allow sites to make network requests to local network endpoints. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_chromesuggestionssettings",
+        "displayName": "Settings for ChromeSuggestions",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsallowedforurls",
+        "displayName": "Allow automatic downloads on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_restrictyoutubecookiesdeletion",
+        "displayName": "Restrict YouTube cookies deletion (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_xsltenabled",
+        "displayName": "Control the availability of the XSLT feature",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_recommended_httpsonlymode_recommended",
+        "displayName": "Allow HTTPS-Only Mode to be enabled (User)",
+        "categoryId": "c3857f91-3df8-472f-9b5a-b10778c715c0",
+        "categoryName": "Google Chrome - Default Settings users can override",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_maxconnectionsperproxyforwebsocket_maxconnectionsperproxyforwebsocket",
+        "displayName": "Maximal number of concurrent connections per proxy server for WebSocket requests: (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_cpuperformancetieroverride",
+        "displayName": "Override for the CPU performance tier (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_precisegeolocationallowedforurls_precisegeolocationallowedforurlsdesc",
+        "displayName": "Allow precise geolocation on these sites (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_geminiactonweballowedforurls_geminiactonweballowedforurlsdesc",
+        "displayName": "Allow Gemini app integrations to directly act on specified sites (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkblockedforurls",
+        "displayName": "Block sites from making network requests to local network endpoints.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultidledetectionsetting_defaultidledetectionsetting",
+        "displayName": "Idle detection",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_xsltenabled",
+        "displayName": "Control the availability of the XSLT feature (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowciphers",
+        "displayName": "Prefer specific encryption cipher algorithms for TLS (User)",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkblockedforurls_localnetworkblockedforurlsdesc",
+        "displayName": "Block sites from making network requests to local network endpoints.",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_smarttabsharingsettings_smarttabsharingsettings",
+        "displayName": "Smart tab sharing settings (User)",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_allowsocketpoolsizerandomizationforproxies",
+        "displayName": "Allow socket pool size randomization for proxies (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkallowedforurls_loopbacknetworkallowedforurlsdesc",
+        "displayName": "Allow sites to make network requests to the local device. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~cryptographycompliance_preferslowkexalgorithms_preferslowkexalgorithms",
+        "displayName": "Prefer specific key exchange algorithms for TLS",
+        "categoryId": "c4377075-71b0-4865-824f-63b8de441547",
+        "categoryName": "Cryptography compliance policies",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultidledetectionsetting",
+        "displayName": "Default idle detection setting (User)",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_restrictpdfsavetogoogledriveaccountstopattern_restrictpdfsavetogoogledriveaccountstopattern",
+        "displayName": "Restrict eligible Google accounts for saving PDF files to Google Drive from the Google Chrome PDF Viewer",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "dnssettings_dnssettings_serverurl",
+        "displayName": "Server URL",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "dnssettings_prohibitdisablement",
+        "displayName": "Prohibit Disablement",
+        "categoryId": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_smarttabsharingsettings_smarttabsharingsettings",
+        "displayName": "Smart tab sharing settings",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkblockedforurls",
+        "displayName": "Block sites from making network requests to local network endpoints. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccessipaddressspaceoverrides_localnetworkaccessipaddressspaceoverridesdesc",
+        "displayName": "Override IP address space mappings",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_restrictpdfsavetogoogledriveaccountstopattern_restrictpdfsavetogoogledriveaccountstopattern",
+        "displayName": "Restrict eligible Google accounts for saving PDF files to Google Drive from the Google Chrome PDF Viewer (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome_silentprintingenabled",
+        "displayName": "Enable Silent Printing (User)",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome_incognitomodeurlallowlist_incognitomodeurlallowlistdesc",
+        "displayName": "Allow access to a list of URLs in Incognito mode.",
+        "categoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd",
+        "categoryName": "Google Chrome",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~generativeai_chromesuggestionssettings_chromesuggestionssettings",
+        "displayName": "Settings for ChromeSuggestions:",
+        "categoryId": "5ee1e57c-db64-4f8e-a9ec-5308b5c633c4",
+        "categoryName": "Generative AI",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_localnetworkaccesspermissionspolicydefaultenabled",
+        "displayName": "Allow Local Network Access (LNA) requests in subframes without explicit delegation (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~localnetworkaccesssettings_loopbacknetworkblockedforurls_loopbacknetworkblockedforurlsdesc",
+        "displayName": "Block sites from making network requests to the local device. (User)",
+        "categoryId": "f66e6bf2-a437-4d36-b46c-e965b31a5d4f",
+        "categoryName": "Local Network Access settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~proxy_enableproxyoverriderulesforallusers_enableproxyoverriderulesforallusers",
+        "displayName": "Controls which managed users can set the ProxyOverrideRules policy.:",
+        "categoryId": "d33197ca-f674-4e3d-9afa-0ff7ef7b4dc7",
+        "categoryName": "Proxy server",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_automaticdownloadsblockedforurls",
+        "displayName": "Block automatic downloads on these sites",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "device_vendor_msft_policy_config_chrome~policy~googlechrome~contentsettings_defaultautomaticdownloadssetting",
+        "displayName": "Default automatic downloads setting",
+        "categoryId": "59d29716-55b0-4014-a458-38b408ff9530",
+        "categoryName": "Content settings",
+        "platform": "windows10"
+      },
+      {
+        "id": "user_vendor_msft_policy_config_chrome~policy~googlechrome~network_httpheaderinjection_httpheaderinjection",
+        "displayName": "Configure HTTP Header Injection for specific URL patterns (User)",
+        "categoryId": "fa2722a8-dcfd-4e14-a429-2b0041642c77",
+        "categoryName": "Network settings",
+        "platform": "windows10"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "id": "com.apple.applicationaccess.new_familycontrolsenabled",
+        "displayName": "Family Controls Enabled (deprecated)",
+        "categoryId": "f019963f-f4ed-4429-b6e3-babfb24c36a8",
+        "categoryName": "Parental Controls Application Restrictions",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Family Controls Enabled\"",
+            "newValue": "\"Family Controls Enabled (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess.new_com.apple.applicationaccess.new",
+        "displayName": "Top Level Setting Group Collection (deprecated)",
+        "categoryId": "f019963f-f4ed-4429-b6e3-babfb24c36a8",
+        "categoryName": "Parental Controls Application Restrictions",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Top Level Setting Group Collection\"",
+            "newValue": "\"Top Level Setting Group Collection (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenrangesonly",
+        "displayName": "Listen Ranges Only (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Listen Ranges Only\"",
+            "newValue": "\"Listen Ranges Only (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerfilterranges_item_type",
+        "displayName": "IP Address Type (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"IP Address Type\"",
+            "newValue": "\"IP Address Type (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_keepawake",
+        "displayName": "Keep Awake (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Keep Awake\"",
+            "newValue": "\"Keep Awake (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules",
+        "displayName": "On Demand Rules (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"On Demand Rules\"",
+            "newValue": "\"On Demand Rules (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_prohibitdisablement",
+        "displayName": "Prohibit Disablement (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Prohibit Disablement\"",
+            "newValue": "\"Prohibit Disablement (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings_dnsprotocol",
+        "displayName": "DNS Protocol (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"DNS Protocol\"",
+            "newValue": "\"DNS Protocol (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v2~policy~l_microsoftofficeoutlook~l_security~l_trustcenter_l_securityleveloutlook",
+        "displayName": "Security setting for macros (User) (Deprecated)",
+        "categoryId": "c3db5686-3bb2-437c-8906-60da1a1fa844",
+        "categoryName": "Trust Center",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy setting controls the security level for macros in Outlook. \\r\\n\\r\\nIf you enable this policy setting, you can choose from four options for handling macros in Outlook: \\r\\n\\r\\n- Always warn. This option corresponds to the \\\"Warnings for all macros\\\" option in the \\\"Macro Security\\\" section of the Outlook Trust Center. Outlook disables all macros that are not opened from a trusted location, even if the macros are signed by a trusted publisher. For each disabled macro, Outlook displays a security alert dialog box with information about the macro and its digital signature (if present), and allows users to enable the macro or leave it disabled. \\r\\n\\r\\n- Never warn, disable all. This option corresponds to the \\\"No warnings and disable all macros\\\" option in the Trust Center. Outlook disables all macros that are not opened from trusted locations, and does not notify users. \\r\\n\\r\\n- Warning for signed, disable unsigned. This option corresponds to the \\\"Warnings for signed macros; all unsigned macros are disabled\\\" option in the Trust Center. Outlook handles macros as follows: \\r\\n\\r\\n--If a macro is digitally signed by a trusted publisher, the macro can run if the user has already trusted the publisher. \\r\\n\\r\\n--If a macro has a valid signature from a publisher that the user has not trusted, the security alert dialog box for the macro lets the user choose whether to enable the macro for the current session, disable the macro for the current session, or to add the publisher to the Trusted Publishers list so that it will run without prompting the user in the future. \\r\\n\\r\\n--If a macro does not have a valid signature, Outlook disables it without prompting the user, unless it is opened from a trusted location. \\r\\n\\r\\nThis option is the default configuration in Outlook. \\r\\n\\r\\n- No security check. This option corresponds to the \\\"No security check for macros (Not recommended)\\\" option in the Trust Center. Outlook runs all macros without prompting users. This configuration makes users' computers vulnerable to potentially malicious code and is not recommended. \\r\\n\\r\\nIf you disable or do not configure this policy setting, the behavior is the equivalent of Enabled -- Warning for signed, disable unsigned.\"",
+            "newValue": "\"This policy setting controls the security level for macros in Outlook. \\r\\n\\r\\nIf you enable this policy setting, you can choose from four options for handling macros in Outlook: \\r\\n\\r\\n- Always warn. This option corresponds to the \\\"Notifications for all macros\\\" option in the \\\"Macro Settings\\\" section of the Outlook Trust Center. Outlook disables all macros that are not opened from a trusted location, even if the macros are signed by a trusted publisher. For each disabled macro, Outlook displays a security alert dialog box with information about the macro and its digital signature (if present), and allows users to enable the macro or leave it disabled. \\r\\n\\r\\n- Never warn, disable all. This option corresponds to the \\\"Disable all macros without notification\\\" option in the Trust Center. Outlook disables all macros that are not opened from trusted locations, and does not notify users. \\r\\n\\r\\n- Warning for signed, disable unsigned. This option corresponds to the \\\"Notifications for digitally signed macros, all other macros disabled\\\" option in the Trust Center. Outlook handles macros as follows: \\r\\n\\r\\n--If a macro is digitally signed by a trusted publisher, the macro can run if the user has already trusted the publisher. \\r\\n\\r\\n--If a macro has a valid signature from a publisher that the user has not trusted, the security alert dialog box for the macro lets the user choose whether to enable the macro for the current session, disable the macro for the current session, or to add the publisher to the Trusted Publishers list so that it will run without prompting the user in the future. \\r\\n\\r\\n--If a macro does not have a valid signature, Outlook disables it without prompting the user, unless it is opened from a trusted location. \\r\\n\\r\\nThis option is the default configuration in Outlook. \\r\\n\\r\\n- No security check. This option corresponds to the \\\"Enable all macros (not recommended; potentially dangerous code can run)\\\" option in the Trust Center. Outlook runs all macros without prompting users. This configuration makes users' computers vulnerable to potentially malicious code and is not recommended. \\r\\n\\r\\nIf you disable or do not configure this policy setting, the behavior is the equivalent of Enabled -- Warning for signed, disable unsigned.\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_logclientidentity",
+        "displayName": "Log Client Identity (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Log Client Identity\"",
+            "newValue": "\"Log Client Identity (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_publicranges_item_last",
+        "displayName": "Last (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Last\"",
+            "newValue": "\"Last (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_mincomplexchars",
+        "displayName": "Min Complex Characters (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Min Complex Characters\"",
+            "newValue": "\"Min Complex Characters (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_customregex_passwordcontentdescription_generickey",
+        "displayName": "Description (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Description\"",
+            "newValue": "\"Description (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_actionparameters",
+        "displayName": "Action Parameters (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Action Parameters\"",
+            "newValue": "\"Action Parameters (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings_serveraddresses",
+        "displayName": "Server Addresses (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Server Addresses\"",
+            "newValue": "\"Server Addresses (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpscan_wfpscanlist",
+        "displayName": "Scanning frequency: (Device)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpshowprogress",
+        "displayName": "Hide the file scan progress window (Windows Insiders only)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_port",
+        "displayName": "Port (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Port\"",
+            "newValue": "\"Port (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerfilterranges_item_last",
+        "displayName": "Last (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Last\"",
+            "newValue": "\"Last (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_cachelimit",
+        "displayName": "Cache Limit (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Cache Limit\"",
+            "newValue": "\"Cache Limit (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_minutesuntilfailedloginreset",
+        "displayName": "Minutes Until Failed Login Reset (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Minutes Until Failed Login Reset\"",
+            "newValue": "\"Minutes Until Failed Login Reset (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_dnsserveraddressmatch",
+        "displayName": "DNS Server Address Match (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"DNS Server Address Match\"",
+            "newValue": "\"DNS Server Address Match (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.unifiedlocksettings",
+        "displayName": "Require separate locks for work and personal profiles",
+        "categoryId": "70c4566f-a079-4a8e-ac97-0736b405df1d",
+        "categoryName": "Work profile password",
+        "platform": "androidEnterprise",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Require separate work lock\"",
+            "newValue": "\"Require separate locks for work and personal profiles\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenranges_item_first",
+        "displayName": "First (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"First\"",
+            "newValue": "\"First (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_autoenabletetheredcaching",
+        "displayName": "Auto Enable Tethered Caching (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Auto Enable Tethered Caching\"",
+            "newValue": "\"Auto Enable Tethered Caching (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_pinhistory",
+        "displayName": "PIN History (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"PIN History\"",
+            "newValue": "\"PIN History (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings_supplementalmatchdomains",
+        "displayName": "Supplemental Match Domains (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Supplemental Match Domains\"",
+            "newValue": "\"Supplemental Match Domains (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v2~policy~l_microsoftofficeoutlook~l_security_l_allowactivexoneoffforms_l_empty29",
+        "displayName": "\r\nSets which ActiveX controls to allow.\r\n",
+        "categoryId": "a9b83120-15ad-4c9d-bb0d-4ff75c2f9453",
+        "categoryName": "Security",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"\"",
+            "newValue": "\"\\r\\nSets which ActiveX controls to allow.\\r\\n\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_enablecloudremediation",
+        "displayName": "[Deprecated] Enable Cloud Remediation (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Enable Cloud Remediation (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Enable Cloud Remediation (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "intelligencesettings_allowvisualintelligencesummary",
+        "displayName": "Allow Visual Intelligence Summary (deprecated)",
+        "categoryId": "11d26400-1d13-4dd6-ab4b-cb323494b127",
+        "categoryName": "Intelligence Settings",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Visual Intelligence Summary\"",
+            "newValue": "\"Allow Visual Intelligence Summary (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenranges",
+        "displayName": "Listen Ranges (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Listen Ranges\"",
+            "newValue": "\"Listen Ranges (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenwithpeersandparents",
+        "displayName": "Listen With Peers And Parents (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Listen With Peers And Parents\"",
+            "newValue": "\"Listen With Peers And Parents (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_datapath",
+        "displayName": "Data Path (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Data Path\"",
+            "newValue": "\"Data Path (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_parentselectionpolicy",
+        "displayName": "Parent Selection Policy (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Parent Selection Policy\"",
+            "newValue": "\"Parent Selection Policy (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenranges_item_type",
+        "displayName": "IP Address Type (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"IP Address Type\"",
+            "newValue": "\"IP Address Type (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_forcepin",
+        "displayName": "Force PIN (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Force PIN\"",
+            "newValue": "\"Force PIN (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_customregex",
+        "displayName": "Custom Regex (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Custom Regex\"",
+            "newValue": "\"Custom Regex (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_maxfailedattempts",
+        "displayName": "Max Failed Attempts (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Max Failed Attempts\"",
+            "newValue": "\"Max Failed Attempts (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_com.apple.dnssettings.managed",
+        "displayName": "Top Level Setting Group Collection (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Top Level Setting Group Collection\"",
+            "newValue": "\"Top Level Setting Group Collection (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_autoremediationsettings_setretryinterval",
+        "displayName": "[Deprecated] Set Retry Interval (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Set Retry Interval (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Set Retry Interval (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_blockedappbundleids",
+        "displayName": "Blocked App Bundle IDs (deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Blocked App Bundle IDs\"",
+            "newValue": "\"Blocked App Bundle IDs (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerlocalsubnetsonly",
+        "displayName": "Peer Local Subnets Only (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Peer Local Subnets Only\"",
+            "newValue": "\"Peer Local Subnets Only (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings_serverurl",
+        "displayName": "Server URL (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Server URL\"",
+            "newValue": "\"Server URL (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpscan",
+        "displayName": "Set Windows File Protection scanning (Windows Insiders only)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_networksettings_networkcredentials_networkpasswordencryptiontype",
+        "displayName": "[Deprecated] Network Password Encryption Type (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Network Password Encryption Type (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Network Password Encryption Type (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_allowcachedelete",
+        "displayName": "Allow Cache Delete (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Cache Delete\"",
+            "newValue": "\"Allow Cache Delete (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings",
+        "displayName": "DNS Settings (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"DNS Settings\"",
+            "newValue": "\"DNS Settings (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpquota_wfpquota_size",
+        "displayName": "Cache size (in MB) (Device)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v2~policy~l_microsoftofficeoutlook~l_security~l_securityformsettings~l_programmaticsettings_l_oomaddressaccess",
+        "displayName": "Configure Outlook object model prompt when reading address information (User) (Deprecated)",
+        "categoryId": "a36b9aa4-52d0-44a4-bc2c-eec26d2a53ec",
+        "categoryName": "Programmatic Security",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy setting controls what happens when an untrusted program attempts to gain access to a recipient field, such as the ''To:'' field, using the Outlook object model.\\r\\n\\r\\nIf you enable this policy setting,  you can choose from four different options when an untrusted program attempts to access a recipient field using the Outlook object model:\\r\\n\\r\\n- Prompt user. The user will be prompted to approve every access attempt.\\r\\n- Automatically approve. Outlook will automatically grant programmatic access requests from any program. This option can create a significant vulnerability, and is not recommended.\\r\\n- Automatically deny. Outlook will automatically deny programmatic access requests from any program.\\r\\n- Prompt user based on computer security. Outlook will only prompt users when antivirus software is out of date or not running. This is the default configuration.\\r\\n\\r\\nIf you disable or do not configure this policy setting, when an untrusted application attempts to access recipient fields, Outlook relies on the setting configured in the ''Programmatic Access'' section of the Trust Center.\"",
+            "newValue": "\"This policy setting controls what happens when an untrusted program attempts to gain access to a recipient field, such as the ''To:'' field, using the Outlook object model. This includes COM add-ins, from 3rd parties and Microsoft, one example is Azure Information Protection which can access the Address Book programmatically.\\r\\n\\r\\n        If you enable this policy setting,  you can choose from four different options when an untrusted program attempts to access a recipient field using the Outlook object model:\\r\\n\\r\\n        - Prompt user. The user will be prompted to approve every access attempt.\\r\\n        - Automatically approve. Outlook will automatically grant programmatic access requests from any program. This option can create a significant vulnerability, and is not recommended.\\r\\n        - Automatically deny. Outlook will automatically deny programmatic access requests from any program.\\r\\n        - Prompt user based on computer security. Outlook will only prompt users when antivirus software is out of date or not running. This is the default configuration.\\r\\n\\r\\n        If you disable or do not configure this policy setting, when an untrusted application attempts to access recipient fields, Outlook relies on the setting configured in the ''Programmatic Access'' section of the Trust Center.\""
+          }
+        ]
+      },
+      {
+        "id": "com.android.devicerestrictionpolicy.keyguarddisabledfeatures",
+        "displayName": "Disabled lock screen features",
+        "categoryId": "f350f9a2-3a91-4d6d-90ed-7e3849b0d5f1",
+        "categoryName": "Device password",
+        "platform": "androidEnterprise",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"When the device is locked, choose the features that can't be used. These features are accessible to users when the device is locked; users will not be able to see or access the features that are disabled. When this setting is configured by more than one assigned policy, the selected features are merged (union) across those policies.\"",
+            "newValue": "\"When the device is locked, choose the features that can't be used. These features are accessible to users when the device is locked; users will not be able to see or access the features that are disabled. When this setting is configured by more than one assigned policy, the selected features are merged (union) across those policies. Options marked '(fully managed or dedicated)' apply only to fully managed and dedicated devices; options marked '(work profile-level)' apply at the work profile level on corporate-owned work profile devices.\""
+          },
+          {
+            "field": "helpText",
+            "oldValue": "\"Options marked '(fully managed or dedicated)' apply only to fully managed and dedicated devices; options marked '(work profile-level)' apply at the work profile level on corporate-owned work profile devices.\"",
+            "newValue": "\"\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_publicranges_item_first",
+        "displayName": "First (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"First\"",
+            "newValue": "\"First (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_denytetheredcaching",
+        "displayName": "Deny Tethered Caching (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Deny Tethered Caching\"",
+            "newValue": "\"Deny Tethered Caching (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_changeatnextauth",
+        "displayName": "Change At Next Auth (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Change At Next Auth\"",
+            "newValue": "\"Change At Next Auth (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v2~policy~l_microsoftofficeoutlook~l_security~l_securityformsettings~l_programmaticsettings_l_oomaddressbook",
+        "displayName": "Configure Outlook object model prompt when accessing an address book (User) (Deprecated)",
+        "categoryId": "a36b9aa4-52d0-44a4-bc2c-eec26d2a53ec",
+        "categoryName": "Programmatic Security",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy setting controls what happens when an untrusted program attempts to gain access to an Address Book using the Outlook object model. \\r\\n\\r\\nIf you enable this policy setting, you can choose from four different options when an untrusted program attempts to programmatically access an Address Book using the Outlook object model:\\r\\n\\r\\n- Prompt user - Users are prompted to approve every access attempt. \\r\\n- Automatically approve - Outlook will automatically grant programmatic access requests from any program. This option can create a significant vulnerability, and is not recommended. \\r\\n- Automatically deny - Outlook will automatically deny programmatic access requests from any program.\\r\\n- Prompt user based on computer security - Outlook will rely on the setting in the ''Programmatic Access'' section of the Trust Center. This is the default behavior.\\r\\n\\r\\nIf you disable or do not configure this policy setting, when an untrusted application attempts to access the address book programmatically, Outlook relies on the setting configured in the ''Programmatic Access'' section of the Trust Center. \"",
+            "newValue": "\"This policy setting controls what happens when an untrusted program attempts to gain access to an Address Book using the Outlook object model. This includes COM add-ins, from 3rd parties and Microsoft, one example is Azure Information Protection which can access the Address Book programmatically.\\r\\n\\r\\n        If you enable this policy setting, you can choose from four different options when an untrusted program attempts to programmatically access an Address Book using the Outlook object model:\\r\\n\\r\\n        - Prompt user - Users are prompted to approve every access attempt.\\r\\n        - Automatically approve - Outlook will automatically grant programmatic access requests from any program. This option can create a significant vulnerability, and is not recommended.\\r\\n        - Automatically deny - Outlook will automatically deny programmatic access requests from any program.\\r\\n        - Prompt user based on computer security - Outlook will rely on the setting in the ''Programmatic Access'' section of the Trust Center. This is the default behavior.\\r\\n\\r\\n        If you disable or do not configure this policy setting, when an untrusted application attempts to access the address book programmatically, Outlook relies on the setting configured in the ''Programmatic Access'' section of the Trust Center.\\r\\n      \""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_networksettings_networkcredentials_networkpasswordencryptionstore",
+        "displayName": "[Deprecated] Network Password Encryption Store (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Network Password Encryption Store (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Network Password Encryption Store (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_dnsdomainmatch",
+        "displayName": "DNS Domain Match (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"DNS Domain Match\"",
+            "newValue": "\"DNS Domain Match (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpquota",
+        "displayName": "Limit Windows File Protection cache size (Windows Insiders only)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpdllcachedir",
+        "displayName": "Specify Windows File Protection cache location (Windows Insiders only)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_dmclient_provider_{providerid}_configrefresh_enabled",
+        "displayName": "Config refresh",
+        "categoryId": "80b21376-0e9a-4e5b-8a74-b672adbe94a8",
+        "categoryName": "Config Refresh",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "options",
+            "oldValue": "2 options",
+            "newValue": "2 options"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_parents",
+        "displayName": "Parents (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Parents\"",
+            "newValue": "\"Parents (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_localsubnetsonly",
+        "displayName": "Local Subnets Only (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Local Subnets Only\"",
+            "newValue": "\"Local Subnets Only (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_allowsimple",
+        "displayName": "Allow Simple Passcode (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Simple Passcode\"",
+            "newValue": "\"Allow Simple Passcode (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_ssidmatch",
+        "displayName": "SSID Match (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"SSID Match\"",
+            "newValue": "\"SSID Match (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_networksettings_networkcredentials_networkpassword",
+        "displayName": "[Deprecated] Network Password (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Network Password (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Network Password (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerlistenranges_item_first",
+        "displayName": "First (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"First\"",
+            "newValue": "\"First (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_publicranges_item_type",
+        "displayName": "IP Address Type (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"IP Address Type\"",
+            "newValue": "\"IP Address Type (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_requirealphanumeric",
+        "displayName": "Require Alphanumeric Passcode (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Require Alphanumeric Passcode\"",
+            "newValue": "\"Require Alphanumeric Passcode (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_actionparameters_item_domainaction",
+        "displayName": "Domain Action (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Domain Action\"",
+            "newValue": "\"Domain Action (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_outlk16v2~policy~l_microsoftofficeoutlook~l_security~l_securityformsettings~l_miscattachmentsettings_l_level1removefilepolicy",
+        "displayName": "Remove file extensions blocked as Level 1 (User) (Deprecated)",
+        "categoryId": "c400a917-cdff-4e15-a70f-59b82df4c038",
+        "categoryName": "Attachment Security",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "description",
+            "oldValue": "\"This policy setting controls which types of attachments (determined by file extension) Outlook prevents from being delivered. \\r\\n\\r\\nOutlook uses two levels of security to restrict users' access to files attached to e-mail messages or other items. Files with specific extensions can be categorized as Level 1 (users cannot view the file) or Level 2 (users can open the file after saving it to disk). Users can freely open files of types that are not categorized as Level 1 or Level 2. \\r\\n\\r\\nIf you enable this policy setting, you can specify the removal of file type extensions as that Outlook classifies as Level 1--that is, to be blocked from delivery--by entering them in the text field provided separated by semicolons. \\r\\n\\r\\nIf you disable or do not configure this policy setting, Outlook classifies a number of potentially harmful file types (such as those with .exe, .reg, and .vbs extensions) as Level 1 and blocks files with those extensions from being delivered. \\r\\nImportant: This policy setting only applies if the \\\"Outlook Security Mode\\\" policy setting under \\\"Microsoft Outlook 2016\\\\Security\\\\Security Form Settings\\\" is configured to \\\"Use Outlook Security Group Policy.\\\"\"",
+            "newValue": "\"This policy setting controls which types of attachments (determined by file extension) Outlook prevents from being delivered. \\r\\n\\r\\nOutlook uses two levels of security to restrict user's access to files attached to e-mail messages or other items. Files with specific extensions can be categorized as Level 1 (users cannot view the file) or Level 2 (users can open the file after saving it to disk). Users can freely open files of types that are not categorized as Level 1 or Level 2. \\r\\n\\r\\nIf you enable this policy setting, you can specify the removal of file type extensions that Outlook classifies as Level 1 (that is, to be blocked from delivery) entering them in the text field provided separated by semicolons. \\r\\n\\r\\nIf you disable or do not configure this policy setting, Outlook classifies a number of potentially harmful file types (such as those with .exe, .reg, and .vbs extensions) as Level 1 and blocks files with those extensions from being delivered. \\r\\nImportant: This policy setting only applies if the \\\"Outlook Security Mode\\\" policy setting under \\\"Microsoft Outlook 2016\\\\Security\\\\Security Form Settings\\\" is configured to \\\"Use Outlook Security Group Policy.\\\"\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_autoremediationsettings_settimetoreboot",
+        "displayName": "[Deprecated] Set Time To Reboot (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Set Time To Reboot (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Set Time To Reboot (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_networksettings_networkcredentials_networkssid",
+        "displayName": "[Deprecated] Network SSID (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Network SSID (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Network SSID (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerlistenranges",
+        "displayName": "Peer Listen Ranges (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Peer Listen Ranges\"",
+            "newValue": "\"Peer Listen Ranges (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerfilterranges_item_first",
+        "displayName": "First (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"First\"",
+            "newValue": "\"First (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_minlength",
+        "displayName": "Min Length (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Min Length\"",
+            "newValue": "\"Min Length (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_policy_config_admx_windowsfileprotection_wfpdllcachedir_wfpdllcachedirbox",
+        "displayName": "Cache file path: (Device)",
+        "categoryId": "dbb76878-34a9-4f87-bbc6-4de7ea223ff4",
+        "categoryName": "Windows File Protection",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.21322\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"9.9\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsEducation\",\"windowsMultiSession\",\"iotEnterprise\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      },
+      {
+        "id": "user_vendor_msft_policy_config_pub16v2~policy~l_microsoftofficepublisher~l_security~l_trustcenter_l_disabletrustbarnotificationforunsigned",
+        "displayName": "Disable Trust Bar Notification for unsigned application add-ins and block them (User) (deprecated)",
+        "categoryId": "30da5d88-cf03-41f4-ab55-51ead91b3844",
+        "categoryName": "Trust Center",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Disable Trust Bar Notification for unsigned application add-ins (User) (Deprecated)\"",
+            "newValue": "\"Disable Trust Bar Notification for unsigned application add-ins and block them (User) (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_allowsharedcaching",
+        "displayName": "Allow Shared Caching (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Shared Caching\"",
+            "newValue": "\"Allow Shared Caching (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerfilterranges",
+        "displayName": "Peer Filter Ranges (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Peer Filter Ranges\"",
+            "newValue": "\"Peer Filter Ranges (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerlistenranges_item_type",
+        "displayName": "IP Address Type (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"IP Address Type\"",
+            "newValue": "\"IP Address Type (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_com.apple.mobiledevice.passwordpolicy",
+        "displayName": "Top Level Setting Group Collection (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Top Level Setting Group Collection\"",
+            "newValue": "\"Top Level Setting Group Collection (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_maxpinageindays",
+        "displayName": "Max PIN Age In Days (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Max PIN Age In Days\"",
+            "newValue": "\"Max PIN Age In Days (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_customregex_passwordcontentdescription",
+        "displayName": "Password Content Description (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Password Content Description\"",
+            "newValue": "\"Password Content Description (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_customregex_passwordcontentregex",
+        "displayName": "Password Content Regex (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Password Content Regex\"",
+            "newValue": "\"Password Content Regex (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.applicationaccess_allowlistedappbundleids",
+        "displayName": "Allow Listed App Bundle IDs (deprecated)",
+        "categoryId": "eda31027-9270-4959-801b-397fa05512e2",
+        "categoryName": "Restrictions",
+        "platform": "iOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Listed App Bundle IDs\"",
+            "newValue": "\"Allow Listed App Bundle IDs (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_com.apple.assetcache.managed",
+        "displayName": "Top Level Setting Group Collection (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Top Level Setting Group Collection\"",
+            "newValue": "\"Top Level Setting Group Collection (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_publicranges",
+        "displayName": "Public Ranges (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Public Ranges\"",
+            "newValue": "\"Public Ranges (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_peerlistenranges_item_last",
+        "displayName": "Last (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Last\"",
+            "newValue": "\"Last (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_listenranges_item_last",
+        "displayName": "Last (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Last\"",
+            "newValue": "\"Last (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_urlstringprobe",
+        "displayName": "URL String Probe (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"URL String Probe\"",
+            "newValue": "\"URL String Probe (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_dnssettings_servername",
+        "displayName": "Server Name (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Server Name\"",
+            "newValue": "\"Server Name (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_autoactivation",
+        "displayName": "Auto Activation (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Auto Activation\"",
+            "newValue": "\"Auto Activation (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_displayalerts",
+        "displayName": "Display Alerts (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Display Alerts\"",
+            "newValue": "\"Display Alerts (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.assetcache.managed_allowpersonalcaching",
+        "displayName": "Allow Personal Caching (deprecated)",
+        "categoryId": "e95335ec-2704-47ab-8b40-f602b31eeb9d",
+        "categoryName": "Content Caching",
+        "platform": "macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Allow Personal Caching\"",
+            "newValue": "\"Allow Personal Caching (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_maxgraceperiod",
+        "displayName": "Max Grace Period (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Max Grace Period\"",
+            "newValue": "\"Max Grace Period (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_customregex_passwordcontentdescription_generickey_keytobereplaced",
+        "displayName": "Password Content Description (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Password Content Description\"",
+            "newValue": "\"Password Content Description (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.mobiledevice.passwordpolicy_maxinactivity",
+        "displayName": "Max Inactivity (deprecated)",
+        "categoryId": "d68abc4d-559a-4339-be48-c41a77a87034",
+        "categoryName": "Passcode",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Max Inactivity\"",
+            "newValue": "\"Max Inactivity (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_actionparameters_item_domains",
+        "displayName": "Domains (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Domains\"",
+            "newValue": "\"Domains (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_action",
+        "displayName": "Action (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Action\"",
+            "newValue": "\"Action (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "com.apple.dnssettings.managed_ondemandrules_item_interfacetypematch",
+        "displayName": "Interface Type Match (deprecated)",
+        "categoryId": "bbe51018-a17d-46c4-9517-ff45c54d8d18",
+        "categoryName": "DNS Settings",
+        "platform": "iOS,macOS",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Interface Type Match\"",
+            "newValue": "\"Interface Type Match (deprecated)\""
+          }
+        ]
+      },
+      {
+        "id": "device_vendor_msft_remoteremediation_cloudremediationsettings_autoremediationsettings_enableautoremediation",
+        "displayName": "[Deprecated] Enable Auto Remediation (Windows Insiders only)",
+        "categoryId": "52e76943-bfc9-4fb5-bdc8-5d4e8c6a436e",
+        "categoryName": "Remote Remediation",
+        "platform": "windows10",
+        "fields": [
+          {
+            "field": "displayName",
+            "oldValue": "\"Enable Auto Remediation (Windows Insiders only)\"",
+            "newValue": "\"[Deprecated] Enable Auto Remediation (Windows Insiders only)\""
+          },
+          {
+            "field": "applicability",
+            "oldValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"10.0.25272\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}",
+            "newValue": "{\"@odata.type\":\"#microsoft.graph.deviceManagementConfigurationWindowsSettingApplicability\",\"description\":null,\"platform\":\"windows10\",\"deviceMode\":\"none\",\"technologies\":\"mdm\",\"configurationServiceProviderVersion\":\"1.0\",\"maximumSupportedVersion\":null,\"minimumSupportedVersion\":\"88.8.88888\",\"windowsSkus\":[\"windowsEnterprise\",\"windowsProfessional\",\"windowsHome\",\"windowsEducation\",\"holographicForBusiness\",\"windowsMultiSession\",\"iotEnterprise\",\"windowsCloudN\",\"windows11SE\",\"iotEnterpriseSEval\",\"windowsCPC\"],\"requiresAzureAd\":false,\"requiredAzureAdTrustType\":\"none\"}"
+          }
+        ]
+      }
+    ],
+    "categoriesAdded": [
+      {
+        "id": "d33197ca-f674-4e3d-9afa-0ff7ef7b4dc7",
+        "displayName": "Proxy server",
+        "parentCategoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd"
+      },
+      {
+        "id": "23f5ada1-3c55-476d-ab08-827b09e8fc3f",
+        "displayName": "Network",
+        "parentCategoryId": "c3dfb294-a7c0-48af-b705-59c4e257d48c"
+      },
+      {
+        "id": "c4377075-71b0-4865-824f-63b8de441547",
+        "displayName": "Cryptography compliance policies",
+        "parentCategoryId": "36c83fb3-c18c-472b-b39e-617c2f8a7fbd"
+      },
+      {
+        "id": "bf998b9d-1a7b-49c5-9a57-d56402609f6e",
+        "displayName": "DNS Settings",
+        "parentCategoryId": "23f5ada1-3c55-476d-ab08-827b09e8fc3f"
+      }
+    ],
+    "categoriesChanged": [
+      {
+        "id": "4a6c4488-bbcf-4b5b-9156-7aa1b10a6010",
+        "displayName": "DNS Proxy",
+        "fields": [
+          {
+            "field": "parentCategoryId",
+            "oldValue": "\"c3dfb294-a7c0-48af-b705-59c4e257d48c\"",
+            "newValue": "\"23f5ada1-3c55-476d-ab08-827b09e8fc3f\""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-23",
     "added": [
       {
