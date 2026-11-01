@@ -46,6 +46,26 @@
     ],
     "watchOut": "Two things to eyeball: TLS Cipher Suites description now says comma delimited rather than semicolon, so verify existing profiles before trusting the old format; and Allow OOBE Updates documentation flipped to devices are not allowed to update by default, which may change behaviour on new builds. The 3,871 categoryId moves and 269/258 category swaps are picker reorganisation only, deployed profiles are unaffected."
   },
+  "2026-10": {
+    "headline": "Windows got the real dials this month: TLS cipher and key exchange preferences, Local Network Access controls for browser-to-LAN requests, and point-in-time restore for Win RE.",
+    "highlights": [],
+    "overview": "Five update days, and the picker did more moving than Microsoft did shipping: roughly 3,871 settings were reassigned to new categories and around 270 categories were added or retired, which is reorganization, not retirement of anything you deployed. The substance sits in three places. Windows added a cryptography compliance category with TLS cipher and key exchange preferences, plus a full set of Local Network Access settings that decide whether a site can talk to your internal endpoints. Chrome and Edge added well over 100 browser policies, a chunk of them governing AI integrations. Apple quietly made DNS settings a declarative configuration for iOS and macOS.",
+    "sections": [
+      {
+        "os": "windows",
+        "body": "The security headliners are TLS cipher and key exchange preferences under Cryptography compliance policies, eight settings that let you pin what Windows offers during a handshake instead of accepting the menu. Local Network Access settings (24 of them) govern whether browser content can reach local network endpoints and the local device, with per-site allow and block lists and an explicit opt-out switch you should think twice about leaving on. Win RE added point-in-time restore with retention, frequency, and disk usage, so a bad driver no longer means a reimage. Elsewhere, Microsoft App Store gained MSIX SmartScreen and allowed-zone checks, Windows Update for Business added ignore group policies and a max pause days cap, Licensing added an ESU subscription check, and Privacy added foreground text access controls. Browser policy dominated the volume: Chrome added 60 settings including HTTPS-Only Mode, DevTools URL gating, and proxy route-probe addresses, with another 36 in Generative AI covering Gemini integrations and auto browse; Edge added per-site AutoFill blocking."
+      },
+      {
+        "os": "apple",
+        "body": "macOS and iOS both picked up declarative DNS settings (com.apple.configuration.network.dns-settings) with a Prohibit Disablement option, which means encrypted DNS stops being a suggestion users can flip back. Treat that as the enforcement win of the month on Apple. At the same time, a batch of older macOS and iOS settings in DNS Settings, Passcode, Content Caching, and Parental Controls were relabeled deprecated. Existing profiles keep working; the message is to build new DNS work on the declarative payload rather than the old one."
+      },
+      {
+        "os": "android",
+        "body": "One rename worth noting: Require separate work lock became Require separate locks for work and personal profiles, and the disabled lock screen features description now spells out which options apply to fully managed or dedicated devices versus the work profile level. Clearer wording, no behavior change."
+      }
+    ],
+    "watchOut": "Two default flips can bite quietly: Edge no longer launches on Windows startup when the policy is unconfigured, and Allow OOBE Updates now defaults to blocked instead of allowed. Also recheck any TLS Cipher Suites values, the description now specifies a comma-delimited list where it used to say semicolon, so a stale string may not parse."
+  },
   "2026-09-22": {
     "headline": "Windows gets a new Agent execution category with 19 settings, letting you decide whether AI agents run their tools in a container by default and which Entra identity profile they use.",
     "highlights": [
