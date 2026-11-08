@@ -9,6 +9,7 @@ import { basePath } from '@/lib/basePath';
 import SettingDetail from './SettingDetail';
 import ExportMenu, { downloadTextFile, type ExportFormat } from './ExportMenu';
 import { cleanValue, generateChangelogCsv, generateChangelogHtml } from '@/lib/changelog-export';
+import { parseSummaryHighlight } from '@/lib/changelog-summary';
 
 interface ChangelogViewerProps {
   entries: ChangelogEntry[];
@@ -601,21 +602,17 @@ export default function ChangelogViewer({ entries, categories, settings, summari
                     </div>
                   ) : (
                     activeSummary.highlights.length > 0 && (
-                      <ul className="list-disc space-y-2.5 pl-5 text-fluent-base leading-6 text-fluent-text marker:text-fluent-blue">
-                        {activeSummary.highlights.map((h, i) => (
-                          <li key={i} className="pl-1">
-                            {h}
-                          </li>
+                      <ol className="divide-y divide-fluent-border">
+                        {activeSummary.highlights.map((highlight, index) => (
+                          <SummaryHighlightRow key={index} highlight={highlight} />
                         ))}
-                      </ul>
+                      </ol>
                     )
                   )}
                   {activeSummary.watchOut && (
-                    <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-fluent-border bg-fluent-bg-alt/80 px-3 py-2.5 text-fluent-base leading-6 text-fluent-text">
-                      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-fluent-blue/20 text-fluent-blue">
-                        <i className="fa-solid fa-info text-fluent-xs" aria-hidden="true" />
-                      </span>
-                      <span className="text-fluent-text">{activeSummary.watchOut}</span>
+                    <div className="mt-3 rounded-lg border border-fluent-border px-3 py-2.5">
+                      <div className="text-fluent-xs font-semibold text-fluent-text-secondary">Worth checking</div>
+                      <p className="mt-1 text-fluent-sm leading-6 text-fluent-text-secondary">{activeSummary.watchOut}</p>
                     </div>
                   )}
                 </div>
@@ -1644,6 +1641,30 @@ function formatCategoryReference(value: string | undefined, categoriesById: Map<
 
 function isEmptyCategoryId(value: string): boolean {
   return value === '00000000-0000-0000-0000-000000000000';
+}
+
+function SummaryHighlightRow({ highlight }: { highlight: string }) {
+  const { body, platforms } = parseSummaryHighlight(highlight);
+  const label = platforms.length > 0
+    ? platforms.map((platform) => platform === 'iOS' ? 'iOS' : PLATFORM_LABELS[platform]).join(' + ')
+    : 'General';
+
+  return (
+    <li className="flex flex-col gap-2 py-4 first:pt-1 last:pb-1 sm:flex-row sm:gap-4">
+      <div className="flex w-28 shrink-0 items-center gap-2 pt-0.5">
+        <span className="inline-flex h-8 min-w-8 items-center justify-center gap-1 rounded-md border border-fluent-border bg-white px-1.5 dark:bg-[#2c2c2e]">
+          {platforms.length > 0
+            ? platforms.map((platform) => {
+                const Icon = PLATFORM_ICONS[platform];
+                return <Icon key={platform} className="h-4 w-4" />;
+              })
+            : <i className="fa-solid fa-list-check text-fluent-xs text-fluent-text-secondary" aria-hidden="true" />}
+        </span>
+        <span className="text-fluent-sm font-semibold text-fluent-text">{label}</span>
+      </div>
+      <p className="min-w-0 flex-1 text-fluent-base leading-6 text-fluent-text">{body}</p>
+    </li>
+  );
 }
 
 /** Render platform indicators from a comma-separated platform string — styled like the platform filter buttons */

@@ -52,3 +52,6 @@ ideas/
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Mockups
+mockups/

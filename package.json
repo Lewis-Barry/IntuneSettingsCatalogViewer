@@ -24,6 +24,7 @@
     "check-search-performance": "tsx scripts/search-performance-check.tsx",
     "check-search-worker": "tsx scripts/search-worker-check.ts",
     "check-changelog-export": "tsx scripts/changelog-export-check.ts",
+    "check-changelog-summary": "tsx scripts/changelog-summary-check.ts",
     "check-usage-filter": "tsx scripts/usage-filter-check.ts",
     "fetch-compliance-templates": "tsx scripts/fetch-compliance-templates.ts",
     "check-compliance": "tsx scripts/compliance-check.ts",
