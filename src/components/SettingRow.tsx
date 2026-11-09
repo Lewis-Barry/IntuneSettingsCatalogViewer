@@ -15,8 +15,6 @@ interface SettingRowProps {
   highlightQuery?: string;
   /** Where the search query matched for this setting (empty when browsing) */
   matchSources?: MatchSource[];
-  /** All settings in context for resolving dependent children */
-  allSettings?: SettingDefinition[];
   /** Sub-category label to disambiguate settings with duplicate display names */
   disambiguationLabel?: string;
   /** Optional value badge (e.g. OIB configured value) shown in the badge area */
@@ -45,7 +43,7 @@ function getAllDependedOnBy(setting: SettingDefinition): Array<{ dependedOnBy: s
   return deps;
 }
 
-export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, allSettings, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, activeLabel, hideScope }: SettingRowProps) {
+export default memo(function SettingRow({ setting, childSettings = [], highlightQuery, matchSources, disambiguationLabel, valueBadge, activeOptionIds, activeSimpleValue, activeLabel, hideScope }: SettingRowProps) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
   const isGroup = setting['@odata.type']?.includes('SettingGroup');
@@ -231,7 +229,7 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
       {/* Expanded detail panel */}
       {expanded && (
         <div className="border-b border-fluent-border bg-fluent-bg">
-          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} matchSources={matchSources} activeOptionIds={activeOptionIds} activeSimpleValue={activeSimpleValue} activeLabel={activeLabel} />
+          <SettingDetail setting={setting} highlightQuery={highlightQuery} activeOptionIds={activeOptionIds} activeSimpleValue={activeSimpleValue} activeLabel={activeLabel} />
 
           {/* Child settings nested under this root */}
           {childSettings.length > 0 && (
@@ -260,7 +258,6 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
                   key={child.id}
                   setting={child}
                   highlightQuery={highlightQuery}
-                  allSettings={allSettings}
                 />
               ))}
             </div>
@@ -275,11 +272,9 @@ export default memo(function SettingRow({ setting, childSettings = [], highlight
 function SettingRowInner({
   setting,
   highlightQuery,
-  allSettings,
 }: {
   setting: SettingDefinition;
   highlightQuery?: string;
-  allSettings?: SettingDefinition[];
 }) {
   const [expanded, setExpanded] = useState(false);
   const scope = getSettingScope(setting.baseUri);
@@ -381,7 +376,7 @@ function SettingRowInner({
 
       {expanded && (
         <div className="border-b border-blue-100 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20">
-          <SettingDetail setting={setting} allSettings={allSettings} highlightQuery={highlightQuery} />
+          <SettingDetail setting={setting} highlightQuery={highlightQuery} />
         </div>
       )}
     </div>

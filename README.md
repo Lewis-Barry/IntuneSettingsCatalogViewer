@@ -6,7 +6,7 @@ Have an idea for a new feature? Open an issue in this repository so the communit
 
 Built with Next.js, TypeScript, and Tailwind CSS. Data is pulled daily from the Microsoft Graph API by GitHub Actions, statically rendered, and deployed to GitHub Pages. The site makes **zero runtime API calls**, everything is baked in at build time.
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8) ![GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-222) ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
+![Next.js](https://img.shields.io/badge/Next.js-16-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8) ![GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-222) ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
 
 ## Live Site
 

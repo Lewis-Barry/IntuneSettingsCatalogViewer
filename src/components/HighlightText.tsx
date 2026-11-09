@@ -1,19 +1,13 @@
 /** Highlight matching substrings with a subtle background.
  *  Supports comma-separated exact phrases AND individual words from each term.
  *  Exact multi-word phrases are matched first (longer patterns take priority),
- *  then individual words are highlighted wherever they appear separately.
- *
- *  `variant` controls the highlight color:
- *   - 'title'     → yellow (default) — used when the title itself matches
- *   - 'secondary' → light blue — used for description / CSP / contextual matches */
+ *  then individual words are highlighted wherever they appear separately. */
 export default function HighlightText({
   text,
   query,
-  variant = 'title',
 }: {
   text: string;
   query?: string;
-  variant?: 'title' | 'secondary';
 }) {
   if (!query || !query.trim()) {
     return <>{text}</>;

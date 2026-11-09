@@ -5,7 +5,7 @@
 // and collapsible change cards. Each viewer owns its data loading, diffing and
 // value formatting, and passes rows in through slots.
 
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { selectClass } from '@/lib/pill';
 import ExportMenu, { Chevron, KindIcon, KIND, SETTING_KIND, type ChangeKind, type ExportFormat } from './ExportMenu';
 
@@ -109,12 +109,14 @@ export function CategorySection<K extends ChangeKind>({
   const kindCounts = {} as Record<K, number>;
   for (const i of items) kindCounts[i.kind] = (kindCounts[i.kind] ?? 0) + 1;
   const present = kinds.filter((k) => kindCounts[k]);
+  // aria-labelledby is a space-separated id list, so the raw category name ("Device Lock") can't be the id.
+  const headingId = useId();
   return (
-    <section className="mb-8" aria-labelledby={`cat-${category}`}>
+    <section className="mb-8" aria-labelledby={headingId}>
       {/* Category header — sticky so context persists while scanning long lists */}
       <div className="sticky top-0 z-10 -mx-1 px-1 py-2 bg-[var(--fluent-page-bg)]">
         <div className="flex items-center gap-3 flex-wrap border-b border-fluent-border pb-2">
-          <h2 id={`cat-${category}`} className="text-fluent-lg font-semibold text-fluent-text">
+          <h2 id={headingId}className="text-fluent-lg font-semibold text-fluent-text">
             {category}
           </h2>
           <span
@@ -207,6 +209,7 @@ export default function VersionDiffView<K extends ChangeKind>({
   onExport,
   subject,
   summary,
+  loadFailed,
   kinds,
   noun,
   view,
@@ -231,6 +234,8 @@ export default function VersionDiffView<K extends ChangeKind>({
   subject?: string;
   /** Null while the two versions are still loading. */
   summary: { heading: ReactNode; detail: ReactNode; counts: Record<K, number>; total: number } | null;
+  /** One of the two selected versions failed to download. */
+  loadFailed?: boolean;
   kinds: K[];
   noun: Noun;
   view: DiffView<K>;
@@ -311,6 +316,10 @@ export default function VersionDiffView<K extends ChangeKind>({
       {!canCompare ? (
         <p className="text-fluent-base text-fluent-text-secondary mt-6">
           Only one version of {subject} is published — nothing to compare yet.
+        </p>
+      ) : loadFailed ? (
+        <p className="text-fluent-error text-fluent-base mt-6" role="alert">
+          Could not load one of these versions. Pick a different version, or reload the page to retry.
         </p>
       ) : !summary ? (
         <p className="text-fluent-text-secondary text-fluent-base mt-6" role="status">Loading versions…</p>

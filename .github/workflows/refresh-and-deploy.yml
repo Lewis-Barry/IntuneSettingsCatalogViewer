@@ -68,6 +68,13 @@ jobs:
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: npx tsx scripts/fetch-baselines.ts
 
+      # ── Classic compliance catalog (no credentials). continue-on-error: the
+      #    script stops before writing if a source is down, so a failure just
+      #    keeps yesterday's file. ──
+      - name: Fetch classic compliance catalog
+        continue-on-error: true
+        run: npx tsx scripts/fetch-compliance-templates.ts
+
       # ── Generate changelog by diffing against previous snapshot ──
       - name: Generate changelog
         run: npx tsx scripts/generate-changelog.ts
@@ -103,6 +110,7 @@ jobs:
             data/category-tree.json \
             data/last-updated.json \
             data/changelog.json \
+            data/compliance-templates.json \
             data/settings-previous.json \
             data/categories-previous.json \
             public/search-index.json \

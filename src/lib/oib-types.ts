@@ -1,6 +1,5 @@
 // ── OIB Types ──
-// Mirrors the output types in scripts/fetch-oib-data.ts.
-// Keep in sync if the fetch script shape changes.
+// The shape scripts/fetch-oib-data.ts writes (the script imports these types).
 
 export interface OIBOutput {
   fetchedAt: string;
@@ -206,7 +205,7 @@ export const FOLDER_LABELS: Record<string, string> = {
   WINDOWS365: 'Windows 365',
 };
 
-const FOLDER_ORDER = ['WINDOWS', 'MACOS', 'WINDOWS365'];
+export const FOLDER_ORDER = ['WINDOWS', 'MACOS', 'WINDOWS365'];
 
 export function buildSidebarTree(policies: OIBPolicy[]): OIBFolderNode[] {
   const map = new Map<string, Map<string, number>>();

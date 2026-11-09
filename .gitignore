@@ -35,8 +35,7 @@ public/settings-bundles/
 data/category-load-manifest.json
 data/search-index-manifest.json
 
-# keep sample data and changelog
-!data/sample-*.json
+# keep the changelog
 !data/changelog.json
 
 # IDE

@@ -28,9 +28,10 @@ export async function generateMetadata({ params }: SettingPageProps): Promise<Me
     return { title: 'Setting Not Found' };
   }
 
+  const title = setting.displayName || setting.name;
   return {
-    title: `${setting.displayName} — Intune Settings Catalog`,
-    description: setting.description || `Intune setting: ${setting.displayName}`,
+    title: `${title} — Intune Settings Catalog`,
+    description: setting.description || `Intune setting: ${title}`,
   };
 }
 
@@ -99,14 +100,14 @@ export default async function SettingPage({ params }: SettingPageProps) {
         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
-        <span className="text-fluent-text font-medium">{setting.displayName}</span>
+        <span className="text-fluent-text font-medium">{setting.displayName || setting.name}</span>
       </nav>
 
       {/* Setting title */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1 flex-wrap">
           <h1 className="text-fluent-2xl font-semibold text-fluent-text">
-            {setting.displayName}
+            {setting.displayName || setting.name}
           </h1>
           {platform && platform !== 'none' && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-fluent-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">

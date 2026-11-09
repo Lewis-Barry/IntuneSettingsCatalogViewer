@@ -1,7 +1,9 @@
 'use client';
 
-import { loadBrowserJson, loadSettingDefinitions } from '@/lib/browser-data';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { groupBy } from '@/lib/group-by';
+import { loadSettingDefinitions } from '@/lib/browser-data';
+import { useShards } from '@/lib/useShards';
+import { useEffect, useMemo, useState } from 'react';
 import { selectClass } from '@/lib/pill';
 import { basePath } from '@/lib/basePath';
 import SettingRow from './SettingRow';
@@ -34,7 +36,7 @@ function activeFrom(s?: BaselineSetting): { activeOptionIds?: string[]; activeSi
 export default function BaselineChangelogViewer() {
   const [index, setIndex] = useState<BaselineIndex | null>(null);
   const [defsMap, setDefsMap] = useState<Map<string, SettingDefinition>>(new Map());
-  const [shards, setShards] = useState<Map<string, BaselineShard>>(new Map());
+  const { shards, ensure: ensureShard, hasFailed } = useShards<BaselineShard>('baselines');
   const [baseId, setBaseId] = useState<string | null>(null);
   const [baseVersionId, setBaseVersionId] = useState<string | null>(null);
   const [compareVersionId, setCompareVersionId] = useState<string | null>(null);
@@ -79,16 +81,6 @@ export default function BaselineChangelogViewer() {
 
 
   // Lazily fetch the two selected shards.
-  const ensureShard = useCallback(
-    (id: string | null) => {
-      if (!id || shards.has(id)) return;
-      loadBrowserJson<BaselineShard>(`baselines/${id}.json`)
-        .then((shard) => setShards((prev) => prev.has(id) ? prev : new Map(prev).set(id, shard)))
-        .catch((e) => setError(String(e)));
-    },
-    [shards]
-  );
-
   useEffect(() => {
     ensureShard(baseVersionId);
     ensureShard(compareVersionId);
@@ -120,7 +112,7 @@ export default function BaselineChangelogViewer() {
   // each category) — same section shape as the OIB changelog.
   const grouped = useMemo(
     () =>
-      [...Map.groupBy(visibleChanges, (c) => c.category ?? 'Other')]
+      [...groupBy(visibleChanges, (c) => c.category ?? 'Other')]
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([category, changes]) => ({
           category,
@@ -192,6 +184,7 @@ export default function BaselineChangelogViewer() {
       onCompareChange={setCompareVersionId}
       onExport={downloadExport}
       subject={family?.displayName}
+      loadFailed={hasFailed(baseVersionId) || hasFailed(compareVersionId)}
       summary={
         diff && family && {
           heading: `${versionLabel(baseVersionId)} → ${versionLabel(compareVersionId)}`,

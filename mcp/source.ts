@@ -34,7 +34,13 @@ export function createSource(fetchFn: typeof fetch = fetch, now: () => number = 
       stalePaths.delete(path);
       return data;
     } catch (err) {
-      if (hit) { stalePaths.add(path); return hit.data; }
+      if (hit) {
+        // Serve the old copy and wait 5 minutes before trying GitHub again,
+        // instead of re-downloading (and maybe hanging) on every tool call.
+        hit.checkedAt = now() - MAX_AGE_MS + 5 * 60e3;
+        stalePaths.add(path);
+        return hit.data;
+      }
       throw new Error(`failed to load ${path} from GitHub raw: ${(err as Error).message}`);
     }
   }

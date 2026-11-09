@@ -8,6 +8,7 @@
 //   3. fuzzy      — Jaccard over setting ids + shared title token (renames in
 //                   legacy versions that predate the manifest)
 
+import { groupBy } from './group-by';
 import { parsePolicy, flattenOIBSettings } from './oib-types';
 import type { OIBPolicy, OIBValue, FlatSetting } from './oib-types';
 import type { PolicyDiff, SettingChange, VersionDiff } from './oib-changelog-types';
@@ -60,7 +61,7 @@ function titleTokens(p: OIBPolicy): Set<string> {
 /** Non-instance leaf settings keyed by definitionId. (Leaves inside a
  *  groupCollection instance carry an instanceId and are diffed separately.) */
 function settingMap(leaves: FlatSetting[]): Map<string, OIBValue[]> {
-  const groups = Map.groupBy(leaves.filter((f) => !f.instanceId), (f) => f.definitionId);
+  const groups = groupBy(leaves.filter((f) => !f.instanceId), (f) => f.definitionId);
   return new Map([...groups].map(([id, fs]) => [id, fs.map((f) => f.value)]));
 }
 
@@ -75,8 +76,8 @@ interface Instance {
 /** Group a policy's groupCollection leaves into instances, keyed by collection
  *  definitionId. Each instance keeps its own leaves (one `_name`, `_action`, …). */
 function instancesByCollection(leaves: FlatSetting[]): Map<string, Instance[]> {
-  // Map.groupBy keeps first-seen order, so instances stay in policy order.
-  const byInstance = Map.groupBy(leaves.filter((f) => f.instanceId), (f) => f.instanceId!);
+  // groupBy keeps first-seen order, so instances stay in policy order.
+  const byInstance = groupBy(leaves.filter((f) => f.instanceId), (f) => f.instanceId!);
   const byCollection = new Map<string, Instance[]>();
   for (const [instanceId, instLeaves] of byInstance) {
     const collectionId = instanceId.slice(0, instanceId.lastIndexOf('#'));
@@ -290,7 +291,7 @@ function tagMoves(policies: PolicyDiff[], base: OIBPolicy[], compare: OIBPolicy[
       if (c.kind === 'added') c.movedFrom = other(inBase.get(c.definitionId), p.label);
     }
     if (p.kind === 'removed' && p.settingChanges.length > 0) {
-      const targets = Map.groupBy(p.settingChanges.filter((c) => c.movedTo), (c) => c.movedTo!);
+      const targets = groupBy(p.settingChanges.filter((c) => c.movedTo), (c) => c.movedTo!);
       const [top] = [...targets].sort((a, b) => b[1].length - a[1].length);
       if (top && top[1].length * 2 >= p.settingChanges.length) p.mergedInto = top[0];
     }

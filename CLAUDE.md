@@ -2,18 +2,18 @@ Update this file as you add/change/remove relevant features
 
 # Intune Settings Catalog Viewer
 
-Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHub Pages via `output: 'export'`. Zero runtime API calls — all data is baked in at build time.
+Static Next.js 16 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHub Pages via `output: 'export'`. Zero runtime API calls — all data is baked in at build time.
 
 ## Architecture
 
 **Data pipeline → static files → Next.js static export → GitHub Pages**
 
 ### Data Flow
-1. `scripts/fetch-settings.ts` — authenticates with Azure AD, fetches the Intune Settings Catalog via MS Graph API → `data/settings.json` (~62MB), `data/categories.json`. Pulls **two catalogs** in one loop (`CATALOGS`): `configurationCategories`/`configurationSettings` and `complianceCategories`/`complianceSettings`. Both are the same Graph resource types under the same permission scope, so everything downstream is shared; records are deduped by id and each carries its own `settingUsage`.
+1. `scripts/fetch-settings.ts` — authenticates with Azure AD, fetches the Intune Settings Catalog via MS Graph API → `data/settings.json` (~45MB, written without indentation to stay well under GitHub's 100MB file limit), `data/categories.json`. Refuses to overwrite when Graph returns >10% fewer settings than are on disk (a partial answer would be logged as mass removals). Auth/retry/paging live in `scripts/graph.ts`, shared with `fetch-baselines.ts`. Pulls **two catalogs** in one loop (`CATALOGS`): `configurationCategories`/`configurationSettings` and `complianceCategories`/`complianceSettings`. Both are the same Graph resource types under the same permission scope, so everything downstream is shared; records are deduped by id and each carries its own `settingUsage`.
    - **Scope note:** `complianceSettings` backs the *settings-catalog-style* compliance engine (`deviceManagement/compliancePolicies`). The **classic** compliance policies (`deviceManagement/deviceCompliancePolicies`, e.g. `windows10CompliancePolicy`) are typed resources with fixed properties — `storageRequireEncryption`, `tpmRequired`, `defenderEnabled` etc. — and have **no setting definitions in any catalog**, so they cannot appear here.
 2. `scripts/build-search-index.ts` — reads settings.json → generates `public/search-index.json`, `data/category-tree.json`, `public/settings-by-category/{id}.json` shards, `data/catalog-stats.json` (now `{ totalSettings, byUsage }`). `settingUsage` is emitted on index/browse records **only when it isn't plain `configuration`** — that default is ~95% of the catalog and spelling it out everywhere would add ~600KB; readers treat a missing value as configuration. The two Windows SKU reports stay configuration-only.
 3. `scripts/fetch-oib-data.ts` — fetches OpenIntuneBaseline policies from GitHub → `public/oib-data.json` (current snapshot for `/baseline`) **and** per-release-tag shards `public/oib-versions/<tag>.json` + `index.json` (powers the version diff at `/baseline/changelog`)
-4. `scripts/generate-changelog.ts` — diffs current vs previous snapshot → `data/changelog.json` (CI copies the committed `settings.json`/`categories.json` to `*-previous.json` before fetching; the `-previous` files are not committed)
+4. `scripts/generate-changelog.ts` — diffs current vs previous snapshot → `data/changelog.json` (CI copies the committed `settings.json`/`categories.json` to `*-previous.json` before fetching, and the workflow commits the `-previous` files too. A second run on the same day is merged into that day's entry, never replaces it)
 5. `scripts/fetch-baselines.ts` — fetches Microsoft's Intune security baseline templates from Graph beta (`templateFamily eq 'baseline'`, works with zero baselines configured; STIG audit-only templates excluded — not shown in the Intune portal), resolves setting/option/category names from `data/settings.json` → `public/baselines/index.json` (families by baseId) + one shard per version `public/baselines/{id}.json`
 6. `scripts/fetch-compliance-templates.ts` — the **classic** compliance policies (`deviceManagement/deviceCompliancePolicies`) are typed Graph resources with fixed properties and **no definition endpoint**, so their catalog is reconstructed from two sources: Graph `$metadata` (types, properties, and **enum members = the possible values**) + Microsoft's doc source on GitHub (each property's description). Nothing is hand-written except the type-to-platform label map, so it regenerates as Microsoft adds settings. Needs **no credentials and reads no tenant data** — a reference catalog of what *can* be set, never what a tenant *has* set. -> `data/compliance-templates.json` (11 platforms, 242 settings, 88 distinct). Written to `data/`, not `public/`, so the page loads it at build time as a server-component prop — that is what makes it server-render its full chrome like the main browser instead of flashing a loading state.
    - **Parsing gotcha:** ~240 EntityTypes in `$metadata` are self-closing, so a non-greedy `<EntityType ...>(...)</EntityType>` match silently spans across them and swallows real types (including `windows10CompliancePolicy`). Split on the open tag instead.
@@ -24,7 +24,6 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | File | Role |
 |------|------|
 | `src/app/page.tsx` | Main settings browser — loads category-tree + stats at build time |
-| `src/app/category/` | Per-category pages (lazy-loaded shards) |
 | `src/app/setting/` | Individual setting detail pages (slug-based) |
 | `src/app/changelog/` | Changelog viewer |
 | `src/app/compliance/` + `src/components/ComplianceBrowser.tsx` | Compliance settings browser. Deliberately shares the main browser's chrome so the two pages read as one site: same `max-w-[1600px]` wrapper, `h-[calc(100dvh-…)]` shell, header/search/platform-filter block, `BrowserSidebar`, and the same `category-item` / `setting-row` / `scope-badge` / `info-icon` CSS classes and `w-[4.5rem]`/`w-[6rem]`/`w-[3.5rem]` column widths. Rows expand to Description / **Possible values** / Graph property. Shows only what *can* be configured; never tenant values |
@@ -59,6 +58,9 @@ Static Next.js 14 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 | `src/lib/pill.ts` | Shared segmented-pill class helper (platform filter + version picker) |
 | `src/lib/basePath.ts` | Next.js `basePath` constant (build-time inlined) — prefix for all runtime fetches of `public/` assets |
 | `src/lib/slug.ts` | URL slug generation |
+| `src/lib/settings-grouping.ts` | `groupSettings` + `getCspPath` — the **only** place a CSP path is built (most `offsetUri`s start with `/`, so never join `baseUri`/`offsetUri` by hand) |
+| `src/lib/group-by.ts` | `groupBy` — use instead of `Map.groupBy` in browser code (needs Safari 17.4 / Chrome 117) |
+| `src/lib/useShards.ts` | Lazy per-version JSON loader (`shards`, `ensure`, `hasFailed`) shared by `BaselineBrowser` and both version-compare pages |
 
 ### MCP server (`mcp/`)
 

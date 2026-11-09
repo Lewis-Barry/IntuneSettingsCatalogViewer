@@ -12,8 +12,15 @@ const settings: SettingDefinition[] = JSON.parse(readFileSync('public/avd-multis
 const queries = ['a', 'device', 'windows defender, antivirus', 'password length', 'DEVICE', ' , ', '', 'no-match-273481', './device/vendor', '  windows  defender  '];
 
 function referenceMatch(setting: SettingDefinition, terms: string[]) {
-  const fields = [setting.displayName, setting.name, setting.description, setting.helpText, getCspPath(setting), ...(setting.keywords || [])];
-  return terms.some((term) => fields.some((field) => field?.toLowerCase().includes(term)));
+  // Uncached reference for the rule in setting-search.ts: every word of some
+  // comma-separated term must appear somewhere in the setting.
+  const hay = [setting.displayName, setting.name, setting.description, setting.helpText, getCspPath(setting), ...(setting.keywords || [])]
+    .map((field) => field?.toLowerCase() || '')
+    .join(' ');
+  return terms.some((term) => {
+    const words = term.split(/\s+/).filter(Boolean);
+    return words.length > 0 && words.every((word) => hay.includes(word));
+  });
 }
 
 for (const query of queries) {

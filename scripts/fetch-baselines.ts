@@ -24,86 +24,11 @@ import type {
   BaselineShard,
 } from '../src/lib/baseline-types';
 
-// Pick up credentials from .env.local as well as the process environment.
-try {
-  process.loadEnvFile(path.resolve(__dirname, '..', '.env.local'));
-} catch {
-  // no .env.local; rely on the process environment
-}
-
-const TENANT_ID = process.env.AZURE_TENANT_ID!;
-const CLIENT_ID = process.env.AZURE_CLIENT_ID!;
-const CLIENT_SECRET = process.env.AZURE_CLIENT_SECRET!;
+import { getAccessToken, fetchAllPages } from './graph';
 
 const SETTINGS_FILE = path.resolve(__dirname, '..', 'data', 'settings.json');
 const CATEGORIES_FILE = path.resolve(__dirname, '..', 'data', 'categories.json');
 const OUT_DIR = path.resolve(__dirname, '..', 'public', 'baselines');
-
-// ─── Auth + Graph GET with retry (same pattern as fetch-settings.ts) ───
-
-let token: string | null = null;
-
-async function getAccessToken(): Promise<string> {
-  if (!TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) {
-    console.error('Error: AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET must be set.');
-    process.exit(1);
-  }
-  const res = await fetch(`https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`, {
-    method: 'POST',
-    body: new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      scope: 'https://graph.microsoft.com/.default',
-    }),
-  });
-  if (!res.ok) throw new Error(`Token request failed: ${res.status} ${await res.text()}`);
-  const json = await res.json();
-  if (!json.access_token) throw new Error('Token response missing access_token');
-  token = json.access_token as string;
-  return token;
-}
-
-const MAX_RETRIES = 8;
-
-async function graphGet(url: string): Promise<Record<string, unknown>> {
-  const fullUrl = url.startsWith('https://') ? url : `https://graph.microsoft.com/beta${url}`;
-  for (let attempt = 1; ; attempt++) {
-    let res: Response;
-    try {
-      res = await fetch(fullUrl, { headers: { Authorization: `Bearer ${token ?? (await getAccessToken())}` } });
-    } catch (err) {
-      if (attempt > MAX_RETRIES) throw err;
-      console.warn(`  Network error (${(err as Error).message}). Retrying in 5s (attempt ${attempt}/${MAX_RETRIES})...`);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      continue;
-    }
-    if (res.status === 401 && attempt === 1) {
-      token = null;
-      continue;
-    }
-    if ((res.status === 429 || res.status >= 500) && attempt <= MAX_RETRIES) {
-      const retryAfter = parseInt(res.headers.get('Retry-After') ?? '', 10);
-      const waitS = retryAfter > 0 ? retryAfter : 30;
-      console.warn(`  HTTP ${res.status}. Waiting ${waitS}s (attempt ${attempt}/${MAX_RETRIES})...`);
-      await new Promise((resolve) => setTimeout(resolve, waitS * 1000));
-      continue;
-    }
-    if (!res.ok) throw new Error(`Graph request failed: ${res.status} ${await res.text()}`);
-    return res.json();
-  }
-}
-
-async function fetchAllPages<T>(url: string): Promise<T[]> {
-  const results: T[] = [];
-  let nextLink: string | undefined = url;
-  while (nextLink) {
-    const response = await graphGet(nextLink);
-    results.push(...(response.value as T[]));
-    nextLink = response['@odata.nextLink'] as string | undefined;
-  }
-  return results;
-}
 
 // ─── Local catalog (name + option resolution) ───
 

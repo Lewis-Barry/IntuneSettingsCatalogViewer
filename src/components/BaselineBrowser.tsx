@@ -1,6 +1,8 @@
 'use client';
 
-import { loadBrowserJson, loadSettingDefinitions } from '@/lib/browser-data';
+import { groupBy } from '@/lib/group-by';
+import { loadSettingDefinitions } from '@/lib/browser-data';
+import { useShards } from '@/lib/useShards';
 import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from 'react';
 import { basePath } from '@/lib/basePath';
 import { selectClass } from '@/lib/pill';
@@ -257,7 +259,7 @@ function Section({ title, breadcrumb, count, children }: SectionProps) {
 export default function BaselineBrowser() {
   const [index, setIndex] = useState<BaselineIndex | null>(null);
   const [defsMap, setDefsMap] = useState<Map<string, SettingDefinition>>(new Map());
-  const [shards, setShards] = useState<Map<string, BaselineShard>>(new Map());
+  const { shards, ensure: ensureShard, hasFailed } = useShards<BaselineShard>('baselines');
   const [indexLoaded, setIndexLoaded] = useState(false);
   const [defsLoaded, setDefsLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -306,15 +308,10 @@ export default function BaselineBrowser() {
 
   const isLoading = !indexLoaded || !defsLoaded;
 
-  const ensureShard = useCallback(
-    (id: string | null | undefined) => {
-      if (!id || shards.has(id)) return;
-      loadBrowserJson<BaselineShard>(`baselines/${id}.json`)
-        .then((shard) => setShards((prev) => prev.has(id) ? prev : new Map(prev).set(id, shard)))
-        .catch((e) => setLoadError(String(e)));
-    },
-    [shards]
-  );
+  // A failed download must end the spinner (and must not blame the selected
+  // version when it was another baseline's search fetch that failed).
+  const shardFailed = hasFailed(versionId);
+  const shardLoading = !!versionId && !shards.has(versionId) && !shardFailed;
 
   // Fetch the selected version's shard.
   useEffect(() => {
@@ -365,7 +362,7 @@ export default function BaselineBrowser() {
 
   // ── Selected version's settings grouped by settings-catalog category ──
   const categoryMap = useMemo(
-    () => Map.groupBy(shard?.settings ?? [], (s) => s.category ?? 'Other'),
+    () => groupBy(shard?.settings ?? [], (s) => s.category ?? 'Other'),
     [shard]
   );
 
@@ -377,7 +374,8 @@ export default function BaselineBrowser() {
         label: family?.displayName ?? '',
         categories: [...categoryMap.entries()]
           .sort(([a], [b]) => a.localeCompare(b))
-          .map(([category, settings]) => ({ category, count: settings.length })),
+          // Same count as the panel header (leaf rows, not top-level settings).
+          .map(([category, settings]) => ({ category, count: rowCount(buildRows(settings)) })),
       },
     ],
     [baseId, family, categoryMap]
@@ -526,7 +524,7 @@ export default function BaselineBrowser() {
         sidebarHydrated={sidebarHydrated}
         handleResizeStart={handleResizeStart}
         sidebarBody={
-          isLoading || (versionId && !shard) ? (
+          isLoading || shardLoading ? (
             <SidebarLoading />
           ) : (
             <FolderSidebarTree
@@ -542,7 +540,11 @@ export default function BaselineBrowser() {
         <div ref={mainScrollRef} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
           {searchHits ? (
             searchHits.length === 0 ? (
-              <NoResults query={deferredQuery} />
+              // The other baselines download on first search — not "no results" until they are in.
+              index?.families.some((f) => {
+                const id = defaultVersion(f)?.id;
+                return !!id && !shards.has(id) && !hasFailed(id);
+              }) ? <PanelLoading /> : <NoResults query={deferredQuery} />
             ) : (
               <div>
                 <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-white dark:bg-[#1c1c1e] sticky top-0 z-10">
@@ -586,12 +588,12 @@ export default function BaselineBrowser() {
                 versionLabel={shard.displayVersion}
               />
             </div>
-          ) : isLoading || (versionId && !shard) ? (
+          ) : isLoading || shardLoading ? (
             <PanelLoading />
-          ) : loadError ? (
+          ) : loadError || shardFailed ? (
             <LoadError
               title="Failed to load baseline data"
-              error={loadError}
+              error={loadError ?? 'Could not download this baseline version. Pick it again to retry.'}
               command="npm run fetch-baselines"
               output="data files"
             />

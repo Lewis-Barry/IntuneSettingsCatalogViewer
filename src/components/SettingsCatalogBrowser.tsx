@@ -1,5 +1,6 @@
 'use client';
 
+import { groupBy } from '@/lib/group-by';
 import { useState, useCallback, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CategoryTree from './CategoryTree';
@@ -15,6 +16,7 @@ import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { loadCategorySettings } from '@/lib/category-data';
 import { matchesCompatibilitySearch } from '@/lib/setting-search';
+import ExportMenu, { downloadTextFile } from './ExportMenu';
 
 interface SettingsCatalogBrowserProps {
   categoryTree: CategoryTreeNode[];
@@ -101,6 +103,7 @@ export default function SettingsCatalogBrowser({
   const [compatibilityReports, setCompatibilityReports] = useState<Record<string, SettingDefinition[]>>({});
   const [compatibilityError, setCompatibilityError] = useState(false);
   const [retryCompatibility, setRetryCompatibility] = useState(0);
+  const [settingsLoadError, setSettingsLoadError] = useState(false);
   const searchParams = useSearchParams();
   const isDesktop = useIsDesktop();
 
@@ -184,17 +187,21 @@ export default function SettingsCatalogBrowser({
 
   const loadSettingsForCategories = useCallback(async (categoryIds: string[]) => {
     const missingIds = Array.from(new Set(categoryIds)).filter((categoryId) => !loadedCategoryIdsRef.current.has(categoryId));
-    if (missingIds.length === 0) return;
+    if (missingIds.length === 0) return true;
 
     setSettingsLoading(true);
+    setSettingsLoadError(false);
     try {
       const byCat = await loadCategorySettings(categoryIds, loadedCategoryIdsRef.current);
       for (const categoryId of Object.keys(byCat)) {
         loadedCategoryIdsRef.current.add(categoryId);
       }
       mergeSettingsByCategory(byCat);
+      return true;
     } catch (err) {
       console.error('Failed to load category settings:', err);
+      setSettingsLoadError(true);
+      return false;
     } finally {
       setSettingsLoading(false);
     }
@@ -266,28 +273,34 @@ export default function SettingsCatalogBrowser({
       // in one go with no empty-state flash.
       pendingCategoryIdRef.current = categoryId;
       setLoadingCategoryId(categoryId);
-      void loadSettingsForCategories(categoryIds).finally(() => {
-        // Ignore stale loads if the user has since clicked a different category.
+      void loadSettingsForCategories(categoryIds).then((loaded) => {
+        // Ignore stale loads if the user has since clicked a different category or searched.
         if (pendingCategoryIdRef.current !== categoryId) return;
+        setLoadingCategoryId(null);
+        // Failed download: keep the current pane (the error banner shows) so
+        // clicking the category again retries instead of showing "0 settings".
+        if (!loaded) {
+          pendingCategoryIdRef.current = null;
+          return;
+        }
         setSelectedCategoryId(categoryId);
         setSelectedCategoryName(categoryName);
         setSearchResults(null);
-        setLoadingCategoryId(null);
       });
     },
     [categoryTree, loadSettingsForCategories, selectedCategoryId, windowsCompatibility]
   );
 
-  const handleSearchResults = useCallback((results: SearchIndexEntry[]) => {
+  const handleSearchResults = useCallback((results: SearchIndexEntry[] | null) => {
     if (windowsCompatibility) return;
-    if (results.length > 0) {
-      setSearchResults(results);
-      setSelectedCategoryId(null);
-      setSelectedCategoryName('');
-      void loadSettingsForCategories(results.map((result) => result.categoryId));
-    } else {
-      setSearchResults(null);
-    }
+    setSearchResults(results);
+    if (!results) return; // box cleared — back to the category view
+    // A category still downloading must not replace these results when it lands.
+    pendingCategoryIdRef.current = null;
+    setLoadingCategoryId(null);
+    setSelectedCategoryId(null);
+    setSelectedCategoryName('');
+    void loadSettingsForCategories(results.map((result) => result.categoryId));
   }, [loadSettingsForCategories, windowsCompatibility]);
 
   useEffect(() => {
@@ -408,7 +421,7 @@ export default function SettingsCatalogBrowser({
 
     // Build a map of categoryId → matched SettingDefinition[]
     const matched = searchResults.flatMap((result) => settingsById.get(result.id) ?? []);
-    const groupMap = Map.groupBy(matched, (setting) => setting.categoryId);
+    const groupMap = groupBy(matched, (setting) => setting.categoryId);
 
     // Apply platform + deprecated filters
     const groups: CategorySettingsGroup[] = [];
@@ -485,14 +498,7 @@ export default function SettingsCatalogBrowser({
       reportTitle: windowsCompatibility === 'enterprise-only' ? 'Enterprise-only Settings (not in Windows Pro)' : 'Settings available on Windows AVD Multi-Session',
     };
     const content = format === 'csv' ? generateProExclusiveCsv(options) : generateProExclusiveHtml(options);
-    const url = URL.createObjectURL(new Blob([content], { type: format === 'csv' ? 'text/csv;charset=utf-8' : 'text/html;charset=utf-8' }));
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `${windowsCompatibility}-settings.${format}`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+    downloadTextFile(`${windowsCompatibility}-settings.${format}`, content, format);
   };
 
   // Close mobile drawer when a category is selected
@@ -526,22 +532,12 @@ export default function SettingsCatalogBrowser({
                   : <>{displayedSettingsCount.toLocaleString()} settings available</>
               }
               {lastUpdated && (
-                <span> · Last updated: {new Date(lastUpdated).toLocaleDateString('en-US')}</span>
+                <span> · Last updated: {new Date(lastUpdated).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
               )}
             </p>
           </div>
           {windowsCompatibility && filterDataLoaded && (
-            <details className="relative flex-none">
-              <summary className="fluent-btn-secondary text-fluent-sm cursor-pointer" aria-label="Export filtered settings">Export</summary>
-              <div className="absolute right-0 mt-1 z-50 min-w-[8rem] bg-fluent-bg border border-fluent-border rounded-md shadow-lg py-1">
-                {(['csv', 'html'] as const).map((format) => (
-                  <button key={format} disabled={!categorySettings.length} className="block w-full text-left px-3 py-2 text-fluent-sm text-fluent-text hover:bg-fluent-bg-alt disabled:opacity-50 disabled:cursor-not-allowed" onClick={(event) => {
-                    downloadExport(format);
-                    event.currentTarget.closest('details')?.removeAttribute('open');
-                  }}>{format.toUpperCase()}</button>
-                ))}
-              </div>
-            </details>
+            <ExportMenu className="relative flex-none" ariaLabel="Export filtered settings" disabled={!categorySettings.length} onExport={downloadExport} />
           )}
         </div>
 
@@ -607,6 +603,11 @@ export default function SettingsCatalogBrowser({
       >
         {/* Settings list */}
         <div ref={settingsScrollRef} aria-busy={searchQuery !== deferredSearchQuery} className="flex-1 overflow-y-auto fluent-scroll bg-white dark:bg-[#1c1c1e]">
+          {settingsLoadError && !windowsCompatibility && (
+            <div role="alert" className="px-4 py-3 border-b border-fluent-border text-fluent-sm text-fluent-error">
+              Could not load some settings. Check your connection, then select the category or search again.
+            </div>
+          )}
           {windowsCompatibility ? (
             compatibilityLoading ? (
               <div role="status" className="p-6 text-fluent-sm text-fluent-text-secondary">Loading compatibility settings...</div>
@@ -649,6 +650,10 @@ export default function SettingsCatalogBrowser({
                   categoryMap={categoryMap}
                 />
               ))}
+            </div>
+          ) : searchResults?.length === 0 ? (
+            <div role="status" className="p-6 text-fluent-base text-fluent-text-secondary">
+              No settings match “{searchQuery}”.
             </div>
           ) : selectedCategoryId ? (
             <SettingsList

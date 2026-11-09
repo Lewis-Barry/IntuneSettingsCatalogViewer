@@ -15,8 +15,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { createHash } from 'node:crypto';
-import { hasUsage, type SettingDefinition, type SettingCategory, type CategoryTreeNode, type SearchIndexEntry } from '../src/lib/types';
+import { hasUsage, getSettingScope, type SettingDefinition, type SettingCategory, type CategoryTreeNode, type SearchIndexEntry } from '../src/lib/types';
 import { getAsrRuleInfo } from '../src/lib/asr-rules';
+import { getCspPath } from '../src/lib/settings-grouping';
 
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
@@ -25,14 +26,6 @@ const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const SEARCH_INDEX_FILE = path.join(PUBLIC_DIR, 'search-index.json');
 const CATEGORY_TREE_FILE = path.join(DATA_DIR, 'category-tree.json');
 const CATALOG_STATS_FILE = path.join(DATA_DIR, 'catalog-stats.json');
-
-/** Derive scope from baseUri */
-function getScope(baseUri?: string): 'device' | 'user' | 'unknown' {
-  if (!baseUri) return 'unknown';
-  if (baseUri.toLowerCase().includes('/device/')) return 'device';
-  if (baseUri.toLowerCase().includes('/user/')) return 'user';
-  return 'unknown';
-}
 
 /**
  * Emit settingUsage only when it isn't the default. 'configuration' is ~95% of
@@ -365,11 +358,6 @@ function main() {
   const settingById = new Map<string, SettingDefinition>();
   for (const s of settings) settingById.set(s.id, s);
 
-  const getCspPath = (s: SettingDefinition) =>
-    s.baseUri && s.offsetUri
-      ? `${s.baseUri}/${s.offsetUri}`
-      : s.baseUri || s.offsetUri || '';
-
   const settingsCountMap = new Map<string, number>();
   const countSetting = (s: SettingDefinition) => {
     settingsCountMap.set(s.categoryId, (settingsCountMap.get(s.categoryId) || 0) + 1);
@@ -410,7 +398,7 @@ function main() {
       })(),
       categoryId: s.categoryId,
       categoryName: categoryNameMap.get(s.categoryId) || 'Unknown Category',
-      scope: getScope(s.baseUri),
+      scope: getSettingScope(s.baseUri),
       platform: s.applicability?.platform || '',
       settingType: getSettingType(s['@odata.type'] || ''),
     });

@@ -303,7 +303,21 @@ function main() {
       ? JSON.parse(fs.readFileSync(CHANGELOG_FILE, 'utf-8'))
       : [];
 
-    // Remove existing entry for today if re-running
+    // A second run on the same day diffs against the first run's snapshot, so
+    // it only holds what changed since then — add it to today's entry instead
+    // of replacing it (a later record for the same id wins).
+    const today = changelog.find((e) => e.date === entry.date);
+    if (today) {
+      const merge = <T extends { id: string }>(a: T[] = [], b: T[] = []): T[] =>
+        [...new Map([...a, ...b].map((item) => [item.id, item])).values()];
+      entry.added = merge(today.added, added);
+      entry.removed = merge(today.removed, removed);
+      entry.changed = merge(today.changed, changed);
+      for (const key of ['categoriesAdded', 'categoriesRemoved', 'categoriesChanged'] as const) {
+        const merged = merge<{ id: string }>(today[key], entry[key]);
+        if (merged.length > 0) (entry as unknown as Record<string, unknown>)[key] = merged;
+      }
+    }
     const filtered = changelog.filter((e) => e.date !== entry.date);
     filtered.unshift(entry);
 

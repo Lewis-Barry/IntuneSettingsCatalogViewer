@@ -25,6 +25,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import type { ComplianceOption, ComplianceProperty, ComplianceTemplate } from '../src/lib/compliance-types';
 
 // Written to data/ (not public/) so the page can load it at build time as a
 // server component prop — same as the main browser's category tree, which is
@@ -71,28 +72,6 @@ const INHERITED = new Set([
   'id', 'displayName', 'description', 'createdDateTime', 'lastModifiedDateTime', 'version', 'roleScopeTagIds',
 ]);
 
-interface PropertyOption {
-  value: string;
-  isDefault?: boolean;
-}
-
-interface TemplateProperty {
-  name: string;
-  /** Graph EDM type, e.g. 'Boolean', 'Int32', 'String', 'requiredPasswordType'. */
-  type: string;
-  description?: string;
-  /** Allowed values, for Boolean and enum-typed settings. */
-  options?: PropertyOption[];
-  /** 'choice' | 'simple' — mirrors the settings catalog's type badge. */
-  kind: 'choice' | 'simple';
-}
-
-interface ComplianceTemplate {
-  type: string;
-  platform: string;
-  family: string;
-  properties: TemplateProperty[];
-}
 
 // ─── Graph $metadata ───
 
@@ -140,7 +119,7 @@ function parseMetadata(xml: string): ParsedMetadata {
 }
 
 /** Allowed values for a property, where Graph defines a closed set. */
-function optionsFor(type: string, enums: Map<string, string[]>): PropertyOption[] | undefined {
+function optionsFor(type: string, enums: Map<string, string[]>): ComplianceOption[] | undefined {
   if (type === 'Boolean') {
     // The portal renders these as a Require / Not configured toggle.
     return [{ value: 'Require' }, { value: 'Not configured', isDefault: true }];
@@ -159,10 +138,12 @@ function optionsFor(type: string, enums: Map<string, string[]>): PropertyOption[
 /** Pull `|name|Type|Description|` rows out of the doc's Properties table. */
 async function fetchDescriptions(type: string): Promise<Map<string, string>> {
   const res = await fetch(`${DOCS_BASE}/intune-deviceconfig-${type.toLowerCase()}.md`);
-  if (!res.ok) {
-    console.warn(`  ! ${type}: docs ${res.status} — properties will have no description`);
+  if (res.status === 404) {
+    console.warn(`  ! ${type}: no doc page — properties will have no description`);
     return new Map();
   }
+  // Any other failure is temporary: stop rather than save a catalog without descriptions.
+  if (!res.ok) throw new Error(`docs for ${type} failed: ${res.status}`);
   const descriptions = new Map<string, string>();
   for (const line of (await res.text()).split('\n')) {
     if (!line.startsWith('|')) continue;
@@ -199,7 +180,7 @@ async function main() {
       continue;
     }
     const descriptions = await fetchDescriptions(type);
-    const properties: TemplateProperty[] = entity.props
+    const properties: ComplianceProperty[] = entity.props
       .map((p) => {
         const options = optionsFor(p.type, enums);
         return {

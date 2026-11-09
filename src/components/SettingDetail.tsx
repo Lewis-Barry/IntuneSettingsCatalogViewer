@@ -1,19 +1,16 @@
-import type { SettingDefinition, MatchSource } from '@/lib/types';
+import type { SettingDefinition } from '@/lib/types';
 import { getPlatformLabel } from '@/lib/types';
 import { skuLabel } from '@/lib/sku-labels';
 import { getAsrRuleInfo, ASR_DOCS_URL } from '@/lib/asr-rules';
 import { PLATFORM_ICONS } from './PlatformIcons';
 import HighlightText from './HighlightText';
 import CopyCspButton from './CopyCspButton';
+import { getCspPath } from '@/lib/settings-grouping';
 
 interface SettingDetailProps {
   setting: SettingDefinition;
-  /** Pass all sibling settings so we can resolve dependedOnBy child details */
-  allSettings?: SettingDefinition[];
   /** The raw search query to highlight matched words in the description */
   highlightQuery?: string;
-  /** Where the search query matched for this setting */
-  matchSources?: MatchSource[];
   /** Option IDs actively selected (e.g. by OIB baseline) — highlighted in the options list */
   activeOptionIds?: string[];
   /** Resolved simple value configured by a baseline (shown when no options list) */
@@ -22,28 +19,14 @@ interface SettingDetailProps {
   activeLabel?: string;
 }
 
-export default function SettingDetail({ setting, allSettings, highlightQuery, matchSources, activeOptionIds, activeSimpleValue, activeLabel = 'OIB' }: SettingDetailProps) {
-  const cspPath =
-    setting.baseUri && setting.offsetUri
-      ? `${setting.baseUri}/${setting.offsetUri}`
-      : setting.baseUri || setting.offsetUri || '—';
+export default function SettingDetail({ setting, highlightQuery, activeOptionIds, activeSimpleValue, activeLabel = 'OIB' }: SettingDetailProps) {
+  const cspPath = getCspPath(setting) || '—';
   const platform = setting.applicability?.platform;
   const platformLabel = getPlatformLabel(platform);
   const PlatformIcon = platform ? PLATFORM_ICONS[platform] : undefined;
 
   // ASR rule info
   const asrInfo = getAsrRuleInfo(setting.id);
-
-  // Highlight variant logic:
-  //   - If title matched: description & CSP use secondary (blue) highlight
-  //   - If only description/CSP matched (no title match): that field uses primary (yellow)
-  const hasTitleMatch = matchSources?.includes('title') ?? false;
-  const descVariant: 'title' | 'secondary' = hasTitleMatch ? 'secondary' : 'title';
-  const cspVariant: 'title' | 'secondary' = hasTitleMatch
-    ? 'secondary'
-    : matchSources?.includes('csp') && !matchSources?.includes('description')
-      ? 'title'
-      : 'secondary';
 
   return (
     <div className="px-4 md:px-6 py-4 space-y-4">
@@ -99,7 +82,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
             Description
           </h4>
           <p className="text-fluent-base text-fluent-text whitespace-pre-wrap">
-            <HighlightText text={setting.description} query={highlightQuery} variant={descVariant} />
+            <HighlightText text={setting.description} query={highlightQuery} />
           </p>
         </div>
       )}
@@ -195,7 +178,7 @@ export default function SettingDetail({ setting, allSettings, highlightQuery, ma
       {/* CSP Path + MS Learn links */}
       <div className="flex items-end justify-between gap-3 pt-1">
         <span className="inline-flex items-start gap-1.5 text-fluent-xs text-fluent-text-secondary font-mono break-all">
-          <HighlightText text={cspPath} query={highlightQuery} variant={cspVariant} />
+          <HighlightText text={cspPath} query={highlightQuery} />
           {cspPath !== '—' && <CopyCspButton text={cspPath} />}
         </span>
         {setting.infoUrls && setting.infoUrls.length > 0 && (

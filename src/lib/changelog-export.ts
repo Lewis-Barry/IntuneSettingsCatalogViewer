@@ -2,6 +2,7 @@
 // visible on screen (date range + type/platform/category/search filters applied).
 // Reuses the OIB exporters' csvCell/STYLE/escapeHtml so all reports look alike.
 
+import { groupBy } from './group-by';
 import { csvCell } from './oib-export-shared';
 import { STYLE, escapeHtml } from './oib-html-export';
 
@@ -63,7 +64,7 @@ export function generateChangelogHtml({
   const timestamp = `${generatedAt.toLocaleDateString()} ${generatedAt.toLocaleTimeString()}`;
 
   // Group by date, newest first.
-  const byDate = Map.groupBy(items, (item) => item.date);
+  const byDate = groupBy(items, (item) => item.date);
   const dates = [...byDate.keys()].sort((a, b) => b.localeCompare(a));
 
   const toc = dates

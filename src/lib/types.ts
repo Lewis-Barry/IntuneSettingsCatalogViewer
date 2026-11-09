@@ -1,3 +1,4 @@
+import { getCspPath } from './settings-grouping';
 // ─── Microsoft Graph API Types for Intune Settings Catalog ───
 
 /** Platforms supported by Intune */
@@ -328,9 +329,7 @@ export function detectMatchSources(
   // when the displayName itself doesn't contain the search term.
   if (matches(setting.displayName)) sources.push('title');
   if (matches(setting.description)) sources.push('description');
-  const cspPath = setting.baseUri && setting.offsetUri
-    ? `${setting.baseUri}/${setting.offsetUri}`
-    : setting.baseUri || setting.offsetUri || '';
+  const cspPath = getCspPath(setting);
   if (cspPath && matches(cspPath)) sources.push('csp');
   const nameMatchesButNotTitle = !sources.includes('title') && matches(setting.name);
   if (setting.keywords && setting.keywords.some(k => matches(k))) sources.push('keywords');

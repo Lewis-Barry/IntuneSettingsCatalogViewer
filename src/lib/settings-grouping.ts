@@ -3,9 +3,10 @@ import type { SettingDefinition } from './types';
 /**
  * Derive the CSP path for a setting from its baseUri + offsetUri.
  */
-export function getCspPath(s: SettingDefinition): string {
+export function getCspPath(s: Pick<SettingDefinition, 'baseUri' | 'offsetUri'>): string {
+  // Most offsetUris already start with '/', so a plain join gives '…/Policy//Config/…'.
   return s.baseUri && s.offsetUri
-    ? `${s.baseUri}/${s.offsetUri}`
+    ? `${s.baseUri.replace(/\/+$/, '')}/${s.offsetUri.replace(/^\/+/, '')}`
     : s.baseUri || s.offsetUri || '';
 }
 

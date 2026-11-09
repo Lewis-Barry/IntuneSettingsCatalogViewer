@@ -53,6 +53,10 @@ jobs:
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
 
+      # Not in git — without it the changelog's row expand gets 404s after this deploy.
+      - name: Generate per-setting changelog JSON
+        run: npx tsx scripts/generate-changelog-settings.ts
+
       - name: Build site
         run: npm run build
 

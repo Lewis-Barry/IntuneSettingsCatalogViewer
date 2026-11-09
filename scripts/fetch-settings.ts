@@ -12,20 +12,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Pick up credentials from .env.local (gitignored) as well as the process
-// environment, so a local run doesn't need them exported by hand. Same idiom
-// as generate-summaries.ts.
-try {
-  process.loadEnvFile(path.resolve(__dirname, '..', '.env.local'));
-} catch {
-  // no .env.local; rely on the process environment
-}
+import { getAccessToken, graphGet, fetchAllPages } from './graph';
 
 // ─── Config ───
-const TENANT_ID = process.env.AZURE_TENANT_ID!;
-const CLIENT_ID = process.env.AZURE_CLIENT_ID!;
-const CLIENT_SECRET = process.env.AZURE_CLIENT_SECRET!;
-
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
@@ -88,98 +77,11 @@ const CATALOGS = [
   { usage: 'compliance', categories: 'complianceCategories', settings: 'complianceSettings' },
 ] as const;
 
-// ─── Auth (client-credentials flow, plain fetch) ───
-
-// Module-level so graphGet can refresh it when it expires mid-run — a full
-// catalog fetch (plus throttle waits) can outlast the ~60min token lifetime.
-let token: string | null = null;
-
-async function getAccessToken(): Promise<string> {
-  if (!TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) {
-    console.error('Error: AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET must be set.');
-    process.exit(1);
-  }
-
-  const res = await fetch(`https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`, {
-    method: 'POST',
-    body: new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      scope: 'https://graph.microsoft.com/.default',
-    }),
-  });
-  if (!res.ok) {
-    throw new Error(`Token request failed: ${res.status} ${await res.text()}`);
-  }
-  const json = await res.json();
-  if (!json.access_token) {
-    throw new Error('Token response missing access_token');
-  }
-  token = json.access_token as string;
-  return token;
-}
-
-// ─── Graph GET with retry (throttling, transient 5xx/network, token expiry) ───
-
-const MAX_RETRIES = 8;
-
-async function graphGet(url: string): Promise<Record<string, unknown>> {
-  const fullUrl = url.startsWith('https://') ? url : `https://graph.microsoft.com/beta${url}`;
-  for (let attempt = 1; ; attempt++) {
-    let res: Response;
-    try {
-      res = await fetch(fullUrl, { headers: { Authorization: `Bearer ${token ?? (await getAccessToken())}` } });
-    } catch (err) {
-      if (attempt > MAX_RETRIES) throw err;
-      console.warn(`  Network error (${(err as Error).message}). Retrying in 5s (attempt ${attempt}/${MAX_RETRIES})...`);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      continue;
-    }
-    if (res.status === 401 && attempt === 1) {
-      // Token expired mid-run — refresh once and retry; a second 401 is a real auth error
-      token = null;
-      continue;
-    }
-    if ((res.status === 429 || res.status >= 500) && attempt <= MAX_RETRIES) {
-      // Retry-After may be delta-seconds or an HTTP-date; NaN/0 → default backoff
-      const retryAfter = parseInt(res.headers.get('Retry-After') ?? '', 10);
-      const waitS = retryAfter > 0 ? retryAfter : 30;
-      console.warn(`  HTTP ${res.status}. Waiting ${waitS}s (attempt ${attempt}/${MAX_RETRIES})...`);
-      await new Promise((resolve) => setTimeout(resolve, waitS * 1000));
-      continue;
-    }
-    if (!res.ok) {
-      throw new Error(`Graph request failed: ${res.status} ${await res.text()}`);
-    }
-    return res.json();
-  }
-}
-
-// ─── Paginated Fetch ───
-
-async function fetchAllPages<T>(url: string): Promise<T[]> {
-  const results: T[] = [];
-  let nextLink: string | undefined = url;
-  let page = 1;
-
-  while (nextLink) {
-    console.log(`  Page ${page}...`);
-    const response = await graphGet(nextLink);
-    results.push(...(response.value as T[]));
-    nextLink = response['@odata.nextLink'] as string | undefined;
-    page++;
-  }
-
-  return results;
-}
-
 // ─── Main ───
 
 async function main() {
   console.log('Intune Settings Catalog Fetcher');
   console.log('================================');
-  console.log(`Tenant: ${TENANT_ID}`);
   console.log();
 
   await getAccessToken(); // validate credentials up front
@@ -206,7 +108,8 @@ async function main() {
   for (const catalog of CATALOGS) {
     console.log(`\nFetching ${catalog.usage} categories...`);
     const catalogCategories = await fetchAllPages<Record<string, unknown>>(
-      `/deviceManagement/${catalog.categories}?$select=${CATEGORIES_SELECT}`
+      `/deviceManagement/${catalog.categories}?$select=${CATEGORIES_SELECT}`,
+      true
     );
     console.log(`  Retrieved ${catalogCategories.length} categories.`);
 
@@ -214,7 +117,7 @@ async function main() {
     // sub-types (choice, simple, group, etc.) have different properties and
     // $select on the base type rejects sub-type-only fields like 'options'.
     console.log(`Fetching ${catalog.usage} settings...`);
-    const catalogSettings = await fetchAllPages<Record<string, unknown>>(`/deviceManagement/${catalog.settings}`);
+    const catalogSettings = await fetchAllPages<Record<string, unknown>>(`/deviceManagement/${catalog.settings}`, true);
     console.log(`  Retrieved ${catalogSettings.length} settings.`);
 
     // Graph stamps settingUsage itself; fall back to the endpoint we asked, so
@@ -266,13 +169,27 @@ async function main() {
   const allSettings = dedupe(settings, 'settings');
 
   console.log(`\nTotal: ${allSettings.length} settings across ${allCategories.length} categories.`);
-  fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(allCategories, null, 2), 'utf-8');
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(allSettings, null, 2), 'utf-8');
+
+  // A partial answer from Graph must not be saved: the changelog would log the
+  // missing settings as "removed" and the site would deploy without them.
+  const previousSettings: unknown[] = existingSettings ? JSON.parse(existingSettings) : [];
+  if (allSettings.length < previousSettings.length * 0.9) {
+    throw new Error(
+      `Graph returned ${allSettings.length} settings, more than 10% fewer than the ${previousSettings.length} on disk — refusing to overwrite. ` +
+        'If the drop is real, delete data/settings.json and run again.'
+    );
+  }
+
+  // settings.json is written without indentation: it is ~69 MB pretty-printed
+  // and GitHub rejects files over 100 MB.
+  const newSettings = JSON.stringify(allSettings);
+  const newCategories = JSON.stringify(allCategories, null, 2);
+  fs.writeFileSync(CATEGORIES_FILE, newCategories, 'utf-8');
+  fs.writeFileSync(SETTINGS_FILE, newSettings, 'utf-8');
 
   // 3. Write last-updated timestamp only if data actually changed
-  const newSettings = fs.readFileSync(SETTINGS_FILE, 'utf-8');
-  const newCategories = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
-  const hasChanges = newSettings !== existingSettings || newCategories !== existingCategories;
+  // (compare content, not formatting, so an indented file on disk still matches)
+  const hasChanges = newSettings !== JSON.stringify(previousSettings) || newCategories !== existingCategories;
 
   if (hasChanges) {
     const now = new Date().toISOString();

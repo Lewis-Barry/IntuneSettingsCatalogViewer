@@ -86,11 +86,7 @@ export function loadComplianceTemplates(): ComplianceTemplate[] {
 }
 
 export function loadChangelog(): ChangelogEntry[] {
-  const raw = readJSON<ChangelogEntry[]>('changelog.json') || [];
-  // Exclude the initial baseline entry (2026-02-21) which contains the bulk
-  // import of all settings and makes the page very slow.
-  const BASELINE_DATE = '2026-02-21';
-  return raw.filter((e) => e.date !== BASELINE_DATE);
+  return readJSON<ChangelogEntry[]>('changelog.json') || [];
 }
 
 /** AI summaries keyed by changelog entry date (empty until generate-summaries runs). */

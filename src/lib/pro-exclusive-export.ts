@@ -3,6 +3,7 @@
 // (category + search filters applied).
 // Reuses the OIB changelog's STYLE/escapeHtml/csvCell so both reports look alike.
 
+import { groupBy } from './group-by';
 import type { SettingDefinition } from './types';
 import { getSettingScope, getSettingTypeLabel } from './types';
 import { csvCell } from './oib-export-shared';
@@ -26,7 +27,7 @@ function groupByCategory(
   settings: SettingDefinition[],
   categoryMap: Record<string, string>,
 ): { category: string; settings: SettingDefinition[] }[] {
-  return [...Map.groupBy(settings, (s) => categoryMap[s.categoryId] ?? '')]
+  return [...groupBy(settings, (s) => categoryMap[s.categoryId] ?? '')]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([category, list]) => ({
       category,

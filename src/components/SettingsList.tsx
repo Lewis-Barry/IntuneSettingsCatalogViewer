@@ -168,7 +168,6 @@ export default memo(function SettingsList({
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
                 matchSources={getMatchSources(setting)}
-                allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
             ))}
@@ -241,7 +240,6 @@ export default memo(function SettingsList({
                 childSettings={childMap.get(setting.id)}
                 highlightQuery={highlightQuery}
                 matchSources={getMatchSources(setting)}
-                allSettings={settings}
                 disambiguationLabel={disambiguationMap.get(setting.id)}
               />
             </div>

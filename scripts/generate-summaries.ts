@@ -5,8 +5,7 @@
  * the prompt in scripts/ai-summary-prompt.md (daily) or
  * scripts/ai-summary-monthly-prompt.md (monthly) — in each file, everything
  * after the first `---` is the system prompt. Summaries are stored separately
- * in data/changelog-summaries.json, keyed by date — generate-changelog.ts
- * rebuilds changelog.json from scratch, so summaries must not live inside it.
+ * in data/changelog-summaries.json, keyed by date.
  *
  * API key: create `.env.local` in the project root (gitignored) with one of
  *   DEEPSEEK_API_KEY=sk-...        (model: deepseek-flash)
@@ -338,10 +337,17 @@ async function main() {
       console.log(user.length > 1500 ? '…\n' : '\n');
       continue;
     }
-    const raw = await callModel(system!, user, cfg!, monthly ? MONTHLY_MAX_TOKENS : DAILY_MAX_TOKENS);
-    const summary = monthly ? parseMonthlySummary(raw) : parseSummary(raw);
-    summaries[target.key] = summary;
-    console.log(`${target.key}: ${summary.headline}`);
+    // One bad day (API error, unparseable answer) must not throw away the
+    // summaries already generated in this run, or block the days after it.
+    try {
+      const raw = await callModel(system!, user, cfg!, monthly ? MONTHLY_MAX_TOKENS : DAILY_MAX_TOKENS);
+      const summary = monthly ? parseMonthlySummary(raw) : parseSummary(raw);
+      summaries[target.key] = summary;
+      console.log(`${target.key}: ${summary.headline}`);
+    } catch (err) {
+      console.error(`${target.key}: FAILED — ${(err as Error).message}`);
+      process.exitCode = 1;
+    }
   }
 
   if (!dryRun) {

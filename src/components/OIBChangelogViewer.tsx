@@ -1,7 +1,9 @@
 'use client';
 
-import { loadBrowserJson, loadSettingDefinitions } from '@/lib/browser-data';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { groupBy } from '@/lib/group-by';
+import { loadSettingDefinitions } from '@/lib/browser-data';
+import { useShards } from '@/lib/useShards';
+import { useEffect, useMemo, useState } from 'react';
 import { pillClass } from '@/lib/pill';
 import { basePath } from '@/lib/basePath';
 import { PLATFORM_ICONS } from './PlatformIcons';
@@ -56,7 +58,7 @@ function activeFrom(value?: OIBValue): { activeOptionIds?: string[]; activeSimpl
  *  "Min Smb2 Dialect") → the CSP node that tells them apart ("LanmanServer"). */
 function disambiguate(changes: SettingChange[], defs: Map<string, SettingDefinition>): Map<string, string> {
   const out = new Map<string, string>();
-  const byName = Map.groupBy(changes, (c) => defs.get(c.definitionId)?.displayName ?? c.definitionId);
+  const byName = groupBy(changes, (c) => defs.get(c.definitionId)?.displayName ?? c.definitionId);
   for (const group of byName.values()) {
     if (new Set(group.map((c) => c.definitionId)).size < 2) continue;
     for (const c of group) {
@@ -97,7 +99,7 @@ const cardId = (key: string) => `p-${key.toLowerCase().replace(/[^a-z0-9]+/g, '-
 
 /** Group policies by category (alphabetical), kinds first within each category. */
 function groupByCategory(policies: PolicyDiff[]): { category: string; policies: PolicyDiff[] }[] {
-  return [...Map.groupBy(policies, (p) => p.category)]
+  return [...groupBy(policies, (p) => p.category)]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([category, ps]) => ({
       category,
@@ -110,7 +112,7 @@ function groupByCategory(policies: PolicyDiff[]): { category: string; policies: 
 export default function OIBChangelogViewer() {
   const [index, setIndex] = useState<OIBVersionIndex | null>(null);
   const [defsMap, setDefsMap] = useState<Map<string, SettingDefinition>>(new Map());
-  const [shards, setShards] = useState<Map<string, OIBVersionShard>>(new Map());
+  const { shards, ensure: ensureShard, hasFailed } = useShards<OIBVersionShard>('oib-versions');
   const [folder, setFolder] = useState<string | null>(null);
   const [baseTag, setBaseTag] = useState<string | null>(null);
   const [compareTag, setCompareTag] = useState<string | null>(null);
@@ -151,16 +153,6 @@ export default function OIBChangelogViewer() {
   }, [platform]);
 
   // Lazily fetch the two selected shards.
-  const ensureShard = useCallback(
-    (tag: string | null) => {
-      if (!tag || shards.has(tag)) return;
-      loadBrowserJson<OIBVersionShard>(`oib-versions/${tag}.json`)
-        .then((shard) => setShards((prev) => prev.has(tag) ? prev : new Map(prev).set(tag, shard)))
-        .catch((e) => setError(String(e)));
-    },
-    [shards]
-  );
-
   useEffect(() => {
     ensureShard(baseTag);
     ensureShard(compareTag);
@@ -304,6 +296,7 @@ export default function OIBChangelogViewer() {
       onCompareChange={setCompareTag}
       onExport={downloadExport}
       subject={platform?.label}
+      loadFailed={hasFailed(baseTag) || hasFailed(compareTag)}
       summary={
         diff && {
           heading: `v${versionLabel(baseTag)} → v${versionLabel(compareTag)}`,

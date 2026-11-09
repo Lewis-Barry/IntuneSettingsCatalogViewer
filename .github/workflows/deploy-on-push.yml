@@ -47,18 +47,23 @@ jobs:
           restore-keys: |
             nextjs-${{ hashFiles('package-lock.json') }}-
 
-      # Uses existing data files (no fetch step)
-      # If data files don't exist, falls back to sample data
-      - name: Ensure data files exist
-        run: |
-          if [ ! -f data/settings.json ]; then
-            echo "No settings.json found, using sample data..."
-            cp data/sample-settings.json data/settings.json 2>/dev/null || echo "[]" > data/settings.json
-            cp data/sample-categories.json data/categories.json 2>/dev/null || echo "[]" > data/categories.json
-          fi
-
+      # Uses the committed data files (no fetch step)
       - name: Build search index
         run: npx tsx scripts/build-search-index.ts
+
+      # Offline self-checks — a broken diff engine, exporter or filter must not deploy.
+      - name: Self-checks
+        run: |
+          npm run check-oib-diff
+          npm run check-baseline-diff
+          npm run check-changelog-export
+          npm run check-changelog-summary
+          npm run check-usage-filter
+          npm run check-compliance
+          npm run check-windows-compatibility
+          npm run check-browser-data
+          npm run check-search-worker
+          npm run check-search-performance
 
       - name: Generate per-setting changelog JSON
         run: npx tsx scripts/generate-changelog-settings.ts

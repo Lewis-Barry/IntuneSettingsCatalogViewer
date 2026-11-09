@@ -8,7 +8,7 @@ import { getAsrRuleInfo } from '@/lib/asr-rules';
 import { WindowsIcon, MacOSIcon } from './PlatformIcons';
 import SettingRow from './SettingRow';
 import { useIsDesktop } from '@/lib/useMediaQuery';
-import type { OIBOutput, OIBPolicy, OIBValue, FlatSetting } from '@/lib/oib-types';
+import type { OIBOutput, OIBPolicy, FlatSetting } from '@/lib/oib-types';
 import {
   parsePolicy,
   flattenOIBSettings,
@@ -32,8 +32,6 @@ import {
 } from './BrowserParts';
 import ExportMenu, { downloadTextFile } from './ExportMenu';
 import { generateOIBBrowseCsv, generateOIBBrowseHtml, type BrowseExportEntry } from '@/lib/oib-browse-export';
-
-// ── (Value resolution removed — OIB selections are now shown in the expanded detail panel) ──
 
 // ── Search ───────────────────────────────────────────────────────────────────
 
@@ -61,17 +59,12 @@ function getOIBMatchSources(
     return words.length > 0 && words.every((w) => hay.includes(w));
   });
   if (!hasAllWords) return [];
-  if (!def) {
-    // No definition — fall back to simple ID match
-    if (flat.definitionId.toLowerCase().includes(query)) return ['keywords'];
-    return [];
-  }
+  // hasAllWords already matched, so a setting with no labelled source (no
+  // definition, or the hit was in the raw definitionId) still counts as a hit.
+  if (!def) return ['keywords'];
   const extraKeywords = asrInfo ? [asrInfo.guid] : undefined;
   const sources = detectMatchSources(def, query, extraKeywords);
-  // Also check the raw definitionId (may differ from setting.name)
-  if (sources.length === 0 && flat.definitionId.toLowerCase().includes(query)) {
-    sources.push('keywords');
-  }
+  if (sources.length === 0) sources.push('keywords');
   return sources;
 }
 
@@ -565,7 +558,8 @@ export default function OIBBrowser() {
             searchHits!.length === 0 ? (
               <NoResults query={deferredQuery} />
             ) : (
-              <div>
+              // key: search and category views must not share PolicySection state (collapsed/open groups)
+              <div key="search">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-fluent-border bg-white dark:bg-[#1c1c1e] sticky top-0 z-10">
                   <div className="text-fluent-base font-semibold text-fluent-blue">
                     {totalSearchMatches.toLocaleString()} matching {totalSearchMatches === 1 ? 'setting' : 'settings'} across {searchHits!.length} {searchHits!.length === 1 ? 'policy' : 'policies'}
@@ -590,7 +584,7 @@ export default function OIBBrowser() {
               </div>
             )
           ) : selectedNode ? (
-            <div>
+            <div key="category">
               <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fluent-border bg-fluent-bg-alt sticky top-0 z-10">
                 <span className="text-fluent-sm text-fluent-text-secondary">
                   {FOLDER_LABELS[selectedNode.folder] ?? selectedNode.folder} ›

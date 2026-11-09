@@ -21,6 +21,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { FOLDER_LABELS, FOLDER_ORDER, type OIBOutput, type OIBPolicy, type OIBSetting, type OIBValue } from '../src/lib/oib-types';
 
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
 const OIB_DATA_FILE = path.join(PUBLIC_DIR, 'oib-data.json');
@@ -36,39 +37,6 @@ const PLATFORM_PATHS: Array<{ folder: string; catalogPath: string }> = [
   { folder: 'MACOS',      catalogPath: 'MACOS/IntuneManagement/SettingsCatalog' },
   { folder: 'WINDOWS365', catalogPath: 'WINDOWS365/IntuneManagement/SettingsCatalog' },
 ];
-
-// ── Output types (mirrored in src/lib/oib-types.ts for the browser) ──
-
-export interface OIBOutput {
-  fetchedAt: string;
-  oibCommitSha: string;
-  policies: OIBPolicy[];
-}
-
-export interface OIBPolicy {
-  name: string;
-  platform: string;
-  technologies: string;
-  oibFolder: string;
-  githubUrl: string;
-  /** Stable GUID from PolicyManifest.json, where the version ships one. */
-  oibId?: string;
-  settings: OIBSetting[];
-}
-
-export interface OIBSetting {
-  definitionId: string;
-  value: OIBValue;
-}
-
-export type OIBValue =
-  | { type: 'choice'; optionId: string; children?: OIBSetting[] }
-  | { type: 'simple'; value: string | number | boolean | null }
-  | { type: 'choiceCollection'; optionIds: string[] }
-  | { type: 'simpleCollection'; values: (string | number | boolean | null)[] }
-  | { type: 'group'; members: OIBSetting[] }
-  | { type: 'groupCollection'; groups: OIBSetting[][] }
-  | { type: 'unknown' };
 
 // ── GitHub API helpers ──
 
@@ -257,6 +225,9 @@ async function fetchPlatformPolicies(
         settings,
       });
     } catch (err) {
+      // Only a file that cannot be parsed is skipped. A failed download must
+      // fail the run: a missing policy would be published as "removed".
+      if (!(err instanceof SyntaxError)) throw err;
       console.error(`   FAILED ${file.name} — ${err}`);
     }
   }
@@ -404,13 +375,6 @@ function compareVersions(a: string, b: string): number {
   }
   return 0;
 }
-
-const FOLDER_LABELS: Record<string, string> = {
-  WINDOWS: 'Windows',
-  MACOS: 'macOS',
-  WINDOWS365: 'Windows 365',
-};
-const FOLDER_ORDER = ['WINDOWS', 'MACOS', 'WINDOWS365'];
 
 main().catch((err) => {
   console.error(err);

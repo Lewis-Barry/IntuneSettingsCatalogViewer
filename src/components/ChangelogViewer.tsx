@@ -5,6 +5,7 @@ import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, Chan
 import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { pillClass } from '@/lib/pill';
 import { settingSlug } from '@/lib/slug';
+import { getCspPath } from '@/lib/settings-grouping';
 import { basePath } from '@/lib/basePath';
 import SettingDetail from './SettingDetail';
 import ExportMenu, { downloadTextFile, type ExportFormat } from './ExportMenu';
@@ -69,7 +70,6 @@ interface ChangeFeedItem {
   contextLabel?: string;
   contextDetail?: string;
   platform?: string;
-  href?: string;
   setting?: ChangelogSettingSummary;
   fields?: Array<{ field: string; oldValue: string; newValue: string }>;
   /** Lowercased search text, precomputed once in the feedItems memo. */
@@ -171,14 +171,13 @@ export default function ChangelogViewer({ entries, categories, settings, summari
           date: entry.date,
           action: 'added',
           entity: 'setting',
-          title: setting.displayName,
+          title: setting.displayName || currentSetting?.name || setting.id,
           settingId: setting.id,
           groupTitle: getSettingGroupTitle(currentSetting, settingsById),
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
           platform: setting.platform,
-          href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
           setting: currentSetting,
         });
       });
@@ -189,7 +188,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
           date: entry.date,
           action: 'removed',
           entity: 'setting',
-          title: setting.displayName,
+          title: setting.displayName || setting.id,
           settingId: setting.id,
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
@@ -205,14 +204,13 @@ export default function ChangelogViewer({ entries, categories, settings, summari
           date: entry.date,
           action: 'changed',
           entity: 'setting',
-          title: setting.displayName,
+          title: setting.displayName || currentSetting?.name || setting.id,
           settingId: setting.id,
           groupTitle: getSettingGroupTitle(currentSetting, settingsById),
           categoryId: setting.categoryId,
           categoryName: setting.categoryName,
           hotspotCategory: getHotspotCategory(setting.categoryId, setting.categoryName, categoryRollups),
           platform: setting.platform,
-          href: `/setting/${encodeURIComponent(settingSlug(setting.id))}/`,
           setting: currentSetting,
           fields: setting.fields,
         });
@@ -922,7 +920,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
 function relativeDayLabel(date: string | null): string {
   if (!date) return 'No changes yet';
   const diffDays = Math.floor((Date.now() - new Date(date + 'T00:00:00').getTime()) / 86_400_000);
-  if (diffDays === 0) return 'Today';
+  if (diffDays <= 0) return 'Today'; // entry dates are UTC, so west of UTC this can be -1
   if (diffDays === 1) return 'Yesterday';
   if (diffDays < 7) return `${diffDays} days ago`;
   if (diffDays < 30) {
@@ -1279,17 +1277,7 @@ function groupRelatedFeedItems(
     const rootDefinitionId = settingsById.get(item.settingId)?.rootDefinitionId;
     if (rootDefinitionId) return rootDefinitionId;
 
-    let inferredRoot: string | undefined;
-    for (const candidateId of itemIds) {
-      if (
-        candidateId !== item.settingId &&
-        item.settingId.startsWith(`${candidateId}_`) &&
-        (!inferredRoot || candidateId.length > inferredRoot.length)
-      ) {
-        inferredRoot = candidateId;
-      }
-    }
-    return inferredRoot ?? item.settingId;
+    return longestPrefixId(item.settingId, (id) => itemIds.has(id)) ?? item.settingId;
   };
 
   const groups = new Map<string, { rootId: string; members: ChangeFeedItem[]; hasChild: boolean }>();
@@ -1336,7 +1324,7 @@ function groupRelatedFeedItems(
       ),
       setting: rootSetting,
       fields: undefined,
-      children: children.length > 0 ? children : group.members,
+      children,
     });
   }
 
@@ -1348,10 +1336,6 @@ function getSettingSearchText(setting?: ChangelogSettingSummary): string {
 
   // Note: option-level text isn't searchable on the changelog page since
   // options are excluded from the initial payload (lazy-fetched on expand).
-  const cspPath = setting.baseUri && setting.offsetUri
-    ? `${setting.baseUri}/${setting.offsetUri}`
-    : setting.baseUri || setting.offsetUri;
-
   return [
     setting.displayName,
     setting.name,
@@ -1359,7 +1343,7 @@ function getSettingSearchText(setting?: ChangelogSettingSummary): string {
     setting.helpText,
     setting.applicability?.technologies,
     setting.defaultValue === undefined ? undefined : String(setting.defaultValue),
-    cspPath,
+    getCspPath(setting),
   ].filter(Boolean).join(' ');
 }
 
@@ -1399,17 +1383,18 @@ function getDuplicateParentRef<T extends ChangelogSettingRef>(
     if (parent) return parent;
   }
 
-  let bestParent: T | undefined;
-  for (const candidate of refsById.values()) {
-    if (
-      candidate.id !== ref.id &&
-      ref.id.startsWith(`${candidate.id}_`) &&
-      (!bestParent || candidate.id.length > bestParent.id.length)
-    ) {
-      bestParent = candidate;
-    }
+  const parentId = longestPrefixId(ref.id, (id) => refsById.has(id));
+  return parentId ? refsById.get(parentId) : undefined;
+}
+
+/** Longest known id that `id` extends with `_…`. Walks the id's own `_` positions
+ *  instead of scanning every known id (one changelog day can hold ~4,000 refs). */
+function longestPrefixId(id: string, has: (candidate: string) => boolean): string | undefined {
+  for (let i = id.lastIndexOf('_'); i > 0; i = id.lastIndexOf('_', i - 1)) {
+    const candidate = id.slice(0, i);
+    if (has(candidate)) return candidate;
   }
-  return bestParent;
+  return undefined;
 }
 
 function hasSameFeedIdentity(a: ChangelogSettingRef, b: ChangelogSettingRef): boolean {

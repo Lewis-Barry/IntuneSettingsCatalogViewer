@@ -5,7 +5,8 @@ import { search as flexSearch, ensureIndex } from '@/lib/search';
 import type { SearchIndexEntry } from '@/lib/types';
 
 interface SearchBarProps {
-  onSearchResults?: (results: SearchIndexEntry[]) => void;
+  /** `null` = the box was cleared; `[]` = a search ran and matched nothing. */
+  onSearchResults?: (results: SearchIndexEntry[] | null) => void;
   onQueryChange?: (query: string) => void;
   placeholder?: string;
   localSearch?: boolean;
@@ -63,7 +64,7 @@ export default function SearchBar({
 
       if (!value.trim()) {
         setIsLoading(false);
-        onSearchResults?.([]);
+        onSearchResults?.(null);
         return;
       }
     },
@@ -121,7 +122,7 @@ export default function SearchBar({
                 ++searchSeqRef.current;
                 setIsLoading(false);
                 onQueryChange?.('');
-                onSearchResults?.([]);
+                onSearchResults?.(null);
                 inputRef.current?.focus();
               }}
               className="search-clear-btn absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center
