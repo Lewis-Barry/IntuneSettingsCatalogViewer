@@ -308,6 +308,29 @@ function buildCategoryBundles(settings: SettingDefinition[], tree: CategoryTreeN
   console.log(`Browse subtree bundles: ${Object.keys(bundles).length} files`);
 }
 
+/**
+ * Per-category setting counts keyed by `${platform}|${deprecated ? 1 : 0}`,
+ * each `[visible, total]`. Lets the browser filter the category tree by
+ * platform / deprecated without downloading the whole 28 MB browse payload.
+ * "Visible" mirrors the tree count: roots, plus children whose CSP path
+ * differs from their parent's.
+ */
+function buildFilterCounts(settings: SettingDefinition[]) {
+  const byId = new Map(settings.map((setting) => [setting.id, setting]));
+  const counts: Record<string, Record<string, [number, number]>> = {};
+  for (const s of settings) {
+    const parent = s.rootDefinitionId && s.rootDefinitionId !== s.id ? byId.get(s.rootDefinitionId) : undefined;
+    const visible = !parent || getCspPath(s) !== getCspPath(parent);
+    const key = `${s.applicability?.platform ?? ''}|${s.displayName?.toLowerCase().includes('deprecated') ? 1 : 0}`;
+    const count = ((counts[s.categoryId] ??= {})[key] ??= [0, 0]);
+    if (visible) count[0] += 1;
+    count[1] += 1;
+  }
+  const total = Object.values(counts).flatMap((byKey) => Object.values(byKey)).reduce((sum, [, n]) => sum + n, 0);
+  if (total !== settings.length) throw new Error(`filter-counts: counted ${total} of ${settings.length} settings`);
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'filter-counts.json'), JSON.stringify(counts), 'utf-8');
+}
+
 function buildSearchManifest() {
   const json = fs.readFileSync(SEARCH_INDEX_FILE);
   const libraryVersion: string = JSON.parse(fs.readFileSync(require.resolve('flexsearch/package.json'), 'utf-8')).version;
@@ -321,6 +344,7 @@ function main() {
     const settings: SettingDefinition[] = JSON.parse(fs.readFileSync(path.join(PUBLIC_DIR, 'settings-browse.json'), 'utf-8'));
     const tree: CategoryTreeNode[] = JSON.parse(fs.readFileSync(CATEGORY_TREE_FILE, 'utf-8'));
     buildDefinitionSubsets(settings);
+    buildFilterCounts(settings);
     buildCategoryBundles(settings, tree);
     buildSearchManifest();
     return;
@@ -483,6 +507,7 @@ function main() {
   const browseSizeMB = (fs.statSync(BROWSE_FILE).size / 1024 / 1024).toFixed(2);
   console.log(`Browse data: ${browseSettings.length} settings (${browseSizeMB} MB) → ${BROWSE_FILE}`);
   buildDefinitionSubsets(browseSettings);
+  buildFilterCounts(browseSettings);
 
   // Also write per-category browse payloads so the main browser can fetch only
   // the selected category subtree instead of parsing the full catalog on first load.

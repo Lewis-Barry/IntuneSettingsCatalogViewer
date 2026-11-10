@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useCallback, memo } from 'react';
-import type { CategoryTreeNode } from '@/lib/types';
+import type { BrowseTreeNode } from '@/lib/types';
 
 interface CategoryTreeProps {
-  categories: CategoryTreeNode[];
+  categories: BrowseTreeNode[];
   selectedCategoryId: string | null;
   loadingCategoryId?: string | null;
   onSelectCategory: (categoryId: string, categoryName: string) => void;
@@ -38,7 +38,7 @@ export default memo(function CategoryTree({
 });
 
 interface CategoryNodeProps {
-  node: CategoryTreeNode;
+  node: BrowseTreeNode;
   depth: number;
   selectedCategoryId: string | null;
   loadingCategoryId?: string | null;

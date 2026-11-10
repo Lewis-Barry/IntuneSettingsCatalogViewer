@@ -1,4 +1,4 @@
-import { loadCategories, loadChangelog, loadChangelogSettingSummaries, loadChangelogSummaries } from '@/lib/data';
+import { loadCategories, loadChangelogDays, loadChangelogSummaries } from '@/lib/data';
 import ChangelogViewer from '@/components/ChangelogViewer';
 import type { Metadata } from 'next';
 
@@ -10,12 +10,13 @@ export const metadata: Metadata = {
 export const dynamic = 'force-static';
 
 export default function ChangelogPage() {
-  const changelog = loadChangelog();
-  const categories = loadCategories();
-  // Pass only the changelog-referenced settings, with heavy fields (options,
-  // helpText for options, dependency arrays) stripped. Full setting JSON is
-  // lazy-fetched per row from /changelog-settings/{slug}.json on expand.
-  const settings = loadChangelogSettingSummaries();
+  // Only the newest day is inlined in the HTML (the default view). Shipping the
+  // whole history here made this a 14 MB page; other days are fetched from
+  // /changelog-days/{date}.json when picked.
+  const days = loadChangelogDays();
+  const categories = loadCategories().map(({ id, displayName, parentCategoryId, rootCategoryId }) => ({
+    id, displayName, parentCategoryId, rootCategoryId,
+  }));
   const summaries = loadChangelogSummaries();
 
   return (
@@ -40,7 +41,7 @@ export default function ChangelogPage() {
         </span>
       </div>
 
-      <ChangelogViewer entries={changelog} categories={categories} settings={settings} summaries={summaries} />
+      <ChangelogViewer dates={days.map((day) => day.entry.date)} latest={days[0] ?? null} categories={categories} summaries={summaries} />
     </div>
   );
 }

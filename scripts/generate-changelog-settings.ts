@@ -8,6 +8,9 @@
  * The changelog page lazy-fetches these on row expand so the initial page
  * payload doesn't have to carry the full settings array.
  *
+ * Also writes public/changelog-days/{date}.json (entry + setting summaries),
+ * fetched by the changelog page for every date except the newest.
+ *
  * Usage:
  *   npx tsx scripts/generate-changelog-settings.ts
  */
@@ -16,6 +19,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { SettingDefinition, ChangelogEntry } from '../src/lib/types';
 import { settingSlug } from '../src/lib/slug';
+import { loadChangelogDays } from '../src/lib/data';
 
 const DATA_DIR = path.resolve(__dirname, '..', 'data');
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
@@ -70,6 +74,17 @@ function main() {
     `Wrote ${written} changelog setting JSON files to ${path.relative(process.cwd(), OUT_DIR)}` +
       (missing > 0 ? ` (${missing} referenced IDs no longer exist in settings.json)` : ''),
   );
+
+  // One file per changelog date — the changelog page inlines only the newest
+  // day and fetches the others when a date/month/range is picked.
+  const daysDir = path.join(PUBLIC_DIR, 'changelog-days');
+  fs.rmSync(daysDir, { recursive: true, force: true });
+  fs.mkdirSync(daysDir, { recursive: true });
+  const days = loadChangelogDays();
+  for (const day of days) {
+    fs.writeFileSync(path.join(daysDir, `${day.entry.date}.json`), JSON.stringify(day));
+  }
+  console.log(`Wrote ${days.length} changelog day files to ${path.relative(process.cwd(), daysDir)}`);
 }
 
 main();

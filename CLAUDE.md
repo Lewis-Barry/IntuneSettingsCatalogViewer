@@ -25,7 +25,7 @@ Static Next.js 16 (App Router) + TypeScript + TailwindCSS app. Deployed to GitHu
 |------|------|
 | `src/app/page.tsx` | Main settings browser — loads category-tree + stats at build time |
 | `src/app/setting/` | Individual setting detail pages (slug-based) |
-| `src/app/changelog/` | Changelog viewer |
+| `src/app/changelog/` | Changelog viewer. Inlines **only the newest day** (`loadChangelogDays()[0]`) plus the date list; every other day is fetched from `public/changelog-days/{date}.json` (written by `generate-changelog-settings.ts`) when a date, month, range or "All updates" is picked. Never pass the whole history as props again — that made the page 14 MB |
 | `src/app/compliance/` + `src/components/ComplianceBrowser.tsx` | Compliance settings browser. Deliberately shares the main browser's chrome so the two pages read as one site: same `max-w-[1600px]` wrapper, `h-[calc(100dvh-…)]` shell, header/search/platform-filter block, `BrowserSidebar`, and the same `category-item` / `setting-row` / `scope-badge` / `info-icon` CSS classes and `w-[4.5rem]`/`w-[6rem]`/`w-[3.5rem]` column widths. Rows expand to Description / **Possible values** / Graph property. Shows only what *can* be configured; never tenant values |
 | `src/lib/compliance-types.ts` | Classic compliance types + `humanise()`/`typeLabel()`/`matchesQuery()`. Self-check: `npm run check-compliance` |
 | `src/app/baseline/` | OpenIntuneBaseline (OIB) policy browser |
@@ -81,6 +81,10 @@ Reuses `src/lib` read-only (types, `baseline-diff`, `oib-diff`, `compliance-type
 - Web Worker search (Flexsearch off main thread)
 - Virtual scrolling for large lists
 - Per-category JSON shards (lazy-loaded, not the full 62MB)
+- Platform / deprecated filters prune the category tree from `public/filter-counts.json` (~60KB, per-category `[visible, total]` counts keyed by `platform|deprecated`, built by `build-search-index.ts`) — the browser never downloads `settings-browse.json` (28MB); that file is only a build input
+- Changelog page ships one day, not the history (see `src/app/changelog/`)
+- Home page passes a slimmed category tree (`BrowseTreeNode`: id, name, count, children)
+- No icon font or third-party CSS — icons are inline SVG
 - Module-level JSON caching during static generation
 - Indexed lookups in `data.ts` (`getSettingBySlug`/`getChildSettings`/`getCategoryById`) — built once, so generating the ~17.7k setting pages is O(n), not O(n²)
 - CI caches `.next/cache` between runs (compile/bundle reuse)

@@ -29,6 +29,8 @@ data/categories-previous.json
 data/last-updated.json
 public/search-index.json
 public/changelog-settings/
+public/changelog-days/
+public/filter-counts.json
 public/setting-definitions/
 data/setting-definitions-manifest.json
 public/settings-bundles/

@@ -7,19 +7,20 @@ import CategoryTree from './CategoryTree';
 import SettingsList from './SettingsList';
 import SearchBar from './SearchBar';
 import PlatformFilter from './PlatformFilter';
-import type { CategoryTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
-import { countVisibleSettings, getCspPath, groupSettings } from '@/lib/settings-grouping';
+import type { BrowseTreeNode, SettingDefinition, SearchIndexEntry } from '@/lib/types';
+import { countVisibleSettings, groupSettings } from '@/lib/settings-grouping';
 import { matchesWindowsCompatibility, type WindowsCompatibility } from '@/lib/sku-labels';
 import { generateProExclusiveCsv, generateProExclusiveHtml } from '@/lib/pro-exclusive-export';
 import { useIsDesktop } from '@/lib/useMediaQuery';
 import { basePath } from '@/lib/basePath';
 import BrowserSidebar, { useBrowserSidebar } from './BrowserSidebar';
 import { loadCategorySettings } from '@/lib/category-data';
+import { loadBrowserJson } from '@/lib/browser-data';
 import { matchesCompatibilitySearch } from '@/lib/setting-search';
 import ExportMenu, { downloadTextFile } from './ExportMenu';
 
 interface SettingsCatalogBrowserProps {
-  categoryTree: CategoryTreeNode[];
+  categoryTree: BrowseTreeNode[];
   categoryMap: Record<string, string>;
   categoryParentMap: Record<string, string>;
   totalSettings: number;
@@ -60,6 +61,23 @@ function matchesPlatformFilter(platformValue: string | undefined, selectedPlatfo
     const aliases = PLATFORM_ALIASES[sel] || [sel];
     return parts.some((p) => aliases.includes(p));
   });
+}
+
+/** public/filter-counts.json: categoryId → `${platform}|${deprecated 0/1}` → [visible, total]. */
+type FilterCounts = Record<string, Record<string, [number, number]>>;
+
+/** Sum a category's [visible, total] counts over the keys matching the active filters. */
+function countMatching(byKey: FilterCounts[string] | undefined, selectedPlatforms: string[], deprecatedOnly: boolean): [number, number] {
+  let visible = 0;
+  let total = 0;
+  for (const [key, count] of Object.entries(byKey ?? {})) {
+    const split = key.lastIndexOf('|');
+    if (deprecatedOnly && key.slice(split + 1) !== '1') continue;
+    if (selectedPlatforms.length > 0 && !matchesPlatformFilter(key.slice(0, split), selectedPlatforms)) continue;
+    visible += count[0];
+    total += count[1];
+  }
+  return [visible, total];
 }
 
 /** Check whether a setting matches the deprecated filter. */
@@ -109,14 +127,14 @@ export default function SettingsCatalogBrowser({
 
   // ── Client-side settings loading ──
   // The initial page only needs the category tree. Setting details are loaded
-  // from per-category shards when the user selects a category; the full browse
-  // payload is kept as a fallback for global filters and search result grouping.
+  // from per-category shards when the user selects a category or searches;
+  // global filters (platform / deprecated) only need the small per-category
+  // counts in filter-counts.json to prune the tree.
   const [loadedSettingsByCategory, setSettingsByCategory] = useState<Record<string, SettingDefinition[]>>({});
-  const [fullBrowseLoaded, setFullBrowseLoaded] = useState(false);
+  const [filterCounts, setFilterCounts] = useState<FilterCounts | null>(null);
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [loadingCategoryId, setLoadingCategoryId] = useState<string | null>(null);
   const loadedCategoryIdsRef = useRef<Set<string>>(new Set());
-  const fullBrowsePromiseRef = useRef<Promise<void> | null>(null);
   const pendingCategoryIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -177,7 +195,7 @@ export default function SettingsCatalogBrowser({
     }
     return byCategory;
   }, [windowsCompatibility, compatibilityReports, loadedSettingsByCategory]);
-  const filterDataLoaded = windowsCompatibility ? !!compatibilityReports[windowsCompatibility] : fullBrowseLoaded;
+  const filterDataLoaded = windowsCompatibility ? !!compatibilityReports[windowsCompatibility] : !!filterCounts;
   const compatibilityLoading = !!windowsCompatibility && !filterDataLoaded && !compatibilityError;
   const compatibilityLabel = windowsCompatibility === 'enterprise-only' ? 'Enterprise-only settings' : 'AVD multi-session settings';
 
@@ -207,40 +225,6 @@ export default function SettingsCatalogBrowser({
     }
   }, [mergeSettingsByCategory]);
 
-  const loadFullBrowseSettings = useCallback(async () => {
-    if (fullBrowseLoaded) return;
-    if (fullBrowsePromiseRef.current) return fullBrowsePromiseRef.current;
-
-    setSettingsLoading(true);
-    fullBrowsePromiseRef.current = (async () => {
-      const settings = await fetch(`${basePath}/settings-browse.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load settings: ${res.status}`);
-        return res.json();
-      })
-      .then((data) => data as SettingDefinition[]);
-
-      const byCat: Record<string, SettingDefinition[]> = {};
-      for (const s of settings) {
-        if (!byCat[s.categoryId]) byCat[s.categoryId] = [];
-        byCat[s.categoryId].push(s);
-      }
-      for (const catId of Object.keys(byCat)) {
-        loadedCategoryIdsRef.current.add(catId);
-      }
-      mergeSettingsByCategory(byCat);
-      setFullBrowseLoaded(true);
-    })()
-      .catch((err) => {
-        fullBrowsePromiseRef.current = null;
-        console.error('Failed to load browse settings:', err);
-      })
-      .finally(() => {
-        setSettingsLoading(false);
-      });
-
-    return fullBrowsePromiseRef.current;
-  }, [fullBrowseLoaded, mergeSettingsByCategory]);
   const { sidebarOpen, setSidebarOpen, sidebarWidth, sidebarHydrated, handleResizeStart } = useBrowserSidebar();
   const settingsScrollRef = useRef<HTMLDivElement>(null);
 
@@ -304,10 +288,15 @@ export default function SettingsCatalogBrowser({
   }, [loadSettingsForCategories, windowsCompatibility]);
 
   useEffect(() => {
-    if (!windowsCompatibility && (selectedPlatforms.length > 0 || deprecatedOnly) && !fullBrowseLoaded) {
-      void loadFullBrowseSettings();
+    if (!windowsCompatibility && (selectedPlatforms.length > 0 || deprecatedOnly) && !filterCounts) {
+      loadBrowserJson<FilterCounts>('filter-counts.json')
+        .then(setFilterCounts)
+        .catch((err) => {
+          console.error('Failed to load filter counts:', err);
+          setSettingsLoadError(true);
+        });
     }
-  }, [deprecatedOnly, fullBrowseLoaded, loadFullBrowseSettings, selectedPlatforms.length, windowsCompatibility]);
+  }, [deprecatedOnly, filterCounts, selectedPlatforms.length, windowsCompatibility]);
 
   const settingsById = useMemo(() => {
     const byId = new Map<string, SettingDefinition>();
@@ -324,31 +313,25 @@ export default function SettingsCatalogBrowser({
     if (selectedPlatforms.length === 0 && !deprecatedOnly && !windowsCompatibility) return categoryTree;
     if (!filterDataLoaded) return windowsCompatibility ? [] : categoryTree;
 
-    function isVisibleSetting(s: SettingDefinition): boolean {
-      const isRoot = !s.rootDefinitionId || s.rootDefinitionId === s.id;
-      if (isRoot) return true;
-      // Child: only visible if CSP path differs from parent
-      const parent = settingsById.get(s.rootDefinitionId!);
-      return !parent || getCspPath(s) !== getCspPath(parent);
-    }
-
-    function filterNode(node: CategoryTreeNode): CategoryTreeNode | null {
+    function filterNode(node: BrowseTreeNode): BrowseTreeNode | null {
       // Recursively filter children first
       const filteredChildren = node.children
         .map(filterNode)
-        .filter((c): c is CategoryTreeNode => c !== null);
+        .filter((c): c is BrowseTreeNode => c !== null);
 
-      // Count visible settings in *this* category that match the platform filter.
-      // Excludes child settings whose CSP path is identical to their parent
-      // (these are hidden duplicates in the UI).
-      const catSettings = settingsByCategory[node.id] || [];
-      const matchingSettings = catSettings.filter(
-        (s) =>
-          (windowsCompatibility || isVisibleSetting(s)) &&
-          (selectedPlatforms.length === 0 || matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) &&
-          matchesDeprecatedFilter(s.displayName, deprecatedOnly)
-      );
-      const matchingCount = windowsCompatibility ? countVisibleSettings(matchingSettings) : matchingSettings.length;
+      // Count visible settings in *this* category that match the filters. The
+      // prebuilt counts already exclude child settings whose CSP path is
+      // identical to their parent (hidden duplicates in the UI).
+      let matchingCount: number;
+      if (windowsCompatibility) {
+        matchingCount = countVisibleSettings((settingsByCategory[node.id] || []).filter(
+          (s) =>
+            (selectedPlatforms.length === 0 || matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) &&
+            matchesDeprecatedFilter(s.displayName, deprecatedOnly)
+        ));
+      } else {
+        matchingCount = countMatching(filterCounts?.[node.id], selectedPlatforms, deprecatedOnly)[0];
+      }
 
       // Total = own matching + all descendants' matching
       const descendantCount = filteredChildren.reduce((sum, c) => sum + c.settingCount, 0);
@@ -366,8 +349,8 @@ export default function SettingsCatalogBrowser({
 
     return categoryTree
       .map(filterNode)
-      .filter((c): c is CategoryTreeNode => c !== null);
-  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory, settingsById, filterDataLoaded, windowsCompatibility]);
+      .filter((c): c is BrowseTreeNode => c !== null);
+  }, [categoryTree, selectedPlatforms, deprecatedOnly, settingsByCategory, filterCounts, filterDataLoaded, windowsCompatibility]);
 
   // Clear selected category when it's removed by a platform filter change
   if (selectedCategoryId && (selectedPlatforms.length > 0 || deprecatedOnly || windowsCompatibility) && filterDataLoaded) {
@@ -472,20 +455,10 @@ export default function SettingsCatalogBrowser({
   const displayedSettingsCount = useMemo(() => {
     if (windowsCompatibility) return filteredCategoryTree.reduce((count, category) => count + category.settingCount, 0);
     if (selectedPlatforms.length === 0 && !deprecatedOnly) return totalSettings;
-    if (!fullBrowseLoaded) return totalSettings;
-    let count = 0;
-    for (const catSettings of Object.values(settingsByCategory)) {
-      for (const s of catSettings) {
-        if (
-          (selectedPlatforms.length === 0 || matchesPlatformFilter(s.applicability?.platform, selectedPlatforms)) &&
-          matchesDeprecatedFilter(s.displayName, deprecatedOnly)
-        ) {
-          count++;
-        }
-      }
-    }
-    return count;
-  }, [selectedPlatforms, deprecatedOnly, settingsByCategory, totalSettings, fullBrowseLoaded, windowsCompatibility, filteredCategoryTree]);
+    if (!filterCounts) return totalSettings;
+    return Object.values(filterCounts).reduce(
+      (count, byKey) => count + countMatching(byKey, selectedPlatforms, deprecatedOnly)[1], 0);
+  }, [selectedPlatforms, deprecatedOnly, filterCounts, totalSettings, windowsCompatibility, filteredCategoryTree]);
 
   const isSearching = !windowsCompatibility && searchResults !== null && searchResults.length > 0;
 
@@ -522,7 +495,7 @@ export default function SettingsCatalogBrowser({
               Settings Catalog
             </h1>
             <p className="text-fluent-sm text-fluent-text-secondary mt-1">
-              {compatibilityLoading || (!windowsCompatibility && settingsLoading && (selectedPlatforms.length > 0 || deprecatedOnly || isSearching))
+              {compatibilityLoading || (!windowsCompatibility && (selectedPlatforms.length > 0 || deprecatedOnly) && !filterCounts && !settingsLoadError) || (!windowsCompatibility && settingsLoading && isSearching)
                 ? <span className="inline-flex items-center gap-1.5">
                     <span className="w-3 h-3 border-2 border-fluent-blue border-t-transparent rounded-full animate-spin" />
                     Loading settings…
@@ -680,10 +653,10 @@ export default function SettingsCatalogBrowser({
 }
 
 /** Recursively collect a category ID and all its descendant IDs */
-function collectCategoryIds(tree: CategoryTreeNode[], targetId: string): string[] {
+function collectCategoryIds(tree: BrowseTreeNode[], targetId: string): string[] {
   const ids: string[] = [];
 
-  function find(nodes: CategoryTreeNode[]): CategoryTreeNode | null {
+  function find(nodes: BrowseTreeNode[]): BrowseTreeNode | null {
     for (const node of nodes) {
       if (node.id === targetId) return node;
       const found = find(node.children);
@@ -692,7 +665,7 @@ function collectCategoryIds(tree: CategoryTreeNode[], targetId: string): string[
     return null;
   }
 
-  function collect(node: CategoryTreeNode) {
+  function collect(node: BrowseTreeNode) {
     ids.push(node.id);
     for (const child of node.children) {
       collect(child);

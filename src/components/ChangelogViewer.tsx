@@ -1,23 +1,30 @@
 'use client';
 
 import { Fragment, useEffect, useState, useMemo } from 'react';
-import type { ChangelogEntry, ChangelogSettingRef, ChangelogSettingSummary, ChangelogSummary, SettingCategory, SettingDefinition } from '@/lib/types';
+import type { ChangelogDay, ChangelogSettingRef, ChangelogSettingSummary, ChangelogSummary, SettingCategory, SettingDefinition } from '@/lib/types';
 import { PLATFORM_ICONS, PLATFORM_LABELS } from './PlatformIcons';
 import { pillClass } from '@/lib/pill';
 import { settingSlug } from '@/lib/slug';
 import { getCspPath } from '@/lib/settings-grouping';
 import { basePath } from '@/lib/basePath';
+import { loadBrowserJson } from '@/lib/browser-data';
 import SettingDetail from './SettingDetail';
 import ExportMenu, { downloadTextFile, type ExportFormat } from './ExportMenu';
 import { cleanValue, generateChangelogCsv, generateChangelogHtml } from '@/lib/changelog-export';
 import { parseSummaryHighlight } from '@/lib/changelog-summary';
 
+/** Only the fields the changelog needs — the page strips the rest. */
+type ChangelogCategory = Pick<SettingCategory, 'id' | 'displayName' | 'parentCategoryId' | 'rootCategoryId'>;
+
 interface ChangelogViewerProps {
-  entries: ChangelogEntry[];
-  categories: SettingCategory[];
-  /** Stripped-down settings (changelog-referenced only). Full setting is
-   *  lazy-fetched per row from /changelog-settings/{slug}.json on expand. */
-  settings: ChangelogSettingSummary[];
+  /** Every changelog date with visible changes, newest first. */
+  dates: string[];
+  /** The newest day, inlined in the page. Other days are fetched from
+   *  /changelog-days/{date}.json when a date, month or range needs them; each
+   *  carries stripped-down settings (the full setting is lazy-fetched per row
+   *  from /changelog-settings/{slug}.json on expand). */
+  latest: ChangelogDay | null;
+  categories: ChangelogCategory[];
   /** AI summaries keyed by date (or month key); shown in the update card when present. */
   summaries?: Record<string, ChangelogSummary>;
 }
@@ -115,7 +122,7 @@ const MONTHLY_OS_PLATFORMS: Record<string, string> = {
   linux: 'linux',
 };
 
-export default function ChangelogViewer({ entries, categories, settings, summaries = {} }: ChangelogViewerProps) {
+export default function ChangelogViewer({ dates, latest, categories, summaries = {} }: ChangelogViewerProps) {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [selectedDate, setSelectedDate] = useState<DateFilter>('latest');
   const [rangeFrom, setRangeFrom] = useState<string | null>(null);
@@ -144,7 +151,50 @@ export default function ChangelogViewer({ entries, categories, settings, summari
     );
   };
 
-  const settingsById = useMemo(() => new Map(settings.map((setting) => [setting.id, setting])), [settings]);
+  // ── Lazy per-day data ──
+  const [days, setDays] = useState(() => new Map(latest ? [[latest.entry.date, latest]] : []));
+  const [failedKey, setFailedKey] = useState<string | null>(null);
+  const neededDates = useMemo(() => {
+    if (selectedDate === 'all') return dates;
+    if (selectedDate === 'range') {
+      return dates.filter((date) => (!rangeFrom || date >= rangeFrom) && (!rangeTo || date <= rangeTo));
+    }
+    if (selectedDate.startsWith('month:')) return dates.filter((date) => date.startsWith(`${selectedDate.slice(6)}-`));
+    if (selectedDate.startsWith('date:')) return [selectedDate.slice(5)];
+    return []; // 'latest' is inlined
+  }, [dates, selectedDate, rangeFrom, rangeTo]);
+  const missingKey = neededDates.filter((date) => !days.has(date)).join(',');
+  const daysFailed = missingKey !== '' && failedKey === missingKey;
+  const daysLoading = missingKey !== '' && !daysFailed;
+  useEffect(() => {
+    if (!missingKey || failedKey === missingKey) return;
+    let cancelled = false;
+    // One state update for the whole batch, so the feed is rebuilt once.
+    Promise.all(missingKey.split(',').map((date) => loadBrowserJson<ChangelogDay>(`changelog-days/${date}.json`)))
+      .then((loaded) => {
+        if (cancelled) return;
+        setDays((prev) => {
+          const next = new Map(prev);
+          for (const day of loaded) next.set(day.entry.date, day);
+          return next;
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setFailedKey(missingKey);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [missingKey, failedKey]);
+
+  const entries = useMemo(() => dates.flatMap((date) => days.get(date)?.entry ?? []), [dates, days]);
+  const settingsById = useMemo(() => {
+    const byId = new Map<string, ChangelogSettingSummary>();
+    for (const day of days.values()) {
+      for (const setting of day.settings) byId.set(setting.id, setting);
+    }
+    return byId;
+  }, [days]);
   const cleanedEntries = useMemo(() => entries.map((e) => ({
     ...e,
     added: dedupeSettingRefs(e.added, settingsById),
@@ -266,9 +316,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
     return items;
   }, [categoriesById, categoryRollups, cleanedEntries, settingsById]);
 
-  const dateOptions = useMemo(() => {
-    return Array.from(new Set(feedItems.map((item) => item.date))).sort((a, b) => b.localeCompare(a));
-  }, [feedItems]);
+  const dateOptions = dates;
 
   const latestDate = dateOptions[0] ?? null;
   const oldestDate = dateOptions[dateOptions.length - 1] ?? null;
@@ -528,7 +576,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
   }
   const visibleItems = showAllRows ? displayedItems : displayedItems.slice(0, ROW_CAP);
 
-  if (entries.length === 0) {
+  if (dates.length === 0) {
     return (
       <div className="text-center py-16 text-fluent-text-secondary">
         <svg className="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -544,7 +592,7 @@ export default function ChangelogViewer({ entries, categories, settings, summari
 
   return (
     <div className="space-y-6">
-      <section className="fluent-card p-4 sm:p-5">
+      <section className={`fluent-card p-4 sm:p-5 ${daysLoading ? 'opacity-60' : ''}`} aria-busy={daysLoading}>
         <div className="flex h-full flex-col gap-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -617,7 +665,9 @@ export default function ChangelogViewer({ entries, categories, settings, summari
               )}
               <div className="mt-3 flex justify-end">
                 <span className="inline-flex items-center gap-1 text-fluent-xs text-fluent-text-secondary">
-                  <i className="fa-solid fa-wand-magic-sparkles" aria-hidden="true" />
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+                  </svg>
                   AI generated
                 </span>
               </div>
@@ -877,7 +927,16 @@ export default function ChangelogViewer({ entries, categories, settings, summari
             </div>
           </div>
 
-          {displayedItems.length === 0 ? (
+          {daysLoading ? (
+            <div role="status" className="fluent-card px-4 py-10 text-center text-fluent-base text-fluent-text-secondary">
+              Loading changes…
+            </div>
+          ) : daysFailed ? (
+            <div role="alert" className="fluent-card px-4 py-10 text-center text-fluent-text-secondary">
+              <p className="mb-3 text-fluent-base">Could not load these changes. Check your connection.</p>
+              <button type="button" className="fluent-btn-secondary" onClick={() => setFailedKey(null)}>Retry</button>
+            </div>
+          ) : displayedItems.length === 0 ? (
             <div className="fluent-card px-4 py-10 text-center text-fluent-text-secondary">
               <p className="text-fluent-base">No matching changes.</p>
             </div>
@@ -1496,7 +1555,7 @@ function formatMonth(month: string, options?: { month?: 'short' | 'long'; includ
   });
 }
 
-function buildCategoryRollupMap(categoriesById: Map<string, SettingCategory>): Map<string, string> {
+function buildCategoryRollupMap(categoriesById: Map<string, ChangelogCategory>): Map<string, string> {
   const rollups = new Map<string, string>();
 
   for (const category of categoriesById.values()) {
@@ -1573,14 +1632,14 @@ function buildTaxonomySummary(items: ChangeFeedItem[]): TaxonomySummary {
   };
 }
 
-function getCategoryPath(categoryId: string | undefined, categoriesById: Map<string, SettingCategory>): string | undefined {
+function getCategoryPath(categoryId: string | undefined, categoriesById: Map<string, ChangelogCategory>): string | undefined {
   if (!categoryId) return undefined;
   const category = categoriesById.get(categoryId);
   if (!category) return undefined;
 
   const chain: string[] = [];
   const seen = new Set<string>();
-  let current: SettingCategory | undefined = category;
+  let current: ChangelogCategory | undefined = category;
 
   while (current && !seen.has(current.id)) {
     seen.add(current.id);
@@ -1592,7 +1651,7 @@ function getCategoryPath(categoryId: string | undefined, categoriesById: Map<str
   return chain.length > 0 ? chain.join(' > ') : undefined;
 }
 
-function enrichCategoryFields(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, SettingCategory>) {
+function enrichCategoryFields(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, ChangelogCategory>) {
   return fields.map((field) => {
     if (field.field !== 'parentCategoryId') return field;
 
@@ -1605,7 +1664,7 @@ function enrichCategoryFields(fields: Array<{ field: string; oldValue: string; n
   });
 }
 
-function getCategoryChangeSummary(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, SettingCategory>): string | undefined {
+function getCategoryChangeSummary(fields: Array<{ field: string; oldValue: string; newValue: string }>, categoriesById: Map<string, ChangelogCategory>): string | undefined {
   const parentChange = fields.find((field) => field.field === 'parentCategoryId');
   if (!parentChange) return undefined;
 
@@ -1614,7 +1673,7 @@ function getCategoryChangeSummary(fields: Array<{ field: string; oldValue: strin
   return `Moved from ${oldParent} to ${newParent}`;
 }
 
-function formatCategoryReference(value: string | undefined, categoriesById: Map<string, SettingCategory>): string | undefined {
+function formatCategoryReference(value: string | undefined, categoriesById: Map<string, ChangelogCategory>): string | undefined {
   if (!value) return undefined;
   const id = cleanValue(value);
   if (isEmptyCategoryId(id)) return 'Top level';
@@ -1643,7 +1702,7 @@ function SummaryHighlightRow({ highlight }: { highlight: string }) {
                 const Icon = PLATFORM_ICONS[platform];
                 return <Icon key={platform} className="h-4 w-4" />;
               })
-            : <i className="fa-solid fa-list-check text-fluent-xs text-fluent-text-secondary" aria-hidden="true" />}
+            : <svg className="h-4 w-4 text-fluent-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>}
         </span>
         <span className="text-fluent-sm font-semibold text-fluent-text">{label}</span>
       </div>

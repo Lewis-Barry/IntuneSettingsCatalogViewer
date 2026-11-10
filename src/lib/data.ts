@@ -6,7 +6,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogEntry, ChangelogSettingSummary, ChangelogSummary } from './types';
+import type { SettingDefinition, SettingCategory, CategoryTreeNode, ChangelogDay, ChangelogEntry, ChangelogSettingSummary, ChangelogSummary } from './types';
 import type { ComplianceTemplate, ComplianceTemplatesFile } from './compliance-types';
 import { settingSlug } from './slug';
 
@@ -104,50 +104,57 @@ export function getLastUpdated(): string | null {
 }
 
 /**
- * Return only the settings referenced by the changelog (added or changed),
- * stripped to the fields needed for the changelog row display + search.
+ * One `ChangelogDay` per changelog date that has visible changes, newest first.
+ * Each carries only the settings that date references (added or changed, plus
+ * their root definitions), stripped to the fields the row display + search need.
  *
- * The full setting (with `options`, `keywords`, dependency arrays etc.) is
- * lazy-fetched per row from /changelog-settings/{slug}.json on expand.
+ * The page inlines the newest day; the rest are written to
+ * public/changelog-days/{date}.json (generate-changelog-settings.ts) and
+ * fetched on demand. The full setting (with `options` etc.) is lazy-fetched
+ * per row from /changelog-settings/{slug}.json on expand.
  */
-export function loadChangelogSettingSummaries(): ChangelogSettingSummary[] {
-  const settings = loadSettings();
-  const changelog = loadChangelog();
+export function loadChangelogDays(): ChangelogDay[] {
+  const settingsById = new Map(loadSettings().map((setting) => [setting.id, setting]));
 
-  const referencedIds = new Set<string>();
-  for (const entry of changelog) {
-    entry.added.forEach((s) => referencedIds.add(s.id));
-    entry.changed.forEach((s) => referencedIds.add(s.id));
-  }
-
-  // Include root group/collection definitions so the changelog can label a
-  // set of related child changes with their real parent setting name.
-  const settingsById = new Map(settings.map((setting) => [setting.id, setting]));
-  for (const id of Array.from(referencedIds)) {
-    const rootDefinitionId = settingsById.get(id)?.rootDefinitionId;
-    if (rootDefinitionId) referencedIds.add(rootDefinitionId);
-  }
-
-  const summaries: ChangelogSettingSummary[] = [];
-  for (const setting of settings) {
-    if (!referencedIds.has(setting.id)) continue;
-    summaries.push({
-      id: setting.id,
-      rootDefinitionId: setting.rootDefinitionId,
-      displayName: setting.displayName,
-      name: setting.name,
-      description: setting.description,
-      helpText: setting.helpText,
-      applicability: setting.applicability
-        ? {
-            platform: setting.applicability.platform,
-            technologies: setting.applicability.technologies,
-          }
-        : undefined,
-      defaultValue: setting.defaultValue,
-      baseUri: setting.baseUri,
-      offsetUri: setting.offsetUri,
+  return loadChangelog()
+    // Version-only changes are hidden by the viewer, so they don't make a day.
+    .filter((entry) =>
+      entry.added.length > 0 || entry.removed.length > 0 ||
+      entry.changed.some((c) => c.fields.some((f) => f.field !== 'version')) ||
+      (entry.categoriesAdded?.length ?? 0) > 0 ||
+      (entry.categoriesRemoved?.length ?? 0) > 0 ||
+      (entry.categoriesChanged?.length ?? 0) > 0)
+    .map((entry) => {
+      const ids = new Set<string>();
+      // Removed refs too: one that was re-added later still resolves its root.
+      for (const ref of [...entry.added, ...entry.changed, ...entry.removed]) {
+        ids.add(ref.id);
+        // Root group/collection definitions label a set of related child changes.
+        const rootDefinitionId = settingsById.get(ref.id)?.rootDefinitionId;
+        if (rootDefinitionId) ids.add(rootDefinitionId);
+      }
+      const settings: ChangelogSettingSummary[] = [];
+      for (const id of ids) {
+        const setting = settingsById.get(id);
+        if (!setting) continue;
+        settings.push({
+          id: setting.id,
+          rootDefinitionId: setting.rootDefinitionId,
+          displayName: setting.displayName,
+          name: setting.name,
+          description: setting.description,
+          helpText: setting.helpText,
+          applicability: setting.applicability
+            ? {
+                platform: setting.applicability.platform,
+                technologies: setting.applicability.technologies,
+              }
+            : undefined,
+          defaultValue: setting.defaultValue,
+          baseUri: setting.baseUri,
+          offsetUri: setting.offsetUri,
+        });
+      }
+      return { entry, settings };
     });
-  }
-  return summaries;
 }

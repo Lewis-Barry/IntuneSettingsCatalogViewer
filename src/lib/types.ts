@@ -81,6 +81,15 @@ export interface CategoryTreeNode extends SettingCategory {
   settingCount: number;
 }
 
+/** The slice of the category tree the browser sidebar needs — page.tsx strips
+ *  the rest (descriptions, child id lists) to keep the home page HTML small. */
+export interface BrowseTreeNode {
+  id: string;
+  displayName: string;
+  settingCount: number;
+  children: BrowseTreeNode[];
+}
+
 // ─── Applicability ───
 
 export interface SettingApplicability {
@@ -161,6 +170,13 @@ export interface ChangelogSettingSummary {
   defaultValue?: unknown;
   baseUri?: string;
   offsetUri?: string;
+}
+
+/** One changelog date as the changelog page loads it: the entry plus the
+ *  summaries of the settings it references (and their root definitions). */
+export interface ChangelogDay {
+  entry: ChangelogEntry;
+  settings: ChangelogSettingSummary[];
 }
 
 export interface ChoiceOption {

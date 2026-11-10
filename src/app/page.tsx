@@ -1,12 +1,16 @@
 import { loadCategoryTree, loadCategories, loadCatalogStats, getLastUpdated } from '@/lib/data';
 import SettingsCatalogBrowser from '@/components/SettingsCatalogBrowser';
 import { Suspense } from 'react';
+import type { BrowseTreeNode, CategoryTreeNode } from '@/lib/types';
 
 export default function HomePage() {
   // Load lightweight data at build time (server component).
   // Setting details are loaded client-side by category shard to avoid pulling
   // the full browse payload on initial page load.
-  const categoryTree = loadCategoryTree();
+  const slim = ({ id, displayName, settingCount, children }: CategoryTreeNode): BrowseTreeNode => ({
+    id, displayName, settingCount, children: children.map(slim),
+  });
+  const categoryTree = loadCategoryTree().map(slim);
   const categories = loadCategories();
   const catalogStats = loadCatalogStats();
   const lastUpdated = getLastUpdated();
