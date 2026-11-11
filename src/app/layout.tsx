@@ -143,8 +143,8 @@ export default function RootLayout({
             </p>
             <p>
               Try{' '}
-              <a href="https://regedit.app" className="text-fluent-blue hover:underline">
-                regedit.app
+              <a href="https://rmmguard.com" className="text-fluent-blue hover:underline">
+                rmmguard.com
               </a>
               {' · '}Last updated: <span className="font-medium">{(() => { const d = getLastUpdated(); return d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '—'; })()}</span>
             </p>
