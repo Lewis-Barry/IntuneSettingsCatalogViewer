@@ -1,4 +1,15 @@
 {
+  "2026-11-11": {
+    "headline": "macOS Edge picks up 46 new settings, the useful ones being Local Network Access allow/block lists and saving passkeys to the password manager; macOS also sprouts a small 'AI agent runtime protection' category with network inspection.",
+    "highlights": [
+      "macOS Edge: new allow/block URL lists for Local Network Access, so you can stop sites from reaching local devices and endpoints, plus an IPv6 route-probe address for PAC scripts and proxy socket pool randomization",
+      "macOS Edge: passkey saving to the password manager and blocked-URL lists for Copilot browsing; good candidates for tightening defaults before users find them",
+      "macOS, iOS/macOS: Extensible SSO settings arrive (Platform SSO, additional HTTP headers, always use login UI); the iOS/macOS Authentication Method list grew by one option",
+      "Windows: 19 App Update and 5 Windows update client policy settings for app update sources, deferrals, deadlines and grace periods, all Windows Insiders only for now",
+      "macOS: AI agent runtime protection adds two settings, AI agent protection and AI agent network inspection; small but worth a look if agents touch managed Macs"
+    ],
+    "watchOut": "690 applicability edits plus 230 description and 21 display name rewrites are metadata churn, nothing removed; one rename to note is Edge efficiency mode becoming energy saver, so update your internal docs and saved searches."
+  },
   "2026-10-28": {
     "headline": "Chrome policy lands in bulk today: Local Network Access restrictions, Gemini integration controls, and a fresh iOS/macOS DNS settings category, so browser and network guardrails now have real knobs.",
     "highlights": [
