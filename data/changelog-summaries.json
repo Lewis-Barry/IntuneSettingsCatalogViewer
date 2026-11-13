@@ -1,4 +1,15 @@
 {
+  "2026-11-13": {
+    "headline": "A quiet Friday: Defender gets a prompt-evidence collection toggle, Windows adds a proxy allowlist for all HTTP auth schemes, and Microsoft nudges 479 Insiders settings onto newer builds.",
+    "highlights": [
+      "Windows: Defender gains 'Prompt Evidence Collection', a new knob for gathering evidence around prompts; worth a look if you are tightening AI/agent visibility",
+      "Windows: HTTP authentication adds 'List of proxy servers that allow all HTTP authentication schemes', name the proxies you trust to see every auth scheme, keep the list short since anything on it can coax credentials out of clients",
+      "Windows: 479 Windows Insiders settings had their supported build range raised to 10.0.26310 / 10.0.26341; coverage grew, no setting was pulled",
+      "Windows: Edge adds Blueprint GWA availability and cloud policy enrollment token settings; the WebSockets back/forward cache policy is now tagged (deprecated) in its name and description",
+      "Windows: the 'Agent execution' setting was renamed to 'Agent containment', same picker slot, new label"
+    ],
+    "watchOut": "The Edge 'Allow Back/Forward Cache for WebSockets' policy is officially deprecated and will go obsolete in a future release, so plan to drop it from any Edge baseline before it stops doing anything."
+  },
   "2026-11-11": {
     "headline": "macOS Edge picks up 46 new settings, the useful ones being Local Network Access allow/block lists and saving passkeys to the password manager; macOS also sprouts a small 'AI agent runtime protection' category with network inspection.",
     "highlights": [
